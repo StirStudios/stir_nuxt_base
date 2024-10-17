@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SiteInfo } from '../types'
+import type { SiteInfo } from '~/types'
 
 const props = defineProps<{
   site: SiteInfo
