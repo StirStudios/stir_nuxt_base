@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CarouselProps } from '~/types'
+import type { CarouselProps } from '../types'
 
 const props = withDefaults(defineProps<CarouselProps>(), () => ({
   items: items,

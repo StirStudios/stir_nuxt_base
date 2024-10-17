@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PageProps } from '~/types'
+import type { PageProps } from '../types'
 
 defineProps<PageProps>()
 </script>

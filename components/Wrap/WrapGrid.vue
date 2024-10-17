@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CommonSettings } from '~/types'
+import type { CommonSettings } from '../types'
 
 withDefaults(defineProps<CommonSettings>(), {
   wrapper: undefined,

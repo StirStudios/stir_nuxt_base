@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TabsProps } from '~/types'
+import type { TabsProps } from '../types'
 
 const props = defineProps<TabsProps>()
 const config = useRuntimeConfig()
