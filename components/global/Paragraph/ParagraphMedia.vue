@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MediaSettings, Media } from '~/base/types'
+import type { MediaSettings, Media } from '~/types'
 
 defineProps<{
   item: {

@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
-  plugins: ['~/base/plugins/aos.client'],
+  plugins: ['~/plugins/aos.client'],
   devtools: { enabled: true },
   modules: [
     [

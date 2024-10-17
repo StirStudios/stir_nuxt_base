@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionItem } from '~/base/types'
+import type { RegionItem } from '~/types'
 
 defineProps<{
   item: RegionItem

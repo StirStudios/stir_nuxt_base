@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CrumbProps } from '~/base/types'
+import type { CrumbProps } from '~/types'
 
 const props = defineProps<CrumbProps>()
 

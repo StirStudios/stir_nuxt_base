@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AnimateSettings } from '~/base/types'
+import type { AnimateSettings } from '~/types'
 
 withDefaults(defineProps<AnimateSettings>(), {
   aos: 'fade-up',

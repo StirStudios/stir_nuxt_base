@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Section } from '~/base/types'
+import type { Section } from '~/types'
 
 defineProps<{
   section: Section[]
