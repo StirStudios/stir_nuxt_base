@@ -3,8 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"],
-      "~types": ["types.ts"]
+    "@/*": ["*"],
+    "~/*": ["*"],
+    "~types": ["types.ts"]
     }
   }
 }
