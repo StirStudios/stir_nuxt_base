@@ -1,9 +1,3 @@
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-
-// Get the current directory of this file
-const currentDir = dirname(fileURLToPath(import.meta.url))
-
 export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
@@ -39,7 +33,7 @@ export default defineNuxtConfig({
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
-  plugins: [join(currentDir, './plugins/aos.client')],
+  plugins: ['~/plugins/aos.client'],
   devtools: { enabled: true },
   modules: [
     [
@@ -147,6 +141,9 @@ export default defineNuxtConfig({
     ],
   ],
   runtimeConfig: {
+    turnstile: {
+      secretKey: process.env.TURNSTILE_SECRET,
+    },
     api: process.env.DRUPAL_URL,
     public: {
       api: process.env.DRUPAL_URL,
