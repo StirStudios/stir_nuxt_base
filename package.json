@@ -1,6 +1,6 @@
 {
   "name": "stir_nuxt_base",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "scripts": {
     "build": "nuxi build",
@@ -20,7 +20,6 @@
     "@nuxt/ui": "^2.18.7",
     "@nuxtjs/robots": "^4.1.7",
     "@nuxtjs/sitemap": "^6.1.1",
-    "@nuxtjs/turnstile": "^0.9.10",
     "@types/node": "^22.7.5",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
     "@typescript-eslint/parser": "^8.8.1",
