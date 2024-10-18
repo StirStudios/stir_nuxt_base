@@ -21,7 +21,7 @@ const { dataReady, isAdministrator, page } = await useDrupalApi()
       :page-title="page.title"
       :site-slogan="page.site_info.slogan"
     />
-    <h1 v-else class="mb-24 text-center text-6xl">{{ page.title }}</h1>
+    <h1 v-else class="mb-2 text-center text-6xl">{{ page.title }}</h1>
     <slot />
   </main>
   <LazyAppFooter v-if="dataReady" :site="page" />
