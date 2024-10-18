@@ -1,6 +1,6 @@
 {
   "name": "stir_nuxt_base",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "module",
   "scripts": {
     "build": "nuxi build",
