@@ -5,9 +5,7 @@
     "paths": {
       "@/*": ["*"],
       "~/*": ["*"],
-      "~/types": ["types.ts"],
-      "~/plugins/aos.client.ts": ["plugins/aos.client.ts"],
-      "~/composables/useDrupalApi": ["composables/useDrupalApi"]
+      "~/types": ["types.ts"]
     }
   }
 }
