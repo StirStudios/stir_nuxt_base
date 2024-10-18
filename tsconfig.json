@@ -6,8 +6,8 @@
       "@/*": ["*"],
       "~/*": ["*"],
       "~/types": ["types.ts"],
-      "~/plugins": ["plugins/*"],
-      "~/composables/useDrupalApi": ["composables/*"]
+      "~/plugins/aos.client.ts": ["plugins/aos.client.ts"],
+      "~/composables/useDrupalApi": ["composables/useDrupalApi"]
     }
   }
 }
