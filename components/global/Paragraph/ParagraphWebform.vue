@@ -3,7 +3,6 @@ import type { WebformProps } from '~/types'
 import { object, string, type InferType } from 'yup'
 
 const toast = useToast()
-const router = useRouter()
 
 const props = defineProps<WebformProps>()
 
