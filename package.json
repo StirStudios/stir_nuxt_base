@@ -33,8 +33,7 @@
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "tailwindcss": "^3.4.13",
-    "vue-eslint-parser": "^9.4.3",
-    "yup": "^1.4.0"
+    "vue-eslint-parser": "^9.4.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
