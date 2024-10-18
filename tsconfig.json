@@ -1,12 +1,4 @@
 {
-  "extends": "./.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["*"],
-      "~/*": ["*"],
-      "~/types": ["types.ts"],
-      "~/composables/useDrupalApi": ["composables/useDrupalApi"]
-    }
-  }
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json"
 }
