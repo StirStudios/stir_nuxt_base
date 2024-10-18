@@ -24,15 +24,15 @@ export default <Partial<Config>>{
         // },
       },
       fontFamily: {
-        sans: ['"DM San"', ...defaultTheme.fontFamily.sans],
+        // sans: ['"DM San"', ...defaultTheme.fontFamily.sans],
       },
     },
   },
   safelist: [
-    {
-      pattern:
-        /^(basis-\d\/\d|grid-cols-\d|columns-\d|col-span-\d|block|hidden|gap-\d+|max-w-screen-(sm|md|lg|xl|2xl)|p-(2|5|10|20)|pt-(2|5|10|20)|pr-(2|5|10|20)|pb-(2|5|10|20)|pl-(2|5|10|20)|px-(2|5|10|20)|py-(2|5|10|20)|m-(2|5|10|20)|mt-(2|5|10|20)|mr-(2|5|10|20)|mb-(2|5|10|20)|ml-(2|5|10|20)|mx-(2|5|10|20)|my-(2|5|10|20)|lg:(pb|py)-20|lg:(p|pl|pr|pb|pt)-20)$/,
-      variants: ['sm', 'md', 'lg', 'xl', '2xl'],
-    },
+    // {
+    //   pattern:
+    //     /^(basis-\d\/\d|grid-cols-\d|columns-\d|col-span-\d|block|hidden|gap-\d+|max-w-screen-(sm|md|lg|xl|2xl)|p-(2|5|10|20)|pt-(2|5|10|20)|pr-(2|5|10|20)|pb-(2|5|10|20)|pl-(2|5|10|20)|px-(2|5|10|20)|py-(2|5|10|20)|m-(2|5|10|20)|mt-(2|5|10|20)|mr-(2|5|10|20)|mb-(2|5|10|20)|ml-(2|5|10|20)|mx-(2|5|10|20)|my-(2|5|10|20)|lg:(pb|py)-20|lg:(p|pl|pr|pb|pt)-20)$/,
+    //   variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+    // },
   ],
 }
