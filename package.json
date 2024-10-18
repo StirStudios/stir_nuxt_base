@@ -36,6 +36,7 @@
     "@iconify-json/heroicons": "^1.2.1",
     "@nuxt/ui": "^2.18.7",
     "@nuxtjs/turnstile": "^0.9.10",
+    "nuxtjs-drupal-ce": "^2.1.0",
     "yup": "^1.4.0"
   },
   "release-it": {
