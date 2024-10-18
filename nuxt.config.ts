@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+// import { resolve } from 'path'
 
 export default defineNuxtConfig({
   nitro: {
@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
-  plugins: [resolve(__dirname, './plugins/aos.client')],
+  // plugins: [resolve(__dirname, './plugins/aos.client')],
   devtools: { enabled: true },
   modules: [
     [
