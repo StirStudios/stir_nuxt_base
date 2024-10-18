@@ -37,7 +37,7 @@ const media = computed(() => hero.media?.[0] || {})
         <h1 v-else-if="pageTitle" class="mb-0 text-white">
           {{ pageTitle }}
         </h1>
-        <div v-if="hero.text" v-html="hero.text" />
+        <div v-if="hero.text" class="hero-copy" v-html="hero.text" />
       </WrapAnimate>
     </div>
     <img
