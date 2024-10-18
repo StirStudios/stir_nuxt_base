@@ -10,9 +10,6 @@
     "lint": "eslint --ext .ts,.js,.vue, --ignore-path .gitignore .",
     "release": "release-it"
   },
-  "devDependencies": {
-    "release-it": "^17.10.0"
-  },
   "peerDependencies": {
     "@iconify-json/heroicons": "^1.2.1",
     "@nuxt/kit": "^3.13.2",
@@ -43,5 +40,8 @@
     "github": {
       "release": true
     }
+  },
+  "devDependencies": {
+    "release-it": "^17.10.0"
   }
 }
