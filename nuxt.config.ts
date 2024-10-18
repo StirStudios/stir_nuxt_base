@@ -1,5 +1,3 @@
-// import { resolve } from 'path'
-
 export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
@@ -35,7 +33,7 @@ export default defineNuxtConfig({
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
-  // plugins: [resolve(__dirname, './plugins/aos.client')],
+  plugins: ['~/plugins/aos.client'],
   devtools: { enabled: true },
   modules: [
     [
