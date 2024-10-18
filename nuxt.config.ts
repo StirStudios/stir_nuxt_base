@@ -14,6 +14,13 @@ export default defineNuxtConfig({
       }
     },
   },
+  routeRules: {
+    // General pages cached for 1 day using SWR
+    // '/**': { swr: 86400 },
+    '/admincontrol/login': {
+      redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
+    },
+  },
   app: {
     head: {
       htmlAttrs: {
