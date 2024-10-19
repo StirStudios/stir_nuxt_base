@@ -21,6 +21,8 @@ const showNavbar = ref(true)
 const navbarOpen = ref(false)
 const lastScrollPosition = ref(0)
 const isOpen = ref(false)
+const isScrolled = ref(false)
+const route = useRoute()
 
 // Scroll event handler
 const onScroll = () => {
@@ -31,6 +33,7 @@ const onScroll = () => {
   showNavbar.value = currentScrollPosition < lastScrollPosition.value
   lastScrollPosition.value = currentScrollPosition
   navbarOpen.value = false
+  isScrolled.value = currentScrollPosition > 50
 }
 
 // Throttle scroll event handler
@@ -45,6 +48,9 @@ const throttledOnScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', throttledOnScroll)
+  if (route.hash) {
+    isScrolled.value = true
+  }
 })
 
 onBeforeUnmount(() => {
@@ -181,7 +187,7 @@ onBeforeUnmount(() => {
 
 <style scoped lang="css">
 nav {
-  @apply translate-y-0 duration-500;
+  @apply z-50 translate-y-0 duration-500;
 }
 .navbar--hidden {
   @apply -translate-y-full;
