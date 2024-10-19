@@ -1,4 +1,7 @@
 export default defineNuxtConfig({
+  future: {
+    compatibilityVersion: 4,
+  },
   compatibilityDate: '2024-10-18',
   nitro: {
     compressPublicAssets: true,
