@@ -30,6 +30,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     [
+      '@nuxtjs/turnstile',
+      {
+        siteKey: `${process.env.TURNSTILE_KEY}`,
+      },
+    ],
+    [
       '@nuxtjs/robots',
       {
         // disallow: ['/secret', '/admin'],
