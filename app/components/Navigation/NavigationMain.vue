@@ -63,7 +63,7 @@ onBeforeUnmount(() => {
     v-if="isAdministrator"
     id="admin-menu"
     aria-label="Admin navigation"
-    class="sticky top-0 z-20 h-[3.1rem]"
+    class="sticky top-0 z-50 h-[3.1rem]"
     role="navigation"
   />
   <header aria-label="Site header">

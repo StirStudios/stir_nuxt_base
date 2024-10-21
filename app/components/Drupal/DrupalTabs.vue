@@ -76,7 +76,7 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
 
 <template>
   <div
-    class="admin-links md:px-auto sticky top-0 z-20 w-full bg-zinc-200 bg-opacity-70 px-4 px-8 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
+    class="admin-links md:px-auto sticky top-0 w-full bg-zinc-200 bg-opacity-70 px-4 px-8 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
   >
     <UHorizontalNavigation
       :links="links"
