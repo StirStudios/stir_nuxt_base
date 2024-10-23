@@ -126,6 +126,8 @@ export interface CarouselProps extends CommonSettings {
   interval?: number
   indicators?: boolean
   width?: string
+  vid?: string
+
 }
 
 export interface TextRepeatItem {
