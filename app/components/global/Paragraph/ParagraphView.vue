@@ -42,10 +42,10 @@ const getNodeProps = (node, title) => {
     <template v-if="item.carousel">
       <ParagraphCarousel
         :amount="item.gridCount"
-        :class="[item.width, item.spacing]"
         :indicators="item.carouselIndicators"
         :interval="item.carouselInterval"
         :items="filteredRows"
+        :vid="item.viewId"
       />
     </template>
     <div v-else :class="gridClasses">

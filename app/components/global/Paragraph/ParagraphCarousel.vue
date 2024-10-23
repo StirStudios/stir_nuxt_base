@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types'
 
-const props = withDefaults(defineProps<CarouselProps>(), () => ({
-  items: items,
-  amount: carouselCount,
-  interval: carouselInterval,
-  indicators: carouselIndicators,
-  header: header,
-  width: width,
-}))
+const props = defineProps<CarouselProps>()
 
 const carouselRef = ref()
 
@@ -25,12 +18,16 @@ onMounted(() => {
 })
 
 const showIndicators = computed(() => {
-  return props.indicators ? { indicators: true } : {}
+  return props.indicators ? true : false
 })
 
 const dynamicClass = computed(() => {
-  const basisFraction = props.amount > 1 ? `lg:basis-1/${props.amount}` : ''
-  return `basis-full ${basisFraction}`.trim()
+  const mdFraction = props.amount > 2 ? props.amount - 1 : 2
+  const basisFraction =
+    props.amount > 1
+      ? `md:basis-1/${mdFraction} lg:basis-1/${props.amount}`
+      : 'basis-full'
+  return basisFraction.trim()
 })
 </script>
 
