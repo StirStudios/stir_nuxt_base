@@ -40,7 +40,7 @@ const dynamicClass = computed(() => {
       v-slot="{ item }"
       :items="items"
       :ui="{
-        container: `overflow-hidden rounded-lg gap-10 slider ${width}`,
+        container: `rounded-lg gap-10 slider ${width}`,
         item:
           items[0]?.type === 'media' ? dynamicClass + ' h-64' : dynamicClass,
       }"
