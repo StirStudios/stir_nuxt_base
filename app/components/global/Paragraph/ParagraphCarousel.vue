@@ -26,7 +26,7 @@ const dynamicClass = computed(() => {
   const basisFraction =
     props.amount > 1
       ? `md:basis-1/${mdFraction} lg:basis-1/${props.amount}`
-      : 'basis-full'
+      : 'basis-full slide'
   return basisFraction.trim()
 })
 </script>
@@ -46,12 +46,12 @@ const dynamicClass = computed(() => {
       }"
     >
       <template v-if="item.element">
-        <div v-for="(sectionItem, index) in item.section" :key="index">
+        <template v-for="(sectionItem, index) in item.section" :key="index">
           <component
             :is="resolveComponent(sectionItem.element)"
             :item="sectionItem"
           />
-        </div>
+        </template>
       </template>
       <template v-else>
         <img
