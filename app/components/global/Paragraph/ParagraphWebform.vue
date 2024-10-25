@@ -135,69 +135,72 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UForm
-    v-if="!isFormSubmitted"
-    class="mx-auto space-y-4 md:max-w-lg"
-    :schema="schema"
-    :state="state"
-    @submit="onSubmit"
-  >
-    <template v-for="(field, fieldName) in webform[0].fields" :key="fieldName">
-      <UFormGroup
-        :description="field['#description']"
-        :label="field['#title']"
-        :name="fieldName"
-        :ui="{
-          label: {
-            base: 'text-sm block mb-1 font-medium text-gray-700 dark:text-gray-200',
-          },
-          help: 'mt-0 text-sm text-gray-500 dark:text-gray-400 italic pt-2 pb-0',
-          error: 'mt-2 py-0 text-red-500 dark:text-red-400 text-sm',
-        }"
-      >
-        <UInput
-          v-if="field['#type'] === 'textfield' || field['#type'] === 'email'"
-          v-model="state[fieldName]"
-          :placeholder="field['#placeholder']"
-          :type="field['#type']"
+  <WrapNone :wrapper="item.edit ? 'div' : undefined">
+    <EditLink :link="item.editLink" />
+    <UForm
+      v-if="!isFormSubmitted"
+      class="mx-auto space-y-4 md:max-w-lg"
+      :schema="schema"
+      :state="state"
+      @submit="onSubmit"
+    >
+      <template v-for="(field, fieldName) in webform[0].fields" :key="fieldName">
+        <UFormGroup
+          :description="field['#description']"
+          :label="field['#title']"
+          :name="fieldName"
+          :ui="{
+            label: {
+              base: 'text-sm block mb-1 font-medium text-gray-700 dark:text-gray-200',
+            },
+            help: 'mt-0 text-sm text-gray-500 dark:text-gray-400 italic pt-2 pb-0',
+            error: 'mt-2 py-0 text-red-500 dark:text-red-400 text-sm',
+          }"
+        >
+          <UInput
+            v-if="field['#type'] === 'textfield' || field['#type'] === 'email'"
+            v-model="state[fieldName]"
+            :placeholder="field['#placeholder']"
+            :type="field['#type']"
+          />
+          <UTextarea
+            v-if="field['#type'] === 'textarea'"
+            v-model="state[fieldName]"
+            :placeholder="field['#placeholder']"
+          />
+          <template v-if="field['#help']" #help>
+            {{ field['#help'] }}
+          </template>
+        </UFormGroup>
+      </template>
+      <template v-for="action in webform[0].actions" :key="action['#type']">
+        <p
+          class="mb-1 block pb-0 text-sm font-medium text-gray-700 dark:text-gray-200"
+        >
+          Let us know you're human
+        </p>
+        <ClientOnly>
+          <NuxtTurnstile v-model="turnstile" />
+        </ClientOnly>
+        <UButton
+          :label="action['#submit_Label']"
+          :loading="isLoading"
+          size="lg"
+          type="submit"
         />
-        <UTextarea
-          v-if="field['#type'] === 'textarea'"
-          v-model="state[fieldName]"
-          :placeholder="field['#placeholder']"
-        />
-        <template v-if="field['#help']" #help>
-          {{ field['#help'] }}
-        </template>
-      </UFormGroup>
-    </template>
-    <template v-for="action in webform[0].actions" :key="action['#type']">
-      <p
-        class="mb-1 block pb-0 text-sm font-medium text-gray-700 dark:text-gray-200"
-      >
-        Let us know you're human
-      </p>
-      <ClientOnly>
-        <NuxtTurnstile v-model="turnstile" />
-      </ClientOnly>
-      <UButton
-        :label="action['#submit_Label']"
-        :loading="isLoading"
-        size="lg"
-        type="submit"
-      />
-    </template>
-  </UForm>
-  <UNotification
-    v-else
-    :id="webformId"
-    class="mx-auto md:max-w-lg"
-    color="lime"
-    icon="i-heroicons-check-circle"
-    :timeout="0"
-  >
-    <template #description="{ description }">
-      <span v-html="webform[0].confirmationMessage" />
-    </template>
-  </UNotification>
+      </template>
+    </UForm>
+    <UNotification
+      v-else
+      :id="webformId"
+      class="mx-auto md:max-w-lg"
+      color="lime"
+      icon="i-heroicons-check-circle"
+      :timeout="0"
+    >
+      <template #description="{ description }">
+        <span v-html="webform[0].confirmationMessage" />
+      </template>
+    </UNotification>
+  </WrapNone>
 </template>

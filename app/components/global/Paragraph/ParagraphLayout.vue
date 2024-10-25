@@ -120,10 +120,12 @@ const getNodeProps = (item) => {
         </div>
       </div>
     </section>
-    <section v-else-if="!layout.element === 'field-entity-reference-revisions'">
-      <UContainer class="mb-10">
-        <ParagraphText :item="layout" />
-      </UContainer>
+    <section v-else class="container mx-auto">
+      <component
+        :is="resolveComponent(layout.element)"
+        v-bind="getNodeProps(layout)"
+      />
     </section>
   </template>
 </template>
+
