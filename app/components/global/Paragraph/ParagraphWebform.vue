@@ -135,7 +135,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <WrapNone :wrapper="item.edit ? 'div' : undefined">
+  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
     <EditLink :link="item.editLink" />
     <UForm
       v-if="!isFormSubmitted"

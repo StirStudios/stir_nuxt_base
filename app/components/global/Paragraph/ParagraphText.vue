@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <WrapNone :wrapper="item.edit ? 'div' : undefined">
+  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
     <EditLink :link="item.editLink" />
     <WrapAnimate
       :aos="item?.direction"
