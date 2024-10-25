@@ -179,6 +179,7 @@ export interface Webform {
   webformId: string
   webformTitle: string
   confirmationMessage: string
+  webformSubmissions: string
   fields: {
     [key: string]: WebformField
   }

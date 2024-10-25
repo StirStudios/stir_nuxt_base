@@ -135,8 +135,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
+  <WrapNone :wrapper="editLink ? 'div' : undefined">
+    <EditLink :link="webform[0].webformSubmissions" />
     <UForm
       v-if="!isFormSubmitted"
       class="mx-auto space-y-4 md:max-w-lg"
@@ -144,7 +144,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       :state="state"
       @submit="onSubmit"
     >
-      <template v-for="(field, fieldName) in webform[0].fields" :key="fieldName">
+      <template
+        v-for="(field, fieldName) in webform[0].fields"
+        :key="fieldName"
+      >
         <UFormGroup
           :description="field['#description']"
           :label="field['#title']"
