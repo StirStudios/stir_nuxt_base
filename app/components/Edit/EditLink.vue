@@ -13,6 +13,6 @@ defineProps({
     icon="i-heroicons-pencil-square"
     v-if="link"
     :to="link"
-    size="sm"
+    size="xs"
   />
 </template>
