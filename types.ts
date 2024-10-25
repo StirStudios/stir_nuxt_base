@@ -187,4 +187,5 @@ export interface Webform {
 
 export interface WebformProps {
   webform: Webform[]
+  editLink?: string
 }
