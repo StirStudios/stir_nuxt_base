@@ -10,6 +10,7 @@ const props = defineProps<WebformProps>()
 const formData = reactive<{ [key: string]: string }>({})
 const csrfToken = ref('')
 const webformId = props.webform[0]?.webformId
+const webformSubmissions = props.webform[0]?.webformSubmissions
 const config = useRuntimeConfig()
 const siteApi = config.public.api
 const turnstile = ref()
@@ -135,8 +136,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <WrapNone :wrapper="editLink ? 'div' : undefined">
-    <EditLink :link="webform[0].webformSubmissions" />
+  <WrapNone :wrapper="webformSubmissions ? 'div' : undefined">
+    <EditLink :link="webformSubmissions" />
     <UForm
       v-if="!isFormSubmitted"
       class="mx-auto space-y-4 md:max-w-lg"
