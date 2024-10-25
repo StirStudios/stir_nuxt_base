@@ -155,7 +155,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           :name="fieldName"
           :ui="{
             label: {
-              base: 'text-sm block mb-1 font-medium text-gray-700 dark:text-gray-200',
+              base: 'text-sm block mb-1 font-medium text-gray-200 dark:text-gray-200',
             },
             help: 'mt-0 text-sm text-gray-500 dark:text-gray-400 italic pt-2 pb-0',
             error: 'mt-2 py-0 text-red-500 dark:text-red-400 text-sm',
