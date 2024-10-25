@@ -29,6 +29,7 @@ export interface Hero {
   animate?: boolean
   direction?: string
   media: Media[]
+  editLink?: string
 }
 
 export interface Section extends CommonSettings {
