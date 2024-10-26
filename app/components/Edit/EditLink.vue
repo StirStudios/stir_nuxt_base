@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import type { EditLinkProps } from '~/types'
 
 defineProps<EditLinkProps>()
