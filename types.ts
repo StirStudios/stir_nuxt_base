@@ -155,6 +155,11 @@ export interface IconsSocialProps {
 
 // Webform Types
 export interface WebformProps {
+  webform: WebformDefinition[];
+  editLink?: string;
+}
+
+export interface WebformDefinition {
   webformId: string;
   webformTitle: string;
   webformConfirmation: string;
