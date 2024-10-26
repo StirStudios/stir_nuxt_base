@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ViewProps } from './types'
+import type { ViewProps } from '~/types'
 
 const props = defineProps<{
   item: ViewProps

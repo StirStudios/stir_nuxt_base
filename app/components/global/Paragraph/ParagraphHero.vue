@@ -3,8 +3,8 @@ import type { HeroProps } from '~/types'
 import { useDrupalApi } from '~/composables/useDrupalApi'
 const { isFront } = await useDrupalApi()
 
-const { hero } = defineProps<{
-  hero: Hero
+const { hero, pageTitle, siteSlogan } = defineProps<{
+  hero: HeroProps
   pageTitle: string
   siteSlogan: string
 }>()
