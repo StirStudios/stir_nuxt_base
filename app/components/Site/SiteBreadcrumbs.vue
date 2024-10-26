@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CrumbProps } from '~/types'
+import type { CrumbProps } from '~/types/NavigationTypes'
 
 const props = defineProps<CrumbProps>()
 

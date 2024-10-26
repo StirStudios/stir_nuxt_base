@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SectionProps } from '~/types'
+import type { SectionProps } from '~/types/ContentTypes'
 
 defineProps<{
   section: SectionProps[]

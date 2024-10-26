@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SharedSettings } from '~/types'
+import type { SharedSettings } from '~/types/BaseTypes'
 
 withDefaults(defineProps<SharedSettings>(), {
   wrapper: undefined,

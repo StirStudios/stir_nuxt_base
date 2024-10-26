@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HeroProps } from '~/types'
+import type { HeroProps } from '~/types/MediaTypes'
 import { useDrupalApi } from '~/composables/useDrupalApi'
 const { isFront } = await useDrupalApi()
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MediaProps } from '~/types'
+import type { MediaProps } from '~/types/MediaTypes'
 
 // Update props to accept an array of Media objects
 const props = defineProps<{

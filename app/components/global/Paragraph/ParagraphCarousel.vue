@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CarouselProps } from '~/types'
+import type { CarouselProps } from '~/types/MediaTypes'
 
 const props = defineProps<CarouselProps>()
 
