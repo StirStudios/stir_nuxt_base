@@ -1,11 +1,5 @@
 import { SharedSettings } from './BaseTypes'
 
-export interface ViewsPagerProps {
-  current: number
-  totalPages: number
-  maxLinks: number
-}
-
 export interface ViewProps {
   item: ViewItemProps
 }
@@ -20,4 +14,10 @@ export interface ViewItemProps extends SharedSettings {
   showIndicators?: boolean
   rows?: object[]
   pager?: object
+}
+
+export interface ViewsPagerProps {
+  current: number
+  totalPages: number
+  maxLinks: number
 }

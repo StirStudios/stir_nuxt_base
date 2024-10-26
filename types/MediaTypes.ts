@@ -26,10 +26,6 @@ export interface MediaProps {
   loading?: string
 }
 
-export interface MediaSettings extends SharedSettings {
-  matrix?: boolean
-}
-
 export interface CarouselProps extends SharedSettings {
   items: MediaProps[]
   header?: string
