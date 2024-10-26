@@ -1,6 +1,6 @@
-import { SharedSettings } from './BaseTypes'
+import { LayoutProps } from './UtilityTypes'
 
-export interface HeroProps extends SharedSettings {
+export interface HeroProps extends LayoutProps {
   title: string
   element: string
   id: string
@@ -26,7 +26,7 @@ export interface MediaProps {
   loading?: string
 }
 
-export interface CarouselProps extends SharedSettings {
+export interface CarouselProps extends LayoutProps {
   items: MediaProps[]
   header?: string
   amount?: number

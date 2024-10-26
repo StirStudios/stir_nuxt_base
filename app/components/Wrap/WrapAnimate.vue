@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { AnimationProps } from '~/types/UtilityTypes'
+import type { AosProps } from '~/types/UtilityTypes'
 
-withDefaults(defineProps<AnimationProps>(), {
+withDefaults(defineProps<AosProps>(), {
   aos: 'fade-up',
   wrapper: undefined,
   aosDelay: 0,

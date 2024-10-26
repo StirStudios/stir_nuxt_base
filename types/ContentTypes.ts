@@ -1,6 +1,6 @@
-import { SharedSettings } from './BaseTypes'
+import { LayoutProps } from './UtilityTypes'
 
-export interface SectionProps extends SharedSettings {
+export interface SectionProps extends LayoutProps {
   element: string
   id: string
   uuid: string
@@ -9,7 +9,7 @@ export interface SectionProps extends SharedSettings {
   regions: Record<string, RegionItemProps[]>
 }
 
-export interface RegionItemProps extends SharedSettings {
+export interface RegionItemProps extends LayoutProps {
   element: string
   id: string
   uuid: string
@@ -24,7 +24,7 @@ export interface RegionItemProps extends SharedSettings {
   textRepeat?: TextRepeatProps[]
 }
 
-export interface TextProps extends SharedSettings {
+export interface TextProps extends LayoutProps {
   content?: string
 }
 

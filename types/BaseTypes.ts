@@ -23,14 +23,3 @@ export interface LogoProps {
   width?: string
   height?: string
 }
-
-export interface SharedSettings {
-  container?: boolean
-  wrapper?: string
-  classes?: string
-  spacing?: string
-  width?: string
-  header?: string
-  animate?: boolean
-  direction?: string
-}

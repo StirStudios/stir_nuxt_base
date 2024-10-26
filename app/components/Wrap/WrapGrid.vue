@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { SharedSettings } from '~/types/BaseTypes'
+import type { LayoutProps } from '~/types/UtilityTypes'
 
-withDefaults(defineProps<SharedSettings>(), {
+withDefaults(defineProps<LayoutProps>(), {
   wrapper: undefined,
   classes: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
 })

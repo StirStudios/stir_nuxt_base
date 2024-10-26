@@ -1,10 +1,10 @@
-import { SharedSettings } from './BaseTypes'
+import { LayoutProps } from './UtilityTypes'
 
 export interface ViewProps {
   item: ViewItemProps
 }
 
-export interface ViewItemProps extends SharedSettings {
+export interface ViewItemProps extends LayoutProps {
   element: string
   viewId: string
   title: string

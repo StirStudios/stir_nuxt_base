@@ -1,15 +1,26 @@
-import { SharedSettings } from './BaseTypes'
-
 export interface WrapperProps {
   wrapper?: unknown
 }
 
-export interface AnimationProps {
+// AnimationProps
+export interface AosProps {
   wrapper?: string
   aos?: string
   aosDelay?: number
 }
 
-export interface MediaSettings extends SharedSettings {
+export interface MediaSettings extends LayoutProps {
   matrix?: boolean
+}
+
+// SharedSettings
+export interface LayoutProps {
+  container?: boolean
+  wrapper?: string
+  classes?: string
+  spacing?: string
+  width?: string
+  header?: string
+  animate?: boolean
+  direction?: string
 }
