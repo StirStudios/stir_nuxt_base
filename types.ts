@@ -136,7 +136,7 @@ export interface CrumbItemProps {
 export interface CarouselProps extends SharedSettings {
   items: MediaProps[];
   header?: string;
-  count?: number;
+  amount?: number;
   interval?: number;
   showIndicators?: boolean;
   width?: string;
