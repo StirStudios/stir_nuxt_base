@@ -1,10 +1,7 @@
 <script setup>
-defineProps({
-  link: {
-    type: String,
-    required: false,
-  },
-})
+import type { EditLinkProps } from '~/types'
+
+defineProps<EditLinkProps>()
 </script>
 
 <template>

@@ -1,10 +1,7 @@
 <script setup lang="ts">
-defineProps<{
-  formId: string
-  attributes: object
-  method: string
-  content?: string
-}>()
+import type { FormProps } from '~/types'
+
+const props = defineProps<FormProps>()
 </script>
 
 <template>

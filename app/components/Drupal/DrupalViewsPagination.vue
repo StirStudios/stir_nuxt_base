@@ -1,10 +1,8 @@
 <script setup lang="ts">
+import type { ViewsPagerProps } from '~/types'
+
 const props = withDefaults(
-  defineProps<{
-    current: number
-    totalPages: number
-    maxLinks: number
-  }>(),
+  defineProps<ViewsPagerProps>(),
   {
     current: 0,
     totalPages: 0,
