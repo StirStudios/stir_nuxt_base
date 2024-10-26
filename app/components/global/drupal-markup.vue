@@ -1,7 +1,7 @@
 <script setup lang="ts">
-defineProps<{
-  content: string
-}>()
+import type { TextProps } from '~/types'
+
+defineProps<TextProps>()
 </script>
 
 <template>
