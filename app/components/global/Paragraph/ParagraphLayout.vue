@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { Section } from '~/types'
+import type { SectionProps } from '~/types'
 
 defineProps<{
-  section: Section[]
+  section: SectionProps[]
 }>()
 
 // Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
-  return (layout: Section) => {
+  return (layout: SectionProps) => {
     return (
       layout.element === 'paragraph-layout' &&
       Object.values(layout.regions).some(
@@ -18,7 +18,7 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
-  return (layout: Section) => {
+  return (layout: SectionProps) => {
     const layoutToColumnsMap = {
       one_column: 1,
       two_column: 2,

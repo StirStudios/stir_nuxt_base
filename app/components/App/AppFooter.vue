@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { SiteInfo } from '~/types'
+import type { SiteInfoProps } from '~/types'
 
 const props = defineProps<{
-  site: SiteInfo
+  site: SiteInfoProps
 }>()
 
 const currentYear = computed(() => new Date().getFullYear())

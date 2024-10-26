@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { MediaSettings, Media } from '~/types'
+import type { MediaSettings, MediaProps } from '~/types'
 
 defineProps<{
   item: {
     settings: MediaSettings
-    media: Media[]
+    media: MediaProps[]
   }
 }>()
 </script>

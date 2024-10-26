@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const { getMessages } = useDrupalCe()
+const messages = getMessages()
+const dismiss = (id: number) => messages.value.splice(id, 1)
+</script>
+
 <template>
   <div :data-id="$options.name" class="messages">
     <transition-group name="list" tag="div">
@@ -12,12 +18,6 @@
     </transition-group>
   </div>
 </template>
-
-<script setup lang="ts">
-const { getMessages } = useDrupalCe()
-const messages = getMessages()
-const dismiss = (id: number) => messages.value.splice(id, 1)
-</script>
 
 <style lang="css" scoped>
 .messages {

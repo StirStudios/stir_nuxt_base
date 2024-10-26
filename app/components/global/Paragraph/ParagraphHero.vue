@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Hero } from '~/types'
+import type { HeroProps } from '~/types'
 import { useDrupalApi } from '~/composables/useDrupalApi'
 const { isFront } = await useDrupalApi()
 

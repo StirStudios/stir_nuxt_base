@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { CommonSettings } from '~/types'
+import type { SharedSettings } from '~/types'
 
-withDefaults(defineProps<CommonSettings>(), {
+const props = withDefaults(defineProps<SharedSettings>(), {
   wrapper: undefined,
   classes: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
 })
