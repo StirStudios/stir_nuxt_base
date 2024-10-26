@@ -140,7 +140,7 @@ export interface CarouselProps extends SharedSettings {
   interval?: number;
   showIndicators?: boolean;
   width?: string;
-  videoId?: string;
+  vid?: string;
 }
 
 export interface IconsSocialProps {
