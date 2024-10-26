@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import type { ViewsPagerProps } from '~/types'
 
-const props = withDefaults(
-  defineProps<ViewsPagerProps>(),
-  {
-    current: 0,
-    totalPages: 0,
-    maxLinks: 8,
-  },
-)
+const props = withDefaults(defineProps<ViewsPagerProps>(), {
+  current: 0,
+  totalPages: 0,
+  maxLinks: 8,
+})
 
 const previousURL = props.current > 0 ? `?page=${props.current - 1}` : null
 const nextURL =

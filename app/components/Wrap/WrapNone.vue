@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { WrapperProps } from '~/types'
 
-defineProps<WrapperProps>();
+defineProps<WrapperProps>()
 </script>
 
 <template>

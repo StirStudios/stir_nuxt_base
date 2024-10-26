@@ -83,6 +83,8 @@ const getNodeProps = (item) => {
     return {
       webform: item.webform,
     }
+  } else if (item.element === 'field-entity-reference-revisions') {
+    return null
   } else {
     return {
       item: item,
@@ -122,10 +124,10 @@ const getNodeProps = (item) => {
     </section>
     <section v-else class="container mx-auto">
       <component
+        v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
         v-bind="getNodeProps(layout)"
       />
     </section>
   </template>
 </template>
-
