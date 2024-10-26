@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { FormProps } from '~/types'
+import type { DrupalFormProps } from '~/types'
 
-const props = defineProps<FormProps>()
+const props = defineProps<DrupalFormProps>()
 </script>
 
 <template>
