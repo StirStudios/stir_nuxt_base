@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformProps } from '@stir/base/types/FormTypes'
+import type { WebformProps } from '~/types/FormTypes'
 import { object, string, type InferType } from 'yup'
 
 const toast = useToast()
