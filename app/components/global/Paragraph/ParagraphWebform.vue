@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformProps } from '~/types/FormTypes'
+import type { WebformProps } from '@stir/base/types/FormTypes'
 import { object, string, type InferType } from 'yup'
 
 const toast = useToast()
@@ -89,7 +89,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     // Send the form submission
     const { data: submitData, error: submitError } = await useFetch(
-      `${siteApi}/webform_rest/submit`,
+      `${siteApi}/api/stir_webform_rest/submit`,
       {
         method: 'POST',
         headers: {
@@ -203,7 +203,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       :timeout="0"
     >
       <template #description="{ description }">
-        <span v-html="webform[0].confirmationMessage" />
+        <span v-html="webform[0].webformConfirmation" />
       </template>
     </UNotification>
   </WrapNone>

@@ -13,7 +13,7 @@ export interface MediaSettings extends LayoutProps {
   matrix?: boolean
 }
 
-// SharedSettings
+// LayoutProps
 export interface LayoutProps {
   container?: boolean
   wrapper?: string
