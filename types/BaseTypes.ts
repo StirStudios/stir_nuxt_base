@@ -15,6 +15,7 @@ export interface PageProps {
   hero?: HeroProps
   section?: SectionProps[]
   siteInfo?: SiteInfoProps
+  nextPrev?: NextPrevProps
 }
 
 export interface NextPrevProps {
