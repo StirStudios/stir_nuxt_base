@@ -7,11 +7,6 @@ export interface NodeLinkProps {
   url: string
 }
 
-export interface PrevNextProps {
-  prev_node?: NodeLinkProps | null
-  next_node?: NodeLinkProps | null
-}
-
 export interface PageProps {
   title: string
   element: string
@@ -20,7 +15,8 @@ export interface PageProps {
   hero?: HeroProps
   section?: SectionProps[]
   siteInfo?: SiteInfoProps
-  prevNext?: PrevNextProps
+  prev_node?: NodeLinkProps | null
+  next_node?: NodeLinkProps | null
 }
 
 export interface SiteInfoProps {
