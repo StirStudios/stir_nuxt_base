@@ -15,10 +15,6 @@ export interface PageProps {
   hero?: HeroProps
   section?: SectionProps[]
   siteInfo?: SiteInfoProps
-  nextPrev?: NextPrevProps
-}
-
-export interface NextPrevProps {
   prev_node?: NodeLinkProps | null
   next_node?: NodeLinkProps | null
 }
