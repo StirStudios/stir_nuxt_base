@@ -1,6 +1,17 @@
 import { HeroProps } from './MediaTypes'
 import { SectionProps } from './ContentTypes'
 
+export interface NodeLinkProps {
+  nid: string
+  title: string
+  url: string
+}
+
+export interface PrevNextProps {
+  prev_node?: NodeLinkProps | null
+  next_node?: NodeLinkProps | null
+}
+
 export interface PageProps {
   title: string
   element: string
@@ -9,6 +20,7 @@ export interface PageProps {
   hero?: HeroProps
   section?: SectionProps[]
   siteInfo?: SiteInfoProps
+  prevNext?: PrevNextProps
 }
 
 export interface SiteInfoProps {
