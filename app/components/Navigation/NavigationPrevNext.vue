@@ -1,30 +1,34 @@
 <script setup lang="ts">
-import { PageProps } from '~/types/PageTypes'
+import type { NodeLinkProps } from '@stir/base/types/BaseTypes'
 
-const page = ref<PageProps>()
+defineProps<{
+  prevNode?: NodeLinkProps | null
+  nextNode?: NodeLinkProps | null
+}>()
 </script>
 
 <template>
-  <template v-if="page">
+  <div class="flex justify-between">
     <UButton
-      v-if="page.prev_node"
-      icon="i-heroicons-pencil-square"
+      v-if="prevNode"
+      icon="i-heroicons-chevron-left"
       size="sm"
       color="primary"
       square
       variant="solid"
       label="Previous"
-      :to="page.prev_node.url"
+      :to="prevNode.url"
     />
     <UButton
-      v-if="page.next_node"
-      icon="i-heroicons-pencil-square"
+      v-if="nextNode"
+      icon="i-heroicons-chevron-right"
       size="sm"
       color="primary"
       square
       variant="solid"
       label="Next"
-      :to="page.next_node.url"
+      trailing
+      :to="nextNode.url"
     />
-  </template>
+  </div>
 </template>
