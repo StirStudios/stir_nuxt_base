@@ -2,7 +2,7 @@
   <div class="transition">
     <NuxtLoadingIndicator />
     <a
-      class="bg-primary absolute left-0 top-0 z-50 m-3 -translate-y-16 p-3 text-black transition focus:translate-y-0"
+      class="bg-primary absolute top-0 left-0 z-50 m-3 -translate-y-16 p-3 text-black transition focus:translate-y-0"
       href="#main-content"
       >Skip to main content</a
     >
@@ -14,6 +14,8 @@
 </template>
 
 <style scroped>
+@import 'tailwindcss';
+@import '@nuxt/ui';
 .page-enter-active,
 .page-leave-active {
   @apply transition-all duration-500;
