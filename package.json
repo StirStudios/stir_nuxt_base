@@ -16,7 +16,7 @@
     "@nuxt/kit": "^3.13.2",
     "@nuxt/schema": "^3.13.2",
     "@nuxt/scripts": "^0.9.4",
-    "@nuxt/ui": "^2.18.7",
+    "@nuxt/ui": "3.0.0-alpha.7",
     "@nuxtjs/robots": "^4.1.7",
     "@nuxtjs/sitemap": "^6.1.1",
     "@types/node": "^22.7.5",
