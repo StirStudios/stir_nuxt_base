@@ -63,6 +63,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <div
+    v-if="isAdministrator"
+    id="admin-menu"
+    aria-label="Admin navigation"
+    class="sticky top-0 z-50 h-[3.1rem]"
+    role="navigation"
+  />
   <header aria-label="Site header">
     <nav
       aria-label="Site navigation"
@@ -86,11 +93,13 @@ onBeforeUnmount(() => {
 
           <!-- Desktop Navigation -->
           <UNavigationMenu
+            class="hidden md:block"
             :items="navLinks"
-            orientation="vertical"
+            highlight
+            orientation="horizontal"
             color="neutral"
-            @click="isOpen = false"
           />
+
           <!-- Theme Toggle and Mobile Menu Button -->
           <div class="flex items-center space-x-4">
             <ClientOnly>
