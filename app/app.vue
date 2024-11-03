@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<style scroped>
+<style>
 @import 'tailwindcss';
 @import '@nuxt/ui';
 .page-enter-active,
