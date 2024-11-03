@@ -87,7 +87,7 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
   </div>
 </template>
 
-<style lang="css">
+<style>
 @import 'tailwindcss';
 @import '@nuxt/ui';
 .admin-links {

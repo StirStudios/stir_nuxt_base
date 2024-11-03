@@ -185,7 +185,7 @@ onBeforeUnmount(() => {
   </header>
 </template>
 
-<style scoped lang="css">
+<style>
 @import 'tailwindcss';
 @import '@nuxt/ui';
 nav {

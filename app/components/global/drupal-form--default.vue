@@ -20,7 +20,7 @@ defineProps<DrupalFormProps>()
   </div>
 </template>
 
-<style lang="css">
+<style>
 @import 'tailwindcss';
 @import '@nuxt/ui';
 .drupal-form {
