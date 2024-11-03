@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useDrupalApi } from '~/composables/useDrupalApi'
-import { useRoute } from '#app'
-import { useColorModeToggle } from '@nuxt/color-mode'
 
 // Fetch data from Drupal API
 const { page, isAdministrator, fetchMenu } = await useDrupalApi()
