@@ -73,9 +73,10 @@ onBeforeUnmount(() => {
   <header aria-label="Site header">
     <nav
       aria-label="Site navigation"
-      class="bg-opacity-90 dark:bg-opacity-70 fixed top-0 z-10 w-full bg-white px-4 py-3 shadow backdrop-blur-md dark:bg-gray-950 dark:shadow-gray-700"
+      class="md:px-auto bg-opacity-90 dark:bg-opacity-70 fixed top-0 z-10 w-full bg-white px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:shadow-gray-700"
       :class="{
         'navbar--hidden': !showNavbar,
+        sticky: isAdministrator && showNavbar,
       }"
       role="navigation"
     >
@@ -97,7 +98,6 @@ onBeforeUnmount(() => {
             :items="navLinks"
             highlight
             orientation="horizontal"
-            color="neutral"
           />
 
           <!-- Theme Toggle and Mobile Menu Button -->
