@@ -15,7 +15,6 @@ const { isDark } = useColorModeToggle()
 const navLinks = ref(
   mainMenuArray.map((menuItem) => ({
     label: menuItem.title,
-    icon: 'i-heroicons-arrow-right-20-solid', // Replace or customize as needed
     to: menuItem.external
       ? menuItem.absolute
       : `/${menuItem.alias}${menuItem.options && menuItem.options.fragment ? `#${menuItem.options.fragment}` : ''}`,
@@ -73,7 +72,7 @@ onBeforeUnmount(() => {
   <header aria-label="Site header">
     <nav
       aria-label="Site navigation"
-      class="md:px-auto bg-opacity-90 dark:bg-opacity-70 fixed top-0 z-10 w-full bg-white px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:shadow-gray-700"
+      class="md:px-auto bg-opacity-90 dark:bg-opacity-70 fixed top-0 z-10 w-full bg-white px-4 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:shadow-gray-700"
       :class="{
         'navbar--hidden': !showNavbar,
         sticky: isAdministrator && showNavbar,
@@ -81,7 +80,7 @@ onBeforeUnmount(() => {
       role="navigation"
     >
       <UContainer>
-        <div class="flex items-center justify-between">
+        <div class="flex w-full items-center justify-between">
           <!-- Logo -->
           <ULink aria-label="Site Logo" class="font-bold" to="/">
             <template v-if="!page.site_info?.name">
@@ -93,12 +92,14 @@ onBeforeUnmount(() => {
           </ULink>
 
           <!-- Desktop Navigation -->
-          <UNavigationMenu
-            class="hidden md:block"
-            :items="navLinks"
-            highlight
-            orientation="horizontal"
-          />
+          <div class="flex flex-1 justify-center">
+            <UNavigationMenu
+              class="hidden md:block"
+              :items="navLinks"
+              highlight
+              orientation="horizontal"
+            />
+          </div>
 
           <!-- Theme Toggle and Mobile Menu Button -->
           <div class="flex items-center space-x-4">
@@ -131,18 +132,32 @@ onBeforeUnmount(() => {
     <!-- Mobile Navigation -->
     <USlideover v-model="isOpen">
       <UCard class="flex flex-col">
-        <UButton
-          class="self-end"
-          icon="i-heroicons-x-mark-20-solid"
-          variant="ghost"
-          @click="isOpen = false"
-        />
-        <UNavigationMenu
-          :items="navLinks"
-          orientation="vertical"
-          color="neutral"
-          @click="isOpen = false"
-        />
+        <template #header>
+          <div class="flex items-center justify-between">
+            <ULink class="m-auto !outline-none" to="/" @click="isOpen = false">
+              <template v-if="page.site_info?.name">
+                <AppLogo />
+              </template>
+              <template v-else>
+                {{ page.site_info?.name }}
+              </template>
+            </ULink>
+            <UButton
+              class="self-end"
+              icon="i-heroicons-x-mark-20-solid"
+              variant="ghost"
+              @click="isOpen = false"
+            />
+          </div>
+        </template>
+        <div class="flex-1">
+          <UNavigationMenu
+            :items="navLinks"
+            orientation="vertical"
+            color="neutral"
+            @click="isOpen = false"
+          />
+        </div>
       </UCard>
     </USlideover>
   </header>
