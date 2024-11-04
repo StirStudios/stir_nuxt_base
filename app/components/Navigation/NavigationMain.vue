@@ -92,17 +92,15 @@ onBeforeUnmount(() => {
           </ULink>
 
           <!-- Desktop Navigation -->
-          <div class="order-2">
-            <UNavigationMenu
-              class="hidden md:block"
-              :items="navLinks"
-              highlight
-              orientation="horizontal"
-            />
-          </div>
+          <UNavigationMenu
+            class="hidden md:block"
+            :items="navLinks"
+            highlight
+            orientation="horizontal"
+          />
 
           <!-- Theme Toggle and Mobile Menu Button -->
-          <div class="order-3">
+          <div class="flex md:order-3">
             <ClientOnly>
               <UButton
                 aria-label="Theme"
@@ -117,10 +115,15 @@ onBeforeUnmount(() => {
               />
             </ClientOnly>
             <UButton
-              aria-label="Open mobile menu"
-              class="block md:hidden"
+              aria-label="Site navigation toggle"
+              class="block flex items-center md:hidden"
               color="gray"
-              icon="i-heroicons-bars-3-solid"
+              :icon="
+                navbarOpen
+                  ? 'i-heroicons-x-mark-solid'
+                  : 'i-heroicons-bars-3-solid'
+              "
+              size="xl"
               variant="ghost"
               @click="isOpen = true"
             />
