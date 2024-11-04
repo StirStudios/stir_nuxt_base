@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
       role="navigation"
     >
       <UContainer>
-        <div class="flex w-full items-center justify-between">
+        <div class="mx-auto flex flex-wrap items-center justify-between">
           <!-- Logo -->
           <ULink aria-label="Site Logo" class="font-bold" to="/">
             <template v-if="!page.site_info?.name">
@@ -92,7 +92,7 @@ onBeforeUnmount(() => {
           </ULink>
 
           <!-- Desktop Navigation -->
-          <div class="flex flex-1 justify-center">
+          <div class="order-2">
             <UNavigationMenu
               class="hidden md:block"
               :items="navLinks"
@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
           </div>
 
           <!-- Theme Toggle and Mobile Menu Button -->
-          <div class="flex items-center space-x-4">
+          <div class="order-3">
             <ClientOnly>
               <UButton
                 aria-label="Theme"
@@ -130,35 +130,29 @@ onBeforeUnmount(() => {
     </nav>
 
     <!-- Mobile Navigation -->
-    <USlideover v-model="isOpen">
-      <UCard class="flex flex-col">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <ULink class="m-auto !outline-none" to="/" @click="isOpen = false">
-              <template v-if="page.site_info?.name">
-                <AppLogo />
-              </template>
-              <template v-else>
-                {{ page.site_info?.name }}
-              </template>
-            </ULink>
-            <UButton
-              class="self-end"
-              icon="i-heroicons-x-mark-20-solid"
-              variant="ghost"
-              @click="isOpen = false"
-            />
-          </div>
-        </template>
-        <div class="flex-1">
-          <UNavigationMenu
-            :items="navLinks"
-            orientation="vertical"
-            color="neutral"
-            @click="isOpen = false"
-          />
-        </div>
-      </UCard>
+    <USlideover
+      v-model="isOpen"
+      title="Slideover with close button"
+      :close="{
+        color: 'primary',
+        variant: 'outline',
+        class: 'rounded-full',
+      }"
+    >
+      <UButton
+        class="self-end"
+        icon="i-heroicons-x-mark-20-solid"
+        variant="ghost"
+        @click="isOpen = false"
+      />
+      <template #body>
+        <UNavigationMenu
+          :items="navLinks"
+          orientation="vertical"
+          color="neutral"
+          @click="isOpen = false"
+        />
+      </template>
     </USlideover>
   </header>
 </template>
