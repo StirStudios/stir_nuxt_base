@@ -5,8 +5,9 @@
     "paths": {
       "@/*": ["*"],
       "~/*": ["*"],
-      "~/types/*": ["types/*"],
-      "~/composables/*": ["composables/*"]
+      "~/components/*": ["components/*"],
+      "~/composables/*": ["composables/*"],
+      "~/types/*": ["types/*"]
     }
   }
 }
