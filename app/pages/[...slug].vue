@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDrupalApi } from '~/composables/useDrupalApi'
+import { useDrupalApi } from './composables/useDrupalApi'
 const { isAdministrator, renderCustomElements, classes, page } =
   await useDrupalApi()
 
