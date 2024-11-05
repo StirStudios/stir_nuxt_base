@@ -6,7 +6,7 @@
       "@/*": ["*"],
       "~/*": ["*"],
       "~/types/*": ["types/*"],
-      "~/composables/*": ["app/composables/*"]
+      "~/composables/*": ["./app/composables/*"]
     }
   }
 }
