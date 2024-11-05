@@ -27,13 +27,16 @@ defineProps<{
         >
           <template
             v-if="
-              (item.overlay === true && media.type === 'image') ||
-              media.type === 'video'
+              item.overlay === true ||
+              (media.type === 'video' && media.type === 'image')
             "
           >
             <MediaPopup :media="[media]" />
           </template>
-          <template v-else-if="media.type === 'image'">
+          <template v-else-if="media.type === 'audio'">
+            <div v-html="media.mediaEmbed" />
+          </template>
+          <template v-else>
             <MediaSimple :media="[media]" />
           </template>
         </div>
