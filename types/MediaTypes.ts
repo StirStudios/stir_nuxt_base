@@ -35,3 +35,18 @@ export interface CarouselProps extends LayoutProps {
   width?: string
   vid?: string
 }
+
+export interface VideoPlayer {
+  isReady: boolean
+  supports: (method: string, value: string) => boolean
+  pause: () => void
+  play: () => void
+  mute: () => void
+  unmute: () => void
+  setVolume: (value: number) => void
+  getVolume: (callback: (value: number) => void) => void
+  getCurrentTime: (callback: (value: number) => void) => void
+  setCurrentTime: (value: number) => void
+  on: (event: string, callback: () => void) => void
+  off: (event: string, callback?: () => void) => void
+}
