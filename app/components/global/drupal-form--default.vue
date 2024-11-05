@@ -20,21 +20,19 @@ defineProps<DrupalFormProps>()
   </div>
 </template>
 
-<style>
-@import 'tailwindcss';
-@import '@nuxt/ui';
+<style lang="css">
 .drupal-form {
   .form-item {
     label {
-      @apply block text-sm leading-6 font-medium text-white;
+      @apply block text-sm font-medium leading-6 text-white;
     }
     input {
-      @apply mt-2 block w-full rounded-md border-0 px-2 py-1.5 text-white ring-1 shadow-sm ring-gray-300 ring-inset placeholder:text-white focus:ring-2 focus:ring-indigo-600 focus:ring-inset sm:text-sm sm:leading-6;
+      @apply mt-2 block w-full rounded-md border-0 px-2 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6;
     }
   }
   .form-actions {
     input {
-      @apply bg-primary hover:bg-primary-500 focus-visible:outline-primary-600 flex w-full justify-center rounded-md px-3 py-1.5 text-sm leading-6 font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+      @apply bg-primary hover:bg-primary-500 focus-visible:outline-primary-600 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
     }
   }
 }

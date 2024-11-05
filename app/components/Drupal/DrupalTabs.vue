@@ -49,7 +49,7 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
     [
       {
         label: 'Log out',
-        icon: 'i-heroicons-arrow-left-on-rectangle',
+        icon: 'i-heroicons-arrow-left-start-on-rectangle',
         to: `${siteApi}/user/logout`,
       },
     ],
@@ -66,7 +66,7 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
     [
       {
         label: 'Log out',
-        icon: 'i-heroicons-arrow-left-on-rectangle',
+        icon: 'i-heroicons-arrow-left-start-on-rectangle',
         to: `${siteApi}/user/logout`,
       },
     ],
@@ -76,21 +76,18 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
 
 <template>
   <div
-    class="admin-links md:px-auto bg-opacity-70 sticky top-0 w-full bg-zinc-200 px-4 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
+    class="admin-links md:px-auto sticky top-0 w-full bg-zinc-200 bg-opacity-70 px-4 px-8 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
   >
-    <UNavigationMenu
-      :items="links"
+    <UHorizontalNavigation
+      :links="links"
       :ui="{
         base: 'text-xs',
       }"
-      orientation="horizontal"
     />
   </div>
 </template>
 
-<style>
-@import 'tailwindcss';
-@import '@nuxt/ui';
+<style lang="css">
 .admin-links {
   .truncate {
     @apply hidden md:block;

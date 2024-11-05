@@ -1,31 +1,25 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useDrupalApi } from '~/composables/useDrupalApi'
-
-// Fetch data from Drupal API
 const { page, isAdministrator, fetchMenu } = await useDrupalApi()
 const mainMenu = await fetchMenu('main')
 
-// Extract the raw array value from the reactive ref object
+// Extract the raw array value from the reactive ref object 'mainMenu'
 const mainMenuArray = mainMenu.value
 
-// Set color mode toggle
+// Set color mode toggle.
 const { isDark } = useColorModeToggle()
 
-// Map over the array of menu items to create navLinks in the format required by UNavigationMenu
-const navLinks = ref(
-  mainMenuArray.map((menuItem) => ({
-    label: menuItem.title,
-    to: menuItem.external
-      ? menuItem.absolute
-      : `/${menuItem.alias}${menuItem.options && menuItem.options.fragment ? `#${menuItem.options.fragment}` : ''}`,
-    children: menuItem.children?.map((child) => ({
-      label: child.title,
-      to: child.external ? child.absolute : `/${child.alias}`,
-    })),
-  })),
-)
+// Map over the array of menu items to create navLinks
+const navLinks = mainMenuArray.map((menuItem) => ({
+  label: menuItem.title,
+  to: menuItem.external
+    ? menuItem.absolute
+    : `/${menuItem.alias}${menuItem.options && menuItem.options.fragment ? `#${menuItem.options.fragment}` : ''}`,
+}))
 
 const showNavbar = ref(true)
+const navbarOpen = ref(false)
+const lastScrollPosition = ref(0)
 const isOpen = ref(false)
 const isScrolled = ref(false)
 const route = useRoute()
@@ -35,7 +29,10 @@ const onScroll = () => {
   const currentScrollPosition =
     window.pageYOffset || document.documentElement.scrollTop
   if (currentScrollPosition < 0) return
-  showNavbar.value = currentScrollPosition < 50
+  if (Math.abs(currentScrollPosition - lastScrollPosition.value) < 40) return
+  showNavbar.value = currentScrollPosition < lastScrollPosition.value
+  lastScrollPosition.value = currentScrollPosition
+  navbarOpen.value = false
   isScrolled.value = currentScrollPosition > 50
 }
 
@@ -72,7 +69,7 @@ onBeforeUnmount(() => {
   <header aria-label="Site header">
     <nav
       aria-label="Site navigation"
-      class="md:px-auto bg-opacity-90 dark:bg-opacity-70 fixed top-0 z-10 w-full bg-white px-4 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:shadow-gray-700"
+      class="md:px-auto fixed top-0 z-10 w-full bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
       :class="{
         'navbar--hidden': !showNavbar,
         sticky: isAdministrator && showNavbar,
@@ -81,26 +78,35 @@ onBeforeUnmount(() => {
     >
       <UContainer>
         <div class="mx-auto flex flex-wrap items-center justify-between">
-          <!-- Logo -->
-          <ULink aria-label="Site Logo" class="font-bold" to="/">
-            <template v-if="!page.site_info?.name">
-              <AppLogo />
-            </template>
-            <template v-else>
-              {{ page.site_info?.name }}
-            </template>
-          </ULink>
-
-          <!-- Desktop Navigation -->
-          <UNavigationMenu
-            class="hidden md:block"
-            :items="navLinks"
-            highlight
-            orientation="horizontal"
-          />
-
-          <!-- Theme Toggle and Mobile Menu Button -->
-          <div class="flex md:order-3">
+          <div class="order-1">
+            <ULink aria-label="Site Logo" class="font-bold" to="/">
+              <template v-if="!page.site_info?.name">
+                <AppLogo />
+              </template>
+              <template v-else>
+                {{ page.site_info?.name }}
+              </template>
+            </ULink>
+          </div>
+          <div class="order-2 flex">
+            <UHorizontalNavigation
+              class="hidden border-none md:block"
+              :links="navLinks"
+              :ui="{
+                after: '',
+                container: 'block w-full sm:flex sm:items-center min-w-0',
+              }"
+            >
+              <template #default="{ link }">
+                <span
+                  class="group-hover:text-primary relative block w-full duration-500"
+                >
+                  {{ link.label }}
+                </span>
+              </template>
+            </UHorizontalNavigation>
+          </div>
+          <div class="order-2 flex md:order-3">
             <ClientOnly>
               <UButton
                 aria-label="Theme"
@@ -131,38 +137,55 @@ onBeforeUnmount(() => {
         </div>
       </UContainer>
     </nav>
-
-    <!-- Mobile Navigation -->
     <USlideover
       v-model="isOpen"
-      title="Slideover with close button"
-      :close="{
-        color: 'primary',
-        variant: 'outline',
-        class: 'rounded-full',
+      :ui="{
+        width: 'w-full max-w-full',
       }"
     >
-      <UButton
-        class="self-end"
-        icon="i-heroicons-x-mark-20-solid"
-        variant="ghost"
-        @click="isOpen = false"
-      />
-      <template #body>
-        <UNavigationMenu
-          :items="navLinks"
-          orientation="vertical"
-          color="neutral"
+      <UCard
+        class="size-lg flex flex-1 flex-col"
+        :ui="{
+          body: { base: 'flex-1' },
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }"
+      >
+        <template #header>
+          <div class="flex items-center justify-between">
+            <ULink class="m-auto !outline-none" to="/" @click="isOpen = false">
+              <template v-if="page.site_info?.name">
+                <AppLogo />
+              </template>
+              <template v-else>
+                {{ page.site_info?.name }}
+              </template>
+            </ULink>
+            <UButton
+              class="-my-1"
+              color="gray"
+              icon="i-heroicons-x-mark-20-solid"
+              variant="ghost"
+              @click="isOpen = false"
+            />
+          </div>
+        </template>
+        <UVerticalNavigation
+          :links="navLinks"
+          :ui="{
+            base: 'my-3 uppercase',
+            label: 'text-center w-full',
+            padding: 'px-3.5 py-2.5',
+            size: 'text-lg',
+          }"
           @click="isOpen = false"
         />
-      </template>
+      </UCard>
     </USlideover>
   </header>
 </template>
 
-<style>
-@import 'tailwindcss';
-@import '@nuxt/ui';
+<style scoped lang="css">
 nav {
   @apply z-50 translate-y-0 duration-500;
 }
