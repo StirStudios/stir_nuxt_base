@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useDrupalApi } from './composables/useDrupalApi'
+import { useDrupalApi } from '../composables/useDrupalApi'
 const { dataReady, isAdministrator, page } = await useDrupalApi()
 </script>
 
