@@ -47,8 +47,5 @@
   },
   "devDependencies": {
     "release-it": "^17.10.0"
-  },
-  "dependencies": {
-    "nuxt": "^3.14.0"
   }
 }
