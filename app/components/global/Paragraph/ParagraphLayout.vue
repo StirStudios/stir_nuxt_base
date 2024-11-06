@@ -77,6 +77,8 @@ const getNodeProps = (item) => {
         spacing: item.spacing,
         width: item.width,
         gridCount: item.gridCount,
+        animate: item.animate,
+        direction: item.direction,
       },
     }
   } else if (item.element === 'paragraph-webform') {

@@ -2,7 +2,7 @@
 import type { ViewProps } from '~/types/ViewTypes'
 
 const props = defineProps<{
-  item: ViewProps
+  item: ViewItemProps
 }>()
 
 const gridClasses = computed(() => {
@@ -37,26 +37,31 @@ const getNodeProps = (node, title) => {
 </script>
 
 <template>
-  <h3 v-if="item.title">{{ item.title }}</h3>
-  <div :class="[!item.carousel ? item.width : '', item.spacing]">
-    <template v-if="item.carousel">
-      <ParagraphCarousel
-        :amount="item.gridCount"
-        :indicators="item.carouselIndicators"
-        :interval="item.carouselInterval"
-        :items="filteredRows"
-        :vid="item.viewId"
-      />
-    </template>
-    <div v-else :class="gridClasses">
-      <div v-for="row in filteredRows" :key="row.created" class="item">
-        <component
-          :is="resolveComponent(node.element)"
-          v-for="node in row.section"
-          :key="node.uuid"
-          v-bind="getNodeProps(node, row.title)"
+  <WrapAnimate
+    :aos="item?.direction"
+    :wrapper="item?.animate === true ? 'div' : undefined"
+  >
+    <h3 v-if="item.title">{{ item.title }}</h3>
+    <div :class="[!item.carousel ? item.width : '', item.spacing]">
+      <template v-if="item.carousel">
+        <ParagraphCarousel
+          :amount="item.gridCount"
+          :indicators="item.carouselIndicators"
+          :interval="item.carouselInterval"
+          :items="filteredRows"
+          :vid="item.viewId"
         />
+      </template>
+      <div v-else :class="gridClasses">
+        <div v-for="row in filteredRows" :key="row.created" class="item">
+          <component
+            :is="resolveComponent(node.element)"
+            v-for="node in row.section"
+            :key="node.uuid"
+            v-bind="getNodeProps(node, row.title)"
+          />
+        </div>
       </div>
     </div>
-  </div>
+  </WrapAnimate>
 </template>
