@@ -8,7 +8,7 @@ withDefaults(defineProps<LayoutProps>(), {
   classes: '',
 })
 
-const classes = computed(() => appConfig.stirBase.grid.wrapCols)
+const classes = computed(() => appConfig.stirTheme.grid.wrapCols)
 </script>
 
 <template>
