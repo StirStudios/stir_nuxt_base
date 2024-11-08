@@ -19,6 +19,8 @@ export default defineAppConfig({
         3: 'sm:grid-cols-2 md:grid-cols-3',
         4: 'sm:grid-cols-2 md:grid-cols-4',
       },
+    wrapCols: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4', // Default classes for wrapCols
+
       container: 'mx-auto container px-4 md:px-5',
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
