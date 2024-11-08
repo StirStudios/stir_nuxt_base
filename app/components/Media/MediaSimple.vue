@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
+import { aspectRatioClass } from '~/utils/aspectRatioClass'
 
 defineProps<{
   media?: MediaProps[]
 }>()
+
+const loadedImages = reactive<{ [key: string]: boolean }>({})
 </script>
 
 <template>
@@ -25,20 +28,26 @@ defineProps<{
         allowfullscreen
       />
     </div>
-    <img
-      v-else
-      :alt="item.alt || ''"
-      :class="[
-        'object-fit shadow-2xl',
-        'media media-' + item.mid,
-        aspectRatioClass(item.width, item.height),
-      ]"
-      :height="item.height"
-      :loading="item.loading || 'lazy'"
-      :sizes="item.sizes"
-      :src="item.src"
-      :srcset="item.srcset"
-      :width="item.width"
-    />
+    <client-only v-else>
+      <img
+        :alt="item.alt || ''"
+        :class="[
+          'object-fit shadow-2xl transition-opacity duration-1000 ease-in-out',
+          'media media-' + item.mid,
+          aspectRatioClass(item.width, item.height),
+          {
+            'opacity-100': loadedImages[item.mid],
+            'opacity-0': !loadedImages[item.mid],
+          },
+        ]"
+        :height="item.height"
+        :loading="item.loading || 'lazy'"
+        :sizes="item.sizes"
+        :src="item.src"
+        :srcset="item.srcset"
+        :width="item.width"
+        @load="loadedImages[item.mid] = true"
+      />
+    </client-only>
   </template>
 </template>

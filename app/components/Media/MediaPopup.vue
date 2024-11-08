@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { MediaProps } from '~/types/MediaTypes'
+import { aspectRatioClass } from '~/utils/aspectRatioClass'
 
 // Update props to accept an array of Media objects
 const props = defineProps<{
@@ -7,28 +8,6 @@ const props = defineProps<{
 }>()
 
 const modal = ref(false)
-
-// Computed property to determine aspect ratio based on width and height
-const aspectRatioClass = (width: number | null, height: number | null) => {
-  if (width && height) {
-    if (height === 480) {
-      // Specifically handle height of 480 for 4:3 aspect ratio
-      return 'aspect-[4/3]'
-    }
-    const ratio = width / height
-    if (ratio > 1) {
-      // Landscape (horizontal) 16:9 aspect ratio
-      return 'aspect-[16/9]'
-    } else if (ratio < 1) {
-      // Portrait (vertical) 9:16 aspect ratio
-      return 'aspect-[9/16]'
-    } else {
-      // Square 1:1 aspect ratio
-      return 'aspect-square'
-    }
-  }
-  return ''
-}
 </script>
 
 <template>

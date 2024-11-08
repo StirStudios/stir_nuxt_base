@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types/ContentTypes'
+import type { RegionItemProps } from '@stir/base/types/ContentTypes'
 
 defineProps<{
   item: RegionItemProps
@@ -25,7 +25,6 @@ defineProps<{
                 : 'lg:flex lg:justify-center',
             ]"
           >
-            <!-- First Section -->
             <div
               :class="[
                 'flex-1',
@@ -75,13 +74,13 @@ defineProps<{
               </div>
             </div>
 
-            <!-- Second Section (Date, Location, Media) -->
             <div
               v-if="item.date && item.location"
               class="mt-10 flex-1 lg:mt-0 lg:w-1/2"
             >
               <div class="space-y-8">
-                <MediaSimple v-if="item.media" :media="item.media" />
+                <MediaPopup v-if="item.overlay" :media="item.media" />
+                <MediaSimple v-else-if="item.media" :media="item.media" />
                 <dl
                   class="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:pt-2"
                 >
