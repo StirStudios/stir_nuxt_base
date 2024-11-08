@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const showButton = ref(false)
 
+const appConfig = useAppConfig()
+
 const handleScroll = () => {
-  showButton.value = window.scrollY > 200
+  showButton.value = window.scrollY > appConfig.stirTheme.scrollButton.showAtScrollY
 }
 
 const scrollToTop = () => {
@@ -25,11 +27,15 @@ onBeforeUnmount(() => {
   <ClientOnly>
     <UButton
       aria-label="Scroll to top of page"
-      class="fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300"
-      :class="{ 'opacity-100': showButton, 'opacity-0': !showButton }"
+      :class="`${appConfig.stirTheme.scrollButton.classes} ${showButton ? 'opacity-100' : 'opacity-0'}`"
       @click="scrollToTop"
+      :variant="appConfig.stirTheme.scrollButton.variant"
     >
-      <UIcon aria-hidden="true" class="size-7" name="i-heroicons:arrow-up" />
+      <UIcon
+        aria-hidden="true"
+        class="size-7"
+        :name="appConfig.stirTheme.scrollButton.icon"
+      />
       <span class="sr-only">Scroll to top of page</span>
     </UButton>
   </ClientOnly>
