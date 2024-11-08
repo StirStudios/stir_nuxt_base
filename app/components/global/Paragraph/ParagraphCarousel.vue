@@ -42,7 +42,7 @@ const dynamicClass = computed(() => {
       v-slot="{ item }"
       :items="items"
       :ui="{
-        container: `${appConfig.stirTheme.carousel.container} ${width}`,
+        container: `${appConfig.stirTheme.carousel.container} ${width ? width + ' ' : ''}slider`,
         item:
           items[0]?.type === 'media'
             ? `${dynamicClass} ${appConfig.stirTheme.carousel.mediaHeight}`
