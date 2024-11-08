@@ -26,7 +26,7 @@ const getClassForLayout = computed(() => {
   return (layout: SectionProps) => {
     // Retrieve grid class for layout directly from config
     const gridClass =
-      gridClasses[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
+      grid[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
     const appliedContainerClass = layout.container ? containerClass : ''
 
     return [
