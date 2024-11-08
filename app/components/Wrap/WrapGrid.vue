@@ -5,8 +5,10 @@ const appConfig = useAppConfig()
 
 withDefaults(defineProps<LayoutProps>(), {
   wrapper: undefined,
-  classes: appConfig.stirTheme.grid.wrapCols,
+  classes: '',
 })
+
+const classes = computed(() => appConfig.stirBase.grid.wrapCols)
 </script>
 
 <template>
