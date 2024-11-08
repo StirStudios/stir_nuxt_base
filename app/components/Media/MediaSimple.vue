@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
-import { aspectRatioClass } from '~/utils/aspectRatioClass'
+import { aspectRatio } from '~/utils/aspectRatio'
+
+const appConfig = useAppConfig()
 
 defineProps<{
   media?: MediaProps[]
@@ -14,7 +16,8 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
     <div
       :class="[
         'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
-        aspectRatioClass(item.width, item.height),
+        appConfig.stirTheme.mediaRounded,
+        aspectRatio(item.width, item.height),
       ]"
       v-if="item.mediaEmbed"
     >
@@ -34,7 +37,8 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
         :class="[
           'object-fit shadow-2xl transition-opacity duration-1000 ease-in-out',
           'media media-' + item.mid,
-          aspectRatioClass(item.width, item.height),
+          appConfig.stirTheme.mediaRounded,
+          aspectRatio(item.width, item.height),
           {
             'opacity-100': loadedImages[item.mid],
             'opacity-0': !loadedImages[item.mid],

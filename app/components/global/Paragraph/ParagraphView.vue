@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import type { ViewProps } from '~/types/ViewTypes'
 
+const appConfig = useAppConfig()
+
 const props = defineProps<{
   item: ViewItemProps
 }>()
 
-const gridClasses = computed(() => {
+const viewGridClasses = computed(() => {
+  const { viewGridClasses, viewDefaultGap } = appConfig.stirTheme.gridLayouts
   const gridCount = props.item.gridCount
-  const classes = {
-    2: 'sm:grid-cols-2',
-    3: 'sm:grid-cols-2 md:grid-cols-3',
-    4: 'sm:grid-cols-2 md:grid-cols-4',
-  }
 
-  return `grid gap-5 lg:gap-10 xl:gap-16 ${classes[gridCount] || ''}`.trim()
+  return `grid ${viewDefaultGap} ${viewGridClasses[gridCount] || ''}`.trim()
 })
 
 const filteredRows = computed(
@@ -52,7 +50,7 @@ const getNodeProps = (node, title) => {
           :vid="item.viewId"
         />
       </template>
-      <div v-else :class="gridClasses">
+      <div v-else :class="viewGridClasses">
         <div v-for="row in filteredRows" :key="row.created" class="item">
           <component
             :is="resolveComponent(node.element)"

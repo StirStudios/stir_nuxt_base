@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { SectionProps } from '~/types/ContentTypes'
 
+const appConfig = useAppConfig()
+
 defineProps<{
   section: SectionProps[]
 }>()
@@ -18,39 +20,22 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
+  const { gridClasses, containerClass, defaultGap } =
+    appConfig.stirTheme.gridLayouts
+
   return (layout: SectionProps) => {
-    const layoutToColumnsMap = {
-      one_column: 1,
-      two_column: 2,
-      three_column: 3,
-      four_column: 4,
-    }
+    // Retrieve grid class for layout directly from config
+    const gridClass =
+      gridClasses[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
+    const appliedContainerClass = layout.container ? containerClass : ''
 
-    const columnCount =
-      layout.layout in layoutToColumnsMap
-        ? layoutToColumnsMap[layout.layout]
-        : 0
-
-    const smClasses = {
-      1: 'sm:grid-cols-1 lg:grid-cols-1',
-      2: 'sm:grid-cols-1 lg:grid-cols-2',
-      3: 'sm:grid-cols-2 lg:grid-cols-3',
-      4: 'sm:grid-cols-2 lg:grid-cols-4',
-    }
-    const lgClasses = {
-      1: 'lg:grid-cols-1',
-      2: 'lg:grid-cols-2',
-      3: 'lg:grid-cols-3',
-      4: 'lg:grid-cols-4',
-    }
-
-    const smClass = smClasses[columnCount] || 'sm:grid-cols-1'
-    const lgClass = lgClasses[columnCount] || 'lg:grid-cols-1'
-    const containerClass = layout.container
-      ? 'mx-auto container px-4 md:px-5'
-      : ''
-
-    return ['grid', 'grid-cols-1', 'gap-10', smClass, lgClass, containerClass]
+    return [
+      'grid',
+      'grid-cols-1', // Base grid definition
+      defaultGap, // Apply responsive gap from config
+      gridClass, // Combined responsive grid class from config
+      appliedContainerClass,
+    ]
       .filter(Boolean)
       .join(' ')
   }

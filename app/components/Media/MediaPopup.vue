@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import type { MediaProps } from '~/types/MediaTypes'
-import { aspectRatioClass } from '~/utils/aspectRatioClass'
+import { aspectRatio } from '~/utils/aspectRatio'
 
-// Update props to accept an array of Media objects
+const appConfig = useAppConfig()
+
 const props = defineProps<{
   media?: MediaProps[]
 }>()
@@ -15,12 +16,12 @@ const modal = ref(false)
     <div
       v-for="(item, index) in props.media"
       :key="index"
-      class="overflow-hidden rounded-xl"
+      :class="[appConfig.stirTheme.mediaRounded, 'overflow-hidden']"
     >
       <div
         :class="[
           'relative overflow-hidden transition-all duration-300 hover:scale-110',
-          aspectRatioClass(item.width, item.height),
+          aspectRatio(item.width, item.height),
         ]"
       >
         <img
@@ -83,7 +84,8 @@ const modal = ref(false)
               <div
                 :class="[
                   'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
-                  aspectRatioClass(item.width, item.height),
+                  appConfig.stirTheme.mediaRounded,
+                  aspectRatio(item.width, item.height),
                 ]"
               >
                 <iframe
@@ -103,7 +105,10 @@ const modal = ref(false)
             <div class="m-10 flex justify-center overflow-auto">
               <img
                 :alt="item.alt"
-                class="max-h-[80vh] w-auto rounded-xl object-contain"
+                :class="[
+                  appConfig.stirTheme.mediaRounded,
+                  'max-h-[80vh] w-auto object-contain',
+                ]"
                 :height="item.height"
                 :src="item.src"
                 :width="item.width"
