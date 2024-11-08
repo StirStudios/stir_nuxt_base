@@ -20,13 +20,13 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
-  const { grid, container, gap } =
-    appConfig.stirTheme.gridLayouts
+  const { container, cols, gap } =
+    appConfig.stirTheme.grid
 
   return (layout: SectionProps) => {
     // Retrieve grid class for layout directly from config
     const gridClass =
-      grid[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
+      cols[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
     const appliedContainerClass = layout.container ? container : ''
 
     return [

@@ -7,14 +7,14 @@ export default defineAppConfig({
       square: 'aspect-square',
       fourThree: 'aspect-[4/3]',
     },
-    gridLayouts: {
-      grid: {
+    grid: {
+      cols: {
         one_column: 'sm:grid-cols-1 lg:grid-cols-1',
         two_column: 'sm:grid-cols-1 lg:grid-cols-2',
         three_column: 'sm:grid-cols-2 lg:grid-cols-3',
         four_column: 'sm:grid-cols-2 lg:grid-cols-4',
       },
-      viewGrid: {
+      viewCols: {
         2: 'sm:grid-cols-2',
         3: 'sm:grid-cols-2 md:grid-cols-3',
         4: 'sm:grid-cols-2 md:grid-cols-4',
