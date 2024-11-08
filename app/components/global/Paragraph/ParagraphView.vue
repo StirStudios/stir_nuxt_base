@@ -8,10 +8,10 @@ const props = defineProps<{
 }>()
 
 const viewGridClasses = computed(() => {
-  const { viewGridClasses, viewDefaultGap } = appConfig.stirTheme.gridLayouts
+  const { viewGrid, viewGap } = appConfig.stirTheme.gridLayouts
   const gridCount = props.item.gridCount
 
-  return `grid ${viewDefaultGap} ${viewGridClasses[gridCount] || ''}`.trim()
+  return `grid ${viewGap} ${viewGrid[gridCount] || ''}`.trim()
 })
 
 const filteredRows = computed(

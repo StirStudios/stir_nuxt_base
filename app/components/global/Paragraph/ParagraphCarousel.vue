@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
 
+const appConfig = useAppConfig()
+
 const props = defineProps<CarouselProps>()
 
 const carouselRef = ref()
@@ -40,9 +42,11 @@ const dynamicClass = computed(() => {
       v-slot="{ item }"
       :items="items"
       :ui="{
-        container: `rounded-lg gap-10 slider ${width}`,
+        container: `${appConfig.stirTheme.carousel.container} ${width}`,
         item:
-          items[0]?.type === 'media' ? dynamicClass + ' h-64' : dynamicClass,
+          items[0]?.type === 'media'
+            ? `${dynamicClass} ${appConfig.stirTheme.carousel.mediaHeight}`
+            : `${dynamicClass} ${appConfig.stirTheme.carousel.mediaRounded || appConfig.stirTheme.mediaRounded}`,
       }"
     >
       <template v-if="item.element">

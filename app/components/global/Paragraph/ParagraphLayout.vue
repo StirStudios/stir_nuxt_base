@@ -20,7 +20,7 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
-  const { gridClasses, containerClass, defaultGap } =
+  const { grid, container, gap } =
     appConfig.stirTheme.gridLayouts
 
   return (layout: SectionProps) => {
@@ -32,7 +32,7 @@ const getClassForLayout = computed(() => {
     return [
       'grid',
       'grid-cols-1', // Base grid definition
-      defaultGap, // Apply responsive gap from config
+      gap, // Apply responsive gap from config
       gridClass, // Combined responsive grid class from config
       appliedContainerClass,
     ]
