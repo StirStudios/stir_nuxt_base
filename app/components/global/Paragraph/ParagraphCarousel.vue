@@ -20,7 +20,7 @@ onMounted(() => {
 })
 
 const showIndicators = computed(() => {
-  return props.indicators ? true : false
+  return props.indicators ? { indicators: true } : {}
 })
 
 const dynamicClass = computed(() => {
