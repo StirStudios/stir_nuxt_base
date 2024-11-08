@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MediaProps } from '~/types/MediaTypes'
+import type { MediaProps } from '@stir/base/types/MediaTypes'
 import { aspectRatio } from '~/utils/aspectRatio'
 
 const appConfig = useAppConfig()
@@ -43,7 +43,7 @@ const modal = ref(false)
             v-if="item.mediaEmbed"
             aria-hidden="true"
             aria-label="Play Video"
-            class="transition duration-300 group-hover:scale-125 group-hover:drop-shadow group-hover:filter"
+            class="transition duration-300 hover:scale-125 hover:drop-shadow group-hover:filter"
             color="white"
             name="i-heroicons-play-circle"
             size="60"
