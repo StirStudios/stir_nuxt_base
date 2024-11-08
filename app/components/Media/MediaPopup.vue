@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { MediaProps } from '~/types/MediaTypes'
-import { aspectRatio } from '~/utils/aspectRatio'
+import { aspectRatios } from '~/utils/aspectRatios'
 
 const appConfig = useAppConfig()
 
@@ -21,7 +21,7 @@ const modal = ref(false)
       <div
         :class="[
           'relative overflow-hidden transition-all duration-300 hover:scale-110',
-          aspectRatio(item.width, item.height),
+          aspectRatios(item.width, item.height),
         ]"
       >
         <img
@@ -85,7 +85,7 @@ const modal = ref(false)
                 :class="[
                   'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
                   appConfig.stirTheme.mediaRounded,
-                  aspectRatio(item.width, item.height),
+                  aspectRatios(item.width, item.height),
                 ]"
               >
                 <iframe

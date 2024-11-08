@@ -1,4 +1,4 @@
-export const aspectRatio = (width: number | null, height: number | null) => {
+export const aspectRatios = (width: number | null, height: number | null) => {
   if (width && height) {
 	if (height === 480) {
 	  return 'aspect-[4/3]'
