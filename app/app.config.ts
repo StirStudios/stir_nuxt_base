@@ -20,6 +20,7 @@ export default defineAppConfig({
         2: 'sm:grid-cols-2',
         3: 'sm:grid-cols-2 md:grid-cols-3',
         4: 'sm:grid-cols-2 md:grid-cols-4',
+        5: 'sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5',
       },
       wrapCols: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
       container: 'mx-auto container px-4 md:px-5',
@@ -27,7 +28,7 @@ export default defineAppConfig({
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
     },
     carousel: {
-      container: 'rounded-lg bg-white slider',
+      container: '',
       mediaHeight: 'h-64',
       mediaRounded: 'rounded-xl',
     },
