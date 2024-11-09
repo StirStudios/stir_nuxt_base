@@ -21,7 +21,7 @@ const modal = ref(false)
       <div
         :class="[
           'relative overflow-hidden transition-transform transform-gpu duration-500 ease-in-out hover:scale-110 will-change-transform',
-          aspectRatio(item.width, item.height),
+          aspectRatios(item.width, item.height),
         ]"
       >
         <img
