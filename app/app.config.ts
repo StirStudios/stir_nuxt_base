@@ -1,3 +1,5 @@
+import type { StirThemeConfig } from '~/types/StirThemeConfig'
+
 export default defineAppConfig({
   stirTheme: {
     mediaRounded: 'rounded-xl',
