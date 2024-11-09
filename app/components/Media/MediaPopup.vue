@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MediaProps } from '~/types/MediaTypes'
+import type { MediaProps } from '@stir/base/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
 
 const appConfig = useAppConfig()
@@ -20,13 +20,14 @@ const modal = ref(false)
     >
       <div
         :class="[
-          'relative overflow-hidden transition-transform transform-gpu duration-500 ease-in-out hover:scale-110 will-change-transform',
+          'relative transform-gpu overflow-hidden transition-transform duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
+          'before:absolute before:inset-0 before:z-0 before:bg-black before:opacity-40',
         ]"
       >
         <img
           :alt="item.alt"
-          class="absolute h-full w-full object-cover"
+          class="absolute z-[-1] h-full w-full object-cover"
           :height="item.height"
           :loading="item.loading"
           :sizes="item.sizes"
@@ -43,7 +44,7 @@ const modal = ref(false)
             v-if="item.mediaEmbed"
             aria-hidden="true"
             aria-label="Play Video"
-            class="transition-transform duration-500 ease-in-out transform-gpu hover:scale-125 hover:drop-shadow-md will-change-transform"
+            class="transform-gpu transition-transform duration-500 ease-in-out will-change-transform hover:scale-125 hover:drop-shadow-md"
             color="white"
             name="i-heroicons-play-circle"
             size="60"

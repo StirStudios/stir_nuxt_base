@@ -4,7 +4,8 @@ const showButton = ref(false)
 const appConfig = useAppConfig()
 
 const handleScroll = () => {
-  showButton.value = window.scrollY > appConfig.stirTheme.scrollButton.showAtScrollY
+  showButton.value =
+    window.scrollY > appConfig.stirTheme.scrollButton.showAtScrollY
 }
 
 const scrollToTop = () => {
