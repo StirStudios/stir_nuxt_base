@@ -27,7 +27,7 @@ onBeforeUnmount(() => {
   <ClientOnly>
     <UButton
       aria-label="Scroll to top of page"
-      :class="`${appConfig.stirTheme.scrollButton.classes} ${showButton ? 'opacity-100' : 'opacity-0'}`"
+      :class="`${appConfig.stirTheme.scrollButton.base} ${showButton ? 'opacity-100' : 'opacity-0'}`"
       @click="scrollToTop"
       :variant="appConfig.stirTheme.scrollButton.variant"
     >
