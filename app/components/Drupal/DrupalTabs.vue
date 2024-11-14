@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TabsProps } from '~/types/NavigationTypes'
+import type { TabsProps } from '@stir/base/types/NavigationTypes'
 
 const props = defineProps<TabsProps>()
 const config = useRuntimeConfig()
@@ -9,7 +9,7 @@ const siteApi = config.public.api
 const getLocalTaskLinks = () => {
   return props.tabs.primary.map((tab) => ({
     label: tab.label,
-    to: tab.label === 'View' ? tab.url : `${siteApi}${tab.url}`,
+    to: tab.url,
     icon: filterIconByLabel(tab.label),
   }))
 }
