@@ -14,20 +14,31 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
 <template>
   <template v-for="item in media" :key="item.mid">
     <div
+      v-if="item.mediaEmbed"
       :class="[
         'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
         appConfig.stirTheme.mediaRounded,
         aspectRatios(item.width, item.height),
       ]"
-      v-if="item.mediaEmbed"
     >
+      <div
+        v-if="item.width === 1921"
+        class="relative flex aspect-[16/9] w-full flex-col items-center justify-center rounded-lg bg-gradient-to-br from-slate-700 to-zinc-800"
+      >
+        <UIcon class="mb-2 size-16 text-white" name="i-heroicons-clock" />
+        <span class="text-lg font-semibold text-white">
+          Video is Processing...
+        </span>
+      </div>
       <iframe
+        v-else
+        :src="item.mediaEmbed"
+        :title="item.title"
+        :data-mid="item.mid"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         class="absolute left-0 top-0 h-full w-full"
         frameborder="0"
         loading="lazy"
-        :src="item.mediaEmbed"
-        :title="item.title"
         allowfullscreen
       />
     </div>

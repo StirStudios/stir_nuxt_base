@@ -1,4 +1,4 @@
-import type { VideoPlayer } from '~/types/MediaTypes'
+import type { VideoPlayer } from '@stir/base/types/MediaTypes'
 
 export function useVideoPlayers() {
   const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
@@ -25,31 +25,34 @@ export function useVideoPlayers() {
   async function initializePlayers() {
     await nextTick()
 
-    const iframes = document.querySelectorAll('iframe')
-    iframes.forEach((iframe, index) => {
-      const iframeKey = `iframe-${index}`
-      if (!videoPlayers.value.has(iframeKey)) {
-        try {
-          const player: VideoPlayer = new (window as any).playerjs.Player(
-            iframe,
-          )
-          player.on('ready', () => {
-            videoPlayers.value.set(iframeKey, player)
-            addFullscreenExitOnEnd()
-          })
-        } catch (error) {}
+    const iframes = document.querySelectorAll('iframe[data-mid]')
+    iframes.forEach((iframe) => {
+      const iframeKey = iframe.getAttribute('data-mid')
+      if (!iframeKey || videoPlayers.value.has(iframeKey)) return
+
+      try {
+        const player: VideoPlayer = new (window as any).playerjs.Player(iframe)
+        playersReady(iframeKey, player) // Check readiness for the specific player
+      } catch (error) {
+        console.error(`Error initializing player for ${iframeKey}:`, error)
       }
     })
   }
 
-  function playersReady(callback: () => void) {
-    videoPlayers.value.forEach((player) => {
-      if (player.isReady) {
-        callback()
-      } else {
-        player.on('ready', callback)
-      }
-    })
+  // Modularized playersReady function for single-player handling
+  function playersReady(iframeKey: string, player: VideoPlayer) {
+    if (player.isReady) {
+      // If already ready, store in the players map
+      videoPlayers.value.set(iframeKey, player)
+      console.log(`Player ${iframeKey} is ready immediately.`)
+    } else {
+      // Listen for the "ready" event if not ready yet
+      player.on('ready', () => {
+        videoPlayers.value.set(iframeKey, player)
+        console.log(`Player ${iframeKey} is now ready.`)
+        addFullscreenExitOnEnd()
+      })
+    }
   }
 
   function addEventToAllPlayers(event: string, callback: () => void) {
@@ -79,7 +82,9 @@ export function useVideoPlayers() {
   function addFullscreenExitOnEnd() {
     addEventToAllPlayers('ended', () => {
       if (document.fullscreenElement && 'exitFullscreen' in document) {
-        document.exitFullscreen().catch((err) => {})
+        document
+          .exitFullscreen()
+          .catch((err) => console.error('Error exiting fullscreen:', err))
       }
     })
   }
