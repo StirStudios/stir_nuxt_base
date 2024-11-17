@@ -22,7 +22,7 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
       ]"
     >
       <div
-        v-if="item.width !== 1920"
+        v-if="item.width === 180"
         class="relative flex aspect-[16/9] w-full flex-col items-center justify-center rounded-lg bg-gradient-to-br from-slate-700 to-zinc-800"
       >
         <UIcon class="mb-2 size-16 text-white" name="i-heroicons-clock" />
