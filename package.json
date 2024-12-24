@@ -45,6 +45,6 @@
     }
   },
   "devDependencies": {
-    "release-it": "^17.10.0"
+    "release-it": "^17.11.0"
   }
 }
