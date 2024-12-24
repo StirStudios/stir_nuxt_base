@@ -3,7 +3,7 @@
     <NuxtLoadingIndicator />
     <a
       href="#main-content"
-      class="absolute top-0 left-0 -translate-y-full focus:translate-y-2 focus:left-1/2 focus:-translate-x-1/2 z-50 bg-black bg-opacity-60 text-white text-sm leading-relaxed px-4 py-2 rounded-b-md focus:outline-none"
+      class="bg-primary absolute left-0 top-0 z-50 m-3 -translate-y-96 p-3 text-black transition focus:translate-y-0"
     >
       Skip to main content
     </a>
