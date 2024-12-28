@@ -6,10 +6,13 @@ const appConfig = useAppConfig()
 const props = defineProps<CarouselProps>()
 
 const carouselRef = ref()
+const isHovered = ref(false)
 
-onMounted(() => {
-  setInterval(() => {
-    if (!carouselRef.value) return
+let intervalId: number | undefined
+
+const startCarousel = () => {
+  intervalId = setInterval(() => {
+    if (!carouselRef.value || isHovered.value) return
 
     if (carouselRef.value.page === carouselRef.value.pages) {
       return carouselRef.value.select(0)
@@ -17,6 +20,21 @@ onMounted(() => {
 
     carouselRef.value.next()
   }, props.interval)
+}
+
+const stopCarousel = () => {
+  if (intervalId) {
+    clearInterval(intervalId)
+    intervalId = undefined
+  }
+}
+
+onMounted(() => {
+  startCarousel()
+})
+
+onUnmounted(() => {
+  stopCarousel()
 })
 
 const showIndicators = computed(() => {
@@ -34,7 +52,11 @@ const dynamicClass = computed(() => {
 </script>
 
 <template>
-  <div class="relative z-10">
+  <div
+    class="relative z-10"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+  >
     <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       ref="carouselRef"
