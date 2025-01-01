@@ -1,20 +1,27 @@
 <script lang="ts" setup>
 import { useDrupalApi } from '~/composables/useDrupalApi'
+
+// Fetch data from Drupal API
 const { page, isAdministrator, fetchMenu } = await useDrupalApi()
-const mainMenu = await fetchMenu('main')
 
-// Extract the raw array value from the reactive ref object 'mainMenu'
-const mainMenuArray = mainMenu.value
+// Fetch main menu with error handling
+let mainMenuArray = []
+try {
+  const mainMenu = await fetchMenu('main')
+  mainMenuArray = mainMenu.value
+} catch (error) {
+  console.error('Error fetching main menu:', error)
+}
 
-// Set color mode toggle.
+// Set color mode toggle
 const { isDark } = useColorModeToggle()
 
-// Map over the array of menu items to create navLinks
+// Map over menu items to create navLinks
 const navLinks = mainMenuArray.map((menuItem) => ({
   label: menuItem.title,
   to: menuItem.external
     ? menuItem.absolute
-    : `/${menuItem.alias}${menuItem.options && menuItem.options.fragment ? `#${menuItem.options.fragment}` : ''}`,
+    : `/${menuItem.alias}${menuItem.options?.fragment ? `#${menuItem.options.fragment}` : ''}`,
 }))
 
 const showNavbar = ref(true)
@@ -23,6 +30,10 @@ const lastScrollPosition = ref(0)
 const isOpen = ref(false)
 const isScrolled = ref(false)
 const route = useRoute()
+
+const themeClass = computed(() =>
+  !isDark.value && !isScrolled.value && !isAdministrator.value ? 'text-white' : ''
+)
 
 // Scroll event handler
 const onScroll = () => {
@@ -55,6 +66,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', throttledOnScroll)
+  if (scrollTimeout) clearTimeout(scrollTimeout)
 })
 </script>
 
@@ -81,7 +93,11 @@ onBeforeUnmount(() => {
           <div class="order-1">
             <ULink aria-label="Site Logo" class="font-bold" to="/">
               <template v-if="!page.site_info?.name">
-                <AppLogo />
+                <ClientOnly>
+                  <AppLogo
+                    :dark-mode="!isDark && !isScrolled && !isAdministrator"
+                  />
+                </ClientOnly>
               </template>
               <template v-else>
                 {{ page.site_info?.name }}
@@ -95,6 +111,14 @@ onBeforeUnmount(() => {
               :ui="{
                 after: '',
                 container: 'block w-full sm:flex sm:items-center min-w-0',
+                active:
+                  isScrolled && isAdministrator
+                    ? 'text-gray-900'
+                    : 'text-white dark:text-white after:bg-primary-500 dark:after:bg-primary-400 after:rounded-full',
+                inactive:
+                  !isScrolled && !isAdministrator
+                    ? 'text-white dark:text-white'
+                    : 'text-black dark:text-white hover:text-gray-900 dark:hover:text-white',
               }"
             >
               <template #default="{ link }">
@@ -110,7 +134,8 @@ onBeforeUnmount(() => {
             <ClientOnly>
               <UButton
                 aria-label="Theme"
-                color="gray"
+                :class="themeClass"
+                color="black"
                 :icon="
                   isDark
                     ? 'i-heroicons-moon-20-solid'
@@ -123,13 +148,14 @@ onBeforeUnmount(() => {
             <UButton
               aria-label="Site navigation toggle"
               class="block flex items-center md:hidden"
-              color="gray"
+              :class="themeClass"
+              color="black"
               :icon="
                 navbarOpen
                   ? 'i-heroicons-x-mark-solid'
                   : 'i-heroicons-bars-3-solid'
               "
-              size="xl"
+              size="xxl"
               variant="ghost"
               @click="isOpen = true"
             />
