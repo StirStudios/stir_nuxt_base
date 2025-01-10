@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { HeroProps } from '~/types/MediaTypes'
 import { useDrupalApi } from '~/composables/useDrupalApi'
+import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
+
+const { observeVideos } = useIntersectionObserver()
 const { isFront } = await useDrupalApi()
 
 const { hero, pageTitle, siteSlogan } = defineProps<{
@@ -9,7 +12,10 @@ const { hero, pageTitle, siteSlogan } = defineProps<{
   siteSlogan: string
 }>()
 
-const isDev = false
+onMounted(() => {
+  observeVideos(0.1) // Trigger when 10% of the element is visible
+})
+
 const media = computed(() => hero.media?.[0] || {})
 </script>
 
@@ -54,12 +60,14 @@ const media = computed(() => hero.media?.[0] || {})
       />
       <video
         v-else-if="media.type === 'video'"
-        v-bind="{ autoplay: !isDev, loop: !isDev }"
         class="absolute min-h-full w-auto min-w-full max-w-none"
         height="640"
         muted
         preload="metadata"
         width="360"
+        playsinline
+        disablepictureinpicture
+        controls
       >
         <source :src="media.mediaEmbed" type="video/mp4" />
       </video>
