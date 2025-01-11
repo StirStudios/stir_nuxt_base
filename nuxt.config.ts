@@ -11,6 +11,9 @@ export default defineNuxtConfig({
       resolve('./app/composables'), // Ensure composables in the layer are auto-imported
     ],
   },
+  alias: {
+    '@stir/base': resolve('./app'), // Alias the layer's base directory
+  },
   compatibilityDate: '2025-01-11',
   nitro: {
     compressPublicAssets: true,
