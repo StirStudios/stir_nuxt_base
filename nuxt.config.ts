@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     ],
   },
   alias: {
-    '@stir/base': resolve('./app'), // Alias the layer's base directory
+    '@stir/base': resolve('.'),
   },
   compatibilityDate: '2025-01-11',
   nitro: {
