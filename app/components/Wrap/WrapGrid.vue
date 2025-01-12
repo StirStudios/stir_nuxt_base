@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LayoutProps } from '~/types/UtilityTypes'
+import type { LayoutProps } from '@stir/base/types/UtilityTypes'
 
 const appConfig = useAppConfig()
 

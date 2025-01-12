@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ViewProps } from '~/types/ViewTypes'
+import type { ViewProps } from '@stir/base/types/ViewTypes'
 
 const appConfig = useAppConfig()
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { HeroProps } from '~/types/MediaTypes'
-import { useDrupalApi } from '~/composables/useDrupalApi'
-import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
+import type { HeroProps } from '@stir/base/types/MediaTypes'
+import { useDrupalApi } from '@stir/base/composables/useDrupalApi'
+import { useIntersectionObserver } from '@stir/base/composables/useIntersectionObserver'
 
 const { observeVideos } = useIntersectionObserver()
 const { isFront } = await useDrupalApi()

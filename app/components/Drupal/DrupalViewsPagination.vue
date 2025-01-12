@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ViewsPagerProps } from '~/types/ViewsTypes'
+import type { ViewsPagerProps } from '@stir/base/types/ViewsTypes'
 
 const props = withDefaults(defineProps<ViewsPagerProps>(), {
   current: 0,

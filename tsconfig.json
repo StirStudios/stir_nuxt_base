@@ -3,10 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"],
-      "~/*": ["*"],
       "@stir/base/*": ["./*"],
-      "@stir/base/types/*": ["./types/*"]
+      "@/*": ["*"],
+      "~/*": ["*"]
     }
   }
 }

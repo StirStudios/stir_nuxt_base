@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SectionProps } from '~/types/ContentTypes'
+import type { SectionProps } from '@stir/base/types/ContentTypes'
 
 const appConfig = useAppConfig()
 

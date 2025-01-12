@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useDrupalApi } from '~/composables/useDrupalApi'
+import { useDrupalApi } from '@stir/base/composables/useDrupalApi'
 
 // Fetch data from Drupal API
 const { page, isAdministrator, fetchMenu } = await useDrupalApi()

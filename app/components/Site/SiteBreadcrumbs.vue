@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CrumbProps } from '~/types/NavigationTypes'
+import type { CrumbProps } from '@stir/base/types/NavigationTypes'
 
 const props = defineProps<CrumbProps>()
 

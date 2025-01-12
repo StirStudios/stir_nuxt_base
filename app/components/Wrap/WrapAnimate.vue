@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AosProps } from '~/types/UtilityTypes'
+import type { AosProps } from '@stir/base/types/UtilityTypes'
 
 withDefaults(defineProps<AosProps>(), {
   aos: 'fade-up',

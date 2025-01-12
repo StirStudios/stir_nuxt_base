@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CarouselProps } from '~/types/MediaTypes'
+import type { CarouselProps } from '@stir/base/types/MediaTypes'
 
 const appConfig = useAppConfig()
 
