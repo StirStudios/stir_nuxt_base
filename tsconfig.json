@@ -5,7 +5,8 @@
     "paths": {
       "@/*": ["*"],
       "~/*": ["*"],
-      "~/types/*": ["types/*"],
+      // "~/types/*": ["types/*"],
+      "@stir/types/*": ["types/*"]
     }
   }
 }
