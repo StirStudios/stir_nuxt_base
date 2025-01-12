@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   },
   alias: {
     '@stir/base': resolve('.'),
+    '@stir/types': resolve('./types'),
   },
   compatibilityDate: '2025-01-11',
   nitro: {
