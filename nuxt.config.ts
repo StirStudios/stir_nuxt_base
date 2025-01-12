@@ -5,12 +5,6 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  // imports: {
-  //   autoImport: true,
-  //   dirs: [
-  //     resolve('./app/composables'), // Ensure composables in the layer are auto-imported
-  //   ],
-  // },
   alias: {
     '@stir/base': resolve('.'),
   },
