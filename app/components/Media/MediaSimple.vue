@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { MediaProps } from '@stir/base/types/MediaTypes'
-import { aspectRatios } from '@stir/base/utils/aspectRatios'
+import { aspectRatios } from '@stir/base/app/utils/aspectRatios'
 
 const appConfig = useAppConfig()
 
