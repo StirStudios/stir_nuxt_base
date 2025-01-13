@@ -1,11 +1,12 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "moduleResolution": "Node",
+    "baseUrl": ".",
     "paths": {
-      "@stir/base/*": ["./*"], // Alias for everything in the layer
-      "@/*": ["*"], // Root project aliases
-      "~/*": ["*"] // Root project aliases
+      "@/*": ["*"],
+      "~/*": ["*"],
+      "~/types/*": ["types/*"],
+      "~/composables/*": ["app/composables/*"]
     }
   }
 }
