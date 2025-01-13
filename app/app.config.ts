@@ -1,4 +1,4 @@
-import type { StirThemeConfig } from '~/types/StirThemeConfig'
+import type { StirThemeConfig } from '@stir/base/types/StirThemeConfig'
 
 export default defineAppConfig({
   stirTheme: {
