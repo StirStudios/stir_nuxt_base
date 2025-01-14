@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NodeLinkProps } from '@stir/base/types/BaseTypes'
+import type { NodeLinkProps } from '~/types/BaseTypes'
 
 defineProps<{
   prevNode?: NodeLinkProps | null

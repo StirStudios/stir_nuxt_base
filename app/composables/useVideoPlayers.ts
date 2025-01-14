@@ -1,4 +1,4 @@
-import type { VideoPlayer } from '@stir/base/types/MediaTypes'
+import type { VideoPlayer } from '~/types/MediaTypes'
 
 export function useVideoPlayers() {
   const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
