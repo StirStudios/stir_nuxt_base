@@ -6,10 +6,10 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  alias: { '@stir/base': resolve('./') },
-  imports: {
-    dirs: [resolve('./app/composables')],
-  },
+  // alias: { '@stir/base': resolve('./') },
+  // imports: {
+  //   dirs: [resolve('./app/composables')],
+  // },
   compatibilityDate: '2024-11-04',
   nitro: {
     compressPublicAssets: true,
