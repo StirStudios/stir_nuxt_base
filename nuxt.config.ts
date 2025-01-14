@@ -1,12 +1,12 @@
-// import { createResolver } from 'nuxt/kit';
-//
-// const { resolve } = createResolver(import.meta.url);
+import { createResolver } from 'nuxt/kit';
+
+const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  // alias: { '@stir/base': resolve('./') },
+  alias: { '@stir/base': resolve('./') },
   compatibilityDate: '2024-11-04',
   nitro: {
     compressPublicAssets: true,
