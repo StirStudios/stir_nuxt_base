@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WrapperProps } from '@stir/base/types/UtilityTypes'
+import type { WrapperProps } from '~/types/UtilityTypes'
 
 defineProps<WrapperProps>()
 </script>

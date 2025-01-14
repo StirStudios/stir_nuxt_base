@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TextProps } from '@stir/base/types/ContentTypes'
+import type { TextProps } from '~/types/ContentTypes'
 
 defineProps<TextProps>()
 </script>

@@ -1,18 +1,8 @@
-import { createResolver } from 'nuxt/kit'
-const { resolve } = createResolver(import.meta.url)
-
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  alias: {
-    '@stir/base': resolve('.'),
-  },
-  imports: {
-    autoImport: true,
-    dirs: [resolve('./app/composables')],
-  },
-  compatibilityDate: '2025-01-11',
+  compatibilityDate: '2024-11-04',
   nitro: {
     compressPublicAssets: true,
   },

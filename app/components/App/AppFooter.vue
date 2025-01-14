@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SiteInfoProps } from '@stir/base/types/BaseTypes'
+import type { SiteInfoProps } from '~/types/BaseTypes'
 
 const props = defineProps<{
   site: SiteInfoProps

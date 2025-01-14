@@ -1,4 +1,4 @@
-import type { StirThemeConfig } from '@stir/base/types/StirThemeConfig'
+import type { StirThemeConfig } from '~/types/StirThemeConfig'
 
 export default defineAppConfig({
   stirTheme: {
@@ -56,13 +56,12 @@ export default defineAppConfig({
     },
     icon: {
       size: {
-        '2xs': 'h-4 w-4',
-        xs: 'h-4 w-4',
-        sm: 'h-5 w-5',
+        '2xs': 'h-3 w-3',
+        xs: 'h-3 w-3',
+        sm: 'h-4 w-4',
         md: 'h-5 w-5',
-        lg: 'h-5 w-5',
-        xl: 'h-6 w-6',
-        xxl: 'h-8 w-8',
+        lg: 'h-6 w-6',
+        xl: 'h-8 w-8',
       },
     },
   },

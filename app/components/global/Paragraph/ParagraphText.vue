@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '@stir/base/types/ContentTypes'
+import type { RegionItemProps } from '~/types/ContentTypes'
 
 defineProps<{
   item: RegionItemProps

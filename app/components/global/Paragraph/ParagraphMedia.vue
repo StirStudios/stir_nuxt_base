@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MediaSettings, MediaProps } from '@stir/base/types/MediaTypes'
+import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
 
 defineProps<{
   item: {

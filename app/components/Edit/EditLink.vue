@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EditLinkProps } from '@stir/base/types/LinkTypes'
+import type { EditLinkProps } from '~/types/LinkTypes'
 
 defineProps<EditLinkProps>()
 </script>

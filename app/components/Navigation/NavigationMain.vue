@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useDrupalApi } from '@stir/base/app/composables/useDrupalApi'
+import { useDrupalApi } from '~/composables/useDrupalApi'
 
-// Fetch data from Drupal API
+// Fetch Drupal API data
 const { page, isAdministrator, fetchMenu } = await useDrupalApi()
 
 // Fetch main menu with error handling
@@ -10,13 +10,13 @@ try {
   const mainMenu = await fetchMenu('main')
   mainMenuArray = mainMenu.value
 } catch (error) {
-  console.error('Error fetching main menu:', error)
+  console.error('Error fetching menu:', error)
 }
 
 // Set color mode toggle
 const { isDark } = useColorModeToggle()
 
-// Map over menu items to create navLinks
+// Map over the array of menu items to create navLinks
 const navLinks = mainMenuArray.map((menuItem) => ({
   label: menuItem.title,
   to: menuItem.external
@@ -31,8 +31,11 @@ const isOpen = ref(false)
 const isScrolled = ref(false)
 const route = useRoute()
 
+// Computed class for repeated conditions
 const themeClass = computed(() =>
-  !isDark.value && !isScrolled.value && !isAdministrator.value ? 'text-white' : ''
+  !isDark.value && !isScrolled.value && !isAdministrator.value
+    ? 'text-white'
+    : '',
 )
 
 // Scroll event handler
@@ -112,8 +115,8 @@ onBeforeUnmount(() => {
                 after: '',
                 container: 'block w-full sm:flex sm:items-center min-w-0',
                 active:
-                  isScrolled && isAdministrator
-                    ? 'text-gray-900'
+                  isScrolled || isAdministrator
+                    ? 'text-black'
                     : 'text-white dark:text-white after:bg-primary-500 dark:after:bg-primary-400 after:rounded-full',
                 inactive:
                   !isScrolled && !isAdministrator
@@ -141,24 +144,25 @@ onBeforeUnmount(() => {
                     ? 'i-heroicons-moon-20-solid'
                     : 'i-heroicons-sun-20-solid'
                 "
+                size="lg"
                 variant="ghost"
                 @click="isDark = !isDark"
               />
+              <UButton
+                aria-label="Site navigation toggle"
+                class="block flex items-center md:hidden"
+                :class="themeClass"
+                color="black"
+                :icon="
+                  navbarOpen
+                    ? 'i-heroicons-x-mark-solid'
+                    : 'i-heroicons-bars-3-solid'
+                "
+                size="xl"
+                variant="ghost"
+                @click="isOpen = true"
+              />
             </ClientOnly>
-            <UButton
-              aria-label="Site navigation toggle"
-              class="block flex items-center md:hidden"
-              :class="themeClass"
-              color="black"
-              :icon="
-                navbarOpen
-                  ? 'i-heroicons-x-mark-solid'
-                  : 'i-heroicons-bars-3-solid'
-              "
-              size="xxl"
-              variant="ghost"
-              @click="isOpen = true"
-            />
           </div>
         </div>
       </UContainer>

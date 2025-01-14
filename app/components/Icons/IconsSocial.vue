@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { IconsSocialProps } from '@stir/base/types/LinkTypes'
+import type { IconsSocialProps } from '~/types/LinkTypes'
 
 const props = defineProps<IconsSocialProps>()
 
