@@ -6,10 +6,7 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  imports: {
-    autoImport: true,
-    dirs: [resolve('./app/composables/**')],
-  },
+  alias: { '@stir/base': resolve('./') },
   compatibilityDate: '2024-11-04',
   nitro: {
     compressPublicAssets: true,
