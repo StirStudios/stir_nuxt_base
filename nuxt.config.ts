@@ -1,6 +1,14 @@
+import { createResolver } from 'nuxt/kit';
+
+const { resolve } = createResolver(import.meta.url);
+
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
+  },
+  imports: {
+    autoImport: true,
+    dirs: [resolve('./app/composables/**')],
   },
   compatibilityDate: '2024-11-04',
   nitro: {
