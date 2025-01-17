@@ -14,6 +14,7 @@
   },
   "peerDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
+    "aos": "^2.3.4",
     "@nuxt/ui": "^2.20.0",
     "@nuxtjs/robots": "^4.1.11",
     "@nuxtjs/sitemap": "^6.1.5",

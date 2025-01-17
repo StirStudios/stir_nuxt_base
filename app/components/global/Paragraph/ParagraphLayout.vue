@@ -3,9 +3,11 @@ import type { SectionProps } from '~/types/ContentTypes'
 
 const appConfig = useAppConfig()
 
-defineProps<{
-  section: SectionProps[]
-}>()
+withDefaults(defineProps<{
+  section?: SectionProps[]
+}>(), {
+  section: []
+})
 
 // Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
@@ -20,13 +22,11 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
-  const { container, cols, gap } =
-    appConfig.stirTheme.grid
+  const { container, cols, gap } = appConfig.stirTheme.grid
 
   return (layout: SectionProps) => {
     // Retrieve grid class for layout directly from config
-    const gridClass =
-      cols[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
+    const gridClass = cols[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
     const appliedContainerClass = layout.container ? container : ''
 
     return [
