@@ -75,9 +75,9 @@ onBeforeUnmount(() => {
     role="navigation"
   />
   <header aria-label="Site header">
-  <nav
+    <nav
       aria-label="Site navigation"
-      class="fixed top-0 z-50 w-full bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700 transform duration-500"
+      class="fixed top-0 z-50 w-full transform bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
       :class="{
         '-translate-y-full': !showNavbar,
         sticky: isAdministrator && showNavbar,
@@ -107,7 +107,7 @@ onBeforeUnmount(() => {
               :ui="{
                 after: '',
                 container: 'block w-full sm:flex sm:items-center min-w-0',
-               }"
+              }"
             >
               <template #default="{ link }">
                 <span
