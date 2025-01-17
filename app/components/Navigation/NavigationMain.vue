@@ -55,6 +55,7 @@ const throttledOnScroll = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', throttledOnScroll)
+  onScroll()
   if (route.hash) {
     isScrolled.value = true
   }
