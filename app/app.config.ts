@@ -1,6 +1,9 @@
 import type { StirThemeConfig } from '~/types/StirThemeConfig'
 
 export default defineAppConfig({
+  colorMode: {
+    preference: 'dark',
+  },
   stirTheme: {
     mediaRounded: 'rounded-xl',
     aspectRatios: {
