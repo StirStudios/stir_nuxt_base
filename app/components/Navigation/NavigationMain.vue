@@ -31,13 +31,6 @@ const isOpen = ref(false)
 const isScrolled = ref(false)
 const route = useRoute()
 
-// Computed class for repeated conditions
-const themeClass = computed(() =>
-  !isDark.value && !isScrolled.value && !isAdministrator.value
-    ? 'text-white'
-    : '',
-)
-
 // Scroll event handler
 const onScroll = () => {
   const currentScrollPosition =
@@ -82,11 +75,11 @@ onBeforeUnmount(() => {
     role="navigation"
   />
   <header aria-label="Site header">
-    <nav
+  <nav
       aria-label="Site navigation"
-      class="md:px-auto fixed top-0 z-10 w-full bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
+      class="fixed top-0 z-50 w-full bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700 transform duration-500"
       :class="{
-        'navbar--hidden': !showNavbar,
+        '-translate-y-full': !showNavbar,
         sticky: isAdministrator && showNavbar,
       }"
       role="navigation"
@@ -114,15 +107,7 @@ onBeforeUnmount(() => {
               :ui="{
                 after: '',
                 container: 'block w-full sm:flex sm:items-center min-w-0',
-                active:
-                  isScrolled || isAdministrator
-                    ? 'text-black'
-                    : 'text-white dark:text-white after:bg-primary-500 dark:after:bg-primary-400 after:rounded-full',
-                inactive:
-                  !isScrolled && !isAdministrator
-                    ? 'text-white dark:text-white'
-                    : 'text-black dark:text-white hover:text-gray-900 dark:hover:text-white',
-              }"
+               }"
             >
               <template #default="{ link }">
                 <span
@@ -137,7 +122,6 @@ onBeforeUnmount(() => {
             <ClientOnly>
               <UButton
                 aria-label="Theme"
-                :class="themeClass"
                 color="black"
                 :icon="
                   isDark
@@ -151,7 +135,6 @@ onBeforeUnmount(() => {
               <UButton
                 aria-label="Site navigation toggle"
                 class="block flex items-center md:hidden"
-                :class="themeClass"
                 color="black"
                 :icon="
                   navbarOpen
@@ -214,12 +197,3 @@ onBeforeUnmount(() => {
     </USlideover>
   </header>
 </template>
-
-<style scoped lang="css">
-nav {
-  @apply z-50 translate-y-0 duration-500;
-}
-.navbar--hidden {
-  @apply -translate-y-full;
-}
-</style>
