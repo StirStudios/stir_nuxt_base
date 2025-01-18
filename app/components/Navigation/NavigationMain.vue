@@ -123,7 +123,7 @@ onBeforeUnmount(() => {
           <div class="order-2 flex md:order-3">
             <ClientOnly>
               <UButton
-                v-if="!appConfig.colorMode.enabled"
+                v-if="!appConfig.colorMode.forced"
                 aria-label="Theme"
                 color="black"
                 :icon="
