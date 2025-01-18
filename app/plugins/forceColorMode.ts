@@ -4,10 +4,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
   const appConfig = useAppConfig()
 
-  if (appConfig.forceColorMode.enabled) {
+  if (appConfig.colorMode.enabled) {
     nuxtApp.hook('app:mounted', () => {
-      colorMode.preference = appConfig.forceColorMode.preference
-      colorMode.value = appConfig.forceColorMode.preference
+      colorMode.preference = appConfig.colorMode.preference
+      colorMode.value = appConfig.colorMode.preference
     })
   }
 })

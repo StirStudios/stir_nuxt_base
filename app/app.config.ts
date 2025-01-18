@@ -1,7 +1,7 @@
 import type { StirThemeConfig } from '~/types/StirThemeConfig'
 
 export default defineAppConfig({
-  forceColorMode: {
+  colorMode: {
     enabled: false,
     preference: 'dark',
   },
