@@ -7,9 +7,6 @@ export function useIntersectionObserver() {
     ) as NodeListOf<HTMLVideoElement>
 
     if (videoElements.length === 0) {
-      console.warn(
-        'useIntersectionObserver: No video elements found to observe.',
-      )
       return
     }
 

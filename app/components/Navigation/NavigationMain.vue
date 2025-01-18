@@ -24,6 +24,7 @@ const navLinks = mainMenuArray.map((menuItem) => ({
     : `/${menuItem.alias}${menuItem.options?.fragment ? `#${menuItem.options.fragment}` : ''}`,
 }))
 
+const appConfig = useAppConfig()
 const showNavbar = ref(true)
 const navbarOpen = ref(false)
 const lastScrollPosition = ref(0)
@@ -122,6 +123,7 @@ onBeforeUnmount(() => {
           <div class="order-2 flex md:order-3">
             <ClientOnly>
               <UButton
+                v-if="!appConfig.forceColorMode.enabled"
                 aria-label="Theme"
                 color="black"
                 :icon="
