@@ -67,7 +67,7 @@ const media = computed(() => hero.media?.[0] || {})
         width="360"
         playsinline
         disablepictureinpicture
-        controls
+        loop
       >
         <source :src="media.mediaEmbed" type="video/mp4" />
       </video>
