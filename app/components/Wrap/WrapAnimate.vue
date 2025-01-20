@@ -14,6 +14,7 @@ withDefaults(defineProps<AosProps>(), {
     v-if="wrapper"
     :data-aos="aos"
     :data-aos-delay="aosDelay"
+    class="opacity-0"
     data-aos-once="true"
   >
     <slot />
