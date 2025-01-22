@@ -83,8 +83,6 @@ onBeforeUnmount(() => {
       :class="{
         '-translate-y-full': !showNavbar || !isScrolled,
         'pt-[3.9rem]': isAdministrator && showNavbar,
-        'bg-white bg-opacity-90 backdrop-blur-md dark:bg-gray-950 dark:bg-opacity-70':
-          isScrolled || (isAdministrator && showNavbar),
       }"
       role="navigation"
     >
