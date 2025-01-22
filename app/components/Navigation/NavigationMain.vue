@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
   <header aria-label="Site header">
     <nav
       aria-label="Site navigation"
-      class="fixed top-0 z-50 w-full transform bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
+      class="fixed top-0 z-30 w-full transform bg-white bg-opacity-90 px-4 px-8 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
       :class="{
         '-translate-y-full': !showNavbar,
         'pt-[3.1rem]': isAdministrator && showNavbar,
