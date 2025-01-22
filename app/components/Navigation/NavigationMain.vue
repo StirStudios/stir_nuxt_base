@@ -81,7 +81,7 @@ onBeforeUnmount(() => {
       aria-label="Site navigation"
       class="fixed top-0 z-30 w-full transform bg-white bg-opacity-90 px-4 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
       :class="{
-        '-translate-y-full': !showNavbar || !isScrolled,
+        '-translate-y-full': !showNavbar,
         'pt-[3.9rem]': isAdministrator && showNavbar,
       }"
       role="navigation"
