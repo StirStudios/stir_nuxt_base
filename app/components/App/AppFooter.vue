@@ -28,7 +28,7 @@ const iconsSocialConfig = [
 <template>
   <footer
     aria-label="Site Footer"
-    class="footer bg-black-400 py-10 text-sm"
+    class="footer bg-gray-100 dark:bg-black py-10"
     role="contentinfo"
   >
     <UContainer>
