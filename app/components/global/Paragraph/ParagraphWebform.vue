@@ -72,7 +72,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       toast.add({
         title: 'Error',
         description: 'Please complete the CAPTCHA',
-        color: 'red',
+        color: 'error',
       })
       return
     }
@@ -104,14 +104,16 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       toast.add({
         title: 'Error',
         description: 'Error submitting form: ' + submitError.value,
-        color: 'red',
+        color: 'error',
       })
       return
     } else {
       toast.add({
         title: 'Success!',
-        description: 'Form submitted successfully!',
-        color: 'lime',
+        description:
+          props.webform[0].webformConfirmation ||
+          'Form submitted successfully!',
+        color: 'success',
       })
     }
 
@@ -121,13 +123,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       formData[field] = ''
     }
 
-    isLoading.value = false
     isFormSubmitted.value = true
   } catch (error) {
     toast.add({
       title: 'Error',
       description: 'Error during submission: ' + error.message,
-      color: 'red',
+      color: 'error',
     })
   } finally {
     isLoading.value = false
@@ -145,39 +146,46 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       :state="state"
       @submit="onSubmit"
     >
+      <!-- Loop through fields -->
       <template
-        v-for="(field, fieldName) in webform[0].fields"
+        v-for="(field, fieldName) in props.webform[0].fields"
         :key="fieldName"
       >
-        <UFormGroup
-          :description="field['#description']"
+        <UFormField
           :label="field['#title']"
+          :description="field['#description']"
           :name="fieldName"
-          :ui="{
-            label: {
-              base: 'text-sm block mb-1 font-medium text-gray-200 dark:text-gray-200',
-            },
-            help: 'mt-0 text-sm text-gray-500 dark:text-gray-400 italic pt-2 pb-0',
-            error: 'mt-2 py-0 text-red-500 dark:text-red-400 text-sm',
-          }"
+          :required="field['#required']"
         >
+          <!-- Description -->
+          <template v-if="field['#description']" #description>
+            <span v-html="field['#description']" />
+          </template>
+          <!-- Input Types -->
           <UInput
-            v-if="field['#type'] === 'textfield' || field['#type'] === 'email'"
+            v-if="['textfield', 'email'].includes(field['#type'])"
             v-model="state[fieldName]"
-            :placeholder="field['#placeholder']"
             :type="field['#type']"
+            :placeholder="field['#placeholder']"
+            class="w-full"
           />
           <UTextarea
-            v-if="field['#type'] === 'textarea'"
+            v-else-if="field['#type'] === 'textarea'"
             v-model="state[fieldName]"
             :placeholder="field['#placeholder']"
+            class="w-full"
           />
           <template v-if="field['#help']" #help>
             {{ field['#help'] }}
           </template>
-        </UFormGroup>
+        </UFormField>
       </template>
-      <template v-for="action in webform[0].actions" :key="action['#type']">
+
+      <!-- Actions -->
+      <template
+        v-for="action in props.webform[0].actions"
+        :key="action['#type']"
+      >
         <p
           class="mb-1 block pb-0 text-sm font-medium text-gray-700 dark:text-gray-200"
         >
@@ -194,17 +202,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         />
       </template>
     </UForm>
-    <UNotification
-      v-else
-      :id="webformId"
-      class="mx-auto md:max-w-lg"
-      color="lime"
-      icon="i-heroicons-check-circle"
-      :timeout="0"
-    >
-      <template #description="{ description }">
-        <span v-html="webform[0].webformConfirmation" />
-      </template>
-    </UNotification>
+
+    <!-- Submission Confirmation -->
+    <div v-else class="text-center">
+      <h3 class="text-xl font-bold">Thank You!</h3>
+      <p v-html="props.webform[0].webformConfirmation"></p>
+    </div>
   </WrapNone>
 </template>

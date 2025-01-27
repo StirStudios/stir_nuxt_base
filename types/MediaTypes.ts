@@ -32,6 +32,9 @@ export interface CarouselProps extends LayoutProps {
   amount?: number
   interval?: number
   indicators?: boolean
+  arrows?: boolean
+  fade?: boolean
+  autoscroll?: boolean
   width?: string
   vid?: string
 }

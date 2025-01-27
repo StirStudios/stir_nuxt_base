@@ -49,7 +49,6 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
           'object-fit shadow-2xl transition-opacity duration-1000 ease-in-out',
           'media media-' + item.mid,
           appConfig.stirTheme.mediaRounded,
-          aspectRatios(item.width, item.height),
           {
             'opacity-100': loadedImages[item.mid],
             'opacity-0': !loadedImages[item.mid],

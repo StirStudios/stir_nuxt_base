@@ -1,4 +1,5 @@
-import { LayoutProps } from './UtilityTypes'
+import { LayoutProps, LinkProps } from './UtilityTypes'
+import { MediaProps } from './MediaTypes'
 
 export interface SectionProps extends LayoutProps {
   element: string
@@ -17,11 +18,13 @@ export interface RegionItemProps extends LayoutProps {
   region?: string
   text?: string
   src?: string
+  gradient?: string
+  media?: MediaProps
+  link?: LinkProps[]
   title?: string
   alt?: string
   width?: string
   height?: string
-  textRepeat?: TextRepeatProps[]
 }
 
 export interface TextProps extends LayoutProps {
@@ -30,8 +33,4 @@ export interface TextProps extends LayoutProps {
 
 export interface HTMLInjectionProps {
   html: string
-}
-
-export interface TextRepeatProps {
-  text: string
 }

@@ -14,8 +14,7 @@
   },
   "peerDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "aos": "^2.3.4",
-    "@nuxt/ui": "^2.20.0",
+    "@nuxt/ui": "3.0.0-alpha.11",
     "@nuxtjs/robots": "^4.1.11",
     "@nuxtjs/sitemap": "^6.1.5",
     "@nuxtjs/turnstile": "^0.9.11",
@@ -23,6 +22,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
     "@vue/eslint-config-typescript": "^14.2.0",
+    "aos": "^2.3.4",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -45,7 +45,7 @@
     }
   },
   "devDependencies": {
-    "prettier": "^3.3.3",
-    "release-it": "^18.1.1"
+    "prettier": "^3.4.2",
+    "release-it": "^18.1.2"
   }
 }
