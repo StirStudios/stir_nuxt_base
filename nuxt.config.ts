@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
   },
+  css: ['~/assets/css/main.css'],
   features: {
     inlineStyles: false,
   },

@@ -31,10 +31,13 @@ export default defineAppConfig({
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
     },
+    gradients: {
+      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
+      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
+      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
+    },
     carousel: {
-      container: '',
-      mediaHeight: 'h-64',
-      mediaRounded: 'rounded-xl',
+      padding: 'p-8 px-16 pb-12',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
@@ -45,8 +48,10 @@ export default defineAppConfig({
   },
   ui: {
     // strategy: 'override',
-    primary: 'lime',
-    gray: 'zinc',
+    colors: {
+      primary: 'lime',
+      neutral: 'zinc',
+    },
     button: {
       base: 'transition-all duration-300',
       size: {
@@ -66,6 +71,19 @@ export default defineAppConfig({
         md: 'h-5 w-5',
         lg: 'h-6 w-6',
         xl: 'h-8 w-8',
+      },
+    },
+    formField: {
+      slots: {
+        root: '',
+        wrapper: '',
+        labelWrapper: 'flex content-center items-center justify-between',
+        label: 'block font-medium text-[var(--ui-text)]',
+        container: 'mt-1 relative',
+        description: 'mb-5 text-[var(--ui-text-muted)]',
+        error: 'mt-2 text-[var(--ui-error)]',
+        hint: 'text-[var(--ui-text-muted)]',
+        help: 'mt-2 text-[var(--ui-text-muted)]',
       },
     },
   },

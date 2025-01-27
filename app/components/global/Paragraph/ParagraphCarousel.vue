@@ -1,74 +1,37 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
 
-const appConfig = useAppConfig()
-
 const props = defineProps<CarouselProps>()
 
-const carouselRef = ref()
-const isHovered = ref(false)
+const appConfig = useAppConfig()
+const showIndicators = computed(() => props.indicators || false)
+const showArrows = computed(() => props.arrows || false)
+const transitionFade = computed(() => props.fade || false)
+const autoscroll = computed(() => props.autoscroll || false)
 
-let intervalId: number | undefined
-
-const startCarousel = () => {
-  intervalId = setInterval(() => {
-    if (!carouselRef.value || isHovered.value) return
-
-    if (carouselRef.value.page === carouselRef.value.pages) {
-      return carouselRef.value.select(0)
-    }
-
-    carouselRef.value.next()
-  }, props.interval)
-}
-
-const stopCarousel = () => {
-  if (intervalId) {
-    clearInterval(intervalId)
-    intervalId = undefined
-  }
-}
-
-onMounted(() => {
-  startCarousel()
-})
-
-onUnmounted(() => {
-  stopCarousel()
-})
-
-const showIndicators = computed(() => {
-  return props.indicators ? { indicators: true } : {}
-})
-
-const dynamicClass = computed(() => {
-  const mdFraction = props.amount > 2 ? props.amount - 1 : 2
-  const basisFraction =
-    props.amount > 1
-      ? `md:basis-1/${mdFraction} lg:basis-1/${props.amount}`
-      : 'basis-full slide'
-  return basisFraction.trim()
+// Dynamically calculate grid classes based on the amount of items
+const itemGrid = computed(() => {
+  const amount = props.amount || 3
+  const lgBasis = `lg:basis-1/${amount}`
+  const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : 'basis'
+  return `basis ${mdBasis} ${lgBasis}`
 })
 </script>
 
 <template>
-  <div
-    class="relative z-10"
-    @mouseenter="isHovered = true"
-    @mouseleave="isHovered = false"
-  >
+  <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
     <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
-      ref="carouselRef"
-      v-bind="showIndicators"
       v-slot="{ item }"
+      loop
+      :auto-scroll="autoscroll"
+      :fade="transitionFade"
+      :arrows="showArrows"
+      :dots="showIndicators"
+      :autoplay="{ delay: interval || 2000 }"
       :items="items"
       :ui="{
-        container: `${appConfig.stirTheme.carousel.container} ${width ? width + ' ' : ''}slider`,
-        item:
-          items[0]?.type === 'media'
-            ? `${dynamicClass} ${appConfig.stirTheme.carousel.mediaHeight}`
-            : `${dynamicClass} ${appConfig.stirTheme.carousel.mediaRounded || appConfig.stirTheme.mediaRounded}`,
+        item: itemGrid,
       }"
     >
       <template v-if="item.element">
@@ -80,18 +43,8 @@ const dynamicClass = computed(() => {
         </template>
       </template>
       <template v-else>
-        <img
-          v-if="item.type === 'image'"
-          :alt="item.alt"
-          class="h-28 w-full object-contain px-4 py-2"
-          draggable="false"
-          :height="item.height"
-          :loading="item.loading"
-          :sizes="item.sizes"
-          :src="item.src"
-          :srcset="item.srcset"
-          :width="item.width"
-        />
+        <MediaSimple :media="[item]" v-if="item.type === 'image'" />
+        <MediaPopup :media="[item]" v-else-if="item.type === 'video'" />
       </template>
     </UCarousel>
   </div>

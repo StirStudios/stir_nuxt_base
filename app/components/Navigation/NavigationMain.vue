@@ -103,9 +103,9 @@ onBeforeUnmount(() => {
             </ULink>
           </div>
           <div class="order-2 flex">
-            <UHorizontalNavigation
+            <UNavigationMenu
               class="hidden border-none md:block"
-              :links="navLinks"
+              :items="navLinks"
               :ui="{
                 after: '',
                 container: 'block w-full sm:flex sm:items-center min-w-0',
@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
                   {{ link.label }}
                 </span>
               </template>
-            </UHorizontalNavigation>
+            </UNavigationMenu>
           </div>
           <div class="order-2 flex md:order-3">
             <ClientOnly>
@@ -153,50 +153,35 @@ onBeforeUnmount(() => {
         </div>
       </UContainer>
     </nav>
-    <USlideover
-      v-model="isOpen"
-      :ui="{
-        width: 'w-full max-w-full',
-      }"
-    >
-      <UCard
-        class="size-lg flex flex-1 flex-col"
-        :ui="{
-          body: { base: 'flex-1' },
-          ring: '',
-          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-        }"
-      >
-        <template #header>
-          <div class="flex items-center justify-between">
-            <ULink class="m-auto !outline-none" to="/" @click="isOpen = false">
-              <template v-if="page.site_info?.name">
-                <AppLogo />
-              </template>
-              <template v-else>
-                {{ page.site_info?.name }}
-              </template>
-            </ULink>
-            <UButton
-              class="-my-1"
-              color="gray"
-              icon="i-heroicons-x-mark-20-solid"
-              variant="ghost"
-              @click="isOpen = false"
-            />
-          </div>
-        </template>
-        <UVerticalNavigation
-          :links="navLinks"
-          :ui="{
-            base: 'my-3 uppercase',
-            label: 'text-center w-full',
-            padding: 'px-3.5 py-2.5',
-            size: 'text-lg',
-          }"
-          @click="isOpen = false"
-        />
-      </UCard>
-    </USlideover>
+   <USlideover v-model:open="isOpen" title="Menu">
+     <template #header>
+       <div class="flex items-center justify-between">
+         <ULink aria-label="Logo" to="/" @click="isOpen = false">
+           <AppLogo />
+         </ULink>
+         <UButton
+           aria-label="Close"
+           class="-my-1"
+           color="gray"
+           icon="i-heroicons-x-mark-20-solid"
+           variant="ghost"
+           @click="isOpen = false"
+         />
+       </div>
+     </template>
+     <template #body>
+       <UNavigationMenu
+         orientation="vertical"
+         :items="navLinks"
+         :ui="{
+           base: 'my-3 uppercase',
+           label: 'text-center w-full',
+           padding: 'px-3.5 py-2.5',
+           size: 'text-lg',
+         }"
+         @click="isOpen = false"
+       />
+     </template>
+   </USlideover>
   </header>
 </template>

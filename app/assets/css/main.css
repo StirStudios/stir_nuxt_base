@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+  --font-sans: 'Public Sans', sans-serif;
+  --color-white: #f5f0eb;
+  --color-black: #14161a;
+}
+
+@layer components {
+  [aria-roledescription='carousel'] {
+    .relative {
+      @apply !aspect-1/1;
+    }
+    img {
+      @apply m-auto aspect-1/1 object-cover;
+    }
+  }
+}

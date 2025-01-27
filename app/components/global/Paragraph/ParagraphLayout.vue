@@ -3,11 +3,14 @@ import type { SectionProps } from '~/types/ContentTypes'
 
 const appConfig = useAppConfig()
 
-withDefaults(defineProps<{
-  section?: SectionProps[]
-}>(), {
-  section: []
-})
+withDefaults(
+  defineProps<{
+    section?: SectionProps[]
+  }>(),
+  {
+    section: [],
+  },
+)
 
 // Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
@@ -48,8 +51,11 @@ const getNodeProps = (item) => {
       amount: item.carouselCount,
       header: item.header,
       indicators: item.carouselIndicators,
+      arrows: item.carouselArrows,
+      fade: item.carouselFade,
+      autoscroll: item.carouselAutoscroll,
       interval: item.carouselInterval,
-      items: item.media || item.textRepeat || [],
+      items: item.media,
       width: item.width,
     }
   } else if (item.element === 'paragraph-view') {
@@ -58,6 +64,9 @@ const getNodeProps = (item) => {
         ...item.content,
         carousel: item.carousel,
         carouselIndicators: item.carouselIndicators,
+        carouselArrows: item.carouselArrows,
+        carouselFade: item.carouselFade,
+        carouselAutoscroll: item.carouselAutoscroll,
         carouselInterval: item.carouselInterval,
         spacing: item.spacing,
         width: item.width,
