@@ -78,8 +78,8 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
   <div
     class="md:px-auto sticky top-0 w-full bg-zinc-200 px-4 px-8 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
   >
-    <UHorizontalNavigation
-      :links="links"
+    <UNavigationMenu
+      :items="links"
       :ui="{
         base: 'text-xs',
         label: 'truncate relative hidden md:block',
