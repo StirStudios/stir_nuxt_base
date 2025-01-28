@@ -110,9 +110,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     } else {
       toast.add({
         title: 'Success!',
-        description:
-          props.webform[0].webformConfirmation ||
-          'Form submitted successfully!',
+        description: 'Form submitted successfully!',
         color: 'success',
       })
     }
@@ -206,7 +204,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <!-- Submission Confirmation -->
     <div v-else class="text-center">
       <h3 class="text-xl font-bold">Thank You!</h3>
-      <p v-html="props.webform[0].webformConfirmation"></p>
+      <div
+        class="webform-response"
+        v-html="props.webform[0].webformConfirmation"
+      ></div>
     </div>
   </WrapNone>
 </template>
