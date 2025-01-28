@@ -110,7 +110,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     } else {
       toast.add({
         title: 'Success!',
-        description: 'Form submitted successfully!',
+        description:
+          'Form submitted successfully!\nThank you for your submission.',
         color: 'success',
       })
     }
