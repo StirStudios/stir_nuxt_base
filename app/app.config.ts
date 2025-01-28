@@ -53,37 +53,17 @@ export default defineAppConfig({
       neutral: 'zinc',
     },
     button: {
-      base: 'transition-all duration-300',
-      size: {
-        '2xs': 'text-xs',
-        xs: 'text-xs',
-        sm: 'text-sm',
-        md: 'text-md',
-        lg: 'text-lg',
-        xl: 'text-2xl',
+      slots: {
+        base: 'transition-all duration-300',
       },
-    },
-    icon: {
-      size: {
-        '2xs': 'h-3 w-3',
-        xs: 'h-3 w-3',
-        sm: 'h-4 w-4',
-        md: 'h-5 w-5',
-        lg: 'h-6 w-6',
-        xl: 'h-8 w-8',
+      defaultVariants: {
+        size: 'lg',
       },
     },
     formField: {
       slots: {
-        root: '',
-        wrapper: '',
-        labelWrapper: 'flex content-center items-center justify-between',
-        label: 'block font-medium text-[var(--ui-text)]',
-        container: 'mt-1 relative',
         description: 'mb-5 text-[var(--ui-text-muted)]',
-        error: 'mt-2 text-[var(--ui-error)]',
-        hint: 'text-[var(--ui-text-muted)]',
-        help: 'mt-2 text-[var(--ui-text-muted)]',
+        error: 'mt-2 text-[var(--ui-error)] error',
       },
     },
   },
