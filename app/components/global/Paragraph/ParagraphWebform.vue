@@ -68,7 +68,7 @@ onMounted(async () => {
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   isLoading.value = true
   try {
-    if (!turnstile.value) {
+    if (process.env.NUXT_SITE_ENV !== 'local' && !turnstile.value) {
       toast.add({
         title: 'Error',
         description: 'Please complete the CAPTCHA',
