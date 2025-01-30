@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
+@source "./safelist.txt";
+
 @theme {
   --font-sans: 'Public Sans', sans-serif;
   --color-white: #f5f0eb;
