@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   semi: false,
   arrowParens: 'always',
   singleQuote: true,
