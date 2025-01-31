@@ -68,11 +68,11 @@ onMounted(async () => {
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   isLoading.value = true
   try {
-    if (!turnstile.value) {
+    if (!config.public.turnstileDisable && !turnstile.value) {
       toast.add({
         title: 'Error',
         description: 'Please complete the CAPTCHA',
-        color: 'red',
+        color: 'error',
       })
       return
     }
