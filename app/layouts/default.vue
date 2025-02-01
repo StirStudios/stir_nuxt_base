@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { usePageContext } from '~/composables/usePageContext'
-
 const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
   await useDrupalCe()
 
