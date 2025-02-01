@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { HeroProps } from '~/types/MediaTypes'
-import { useDrupalApi } from '~/composables/useDrupalApi'
+
+import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 
 const { observeVideos } = useIntersectionObserver()
-const { isFront } = await useDrupalApi()
+const { isFront } = await usePageContext()
 
 const { hero, pageTitle, siteSlogan } = defineProps<{
   hero: HeroProps
@@ -51,7 +52,7 @@ const media = computed(() => hero.media?.[0] || {})
       <img
         v-if="media.type === 'image'"
         :alt="media.alt || ''"
-        class="absolute min-h-full w-auto min-w-full max-w-none"
+        class="absolute min-h-full w-auto max-w-none min-w-full"
         :height="media.height || ''"
         :sizes="media.sizes || ''"
         :src="media.src || ''"
@@ -60,7 +61,7 @@ const media = computed(() => hero.media?.[0] || {})
       />
       <video
         v-else-if="media.type === 'video'"
-        class="absolute min-h-full w-auto min-w-full max-w-none"
+        class="absolute min-h-full w-auto max-w-none min-w-full"
         height="640"
         muted
         preload="metadata"
