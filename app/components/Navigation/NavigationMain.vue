@@ -1,8 +1,15 @@
 <script lang="ts" setup>
-import { useDrupalApi } from '~/composables/useDrupalApi'
+import type { SiteInfoProps } from '~/types/BaseTypes'
+import { usePageContext } from '~/composables/usePageContext'
 
-// Fetch Drupal API data
-const { page, isAdministrator, fetchMenu } = await useDrupalApi()
+const { isFront, isAdministrator } = await usePageContext()
+const { fetchMenu } = useDrupalCe()
+const mainMenu = await fetchMenu('main')
+
+// Access the prop correctly
+const props = defineProps<{
+  site: SiteInfoProps
+}>()
 
 // Fetch main menu with error handling
 let mainMenuArray = []
@@ -69,18 +76,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div
-    v-if="isAdministrator"
-    id="admin-menu"
-    aria-label="Admin navigation"
-    class="sticky top-0 z-50 h-[3.1rem]"
-    role="navigation"
-  />
   <header aria-label="Site header">
-    {{ page.local_tasks && page.local_tasks.primary.length }}
     <nav
       aria-label="Site navigation"
-      class="fixed top-0 z-30 w-full transform bg-white bg-opacity-90 px-4 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
+      class="bg-opacity-90 dark:bg-opacity-70 fixed top-0 z-30 w-full transform bg-white px-4 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:shadow-gray-700"
       :class="{
         '-translate-y-full': !showNavbar,
         'pt-[3.9rem]': isAdministrator && showNavbar,
@@ -91,7 +90,7 @@ onBeforeUnmount(() => {
         <div class="mx-auto flex flex-wrap items-center justify-between">
           <div class="order-1">
             <ULink aria-label="Site Logo" class="font-bold" to="/">
-              <template v-if="!page.site_info?.name">
+              <template v-if="!site.site_info?.name">
                 <ClientOnly>
                   <AppLogo
                     :dark-mode="!isDark && !isScrolled && !isAdministrator"
@@ -99,7 +98,7 @@ onBeforeUnmount(() => {
                 </ClientOnly>
               </template>
               <template v-else>
-                {{ page.site_info?.name }}
+                {{ site.site_info?.name }}
               </template>
             </ULink>
           </div>
