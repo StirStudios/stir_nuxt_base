@@ -12,7 +12,7 @@ export function usePageContext(page) {
 
   // Determine CSS classes dynamically
   const classes = computed(() => {
-    return routeSlug + (isAdministrator.value ? ' logged-in' : '')
+    return routeSlug + (isAdministrator ? ' logged-in' : '')
   })
 
   return {
