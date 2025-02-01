@@ -50,8 +50,14 @@ type Schema = InferType<typeof schema>
 onMounted(async () => {
   try {
     // Fetch the CSRF token
-    const { data: csrfData } = await useFetch('/api/token')
-    csrfToken.value = csrfData.value?.csrfToken || ''
+    const csrfData = await $fetch('/api/token')
+
+    // Handle cases where the token might not be present
+    if (!csrfData?.csrfToken) {
+      throw new Error('CSRF token not found in the response')
+    }
+
+    csrfToken.value = csrfData.csrfToken
 
     // Initialize formData and state for dynamic fields from props
     const fields = props.webform[0]?.fields || {}
@@ -61,6 +67,7 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('Error fetching CSRF token:', error)
+    csrfToken.value = '' // Clear token to avoid issues
   }
 })
 
@@ -190,9 +197,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         >
           Let us know you're human
         </p>
-        <ClientOnly>
-          <NuxtTurnstile v-model="turnstile" />
-        </ClientOnly>
+        <NuxtTurnstile v-model="turnstile" />
         <UButton
           :label="action['#submit_Label']"
           :loading="isLoading"
