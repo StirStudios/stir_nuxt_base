@@ -77,6 +77,7 @@ onBeforeUnmount(() => {
     role="navigation"
   />
   <header aria-label="Site header">
+    {{ page.local_tasks && page.local_tasks.primary.length }}
     <nav
       aria-label="Site navigation"
       class="fixed top-0 z-30 w-full transform bg-white bg-opacity-90 px-4 py-3 shadow shadow-gray-300 backdrop-blur-md duration-500 dark:bg-gray-950 dark:bg-opacity-70 dark:shadow-gray-700"
@@ -153,35 +154,35 @@ onBeforeUnmount(() => {
         </div>
       </UContainer>
     </nav>
-   <USlideover v-model:open="isOpen" title="Menu">
-     <template #header>
-       <div class="flex items-center justify-between">
-         <ULink aria-label="Logo" to="/" @click="isOpen = false">
-           <AppLogo />
-         </ULink>
-         <UButton
-           aria-label="Close"
-           class="-my-1"
-           color="gray"
-           icon="i-heroicons-x-mark-20-solid"
-           variant="ghost"
-           @click="isOpen = false"
-         />
-       </div>
-     </template>
-     <template #body>
-       <UNavigationMenu
-         orientation="vertical"
-         :items="navLinks"
-         :ui="{
-           base: 'my-3 uppercase',
-           label: 'text-center w-full',
-           padding: 'px-3.5 py-2.5',
-           size: 'text-lg',
-         }"
-         @click="isOpen = false"
-       />
-     </template>
-   </USlideover>
+    <USlideover v-model:open="isOpen" title="Menu">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <ULink aria-label="Logo" to="/" @click="isOpen = false">
+            <AppLogo />
+          </ULink>
+          <UButton
+            aria-label="Close"
+            class="-my-1"
+            color="gray"
+            icon="i-heroicons-x-mark-20-solid"
+            variant="ghost"
+            @click="isOpen = false"
+          />
+        </div>
+      </template>
+      <template #body>
+        <UNavigationMenu
+          orientation="vertical"
+          :items="navLinks"
+          :ui="{
+            base: 'my-3 uppercase',
+            label: 'text-center w-full',
+            padding: 'px-3.5 py-2.5',
+            size: 'text-lg',
+          }"
+          @click="isOpen = false"
+        />
+      </template>
+    </USlideover>
   </header>
 </template>
