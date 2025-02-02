@@ -15,11 +15,7 @@ watch(
         close: true,
         duration: 5000,
         slots: {
-          description: () => ({
-            render() {
-              return h('div', { innerHTML: message.message })
-            },
-          }),
+          description: () => h('div', message.message), // Temporary debug without innerHTML
         },
         onDismiss: () => messages.value.splice(index, 1),
       })
