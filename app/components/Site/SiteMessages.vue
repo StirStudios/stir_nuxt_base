@@ -15,10 +15,11 @@ watch(
         close: true,
         duration: 5000,
         slots: {
-          description: () =>
-            h('div', {
-              innerHTML: message.message, // Dynamically render raw HTML
-            }),
+          description: () => ({
+            render() {
+              return h('div', { innerHTML: message.message })
+            },
+          }),
         },
         onDismiss: () => messages.value.splice(index, 1),
       })
