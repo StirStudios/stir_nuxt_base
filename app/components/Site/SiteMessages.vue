@@ -17,7 +17,7 @@ watch(
         slots: {
           description: () => (
             // Render raw HTML using v-html inside the slot
-            <div v-html={message.message} />
+            <div innerHTML={message.message}></div>
           ),
         },
         onDismiss: () => messages.value.splice(index, 1),
