@@ -7,7 +7,7 @@ export function usePageContext(page) {
 
   // Check if the current user is an administrator
   const isAdministrator = computed(() => {
-    return page?.current_user?.is_administrator || false
+    return page?.value?.current_user?.is_administrator || false
   })
 
   // Determine CSS classes dynamically

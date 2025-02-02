@@ -2,7 +2,7 @@
 import type { SiteInfoProps } from '~/types/BaseTypes'
 import { usePageContext } from '~/composables/usePageContext'
 
-const { isFront, isAdministrator } = await usePageContext()
+const { isFront, isAdministrator } = usePageContext(page)
 const { fetchMenu } = useDrupalCe()
 const mainMenu = await fetchMenu('main')
 
