@@ -6,7 +6,8 @@ export function usePageContext(page?: Ref<any> | any) {
   const route = useRoute()
 
   // Determine if this is the front page
-  const isFront = route.params.slug?.[0] === 'front'
+  const isFront =
+    route.fullPath === '/' || (route.params.slug?.[0] || '') === 'front'
 
   // Check if the current user is an administrator
   const isAdministrator = !!normalizedPage?.current_user?.is_administrator

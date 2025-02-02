@@ -28,7 +28,7 @@ export default defineAppConfig({
         5: 'sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5',
       },
       wrapCols: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
-      container: 'mx-auto container px-4 md:px-5',
+      container: 'mx-auto max-w-[var(--ui-container)] px-4 md:px-5',
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
     },

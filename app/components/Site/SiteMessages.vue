@@ -1,40 +1,77 @@
 <script setup lang="ts">
 const { getMessages } = useDrupalCe()
+const toast = useToast()
 const messages = getMessages()
-const dismiss = (id: number) => messages.value.splice(id, 1)
+
+// Watch for new messages and trigger a toast for each
+watch(
+  messages,
+  (newMessages) => {
+    newMessages.forEach((message, index) => {
+      toast.add({
+        title: getToastTitle(message.type),
+        description: message.message,
+        color: getToastColor(message.type),
+        icon: getToastIcon(message.type),
+        close: true,
+        duration: 5000,
+        onDismiss: () => messages.value.splice(index, 1),
+      })
+    })
+  },
+  { deep: true, immediate: true },
+)
+
+function getToastTitle(type: string): string {
+  switch (type) {
+    case 'success':
+      return 'Success!'
+    case 'error':
+    case 'danger': // Handling both "error" and "danger" for flexibility
+      return 'Error!'
+    case 'warning':
+      return 'Warning!'
+    case 'info':
+      return 'Information'
+    default:
+      return 'Notice'
+  }
+}
+
+function getToastColor(type: string): string {
+  switch (type) {
+    case 'success':
+      return 'success'
+    case 'error':
+    case 'danger':
+      return 'error'
+    case 'warning':
+      return 'warning'
+    case 'info':
+      return 'info'
+    default:
+      return 'neutral'
+  }
+}
+
+function getToastIcon(type: string): string {
+  switch (type) {
+    case 'success':
+      return 'i-lucide-check-circle'
+    case 'error':
+    case 'danger':
+      return 'i-lucide-x-circle'
+    case 'warning':
+      return 'i-lucide-alert-circle'
+    case 'info':
+      return 'i-lucide-info'
+    default:
+      return 'i-lucide-bell'
+  }
+}
 </script>
 
 <template>
-  <div :data-id="$options.name" class="messages">
-    <transition-group name="list" tag="div">
-      <SiteMessage
-        v-for="(message, index) in messages"
-        :id="`${index}-${message.message}`"
-        :key="`${index}-${message.message}`"
-        :type="message.type"
-        :message="message.message"
-        @dismiss="dismiss"
-      />
-    </transition-group>
-  </div>
+  <!-- No visual content required since toasts are handled globally -->
+  <div style="display: none"></div>
 </template>
-
-<style lang="css" scoped>
-.messages {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-}
-
-.list-enter-active,
-.list-leave-active {
-  transition: opacity 0.5s;
-}
-
-.list-enter,
-.list-leave-to {
-  opacity: 0;
-}
-</style>
