@@ -10,11 +10,16 @@ watch(
     newMessages.forEach((message, index) => {
       toast.add({
         title: getToastTitle(message.type),
-        description: message.message,
         color: getToastColor(message.type),
         icon: getToastIcon(message.type),
         close: true,
         duration: 5000,
+        slots: {
+          description: () => (
+            // Render raw HTML using v-html inside the slot
+            <div v-html={message.message} />
+          ),
+        },
         onDismiss: () => messages.value.splice(index, 1),
       })
     })
@@ -27,7 +32,7 @@ function getToastTitle(type: string): string {
     case 'success':
       return 'Success!'
     case 'error':
-    case 'danger': // Handling both "error" and "danger" for flexibility
+    case 'danger':
       return 'Error!'
     case 'warning':
       return 'Warning!'
@@ -71,7 +76,4 @@ function getToastIcon(type: string): string {
 }
 </script>
 
-<template>
-  <!-- No visual content required since toasts are handled globally -->
-  <div style="display: none"></div>
-</template>
+<template></template>
