@@ -15,10 +15,10 @@ watch(
         close: true,
         duration: 5000,
         slots: {
-          description: () => (
-            // Render raw HTML using v-html inside the slot
-            <div innerHTML={message.message}></div>
-          ),
+          description: () =>
+            h('div', {
+              innerHTML: message.message, // Dynamically render raw HTML
+            }),
         },
         onDismiss: () => messages.value.splice(index, 1),
       })
