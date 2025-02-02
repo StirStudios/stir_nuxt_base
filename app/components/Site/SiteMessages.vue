@@ -15,7 +15,11 @@ watch(
         close: true,
         duration: 5000,
         slots: {
-          description: () => h('div', message.message), // Temporary debug without innerHTML
+          description: () =>
+            h('div', {
+              innerHTML: message.message,
+              style: { whiteSpace: 'pre-wrap' }, // Ensure multi-line rendering if needed
+            }),
         },
         onDismiss: () => messages.value.splice(index, 1),
       })
