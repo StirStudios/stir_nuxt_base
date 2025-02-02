@@ -7,7 +7,7 @@ const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
 const page = await fetchPage(useRoute().path, { query: useRoute().query })
 const layout = getPageLayout(page)
 
-const { isAdministrator, classes } = await usePageContext()
+const { isAdministrator, classes } = usePageContext(page)
 
 usePageHead(page)
 
