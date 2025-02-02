@@ -23,6 +23,7 @@ useHead({
 
 <template>
   <DrupalTabs v-if="isAdministrator" :tabs="page.local_tasks" />
+  <div class="bg-bg-red-500 p-20">{{ isAdministrator }}</div>
   <NavigationMain :site="page" />
   <SiteMessages />
   <main id="main-content" role="main">
