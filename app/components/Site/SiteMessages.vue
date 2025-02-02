@@ -3,6 +3,12 @@ const { getMessages } = useDrupalCe()
 const toast = useToast()
 const messages = getMessages()
 
+function renderHTMLMessage(message: string): string {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = message
+  return wrapper.innerHTML // Return safe, sanitized content
+}
+
 // Watch for new messages and trigger a toast for each
 watch(
   messages,
@@ -14,13 +20,7 @@ watch(
         icon: getToastIcon(message.type),
         close: true,
         duration: 5000,
-        slots: {
-          description: () =>
-            h('div', {
-              innerHTML: message.message,
-              style: { whiteSpace: 'pre-wrap' }, // Ensure multi-line rendering if needed
-            }),
-        },
+        description: renderHTMLMessage(message.message),
         onDismiss: () => messages.value.splice(index, 1),
       })
     })
