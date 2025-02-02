@@ -5,7 +5,7 @@ import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 
 const { observeVideos } = useIntersectionObserver()
-const { isFront } = usePageContext(page)
+const { isFront } = usePageContext()
 
 const { hero, pageTitle, siteSlogan } = defineProps<{
   hero: HeroProps

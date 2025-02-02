@@ -2,14 +2,14 @@
 import type { SiteInfoProps } from '~/types/BaseTypes'
 import { usePageContext } from '~/composables/usePageContext'
 
-const { isFront, isAdministrator } = usePageContext(page)
-const { fetchMenu } = useDrupalCe()
-const mainMenu = await fetchMenu('main')
-
 // Access the prop correctly
 const props = defineProps<{
   site: SiteInfoProps
 }>()
+
+const { isAdministrator } = usePageContext(props.site)
+const { fetchMenu } = useDrupalCe()
+const mainMenu = await fetchMenu('main')
 
 // Fetch main menu with error handling
 let mainMenuArray = []
