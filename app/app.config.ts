@@ -69,7 +69,9 @@ export default defineAppConfig({
     },
     alert: {
       slots: {
-        root: 'relative max-w-[var(--ui-container) overflow-hidden w-full rounded-[calc(var(--ui-radius)*2)] p-4 flex gap-2.5',
+        wrapper:
+          'rounded-[calc(var(--ui-radius)*2)] flex-1 flex flex-col gap-1',
+        icon: 'shrink-0 size-11',
       },
     },
   },
