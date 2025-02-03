@@ -1,34 +1,32 @@
 <script setup lang="ts">
 const { getMessages } = useDrupalCe()
-const toast = useToast()
 const messages = getMessages()
 
-function renderHTMLMessage(message: string): string {
-  const wrapper = document.createElement('div')
-  wrapper.innerHTML = message
-  return wrapper.innerHTML // Return safe, sanitized content
-}
+const dismiss = (index: number) => messages.value.splice(index, 1)
+</script>
 
-// Watch for new messages and trigger a toast for each
-watch(
-  messages,
-  (newMessages) => {
-    newMessages.forEach((message, index) => {
-      toast.add({
-        title: getToastTitle(message.type),
-        color: getToastColor(message.type),
-        icon: getToastIcon(message.type),
-        close: true,
-        duration: 5000,
-        description: renderHTMLMessage(message.message),
-        onDismiss: () => messages.value.splice(index, 1),
-      })
-    })
-  },
-  { deep: true, immediate: true },
-)
+<template>
+  <div class="alerts">
+    <UAlert
+      v-for="(message, index) in messages"
+      :key="`${index}-${message.message}`"
+      :color="message.type || 'neutral'"
+      :title="getAlertTitle(message.type)"
+      icon="i-lucide-info"
+      variant="outline"
+      close
+      @update:open="dismiss(index)"
+    >
+      <template #description>
+        <div v-html="message.message" />
+      </template>
+    </UAlert>
+  </div>
+</template>
 
-function getToastTitle(type: string): string {
+<script lang="ts">
+// Utility function for the alert title based on the message type
+function getAlertTitle(type: string): string {
   switch (type) {
     case 'success':
       return 'Success!'
@@ -43,38 +41,4 @@ function getToastTitle(type: string): string {
       return 'Notice'
   }
 }
-
-function getToastColor(type: string): string {
-  switch (type) {
-    case 'success':
-      return 'success'
-    case 'error':
-    case 'danger':
-      return 'error'
-    case 'warning':
-      return 'warning'
-    case 'info':
-      return 'info'
-    default:
-      return 'neutral'
-  }
-}
-
-function getToastIcon(type: string): string {
-  switch (type) {
-    case 'success':
-      return 'i-lucide-check-circle'
-    case 'error':
-    case 'danger':
-      return 'i-lucide-x-circle'
-    case 'warning':
-      return 'i-lucide-alert-circle'
-    case 'info':
-      return 'i-lucide-info'
-    default:
-      return 'i-lucide-bell'
-  }
-}
 </script>
-
-<template></template>
