@@ -24,7 +24,6 @@ useHead({
 <template>
   <DrupalTabs v-if="isAdministrator" :tabs="page.local_tasks" />
   <NavigationMain :site="page" />
-  <SiteMessages />
   <main id="main-content" role="main">
     <slot
       :page="page"
