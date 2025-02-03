@@ -71,7 +71,7 @@ export default defineAppConfig({
     },
     alert: {
       wrapper:
-        'mx-auto max-w-2xl fixed bottom-5 left-1/2 transform -translate-x-1/2 overflow-hidden w-full p-4 flex gap-2.5',
+        'mx-auto max-w-2xl fixed bottom-5 left-1/2 transform -translate-x-1/2 overflow-hidden w-full p-4',
     },
   },
 })
