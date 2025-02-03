@@ -28,8 +28,13 @@ useHead({
     id="main-content"
     role="main"
     :class="[
-      isAdministrator ? 'pt-[3.9rem]' : '',
-      page.content.hero && page.content.hero.length === 0 ? 'pt-[20rem]' : '',
+      isAdministrator && page.content.hero && page.content.hero.length === 0
+        ? 'pt-[23.9rem]' // Combined padding for both cases (3.9rem + 20rem)
+        : isAdministrator
+          ? 'pt-[3.9rem]' // Admin only
+          : page.content.hero && page.content.hero.length === 0
+            ? 'pt-[20rem]' // Empty hero only
+            : '',
     ]"
   >
     <SiteMessages />
