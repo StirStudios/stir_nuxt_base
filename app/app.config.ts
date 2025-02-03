@@ -67,5 +67,10 @@ export default defineAppConfig({
         error: 'mt-2 text-[var(--ui-error)] error',
       },
     },
+    alert: {
+      slots: {
+        root: 'relative max-w-[var(--ui-container) overflow-hidden w-full rounded-[calc(var(--ui-radius)*2)] p-4 flex gap-2.5',
+      },
+    },
   },
 })

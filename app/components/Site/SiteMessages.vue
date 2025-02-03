@@ -13,7 +13,6 @@ const dismiss = (index: number) => messages.value.splice(index, 1)
       :color="message.type || 'neutral'"
       :title="getAlertTitle(message.type)"
       icon="i-lucide-info"
-      variant="outline"
       close
       @update:open="dismiss(index)"
     >
