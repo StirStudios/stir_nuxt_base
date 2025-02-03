@@ -69,6 +69,7 @@ export default defineAppConfig({
     },
     alert: {
       slots: {
+        root: 'mx-auto max-w-[var(--ui-container)] mb-5 relative overflow-hidden w-full rounded-[calc(var(--ui-radius)*2)] p-4 flex gap-2.5',
         icon: 'shrink-0 size-11',
       },
     },

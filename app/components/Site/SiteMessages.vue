@@ -20,20 +20,18 @@ const dismiss = (index: number) => messages.value.splice(index, 1)
 </script>
 
 <template>
-  <div class="max-w-[var(--ui-container)">
-    <UAlert
-      v-for="(message, index) in messages"
-      :key="`${index}-${message.message}`"
-      :color="message.type === 'success' ? 'success' : 'error'"
-      :title="message.type === 'success' ? 'Success!' : 'Error!'"
-      :icon="getAlertIcon(message.type)"
-      close
-      duration="5000"
-      @update:open="dismiss(index)"
-    >
-      <template #description>
-        <div v-html="message.message" />
-      </template>
-    </UAlert>
-  </div>
+  <UAlert
+    v-for="(message, index) in messages"
+    :key="`${index}-${message.message}`"
+    :color="message.type === 'success' ? 'success' : 'error'"
+    :title="message.type === 'success' ? 'Success!' : 'Error!'"
+    :icon="getAlertIcon(message.type)"
+    close
+    duration="5000"
+    @update:open="dismiss(index)"
+  >
+    <template #description>
+      <div v-html="message.message" />
+    </template>
+  </UAlert>
 </template>
