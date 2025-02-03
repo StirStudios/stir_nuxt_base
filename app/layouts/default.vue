@@ -27,7 +27,10 @@ useHead({
   <main
     id="main-content"
     role="main"
-    :class="isAdministrator ? 'pt-[3.9rem]' : ''"
+    :class="[
+      isAdministrator ? 'pt-[3.9rem]' : '',
+      page.content.hero && page.content.hero.length === 0 ? 'pt-[20rem]' : '',
+    ]"
   >
     <SiteMessages />
     <slot
