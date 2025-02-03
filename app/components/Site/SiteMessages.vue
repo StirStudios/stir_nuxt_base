@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const { getMessages } = useDrupalCe()
-const messages = getMessages()
+const messages = ref([]) // Use a reactive ref instead of direct assignment
+
+// Fetch and update messages on the client side after hydration
+onMounted(() => {
+  messages.value = getMessages().value // Safely assign messages
+})
 
 // Map icons based on message type
 function getAlertIcon(type: string): string {
@@ -16,16 +21,23 @@ function getAlertIcon(type: string): string {
 }
 
 // Automatically dismiss the alert after 10 seconds
-onMounted(() => {
-  messages.value.forEach((_, index) => {
-    setTimeout(() => {
-      dismiss(index)
-    }, 10000)
-  })
-})
+function scheduleDismissal(index: number) {
+  setTimeout(() => {
+    dismiss(index)
+  }, 10000)
+}
 
 // Dismiss function to remove alerts
 const dismiss = (index: number) => messages.value.splice(index, 1)
+
+// Watch for new messages and schedule dismissal
+watch(
+  messages,
+  (newMessages) => {
+    newMessages.forEach((_, index) => scheduleDismissal(index))
+  },
+  { deep: true, immediate: true },
+)
 </script>
 
 <template>
