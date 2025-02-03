@@ -27,9 +27,7 @@ useHead({
   <main
     id="main-content"
     role="main"
-    :class="{
-      'pt-[3.9rem]': isAdministrator && showNavbar,
-    }"
+    :class="isAdministrator ? 'pt-[3.9rem]' : ''"
   >
     <SiteMessages />
     <slot
