@@ -6,22 +6,24 @@ const dismiss = (index: number) => messages.value.splice(index, 1)
 </script>
 
 <template>
-  <div class="alerts">
-    <UAlert
-      v-for="(message, index) in messages"
-      :key="`${index}-${message.message}`"
-      :color="message.type || 'neutral'"
-      :title="getAlertTitle(message.type)"
-      icon="i-lucide-info"
-      variant="outline"
-      close
-      @update:open="dismiss(index)"
-    >
-      <template #description>
-        <div v-html="message.message" />
-      </template>
-    </UAlert>
-  </div>
+  <UAlert
+    v-for="(message, index) in messages"
+    :key="`${index}-${message.message}`"
+    :color="message.type || 'neutral'"
+    :title="getAlertTitle(message.type)"
+    :ui="{
+      root: 'relative max-w-[var(--ui-container) overflow-hidden w-full rounded-[calc(var(--ui-radius)*2)] p-4 flex gap-2.5',
+      icon: 'size-11',
+    }"
+    ,
+    icon="i-lucide-info"
+    close
+    @update:open="dismiss(index)"
+  >
+    <template #description>
+      <div v-html="message.message" />
+    </template>
+  </UAlert>
 </template>
 
 <script lang="ts">
