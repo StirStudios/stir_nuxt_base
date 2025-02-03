@@ -1,13 +1,11 @@
 <script setup lang="ts">
 const { getMessages } = useDrupalCe()
-const messages = ref([]) // Use a reactive ref instead of direct assignment
+const messages = ref([])
 
-// Fetch and update messages on the client side after hydration
 onMounted(() => {
-  messages.value = getMessages().value // Safely assign messages
+  messages.value = getMessages().value
 })
 
-// Map icons based on message type
 function getAlertIcon(type: string): string {
   switch (type) {
     case 'success':
@@ -20,35 +18,34 @@ function getAlertIcon(type: string): string {
   }
 }
 
-// Automatically dismiss the alert after 10 seconds
 function scheduleDismissal(index: number) {
   setTimeout(() => {
     dismiss(index)
   }, 10000)
 }
 
-// Dismiss function to remove alerts
-const dismiss = (index: number) => messages.value.splice(index, 1)
+const dismiss = (messageId: string) => {
+  messages.value = messages.value.filter((msg) => msg.id !== messageId)
+}
 
-// Watch for new messages and schedule dismissal
 watch(
   messages,
   (newMessages) => {
-    newMessages.forEach((_, index) => scheduleDismissal(index))
+    newMessages.forEach((message) => scheduleDismissal(message.id))
   },
-  { deep: true, immediate: true },
+  { immediate: true },
 )
 </script>
 
 <template>
   <UAlert
     v-for="(message, index) in messages"
-    :key="`${index}-${message.message}`"
+    :key="message.id"
     :color="message.type === 'success' ? 'success' : 'error'"
     :title="message.type === 'success' ? 'Success!' : 'Error!'"
     :icon="getAlertIcon(message.type)"
     close
-    @update:open="dismiss(index)"
+    @update:open="dismiss(message.id)"
   >
     <template #description>
       <div v-html="message.message" />
