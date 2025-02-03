@@ -1,9 +1,12 @@
 <script setup lang="ts">
 const { getMessages } = useDrupalCe()
 const messages = ref([])
+const dismissedMessageIds = ref(new Set<string>())
 
 onMounted(() => {
-  messages.value = getMessages().value
+  messages.value = getMessages().value.filter(
+    (msg) => !dismissedMessageIds.value.has(msg.id),
+  )
 })
 
 function getAlertIcon(type: string): string {
@@ -18,9 +21,9 @@ function getAlertIcon(type: string): string {
   }
 }
 
-function scheduleDismissal(index: number) {
+function scheduleDismissal(messageId: string) {
   setTimeout(() => {
-    dismiss(index)
+    dismiss(messageId)
   }, 10000)
 }
 
@@ -32,7 +35,11 @@ const dismiss = (messageId: string) => {
 watch(
   messages,
   (newMessages) => {
-    newMessages.forEach((message) => scheduleDismissal(message.id))
+    newMessages.forEach((message) => {
+      if (!dismissedMessageIds.value.has(message.id)) {
+        scheduleDismissal(message.id)
+      }
+    })
   },
   { immediate: true },
 )
@@ -40,7 +47,7 @@ watch(
 
 <template>
   <UAlert
-    v-for="(message, index) in messages"
+    v-for="message in messages"
     :key="message.id"
     :color="message.type === 'success' ? 'success' : 'error'"
     :title="message.type === 'success' ? 'Success!' : 'Error!'"
