@@ -41,7 +41,6 @@ const iconsSocialConfig = [
               </a>
             </li>
           </ul>
-          <NavigationAccount />
           <p class="mb-0 leading-relaxed">
             © {{ site.site_info?.name }} {{ currentYear }}. All Rights
             Reserved.<br />
