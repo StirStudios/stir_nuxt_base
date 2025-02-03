@@ -54,10 +54,17 @@ watch(
     :key="message.id"
     :color="message.type === 'success' ? 'success' : 'error'"
     :title="message.type === 'success' ? 'Success!' : 'Error!'"
-    :icon="getAlertIcon(message.type)"
-    close
+    :close-button="{
+      icon: 'i-heroicons-x-mark',
+      color: 'gray',
+      variant: 'link',
+    }"
     @update:open="dismiss(message.id)"
   >
+    <template #icon="{ icon }">
+      <UIcon :name="getAlertIcon(message.type)" />
+    </template>
+
     <template #description>
       <div v-html="message.message" />
     </template>

@@ -32,12 +32,12 @@ useHead({
       !page.content.hero ? 'pt-[10rem]' : '',
     ]"
   >
-    <SiteMessages />
     <slot
       :page="page"
       :layout="layout"
       :renderCustomElements="renderCustomElements"
     />
   </main>
+  <LazySiteMessages />
   <LazyAppFooter :site="page" />
 </template>
