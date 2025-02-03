@@ -6,14 +6,23 @@ const messages = getMessages()
 function getAlertIcon(type: string): string {
   switch (type) {
     case 'success':
-      return 'i-lucide-check-circle' // Success icon
+      return 'i-lucide-check-circle'
     case 'error':
     case 'danger':
-      return 'i-lucide-x-circle' // Error icon
+      return 'i-lucide-x-circle'
     default:
-      return 'i-lucide-info' // Default icon for other types
+      return 'i-lucide-info'
   }
 }
+
+// Automatically dismiss the alert after 10 seconds
+onMounted(() => {
+  messages.value.forEach((_, index) => {
+    setTimeout(() => {
+      dismiss(index)
+    }, 10000)
+  })
+})
 
 // Dismiss function to remove alerts
 const dismiss = (index: number) => messages.value.splice(index, 1)
@@ -27,7 +36,6 @@ const dismiss = (index: number) => messages.value.splice(index, 1)
     :title="message.type === 'success' ? 'Success!' : 'Error!'"
     :icon="getAlertIcon(message.type)"
     close
-    duration="5000"
     @update:open="dismiss(index)"
   >
     <template #description>
