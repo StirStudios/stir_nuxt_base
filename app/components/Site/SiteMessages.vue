@@ -25,6 +25,7 @@ function scheduleDismissal(index: number) {
 }
 
 const dismiss = (messageId: string) => {
+  dismissedMessageIds.value.add(messageId)
   messages.value = messages.value.filter((msg) => msg.id !== messageId)
 }
 
