@@ -2,37 +2,21 @@
 const { getMessages } = useDrupalCe()
 const messages = getMessages()
 
-const dismiss = (index: number) => messages.value.splice(index, 1)
-
-function getAlertTitle(type: string): string {
-  switch (type) {
-    case 'success':
-      return 'Success!'
-    case 'error':
-      return 'Error!'
-    case 'warning':
-      return 'Warning!'
-    case 'info':
-      return 'Information'
-    default:
-      return 'Notice'
-  }
-}
-
+// Map icons based on message type
 function getAlertIcon(type: string): string {
   switch (type) {
     case 'success':
-      return 'i-lucide-check-circle'
+      return 'i-lucide-check-circle' // Success icon
     case 'error':
-      return 'i-lucide-x-circle'
-    case 'warning':
-      return 'i-lucide-alert-circle'
-    case 'info':
-      return 'i-lucide-info'
+    case 'danger':
+      return 'i-lucide-x-circle' // Error icon
     default:
-      return 'i-lucide-bell'
+      return 'i-lucide-info' // Default icon for other types
   }
 }
+
+// Dismiss function to remove alerts
+const dismiss = (index: number) => messages.value.splice(index, 1)
 </script>
 
 <template>
@@ -40,14 +24,15 @@ function getAlertIcon(type: string): string {
     <UAlert
       v-for="(message, index) in messages"
       :key="`${index}-${message.message}`"
-      :color="message.type || 'neutral'"
-      :title="getAlertTitle(message.type)"
+      :color="message.type === 'success' ? 'success' : 'error'"
+      :title="message.type === 'success' ? 'Success!' : 'Error!'"
       :icon="getAlertIcon(message.type)"
       close
+      duration="5000"
       @update:open="dismiss(index)"
     >
       <template #description>
-        <SiteMessage :type="message.type" :message="message.message" />
+        <div v-html="message.message" />
       </template>
     </UAlert>
   </div>
