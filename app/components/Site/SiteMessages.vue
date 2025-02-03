@@ -27,7 +27,7 @@ function getAlertIcon(type: string): string {
 }
 
 function scheduleDismissal(messageId: string) {
-  setTimeout(() => dismiss(messageId), 10000)
+  setTimeout(() => dismiss(messageId), 5000)
 }
 
 const dismiss = (messageId: string) => {
@@ -63,3 +63,9 @@ watch(
     </template>
   </UAlert>
 </template>
+
+<style scoped lang="css">
+p {
+  @apply mt-0;
+}
+</style>
