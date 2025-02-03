@@ -20,7 +20,7 @@ const dismiss = (index: number) => messages.value.splice(index, 1)
 </script>
 
 <template>
-  <div class="alerts">
+  <div class="max-w-[var(--ui-container)">
     <UAlert
       v-for="(message, index) in messages"
       :key="`${index}-${message.message}`"
