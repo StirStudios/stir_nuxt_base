@@ -32,6 +32,11 @@ export default defineAppConfig({
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
     },
+    gradients: {
+      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
+      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
+      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
+    },
     carousel: {
       container: '',
       mediaHeight: 'h-64',
