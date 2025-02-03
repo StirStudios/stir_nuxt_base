@@ -69,8 +69,7 @@ export default defineAppConfig({
     },
     alert: {
       slots: {
-        wrapper:
-          'rounded-[calc(var(--ui-radius)*2)] flex-1 flex flex-col gap-1',
+        wrapper: 'max-w-[var(--ui-container) flex-1 flex flex-col gap-1',
         icon: 'shrink-0 size-11',
       },
     },
