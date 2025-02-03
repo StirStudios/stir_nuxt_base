@@ -52,7 +52,7 @@ watch(
   <UAlert
     v-for="message in messages"
     :key="message.id"
-    :color="message.type === 'success' ? 'success' : 'error'"
+    :color="message.type === 'success' ? 'green' : 'red'"
     :title="message.type === 'success' ? 'Success!' : 'Error!'"
     :close-button="{
       icon: 'i-heroicons-x-mark',
