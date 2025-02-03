@@ -7,7 +7,6 @@
     >
       Skip to main content
     </a>
-    <NavigationMain />
     <NuxtPage />
     <UNotifications />
     <LazyAppScrollToTop />
