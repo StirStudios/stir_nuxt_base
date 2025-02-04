@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { HeroProps } from '~/types/MediaTypes'
-import { useDrupalApi } from '~/composables/useDrupalApi'
+import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 
 const { observeVideos } = useIntersectionObserver()
-const { isFront } = await useDrupalApi()
+const { isFront } = usePageContext()
 
 const { hero, pageTitle, siteSlogan } = defineProps<{
   hero: HeroProps
@@ -23,7 +23,7 @@ const media = computed(() => hero.media?.[0] || {})
   <WrapNone :wrapper="hero.editLink ? 'div' : undefined">
     <EditLink :link="hero.editLink" />
     <section
-      class="after:to-bg-black-10 relative flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50"
+      class="after:to-bg-black-10 relative mb-10 flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50"
       :class="isFront ? 'h-screen' : 'min-h-[15rem] lg:h-[30rem]'"
     >
       <div
