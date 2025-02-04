@@ -1,29 +1,42 @@
-<script lang="ts" setup>
-import { useDrupalApi } from '~/composables/useDrupalApi'
-const { dataReady, isAdministrator, page } = await useDrupalApi()
-const appConfig = useAppConfig()
+<script setup lang="ts">
+import { usePageContext } from '~/composables/usePageContext'
+
+const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
+  await useDrupalCe()
+
+const page = await fetchPage(useRoute().path, { query: useRoute().query })
+const layout = getPageLayout(page)
+
+const { isAdministrator, bodyClasses } = usePageContext(page)
+
+usePageHead(page)
+
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+  bodyAttrs: {
+    class: bodyClasses,
+  },
+})
 </script>
 
 <template>
-  <SiteMessages />
+  <DrupalTabs v-if="isAdministrator" :tabs="page.local_tasks" />
+  <NavigationMain :site="page" />
   <main
     id="main-content"
-    :class="{
-      'mt-28':
-        !page.content.hero ||
-        (page.content.hero.length === 0 && !isAdministrator),
-      'mt-12': !page.content.hero && isAdministrator,
-    }"
-    tabindex="-1"
+    role="main"
+    :class="
+      page.content?.hero && page.content.hero.length > 0 ? '' : 'pt-[10rem]'
+    "
   >
-    <ParagraphHero
-      v-if="page.content.hero && page.content.hero.length > 0"
-      :hero="page.content.hero[0]"
-      :page-title="page.title"
-      :site-slogan="page.site_info.slogan"
+    <slot
+      :page="page"
+      :layout="layout"
+      :renderCustomElements="renderCustomElements"
     />
-    <h1 v-else :class="appConfig.stirTheme.h1">{{ page.title }}</h1>
-    <slot />
   </main>
-  <LazyAppFooter v-if="dataReady" :site="page" />
+  <LazySiteMessages />
+  <LazyAppFooter :site="page" />
 </template>

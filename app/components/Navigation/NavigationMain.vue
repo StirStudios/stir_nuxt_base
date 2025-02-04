@@ -1,8 +1,14 @@
 <script lang="ts" setup>
-import { useDrupalApi } from '~/composables/useDrupalApi'
+import type { SiteInfoProps } from '~/types/BaseTypes'
+import { usePageContext } from '~/composables/usePageContext'
 
-// Fetch Drupal API data
-const { page, isAdministrator, fetchMenu } = await useDrupalApi()
+const props = defineProps<{
+  site: SiteInfoProps
+}>()
+
+const { isAdministrator } = usePageContext(props.site)
+const { fetchMenu } = useDrupalCe()
+const mainMenu = await fetchMenu('main')
 
 // Fetch main menu with error handling
 let mainMenuArray = []
@@ -69,13 +75,6 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div
-    v-if="isAdministrator"
-    id="admin-menu"
-    aria-label="Admin navigation"
-    class="sticky top-0 z-50 h-[3.1rem]"
-    role="navigation"
-  />
   <header aria-label="Site header">
     <nav
       aria-label="Site navigation"
@@ -90,7 +89,7 @@ onBeforeUnmount(() => {
         <div class="mx-auto flex flex-wrap items-center justify-between">
           <div class="order-1">
             <ULink aria-label="Site Logo" class="font-bold" to="/">
-              <template v-if="!page.site_info?.name">
+              <template v-if="!site.site_info?.name">
                 <ClientOnly>
                   <AppLogo
                     :dark-mode="!isDark && !isScrolled && !isAdministrator"
@@ -98,7 +97,7 @@ onBeforeUnmount(() => {
                 </ClientOnly>
               </template>
               <template v-else>
-                {{ page.site_info?.name }}
+                {{ site.site_info?.name }}
               </template>
             </ULink>
           </div>
