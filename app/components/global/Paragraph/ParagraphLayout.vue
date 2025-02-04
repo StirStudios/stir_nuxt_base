@@ -112,7 +112,7 @@ const getNodeProps = (item) => {
         </div>
       </div>
     </section>
-    <section v-else class="mx-auto max-w-2xl">
+    <section v-else class="container mx-auto">
       <component
         v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
