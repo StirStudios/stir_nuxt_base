@@ -4,8 +4,7 @@ const appConfig = useAppConfig()
 
 <template>
   <NuxtLoadingIndicator
-    v-if="appConfig.stirTheme.loadingIndicator"
-    :color="appConfig.stirTheme.loadingIndicator"
+    :color="appConfig.stirTheme.loadingIndicator || undefined"
   />
   <a
     href="#main-content"
