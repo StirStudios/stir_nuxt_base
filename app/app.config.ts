@@ -7,8 +7,7 @@ export default defineAppConfig({
   },
   stirTheme: {
     crumbs: false,
-    loadingIndicator:
-      'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
+    loadingIndicator: '',
     h1: 'mb-20 text-center text-6xl',
     mediaRounded: 'rounded-xl',
     aspectRatios: {
