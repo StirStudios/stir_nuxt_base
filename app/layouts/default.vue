@@ -27,10 +27,9 @@ useHead({
   <main
     id="main-content"
     role="main"
-    :class="[
-      isAdministrator ? 'pt-[3.9rem]' : '',
-      !page.content.hero ? 'pt-[10rem]' : '',
-    ]"
+    :class="
+      page.content?.hero && page.content.hero.length > 0 ? '' : 'pt-[10rem]'
+    "
   >
     <slot
       :page="page"
