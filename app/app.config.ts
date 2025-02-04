@@ -6,6 +6,7 @@ export default defineAppConfig({
     preference: 'dark',
   },
   stirTheme: {
+    crumbs: false,
     h1: 'mb-20 text-center text-6xl',
     mediaRounded: 'rounded-xl',
     aspectRatios: {
@@ -31,6 +32,11 @@ export default defineAppConfig({
       container: 'mx-auto container px-4 md:px-5',
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
+    },
+    gradients: {
+      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
+      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
+      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
     },
     carousel: {
       container: '',
@@ -68,6 +74,10 @@ export default defineAppConfig({
         lg: 'h-6 w-6',
         xl: 'h-8 w-8',
       },
+    },
+    alert: {
+      wrapper:
+        'mx-auto max-w-2xl fixed bottom-5 left-1/2 transform -translate-x-1/2 overflow-hidden w-full p-4',
     },
   },
 })

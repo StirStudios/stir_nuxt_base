@@ -3,11 +3,14 @@ import type { SectionProps } from '~/types/ContentTypes'
 
 const appConfig = useAppConfig()
 
-withDefaults(defineProps<{
-  section?: SectionProps[]
-}>(), {
-  section: []
-})
+withDefaults(
+  defineProps<{
+    section?: SectionProps[]
+  }>(),
+  {
+    section: [],
+  },
+)
 
 // Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
