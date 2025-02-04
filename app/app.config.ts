@@ -7,7 +7,6 @@ export default defineAppConfig({
   },
   stirTheme: {
     crumbs: false,
-    loadingIndicator: '',
     h1: 'mb-20 text-center text-6xl',
     mediaRounded: 'rounded-xl',
     aspectRatios: {
