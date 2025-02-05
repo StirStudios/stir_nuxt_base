@@ -7,6 +7,8 @@ const props = defineProps<CarouselProps>()
 
 const carouselRef = ref()
 const isHovered = ref(false)
+const showIndicators = computed(() => props.indicators || false)
+const showArrows = computed(() => props.arrows || false)
 
 let intervalId: number | undefined
 
@@ -37,10 +39,6 @@ onUnmounted(() => {
   stopCarousel()
 })
 
-const showIndicators = computed(() => {
-  return props.indicators ? { indicators: true } : {}
-})
-
 const dynamicClass = computed(() => {
   const mdFraction = props.amount > 2 ? props.amount - 1 : 2
   const basisFraction =
@@ -60,7 +58,8 @@ const dynamicClass = computed(() => {
     <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       ref="carouselRef"
-      v-bind="showIndicators"
+      :arrows="showArrows"
+      :indicators="showIndicators"
       v-slot="{ item }"
       :items="items"
       :ui="{
