@@ -34,7 +34,7 @@ const iconsSocialConfig = [
     <UContainer>
       <div class="grid gap-4 text-center md:text-center lg:grid-cols-2">
         <div class="rights lg:text-left">
-          <ul class="mb-3">
+          <ul v-if="site.footer_menu" class="mb-3">
             <li v-for="menuItem in site.footer_menu" :key="menuItem.title">
               <a class="item" :href="menuItem.url">
                 {{ menuItem.title }}
