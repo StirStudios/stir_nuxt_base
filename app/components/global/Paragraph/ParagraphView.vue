@@ -45,6 +45,7 @@ const getNodeProps = (node, title) => {
         <ParagraphCarousel
           :amount="item.gridCount"
           :indicators="item.carouselIndicators"
+          :arrows="item.carouselArrows"
           :interval="item.carouselInterval"
           :items="filteredRows"
           :vid="item.viewId"
