@@ -9,13 +9,19 @@ onMounted(() => {
   freshMessages.forEach((message) => {
     toast.add({
       title: message.type === 'success' ? 'Success!' : 'Error!',
-      description: message.message, // HTML support is built-in
+      description: createVNodeFromHTML(message.message),
       icon: getAlertIcon(message.type),
       color: message.type === 'success' ? 'success' : 'error',
     })
   })
 })
 
+// Utility function to convert HTML strings into VNodes
+function createVNodeFromHTML(html: string) {
+  return h('div', { innerHTML: html })
+}
+
+// Determine the icon based on message type
 function getAlertIcon(type: string): string {
   switch (type) {
     case 'success':
