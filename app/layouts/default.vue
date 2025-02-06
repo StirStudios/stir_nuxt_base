@@ -2,7 +2,7 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
-  await useDrupalCe()
+  useDrupalCe()
 
 const page = await fetchPage(useRoute().path, { query: useRoute().query })
 const layout = getPageLayout(page)
