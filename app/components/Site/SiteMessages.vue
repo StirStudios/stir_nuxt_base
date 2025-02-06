@@ -2,17 +2,26 @@
 const { getMessages } = useDrupalCe()
 const toast = useToast()
 
+// Track shown messages globally
+const shownMessageIds = useState('shownMessageIds', () => new Set<string>())
+
 onMounted(() => {
   const freshMessages = getMessages().value
 
-  // Show each message as a toast
+  // Show each message only if it hasn't been shown before
   freshMessages.forEach((message) => {
-    toast.add({
-      title: message.type === 'success' ? 'Success!' : 'Error!',
-      description: createVNodeFromHTML(message.message),
-      icon: getAlertIcon(message.type),
-      color: message.type === 'success' ? 'success' : 'error',
-    })
+    if (!shownMessageIds.value.has(message.id)) {
+      // Mark the message as shown
+      shownMessageIds.value.add(message.id)
+
+      // Display the toast
+      toast.add({
+        title: message.type === 'success' ? 'Success!' : 'Error!',
+        description: createVNodeFromHTML(message.message),
+        icon: getAlertIcon(message.type),
+        color: message.type === 'success' ? 'success' : 'error',
+      })
+    }
   })
 })
 
@@ -35,6 +44,4 @@ function getAlertIcon(type: string): string {
 }
 </script>
 
-<template>
-  <!-- The toast system is handled globally, so no need to render anything here -->
-</template>
+<template></template>
