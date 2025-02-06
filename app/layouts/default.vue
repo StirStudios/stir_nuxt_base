@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 
-const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
-  useDrupalCe()
+const { fetchPage, renderCustomElements, getPageLayout } = useDrupalCe()
 
 const page = await fetchPage(useRoute().path, { query: useRoute().query })
 const layout = getPageLayout(page)
 
 const { isAdministrator, bodyClasses } = usePageContext(page)
-
-usePageHead(page)
 
 useHead({
   htmlAttrs: {
@@ -18,6 +15,15 @@ useHead({
   bodyAttrs: {
     class: bodyClasses,
   },
+  title: page.value.title,
+  meta: page.value.metatags.meta,
+  link: page.value.metatags.link,
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(page.value.metatags.jsonld || []),
+    },
+  ],
 })
 </script>
 
