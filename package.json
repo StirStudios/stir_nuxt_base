@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "3.0.0-alpha.11",
+    "@nuxt/ui": "https://pkg.pr.new/@nuxt/ui@71ed7ce",
     "@nuxtjs/robots": "^5.2.2",
     "@nuxtjs/sitemap": "^7.2.4",
     "@nuxtjs/turnstile": "^0.9.11",
