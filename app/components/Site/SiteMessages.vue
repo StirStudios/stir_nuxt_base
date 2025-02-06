@@ -29,5 +29,5 @@ function getAlertIcon(type: string): string {
 </script>
 
 <template>
-  <ClientOnly> </ClientOnly>
+  <ClientOnly />
 </template>
