@@ -22,7 +22,11 @@ useHead({
 </script>
 
 <template>
-  <DrupalTabs v-if="isAdministrator" :tabs="page.local_tasks" />
+  <DrupalTabs
+    v-if="isAdministrator"
+    :user="page.current_user"
+    :tabs="page.local_tasks"
+  />
   <NavigationMain :site="page" />
   <main
     id="main-content"
