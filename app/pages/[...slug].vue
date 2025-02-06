@@ -16,7 +16,7 @@ const appConfig = useAppConfig()
         :site-slogan="page.site_info.slogan"
       />
       <h1 v-else :class="appConfig.stirTheme.h1">{{ page.title }}</h1>
-      <LazySiteBreadcrumbs />
+      <LazySiteBreadcrumbs v-if="appConfig.stirTheme.crumbs" />
       <component :is="renderCustomElements(page.content)" />
     </template>
   </NuxtLayout>
