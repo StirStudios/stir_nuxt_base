@@ -8,7 +8,6 @@ const props = defineProps<{
 
 const { isAdministrator } = usePageContext(props.site)
 const { fetchMenu } = useDrupalCe()
-const mainMenu = await fetchMenu('main')
 
 // Fetch main menu with error handling
 let mainMenuArray = []
