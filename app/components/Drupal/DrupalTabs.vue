@@ -5,7 +5,35 @@ const props = defineProps<TabsProps>()
 const config = useRuntimeConfig()
 const siteApi = config.public.api
 
-// Function to format local task links
+const { fetchMenu } = useDrupalCe()
+const accountMenu = ref([])
+
+// Load account menu items with a specific icon for 'Log out'
+async function loadAccountMenu() {
+  try {
+    const menuResponse = await fetchMenu('account')
+
+    // Access the reactive `_value` directly and safely handle the result
+    const menuItems = Array.isArray(menuResponse?._value)
+      ? menuResponse._value
+      : []
+
+    accountMenu.value = menuItems.map((item) => ({
+      label: item.title,
+      to: item.relative || item.url,
+      icon:
+        item.title === 'Log out'
+          ? 'i-heroicons-arrow-left-start-on-rectangle'
+          : null, // Assign icon to logout, leave others without icons
+    }))
+  } catch (error) {
+    console.error('Error fetching account menu:', error)
+  }
+}
+
+await loadAccountMenu()
+
+// Get local task links
 const getLocalTaskLinks = () => {
   return props.tabs.primary.map((tab) => ({
     label: tab.label,
@@ -14,7 +42,7 @@ const getLocalTaskLinks = () => {
   }))
 }
 
-// Custom function to filter icons based on tab labels
+// Assign icons based on tab labels
 const filterIconByLabel = (label: string) => {
   switch (label) {
     case 'View':
@@ -34,44 +62,33 @@ const filterIconByLabel = (label: string) => {
   }
 }
 
-let links = []
+// Dynamically compute links for the navigation
+const links = computed(() => {
+  const baseLinks = [
+    [
+      {
+        label: 'Drupal CMS',
+        icon: 'i-heroicons-home',
+        to: `${siteApi}/admin/content`,
+      },
+    ],
+  ]
 
-if (props.tabs.primary && props.tabs.primary.length > 0) {
-  links = [
-    [
-      {
-        label: 'Drupal CMS',
-        icon: 'i-heroicons-home',
-        to: `${siteApi}/admin/content`,
-      },
-    ],
-    [...getLocalTaskLinks()],
-    [
-      {
-        label: 'Log out',
-        icon: 'i-heroicons-arrow-left-start-on-rectangle',
-        to: `${siteApi}/user/logout`,
-      },
-    ],
+  const localTaskLinks =
+    props.tabs.primary && props.tabs.primary.length > 0
+      ? [getLocalTaskLinks()]
+      : []
+
+  const accountDropdown = [
+    {
+      label: 'Account',
+      icon: 'i-heroicons-user-circle',
+      children: accountMenu.value, // Add dynamic account links as children
+    },
   ]
-} else {
-  links = [
-    [
-      {
-        label: 'Drupal CMS',
-        icon: 'i-heroicons-home',
-        to: `${siteApi}/admin/content`,
-      },
-    ],
-    [
-      {
-        label: 'Log out',
-        icon: 'i-heroicons-arrow-left-start-on-rectangle',
-        to: `${siteApi}/user/logout`,
-      },
-    ],
-  ]
-}
+
+  return [...baseLinks, ...localTaskLinks, accountDropdown]
+})
 </script>
 
 <template>
