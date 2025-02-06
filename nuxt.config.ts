@@ -29,6 +29,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
+        lang: 'en',
         class: 'scroll-smooth',
       },
     },
