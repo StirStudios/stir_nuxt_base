@@ -10,10 +10,16 @@ export function usePageContext(page?: Ref<any> | any) {
     route.fullPath === '/' || (route.params.slug?.[0] || '') === 'front'
 
   // Check if the current user is an administrator
-  const isAdministrator = !!normalizedPage?.current_user?.is_administrator
+  const isAdministrator = computed(() => {
+    return (
+      normalizedPage?.current_user?.roles?.includes('administrator') || false
+    )
+  })
 
   // Determine CSS classes dynamically
-  const bodyClasses = `${route.params.slug?.[0] || 'front'} ${isAdministrator ? ' logged-in' : ''}`
+  const bodyClasses = computed(() => {
+    return `${route.params.slug?.[0] || 'front'} ${isAdministrator.value ? 'logged-in' : ''}`
+  })
 
   return {
     isFront,
