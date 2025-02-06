@@ -2,33 +2,18 @@
 const { getMessages } = useDrupalCe()
 const toast = useToast()
 
-// Track shown messages globally
-const shownMessageIds = useState('shownMessageIds', () => new Set<string>())
-
 onMounted(() => {
-  const freshMessages = getMessages().value
+  const messages = getMessages().value
 
-  // Show each message only if it hasn't been shown before
-  freshMessages.forEach((message) => {
-    if (!shownMessageIds.value.has(message.id)) {
-      // Mark the message as shown
-      shownMessageIds.value.add(message.id)
-
-      // Display the toast
-      toast.add({
-        title: message.type === 'success' ? 'Success!' : 'Error!',
-        description: createVNodeFromHTML(message.message),
-        icon: getAlertIcon(message.type),
-        color: message.type === 'success' ? 'success' : 'error',
-      })
-    }
+  messages.forEach((message) => {
+    toast.add({
+      title: message.type === 'success' ? 'Success!' : 'Error!',
+      description: h('div', { innerHTML: message.message }),
+      icon: getAlertIcon(message.type),
+      color: message.type === 'success' ? 'success' : 'error',
+    })
   })
 })
-
-// Utility function to convert HTML strings into VNodes
-function createVNodeFromHTML(html: string) {
-  return h('div', { innerHTML: html })
-}
 
 // Determine the icon based on message type
 function getAlertIcon(type: string): string {
