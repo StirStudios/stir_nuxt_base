@@ -37,6 +37,13 @@ export default defineNuxtConfig({
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
+  routeRules: {
+    // General pages cached for 1 day using SWR
+    // '/**': { swr: 86400 },
+    '/admincontrol/login': {
+      redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
+    },
+  },
   devtools: { enabled: true },
   modules: [
     [
