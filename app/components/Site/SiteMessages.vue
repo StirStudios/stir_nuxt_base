@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, watchEffect } from 'vue'
-const toast = useToast()
 const { getMessages } = useDrupalCe()
+const toast = useToast()
 
-// State to track already shown messages
-const shownMessages = ref(new Set<string>())
+// Global state to track shown messages across the app
+const shownMessages = useState('shownMessages', () => new Set<string>())
 
 onMounted(() => {
   const messages = getMessages().value
