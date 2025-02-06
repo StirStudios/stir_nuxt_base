@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import type { UserProps } from '~/types/UserProps'
 import type { TabsProps } from '~/types/NavigationTypes'
+import { usePageContext } from '~/composables/usePageContext'
 
-const props = defineProps<TabsProps>()
+const props = defineProps<{
+  user: UserProps
+  tabs: TabsProps
+}>()
+
 const config = useRuntimeConfig()
 const siteApi = config.public.api
 
@@ -81,9 +87,9 @@ const links = computed(() => {
 
   const accountDropdown = [
     {
-      label: 'Account',
+      label: props.user?.name || 'Account',
       icon: 'i-heroicons-user-circle',
-      children: accountMenu.value, // Add dynamic account links as children
+      children: accountMenu.value,
     },
   ]
 
@@ -100,8 +106,9 @@ const links = computed(() => {
     <UNavigationMenu
       :items="links"
       :ui="{
-        base: 'text-xs',
+        root: 'text-xs',
         label: 'truncate relative hidden md:block',
+        childLink: 'text-end',
       }"
       content-orientation="vertical"
     />
