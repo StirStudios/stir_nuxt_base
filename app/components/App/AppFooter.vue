@@ -28,13 +28,12 @@ const iconsSocialConfig = [
 <template>
   <footer
     aria-label="Site Footer"
-    class="footer mt-20 bg-gray-100 py-10 dark:bg-black"
-    role="contentinfo"
+    class="mt-20 bg-gray-100 py-10 text-sm dark:bg-black"
   >
     <UContainer>
       <div class="grid gap-4 text-center md:text-center lg:grid-cols-2">
         <div class="rights lg:text-left">
-          <ul class="mb-3">
+          <ul v-if="site.footer_menu" class="mb-3">
             <li v-for="menuItem in site.footer_menu" :key="menuItem.title">
               <a class="item" :href="menuItem.url">
                 {{ menuItem.title }}
