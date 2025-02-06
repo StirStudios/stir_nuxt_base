@@ -103,6 +103,7 @@ const links = computed(() => {
         base: 'text-xs',
         label: 'truncate relative hidden md:block',
       }"
+      content-orientation="vertical"
     />
   </div>
 </template>
