@@ -1,23 +1,20 @@
 <script setup lang="ts">
-const { getMessages } = useDrupalCe()
 const toast = useToast()
+const { getMessages } = useDrupalCe()
 
-if (process.client) {
-  onMounted(() => {
-    const messages = getMessages().value
+onMounted(() => {
+  const messages = getMessages().value
 
-    messages.forEach((message) => {
-      toast.add({
-        title: message.type === 'success' ? 'Success!' : 'Error!',
-        description: h('div', { innerHTML: message.message }),
-        icon: getAlertIcon(message.type),
-        color: message.type === 'success' ? 'success' : 'error',
-      })
+  messages.forEach((message) => {
+    toast.add({
+      title: message.type === 'success' ? 'Success!' : 'Error!',
+      description: h('div', { innerHTML: message.message }),
+      icon: getAlertIcon(message.type),
+      color: message.type === 'success' ? 'success' : 'error',
     })
   })
-}
+})
 
-// Determine the icon based on message type
 function getAlertIcon(type: string): string {
   switch (type) {
     case 'success':
@@ -31,4 +28,6 @@ function getAlertIcon(type: string): string {
 }
 </script>
 
-<template></template>
+<template>
+  <ClientOnly> </ClientOnly>
+</template>
