@@ -4,7 +4,7 @@
 @source "./safelist.txt";
 
 @theme {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'InterVariable', system-ui, sans-serif;
   --color-white: #f5f0eb;
   --color-black: #14161a;
 

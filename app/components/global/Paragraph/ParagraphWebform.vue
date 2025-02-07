@@ -2,9 +2,9 @@
 import type { WebformProps } from '~/types/FormTypes'
 import { object, string, type InferType } from 'yup'
 
-const toast = useToast()
-
 const props = defineProps<WebformProps>()
+
+const toast = useToast()
 
 // Reactive state for form data and CSRF token
 const formData = reactive<{ [key: string]: string }>({})
@@ -43,35 +43,33 @@ const schema = object(
   ),
 )
 
-// Infer the schema type for TypeScript
 type Schema = InferType<typeof schema>
 
 // Initialize the state with dynamic fields on mounted
 onMounted(async () => {
   try {
-    // Fetch the CSRF token
-    const csrfData = await $fetch('/api/token')
+    const response = await $fetch<{ csrfToken: string }>('/api/getCsrfToken')
+    csrfToken.value = response.csrfToken
 
-    // Handle cases where the token might not be present
-    if (!csrfData?.csrfToken) {
-      throw new Error('CSRF token not found in the response')
-    }
-
-    csrfToken.value = csrfData.csrfToken
-
-    // Initialize formData and state for dynamic fields from props
-    const fields = props.webform[0]?.fields || {}
-    for (const field in fields) {
+    for (const field of Object.keys(props.webform[0]?.fields || {})) {
       formData[field] = ''
-      state[field] = '' // Initialize state as well for reactivity
+      state[field] = ''
     }
   } catch (error) {
-    console.error('Error fetching CSRF token:', error)
-    csrfToken.value = '' // Clear token to avoid issues
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('Error fetching CSRF token:', error)
+    }
+    csrfToken.value = ''
+    toast.add({
+      title: 'Error',
+      description:
+        'There was an issue initializing the form. Please try again later.',
+      color: 'error',
+    })
   }
 })
 
-// Submission handler
+// Form submission handler
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   isLoading.value = true
   try {
@@ -117,8 +115,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     } else {
       toast.add({
         title: 'Success!',
-        description:
-          'Form submitted successfully!\nThank you for your submission.',
+        description: 'Form submitted successfully!',
         color: 'success',
       })
     }
@@ -128,7 +125,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       state[field] = ''
       formData[field] = ''
     }
-
     isFormSubmitted.value = true
   } catch (error) {
     toast.add({
@@ -145,58 +141,27 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 <template>
   <WrapNone :wrapper="webformSubmissions ? 'div' : undefined">
     <EditLink :link="webformSubmissions" />
+
     <UForm
       v-if="!isFormSubmitted"
-      class="mx-auto space-y-4 md:max-w-lg"
+      class="mx-auto space-y-8 md:max-w-lg"
       :schema="schema"
       :state="state"
       @submit="onSubmit"
     >
-      <!-- Loop through fields -->
-      <template
+      <FieldRenderer
         v-for="(field, fieldName) in props.webform[0].fields"
         :key="fieldName"
-      >
-        <UFormField
-          :label="field['#title']"
-          :description="field['#description']"
-          :name="fieldName"
-          :required="field['#required']"
-        >
-          <!-- Description -->
-          <template v-if="field['#description']" #description>
-            <span v-html="field['#description']" />
-          </template>
-          <!-- Input Types -->
-          <UInput
-            v-if="['textfield', 'email'].includes(field['#type'])"
-            v-model="state[fieldName]"
-            :type="field['#type']"
-            :placeholder="field['#placeholder']"
-            class="w-full"
-          />
-          <UTextarea
-            v-else-if="field['#type'] === 'textarea'"
-            v-model="state[fieldName]"
-            :placeholder="field['#placeholder']"
-            class="w-full"
-          />
-          <template v-if="field['#help']" #help>
-            {{ field['#help'] }}
-          </template>
-        </UFormField>
-      </template>
+        :field="field"
+        :fieldName="fieldName"
+        :state="state"
+      />
 
-      <!-- Actions -->
       <template
         v-for="action in props.webform[0].actions"
         :key="action['#type']"
       >
-        <p
-          class="mb-1 block pb-0 text-sm font-medium text-gray-700 dark:text-gray-200"
-        >
-          Let us know you're human
-        </p>
+        <p class="mb-2 block text-sm/6 font-medium">Let us know you're human</p>
         <NuxtTurnstile v-model="turnstile" />
         <UButton
           :label="action['#submit_Label']"

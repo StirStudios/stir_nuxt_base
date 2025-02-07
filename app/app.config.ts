@@ -64,14 +64,18 @@ export default defineAppConfig({
     },
     formField: {
       slots: {
-        description: 'mb-5 text-[var(--ui-text-muted)]',
+        labelWrapper: 'block text-sm/6 font-medium',
+        container: 'mt-2',
+        description: 'my-3 text-[var(--ui-text-muted)]',
+        help: 'my-3',
         error: 'mt-2 text-[var(--ui-error)] error',
       },
     },
-    alert: {
+    radioGroup: {
       slots: {
-        root: 'mx-auto max-w-2xl fixed bottom-5 left-1/2 transform -translate-x-1/2 overflow-hidden w-full rounded-[calc(var(--ui-radius)*2)] p-4 flex gap-2.5 z-[1000]',
-        icon: 'shrink-0 size-11',
+        root: 'relative',
+        fieldset: 'flex',
+        legend: 'mb-3 block text-sm/6 font-medium',
       },
     },
   },
