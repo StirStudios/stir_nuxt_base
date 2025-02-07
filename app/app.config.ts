@@ -68,12 +68,6 @@ export default defineAppConfig({
         error: 'mt-2 text-[var(--ui-error)] error',
       },
     },
-    navigationMenu: {
-      slots: {
-        root: 'sticky top-0 z-50 h-[3.1rem] w-full bg-neutral-900 px-4 text-neutral-100',
-        linkLabel: 'truncate relative hidden md:block',
-      },
-    },
     alert: {
       slots: {
         root: 'mx-auto max-w-2xl fixed bottom-5 left-1/2 transform -translate-x-1/2 overflow-hidden w-full rounded-[calc(var(--ui-radius)*2)] p-4 flex gap-2.5 z-[1000]',

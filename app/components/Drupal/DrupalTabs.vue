@@ -24,7 +24,7 @@ function getIconForLabel(label: string): string | null {
     Export: 'i-heroicons-arrow-up-tray',
     API: 'i-heroicons-code-bracket',
     'Log out': 'i-heroicons-arrow-left-start-on-rectangle',
-    'My account': 'i-heroicons-user',
+    'My account': 'i-heroicons-user-circle',
   }
 
   return iconMap[label] || null
@@ -76,7 +76,7 @@ const links = computed(() => {
   const accountDropdown = [
     {
       label: props.user?.name || 'Account',
-      icon: getIconForLabel('My Account'),
+      icon: getIconForLabel('My account'),
       children: accountMenu.value,
     },
   ]
@@ -90,6 +90,12 @@ const links = computed(() => {
     aria-label="Admin navigation"
     role="navigation"
     :items="links"
+    :ui="{
+      root: 'dark:bg-neutral-000 sticky top-0 z-50 h-[3.1rem] w-full bg-neutral-200 px-4 shadow',
+      link: 'text-black dark:text-white',
+      linkLabel: 'hidden md:block',
+      linkLeadingIcon: 'text-black dark:text-white',
+    }"
     content-orientation="vertical"
   />
 </template>
