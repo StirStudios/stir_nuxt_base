@@ -91,7 +91,7 @@ const links = computed(() => {
     role="navigation"
     :items="links"
     :ui="{
-      root: 'dark:bg-neutral-000 sticky top-0 z-50 h-[3.1rem] w-full bg-neutral-200 px-4 shadow',
+      root: 'dark:bg-neutral-000 sticky top-0 z-50 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 px-4 shadow',
       link: 'text-black dark:text-white',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-black dark:text-white',
