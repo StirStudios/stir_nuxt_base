@@ -87,8 +87,6 @@ const links = computed(() => {
 
 <template>
   <UNavigationMenu
-    aria-label="Admin navigation"
-    role="navigation"
     :items="links"
     :ui="{
       root: 'dark:bg-neutral-000 sticky top-0 z-50 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 p-4 shadow',
