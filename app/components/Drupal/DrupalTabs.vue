@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { UserProps } from '~/types/UserProps'
 import type { TabsProps } from '~/types/NavigationTypes'
-import { usePageContext } from '~/composables/usePageContext'
 
 const props = defineProps<{
   user: UserProps
@@ -14,12 +13,27 @@ const siteApi = config.public.api
 const { fetchMenu } = useDrupalCe()
 const accountMenu = ref([])
 
-// Load account menu items with a specific icon for 'Log out'
+function getIconForLabel(label: string): string | null {
+  const iconMap: Record<string, string> = {
+    'Drupal CMS': 'i-heroicons-home',
+    Settings: 'i-heroicons-cog',
+    View: 'i-heroicons-eye',
+    Edit: 'i-heroicons-pencil',
+    Delete: 'i-heroicons-trash',
+    Revisions: 'i-heroicons-document-duplicate',
+    Export: 'i-heroicons-arrow-up-tray',
+    API: 'i-heroicons-code-bracket',
+    'Log out': 'i-heroicons-arrow-left-start-on-rectangle',
+    'My account': 'i-heroicons-user',
+  }
+
+  return iconMap[label] || null
+}
+
+// Load account menu items and dynamically assign icons
 async function loadAccountMenu() {
   try {
     const menuResponse = await fetchMenu('account')
-
-    // Access the reactive `_value` directly and safely handle the result
     const menuItems = Array.isArray(menuResponse?._value)
       ? menuResponse._value
       : []
@@ -27,10 +41,7 @@ async function loadAccountMenu() {
     accountMenu.value = menuItems.map((item) => ({
       label: item.title,
       to: item.relative || item.url,
-      icon:
-        item.title === 'Log out'
-          ? 'i-heroicons-arrow-left-start-on-rectangle'
-          : null, // Assign icon to logout, leave others without icons
+      icon: getIconForLabel(item.title),
     }))
   } catch (error) {
     console.error('Error fetching account menu:', error)
@@ -39,56 +50,33 @@ async function loadAccountMenu() {
 
 await loadAccountMenu()
 
-// Get local task links
+// Map tabs to navigation links and assign icons
 const getLocalTaskLinks = () => {
   return props.tabs.primary.map((tab) => ({
     label: tab.label,
     to: tab.url,
-    icon: filterIconByLabel(tab.label),
+    icon: getIconForLabel(tab.label),
   }))
 }
 
-// Assign icons based on tab labels
-const filterIconByLabel = (label: string) => {
-  switch (label) {
-    case 'View':
-      return 'i-heroicons-eye'
-    case 'Edit':
-      return 'i-heroicons-pencil'
-    case 'Delete':
-      return 'i-heroicons-trash'
-    case 'Revisions':
-      return 'i-heroicons-document-duplicate'
-    case 'Export':
-      return 'i-heroicons-arrow-up-tray'
-    case 'API':
-      return 'i-heroicons-code-bracket'
-    default:
-      return null
-  }
-}
-
-// Dynamically compute links for the navigation
+// Dynamically compute navigation links
 const links = computed(() => {
   const baseLinks = [
     [
       {
         label: 'Drupal CMS',
-        icon: 'i-heroicons-home',
+        icon: getIconForLabel('Drupal CMS'),
         to: `${siteApi}/admin/content`,
       },
     ],
   ]
 
-  const localTaskLinks =
-    props.tabs.primary && props.tabs.primary.length > 0
-      ? [getLocalTaskLinks()]
-      : []
+  const localTaskLinks = props.tabs.primary?.length ? [getLocalTaskLinks()] : []
 
   const accountDropdown = [
     {
       label: props.user?.name || 'Account',
-      icon: 'i-heroicons-user-circle',
+      icon: getIconForLabel('My Account'),
       children: accountMenu.value,
     },
   ]
@@ -98,19 +86,10 @@ const links = computed(() => {
 </script>
 
 <template>
-  <div
+  <UNavigationMenu
     aria-label="Admin navigation"
     role="navigation"
-    class="md:px-auto sticky top-0 z-50 h-[3.1rem] w-full bg-zinc-200 px-4 px-8 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
-  >
-    <UNavigationMenu
-      :items="links"
-      :ui="{
-        root: 'text-xs',
-        label: 'truncate relative hidden md:block',
-        childLink: 'text-end',
-      }"
-      content-orientation="vertical"
-    />
-  </div>
+    :items="links"
+    content-orientation="vertical"
+  />
 </template>
