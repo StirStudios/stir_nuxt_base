@@ -22,12 +22,14 @@ useHead({
 </script>
 
 <template>
-  <DrupalTabs
-    v-if="isAdministrator"
-    :user="page.current_user"
-    :tabs="page.local_tasks"
-  />
-  <NavigationMain :site="page" />
+  <header aria-label="Site header">
+    <DrupalTabs
+      v-if="isAdministrator"
+      :user="page.current_user"
+      :tabs="page.local_tasks"
+    />
+    <NavigationMain :site="page" />
+  </header>
   <main
     id="main-content"
     role="main"

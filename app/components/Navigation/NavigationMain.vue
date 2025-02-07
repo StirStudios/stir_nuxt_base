@@ -76,108 +76,106 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header aria-label="Site header">
-    <nav
-      aria-label="Site navigation"
-      class="fixed top-0 z-30 w-full transform bg-white/90 px-4 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70"
-      :class="{
-        '-translate-y-full': !showNavbar,
-        'pt-[3.9rem]': isAdministrator && showNavbar,
-      }"
-      role="navigation"
-    >
-      <UContainer>
-        <div class="mx-auto flex flex-wrap items-center justify-between">
-          <div class="order-1">
-            <ULink aria-label="Site Logo" class="font-bold" to="/">
-              <template v-if="!site.site_info?.name">
-                <ClientOnly>
-                  <AppLogo
-                    :dark-mode="!isDark && !isScrolled && !isAdministrator"
-                  />
-                </ClientOnly>
-              </template>
-              <template v-else>
-                {{ site.site_info?.name }}
-              </template>
-            </ULink>
-          </div>
-          <div class="order-2 flex">
-            <UNavigationMenu
-              class="hidden border-none md:block"
-              :items="navLinks"
-            >
-              <template #default="{ link }">
-                <span
-                  class="group-hover:text-primary relative block w-full duration-500"
-                >
-                  {{ link.label }}
-                </span>
-              </template>
-            </UNavigationMenu>
-          </div>
-          <div class="order-2 flex md:order-3">
-            <ClientOnly>
-              <UButton
-                v-if="!appConfig.colorMode.forced"
-                aria-label="Theme"
-                color="black"
-                :icon="
-                  isDark
-                    ? 'i-heroicons-moon-20-solid'
-                    : 'i-heroicons-sun-20-solid'
-                "
-                size="lg"
-                variant="ghost"
-                @click="isDark = !isDark"
-              />
-              <UButton
-                aria-label="Site navigation toggle"
-                class="block flex items-center md:hidden"
-                color="black"
-                :icon="
-                  navbarOpen
-                    ? 'i-heroicons-x-mark-solid'
-                    : 'i-heroicons-bars-3-solid'
-                "
-                size="xl"
-                variant="ghost"
-                @click="isOpen = true"
-              />
-            </ClientOnly>
-          </div>
-        </div>
-      </UContainer>
-    </nav>
-    <USlideover v-model:open="isOpen" title="Menu">
-      <template #header>
-        <div class="flex items-center justify-between">
-          <ULink aria-label="Logo" to="/" @click="isOpen = false">
-            <AppLogo />
+  <nav
+    aria-label="Site navigation"
+    class="fixed top-0 z-30 w-full transform bg-white/90 px-4 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70"
+    :class="{
+      '-translate-y-full': !showNavbar,
+      'pt-[3.9rem]': isAdministrator && showNavbar,
+    }"
+    role="navigation"
+  >
+    <UContainer>
+      <div class="mx-auto flex flex-wrap items-center justify-between">
+        <div class="order-1">
+          <ULink aria-label="Site Logo" class="font-bold" to="/">
+            <template v-if="!site.site_info?.name">
+              <ClientOnly>
+                <AppLogo
+                  :dark-mode="!isDark && !isScrolled && !isAdministrator"
+                />
+              </ClientOnly>
+            </template>
+            <template v-else>
+              {{ site.site_info?.name }}
+            </template>
           </ULink>
-          <UButton
-            aria-label="Close"
-            class="-my-1"
-            color="gray"
-            icon="i-heroicons-x-mark-20-solid"
-            variant="ghost"
-            @click="isOpen = false"
-          />
         </div>
-      </template>
-      <template #body>
-        <UNavigationMenu
-          orientation="vertical"
-          :items="navLinks"
-          :ui="{
-            base: 'my-3 uppercase',
-            label: 'text-center w-full',
-            padding: 'px-3.5 py-2.5',
-            size: 'text-lg',
-          }"
+        <div class="order-2 flex">
+          <UNavigationMenu
+            class="hidden border-none md:block"
+            :items="navLinks"
+          >
+            <template #default="{ link }">
+              <span
+                class="group-hover:text-primary relative block w-full duration-500"
+              >
+                {{ link.label }}
+              </span>
+            </template>
+          </UNavigationMenu>
+        </div>
+        <div class="order-2 flex md:order-3">
+          <ClientOnly>
+            <UButton
+              v-if="!appConfig.colorMode.forced"
+              aria-label="Theme"
+              color="black"
+              :icon="
+                isDark
+                  ? 'i-heroicons-moon-20-solid'
+                  : 'i-heroicons-sun-20-solid'
+              "
+              size="lg"
+              variant="ghost"
+              @click="isDark = !isDark"
+            />
+            <UButton
+              aria-label="Site navigation toggle"
+              class="block flex items-center md:hidden"
+              color="black"
+              :icon="
+                navbarOpen
+                  ? 'i-heroicons-x-mark-solid'
+                  : 'i-heroicons-bars-3-solid'
+              "
+              size="xl"
+              variant="ghost"
+              @click="isOpen = true"
+            />
+          </ClientOnly>
+        </div>
+      </div>
+    </UContainer>
+  </nav>
+  <USlideover v-model:open="isOpen" title="Menu">
+    <template #header>
+      <div class="flex items-center justify-between">
+        <ULink aria-label="Logo" to="/" @click="isOpen = false">
+          <AppLogo />
+        </ULink>
+        <UButton
+          aria-label="Close"
+          class="-my-1"
+          color="gray"
+          icon="i-heroicons-x-mark-20-solid"
+          variant="ghost"
           @click="isOpen = false"
         />
-      </template>
-    </USlideover>
-  </header>
+      </div>
+    </template>
+    <template #body>
+      <UNavigationMenu
+        orientation="vertical"
+        :items="navLinks"
+        :ui="{
+          base: 'my-3 uppercase',
+          label: 'text-center w-full',
+          padding: 'px-3.5 py-2.5',
+          size: 'text-lg',
+        }"
+        @click="isOpen = false"
+      />
+    </template>
+  </USlideover>
 </template>
