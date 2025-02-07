@@ -18,22 +18,25 @@
     "@nuxtjs/robots": "^5.2.2",
     "@nuxtjs/sitemap": "^7.2.4",
     "@nuxtjs/turnstile": "^0.9.11",
+    "nuxt": "^3.15.4",
+    "nuxtjs-drupal-ce": "^2.2.5",
+    "tailwindcss": "^4.0.4",
+    "yup": "^1.6.1",
+    "aos": "^2.3.4"
+  },
+  "devDependencies": {
     "@types/node": "^22.13.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
     "@vue/eslint-config-typescript": "^14.3.0",
-    "aos": "^2.3.4",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-vue": "^9.32.0",
-    "nuxt": "^3.15.4",
-    "nuxtjs-drupal-ce": "^2.2.5",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.4",
-    "vue-eslint-parser": "^9.4.3",
-    "yup": "^1.6.1"
+    "release-it": "^18.1.2",
+    "vue-eslint-parser": "^9.4.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
@@ -43,9 +46,5 @@
     "npm": {
       "publish": false
     }
-  },
-  "devDependencies": {
-    "prettier": "^3.4.2",
-    "release-it": "^18.1.2"
   }
 }
