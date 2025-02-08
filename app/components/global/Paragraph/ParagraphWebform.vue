@@ -14,7 +14,6 @@ const toast = useToast()
 const config = useRuntimeConfig()
 const siteApi = config.public.api
 
-// Extract webform data
 const {
   fields = {},
   webformId = '',
@@ -25,123 +24,125 @@ const {
 
 const csrfToken = ref('')
 const turnstileToken = ref('')
-const state = ref(
-  Object.keys(fields).reduce(
-    (acc, key) => {
-      acc[key] = fields[key]['#default'] || ''
-      return acc
-    },
-    {} as Record<string, any>,
-  ),
-)
-
+const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
+const errors = ref<Record<string, string>>({})
 
-// Build Yup validation schema dynamically
-const schema: ObjectSchema = object(
-  Object.keys(fields).reduce(
-    (acc, key) => {
-      const field = fields[key]
-      acc[key] = field['#required']
+const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
+
+// Build Yup schema without dot notation issues
+function buildNestedYupSchema(fields: Record<string, any>): ObjectSchema {
+  const shape: Record<string, any> = {}
+
+  for (const [key, field] of Object.entries(fields)) {
+    if (field['#type'] === 'webform_section') {
+      shape[key] = buildNestedYupSchema(field)
+    } else {
+      shape[key] = field['#required']
         ? field['#type'] === 'email'
           ? string().email('Invalid email').required('This field is required')
           : string().required('This field is required')
         : string().nullable()
-      return acc
-    },
-    {} as Record<string, any>,
-  ),
-)
-
-// Fetch CSRF token and initialize state
-onMounted(async () => {
-  try {
-    const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
-      '/api/getCsrfToken',
-    )
-    csrfToken.value = token
-  } catch (error) {
-    toast.add({
-      title: 'Error',
-      description: 'Failed to initialize the form. Please try again later.',
-      color: 'error',
-    })
+    }
   }
+
+  return object().shape(shape)
+}
+
+const schema = buildNestedYupSchema(fields)
+
+function initializeFormState(
+  fields: Record<string, any>,
+  stateObj: Record<string, any> = {},
+) {
+  for (const [key, field] of Object.entries(fields)) {
+    const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase()
+
+    if (field['#type'] === 'webform_section') {
+      initializeFormState(field, stateObj) // Continue with nested sections
+    } else {
+      stateObj[snakeCaseKey] = field['#default'] || ''
+    }
+  }
+  return stateObj
+}
+
+function transformToFlatSnakeCasePayload(
+  obj: Record<string, any>,
+): Record<string, any> {
+  const result: Record<string, any> = {}
+
+  function flatten(obj: any, parentKey = '') {
+    for (const [key, value] of Object.entries(obj)) {
+      const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase()
+
+      // Skip metadata fields
+      if (key.startsWith('#')) continue
+
+      const finalKey = parentKey ? `${parentKey}_${snakeCaseKey}` : snakeCaseKey
+
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        flatten(value, '') // Flatten without propagating prefixes
+      } else {
+        result[finalKey] = value
+      }
+    }
+  }
+
+  flatten(obj)
+  return result
+}
+
+onMounted(async () => {
+  const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
+    '/api/getCsrfToken',
+  )
+  csrfToken.value = token
+  Object.assign(state, initializeFormState(fields))
 })
 
-// Submission handler
 async function onSubmit(event: FormSubmitEvent<any>) {
   isLoading.value = true
-  try {
-    if (!config.public.turnstileDisable && !turnstileToken.value) {
-      toast.add({
-        title: 'Error',
-        description: 'Please complete the CAPTCHA',
-        color: 'error',
-      })
-      return
-    }
+  errors.value = {}
 
-    // Validate the form state using Yup schema
-    await schema.validate(
-      { ...state.value, turnstile: turnstileToken.value },
-      { abortEarly: false },
-    )
+  try {
+    await schema.validate(state, { abortEarly: false })
+
+    const transformedState = transformToFlatSnakeCasePayload(state)
 
     const payload = {
       webform_id: webformId,
-      ...state.value,
-      turnstile: turnstileToken.value,
+      ...transformedState,
     }
 
-    const { data, error } = await useFetch(
-      `${siteApi}/api/stir_webform_rest/submit`,
-      {
-        method: 'POST',
-        headers: {
-          'x-csrf-token': csrfToken.value,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+    await $fetch(`${siteApi}/api/stir_webform_rest/submit`, {
+      method: 'POST',
+      headers: {
+        'x-csrf-token': csrfToken.value,
+        'Content-Type': 'application/json',
       },
-    )
-
-    if (error.value) {
-      toast.add({
-        title: 'Submission Error',
-        description: `Error: ${error.value.message || 'Unknown error'}`,
-        color: 'error',
-      })
-    } else if (data.value) {
-      toast.add({
-        title: 'Success!',
-        description: 'Form submitted successfully!',
-        color: 'success',
-      })
-      resetFormState()
-      isFormSubmitted.value = true
-    }
-  } catch (validationError) {
-    toast.add({
-      title: 'Validation Error',
-      description: validationError.errors.join(', '),
-      color: 'error',
+      body: JSON.stringify(payload),
     })
+
+    toast.add({
+      title: 'Success!',
+      description: 'Form submitted successfully!',
+      color: 'success',
+    })
+    isFormSubmitted.value = true
+  } catch (validationError) {
+    if (validationError.inner) {
+      validationError.inner.forEach((err: any) => {
+        errors.value[err.path] = err.message
+      })
+    } else {
+      console.error('Validation error:', validationError)
+    }
   } finally {
     isLoading.value = false
   }
 }
-
-// Reset form state
-function resetFormState() {
-  for (const key in state.value) {
-    state.value[key] = ''
-  }
-  turnstileToken.value = ''
-}
-
-const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
 </script>
 
 <template>
@@ -154,7 +155,12 @@ const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
       @submit="onSubmit"
     >
       <template v-for="(field, fieldName) in fields" :key="fieldName">
-        <FieldRenderer :field="field" :fieldName="fieldName" :state="state" />
+        <FieldRenderer
+          :field="field"
+          :fieldName="fieldName"
+          :state="state"
+          :errors="errors"
+        />
       </template>
 
       <div v-if="!config.public.turnstileDisable">
