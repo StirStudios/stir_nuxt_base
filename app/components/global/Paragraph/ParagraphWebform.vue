@@ -28,30 +28,16 @@ const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
+const renderedFields = new Set<string>()
 
 const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
 
-// Group fields by parent attribute, fallback to "General" if no parent is set
-const groupedFields = computed(() => {
-  const groups: Record<string, { field: any; fieldName: string }[]> = {
-    General: [],
-  }
-
-  for (const [fieldName, field] of Object.entries(fields)) {
-    const parent = field.parent || 'General'
-    if (!groups[parent]) {
-      groups[parent] = []
-    }
-    groups[parent].push({ field, fieldName })
-  }
-
-  return groups
-})
+// Maintain API order using Object.keys
+const orderedFieldNames = computed(() => Object.keys(fields))
 
 // Initialize state and Yup schema
 const schema = computed(() => buildYupSchema(fields))
 
-// Convert camelCase to snake_case
 function transformPayloadToSnakeCase(
   payload: Record<string, any>,
 ): Record<string, any> {
@@ -62,6 +48,7 @@ function transformPayloadToSnakeCase(
   return result
 }
 
+// Helper to format the group name
 function formatGroupName(groupName: string): string {
   return groupName
     .replace(/_/g, ' ') // Replace underscores with spaces
@@ -69,12 +56,6 @@ function formatGroupName(groupName: string): string {
 }
 
 onMounted(async () => {
-  const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
-    '/api/getCsrfToken',
-  )
-  csrfToken.value = token
-
-  // Initialize form state with default values
   for (const [key, field] of Object.entries(fields)) {
     state[key] = field['#default'] || ''
   }
@@ -94,12 +75,39 @@ function buildYupSchema(fields: Record<string, any>): ObjectSchema {
   return object().shape(shape)
 }
 
+function shouldRenderGroupContainer(fieldName: string) {
+  const parent = fields[fieldName]?.parent
+  return (
+    parent &&
+    !renderedFields.has(fieldName) &&
+    orderedFieldNames.value.some(
+      (name) => fields[name]?.parent === parent && !renderedFields.has(name),
+    )
+  )
+}
+
+function shouldRenderIndividualField(fieldName: string) {
+  return !fields[fieldName]?.parent && !renderedFields.has(fieldName)
+}
+
+function getGroupFields(parentName: string) {
+  const groupedFields = orderedFieldNames.value.filter(
+    (fieldName) => fields[fieldName]?.parent === parentName,
+  )
+  groupedFields.forEach((fieldName) => renderedFields.add(fieldName))
+  return groupedFields
+}
+
 async function onSubmit(event: FormSubmitEvent<any>) {
   isLoading.value = true
   errors.value = {}
 
   try {
-    // Access the reactive schema correctly using schema.value
+    const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
+      '/api/getCsrfToken',
+    )
+    csrfToken.value = token
+
     await schema.value.validate(state, { abortEarly: false })
 
     const payload = {
@@ -146,29 +154,36 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       class="mx-auto space-y-8 md:max-w-lg"
       @submit="onSubmit"
     >
-      <template v-if="Object.keys(groupedFields).length > 1">
-        <template v-for="(fields, groupName) in groupedFields" :key="groupName">
-          <h2
-            v-if="groupName !== 'General'"
-            class="mt-8 text-2xl font-semibold"
-          >
-            {{ formatGroupName(groupName) }}
+      <template
+        v-for="(fieldName, index) in orderedFieldNames"
+        :key="fieldName"
+      >
+        <template v-if="shouldRenderGroupContainer(fieldName)">
+          <h2 class="mb-2 text-xl font-semibold">
+            {{ formatGroupName(fields[fieldName]?.parent) }}
           </h2>
-          <div class="space-y-4">
-            <template v-for="{ field, fieldName } in fields" :key="fieldName">
+          <div class="ms-5 space-y-4">
+            <template
+              v-for="groupedFieldName in getGroupFields(
+                fields[fieldName]?.parent,
+              )"
+              :key="groupedFieldName"
+            >
               <FieldRenderer
-                :field="field"
-                :fieldName="fieldName"
+                :field="fields[groupedFieldName]"
+                :fieldName="groupedFieldName"
                 :state="state"
               />
             </template>
           </div>
         </template>
-      </template>
 
-      <template v-else>
-        <template v-for="(field, fieldName) in fields" :key="fieldName">
-          <FieldRenderer :field="field" :fieldName="fieldName" :state="state" />
+        <template v-else-if="shouldRenderIndividualField(fieldName)">
+          <FieldRenderer
+            :field="fields[fieldName]"
+            :fieldName="fieldName"
+            :state="state"
+          />
         </template>
       </template>
 

@@ -6,7 +6,7 @@ export interface DrupalFormProps {
 }
 
 export interface WebformProps {
-  webform: WebformDefinition[]
+  webform: WebformDefinition
   editLink?: string
 }
 
@@ -20,13 +20,21 @@ export interface WebformDefinition {
 }
 
 export interface WebformFieldProps {
-  '#type': string
+  '#type':
+    | 'textfield'
+    | 'email'
+    | 'textarea'
+    | 'select'
+    | 'radio'
+    | 'processed_text'
   '#title': string
   '#description'?: string
   '#placeholder'?: string
   '#required'?: boolean
   '#name': string
   '#requiredError'?: string
+  '#options'?: Record<string, string>
+  '#text'?: string
 }
 
 export interface WebformActionProps {
