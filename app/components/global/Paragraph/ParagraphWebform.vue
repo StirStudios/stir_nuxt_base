@@ -189,7 +189,6 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     </UForm>
 
     <div v-else class="text-center">
-      <h3 class="text-xl font-bold">Thank You!</h3>
       <div class="webform-response" v-html="webformConfirmation" />
     </div>
   </WrapNone>
