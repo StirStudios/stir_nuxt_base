@@ -138,6 +138,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
 <template>
   <WrapNone :wrapper="webformSubmissions ? 'div' : undefined">
+    <EditLink :link="webformSubmissions" />
     <UForm
       v-if="!isFormSubmitted"
       :state="state"
