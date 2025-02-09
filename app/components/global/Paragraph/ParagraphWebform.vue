@@ -31,29 +31,42 @@ const errors = ref<Record<string, string>>({})
 
 const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
 
-// Convert camelCase to snake_case
-function toSnakeCase(key: string): string {
-  return key.replace(/([A-Z])/g, '_$1').toLowerCase()
-}
-
-// Build Yup schema for validation
-function buildYupSchema(fields: Record<string, any>): ObjectSchema {
-  const shape: Record<string, any> = {}
-
-  for (const [key, field] of Object.entries(fields)) {
-    const requiredError = field['#requiredError'] || 'This field is required'
-
-    shape[key] = field['#required']
-      ? field['#type'] === 'email'
-        ? string().email('Invalid email').required(requiredError)
-        : string().required(requiredError)
-      : string().nullable()
+// Group fields by parent attribute, fallback to "General" if no parent is set
+const groupedFields = computed(() => {
+  const groups: Record<string, { field: any; fieldName: string }[]> = {
+    General: [],
   }
 
-  return object().shape(shape)
+  for (const [fieldName, field] of Object.entries(fields)) {
+    const parent = field.parent || 'General'
+    if (!groups[parent]) {
+      groups[parent] = []
+    }
+    groups[parent].push({ field, fieldName })
+  }
+
+  return groups
+})
+
+// Initialize state and Yup schema
+const schema = computed(() => buildYupSchema(fields))
+
+// Convert camelCase to snake_case
+function transformPayloadToSnakeCase(
+  payload: Record<string, any>,
+): Record<string, any> {
+  const result: Record<string, any> = {}
+  for (const [key, value] of Object.entries(payload)) {
+    result[key.replace(/([A-Z])/g, '_$1').toLowerCase()] = value
+  }
+  return result
 }
 
-const schema = buildYupSchema(fields)
+function formatGroupName(groupName: string): string {
+  return groupName
+    .replace(/_/g, ' ') // Replace underscores with spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letters
+}
 
 onMounted(async () => {
   const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
@@ -67,15 +80,18 @@ onMounted(async () => {
   }
 })
 
-// Transform payload keys to snake_case
-function transformPayloadToSnakeCase(
-  payload: Record<string, any>,
-): Record<string, any> {
-  const result: Record<string, any> = {}
-  for (const [key, value] of Object.entries(payload)) {
-    result[toSnakeCase(key)] = value
+// Build Yup schema for validation
+function buildYupSchema(fields: Record<string, any>): ObjectSchema {
+  const shape: Record<string, any> = {}
+  for (const [key, field] of Object.entries(fields)) {
+    const requiredError = field['#requiredError'] || 'This field is required'
+    shape[key] = field['#required']
+      ? field['#type'] === 'email'
+        ? string().email('Invalid email').required(requiredError)
+        : string().required(requiredError)
+      : string().nullable()
   }
-  return result
+  return object().shape(shape)
 }
 
 async function onSubmit(event: FormSubmitEvent<any>) {
@@ -83,7 +99,8 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   errors.value = {}
 
   try {
-    await schema.validate(state, { abortEarly: false })
+    // Access the reactive schema correctly using schema.value
+    await schema.value.validate(state, { abortEarly: false })
 
     const payload = {
       webform_id: webformId,
@@ -110,8 +127,6 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       validationError.inner.forEach((err: any) => {
         errors.value[err.path] = err.message
       })
-    } else if (validationError.name === 'FetchError') {
-      alert('Submission failed. Please check the backend logs for details.')
     } else {
       console.error('Validation error:', validationError)
     }
@@ -130,8 +145,30 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       class="mx-auto space-y-8 md:max-w-lg"
       @submit="onSubmit"
     >
-      <template v-for="(field, fieldName) in fields" :key="fieldName">
-        <FieldRenderer :field="field" :fieldName="fieldName" :state="state" />
+      <template v-if="Object.keys(groupedFields).length > 1">
+        <template v-for="(fields, groupName) in groupedFields" :key="groupName">
+          <h2
+            v-if="groupName !== 'General'"
+            class="mt-8 text-2xl font-semibold"
+          >
+            {{ formatGroupName(groupName) }}
+          </h2>
+          <div class="space-y-4">
+            <template v-for="{ field, fieldName } in fields" :key="fieldName">
+              <FieldRenderer
+                :field="field"
+                :fieldName="fieldName"
+                :state="state"
+              />
+            </template>
+          </div>
+        </template>
+      </template>
+
+      <template v-else>
+        <template v-for="(field, fieldName) in fields" :key="fieldName">
+          <FieldRenderer :field="field" :fieldName="fieldName" :state="state" />
+        </template>
       </template>
 
       <div v-if="!config.public.turnstileDisable">
