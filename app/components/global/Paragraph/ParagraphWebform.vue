@@ -31,76 +31,50 @@ const errors = ref<Record<string, string>>({})
 
 const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
 
-// Build Yup schema without dot notation issues
-function buildNestedYupSchema(fields: Record<string, any>): ObjectSchema {
+// Convert camelCase to snake_case
+function toSnakeCase(key: string): string {
+  return key.replace(/([A-Z])/g, '_$1').toLowerCase()
+}
+
+// Build Yup schema for validation
+function buildYupSchema(fields: Record<string, any>): ObjectSchema {
   const shape: Record<string, any> = {}
 
   for (const [key, field] of Object.entries(fields)) {
-    if (field['#type'] === 'webform_section') {
-      shape[key] = buildNestedYupSchema(field)
-    } else {
-      shape[key] = field['#required']
-        ? field['#type'] === 'email'
-          ? string().email('Invalid email').required('This field is required')
-          : string().required('This field is required')
-        : string().nullable()
-    }
+    shape[key] = field['#required']
+      ? field['#type'] === 'email'
+        ? string().email('Invalid email').required('This field is required')
+        : string().required('This field is required')
+      : string().nullable()
   }
 
   return object().shape(shape)
 }
 
-const schema = buildNestedYupSchema(fields)
-
-function initializeFormState(
-  fields: Record<string, any>,
-  stateObj: Record<string, any> = {},
-) {
-  for (const [key, field] of Object.entries(fields)) {
-    const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase()
-
-    if (field['#type'] === 'webform_section') {
-      initializeFormState(field, stateObj) // Continue with nested sections
-    } else {
-      stateObj[snakeCaseKey] = field['#default'] || ''
-    }
-  }
-  return stateObj
-}
-
-function transformToFlatSnakeCasePayload(
-  obj: Record<string, any>,
-): Record<string, any> {
-  const result: Record<string, any> = {}
-
-  function flatten(obj: any, parentKey = '') {
-    for (const [key, value] of Object.entries(obj)) {
-      const snakeCaseKey = key.replace(/([A-Z])/g, '_$1').toLowerCase()
-
-      // Skip metadata fields
-      if (key.startsWith('#')) continue
-
-      const finalKey = parentKey ? `${parentKey}_${snakeCaseKey}` : snakeCaseKey
-
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        flatten(value, '') // Flatten without propagating prefixes
-      } else {
-        result[finalKey] = value
-      }
-    }
-  }
-
-  flatten(obj)
-  return result
-}
+const schema = buildYupSchema(fields)
 
 onMounted(async () => {
   const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
     '/api/getCsrfToken',
   )
   csrfToken.value = token
-  Object.assign(state, initializeFormState(fields))
+
+  // Initialize form state with default values
+  for (const [key, field] of Object.entries(fields)) {
+    state[key] = field['#default'] || ''
+  }
 })
+
+// Transform payload keys to snake_case
+function transformPayloadToSnakeCase(
+  payload: Record<string, any>,
+): Record<string, any> {
+  const result: Record<string, any> = {}
+  for (const [key, value] of Object.entries(payload)) {
+    result[toSnakeCase(key)] = value
+  }
+  return result
+}
 
 async function onSubmit(event: FormSubmitEvent<any>) {
   isLoading.value = true
@@ -109,11 +83,9 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   try {
     await schema.validate(state, { abortEarly: false })
 
-    const transformedState = transformToFlatSnakeCasePayload(state)
-
     const payload = {
       webform_id: webformId,
-      ...transformedState,
+      ...transformPayloadToSnakeCase(state),
     }
 
     await $fetch(`${siteApi}/api/stir_webform_rest/submit`, {
@@ -136,6 +108,8 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       validationError.inner.forEach((err: any) => {
         errors.value[err.path] = err.message
       })
+    } else if (validationError.name === 'FetchError') {
+      alert('Submission failed. Please check the backend logs for details.')
     } else {
       console.error('Validation error:', validationError)
     }
