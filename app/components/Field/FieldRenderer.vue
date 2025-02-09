@@ -14,6 +14,15 @@ const props = defineProps({
   },
 })
 
+// Sanitize or convert HTML safely
+function sanitizeHTML(html: string): string {
+  return html.replace(/<\/?[^>]+(>|$)/g, '')
+}
+
+// Computed description and help content
+const descriptionContent = computed(() => props.field['#description'] || '')
+const helpContent = computed(() => props.field['#help'] || '')
+
 // Transform options for select/radio fields
 function transformOptions(options: Record<string, string>) {
   return Object.entries(options).map(([value, label]) => ({ label, value }))
@@ -26,8 +35,8 @@ function transformOptions(options: Record<string, string>) {
     :label="field['#title']"
     :required="!!field['#required']"
   >
-    <template v-if="field['#description']" #description>
-      <span v-html="field['#description']" />
+    <template v-if="descriptionContent" #description>
+      <span v-html="sanitizeHTML(descriptionContent)" />
     </template>
 
     <URadioGroup
@@ -57,8 +66,8 @@ function transformOptions(options: Record<string, string>) {
       class="w-full"
     />
 
-    <template v-if="field['#help']" #help>
-      <span v-html="field['#help']" />
+    <template v-if="helpContent" #help>
+      <span v-html="sanitizeHTML(helpContent)" />
     </template>
   </UFormField>
 </template>

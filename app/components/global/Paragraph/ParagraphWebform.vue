@@ -41,10 +41,12 @@ function buildYupSchema(fields: Record<string, any>): ObjectSchema {
   const shape: Record<string, any> = {}
 
   for (const [key, field] of Object.entries(fields)) {
+    const requiredError = field['#requiredError'] || 'This field is required'
+
     shape[key] = field['#required']
       ? field['#type'] === 'email'
-        ? string().email('Invalid email').required('This field is required')
-        : string().required('This field is required')
+        ? string().email('Invalid email').required(requiredError)
+        : string().required(requiredError)
       : string().nullable()
   }
 
@@ -129,12 +131,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       @submit="onSubmit"
     >
       <template v-for="(field, fieldName) in fields" :key="fieldName">
-        <FieldRenderer
-          :field="field"
-          :fieldName="fieldName"
-          :state="state"
-          :errors="errors"
-        />
+        <FieldRenderer :field="field" :fieldName="fieldName" :state="state" />
       </template>
 
       <div v-if="!config.public.turnstileDisable">
