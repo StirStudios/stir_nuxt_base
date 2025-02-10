@@ -7,6 +7,7 @@ import FieldInput from '@/components/Field/FieldInput.vue'
 import FieldTextarea from '@/components/Field/FieldTextarea.vue'
 import FieldSelect from '@/components/Field/FieldSelect.vue'
 import FieldRadio from '@/components/Field/FieldRadio.vue'
+import FieldDate from '@/components/Field/FieldDate.vue'
 import FieldProcessedText from '@/components/Field/FieldProcessedText.vue'
 
 const props = defineProps<{
@@ -22,6 +23,7 @@ const componentMap = {
   textarea: FieldTextarea,
   select: FieldSelect,
   radio: FieldRadio,
+  date: FieldDate,
   processed_text: FieldProcessedText,
 }
 
