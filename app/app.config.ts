@@ -41,6 +41,12 @@ export default defineAppConfig({
     carousel: {
       padding: 'p-8 px-16 pb-12',
     },
+    webform: {
+      form: 'mx-auto space-y-8 md:max-w-lg',
+      fieldGroupHeader: 'mb-6 text-xl font-semibold',
+      fieldGroup: '',
+      response: 'mx-auto space-y-8 text-center md:max-w-lg',
+    },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
       icon: 'i-heroicons:arrow-up',

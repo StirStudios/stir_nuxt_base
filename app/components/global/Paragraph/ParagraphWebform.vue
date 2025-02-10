@@ -12,6 +12,7 @@ const props = withDefaults(
 
 const toast = useToast()
 const config = useRuntimeConfig()
+const appConfig = useAppConfig()
 const siteApi = config.public.api
 
 const {
@@ -187,7 +188,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       v-if="!isFormSubmitted"
       :state="state"
       :schema="schema"
-      class="mx-auto space-y-8 md:max-w-lg"
+      :class="appConfig.stirTheme.webform.form"
       @submit="onSubmit"
     >
       <template
@@ -195,10 +196,10 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         :key="fieldName"
       >
         <template v-if="shouldRenderGroupContainer(fieldName)">
-          <h2 class="mb-2 text-xl font-semibold">
+          <h2 :class="appConfig.stirTheme.webform.fieldGroupHeader">
             {{ formatGroupName(fields[fieldName]?.parent) }}
           </h2>
-          <div class="ms-5 space-y-4">
+          <div :class="appConfig.stirTheme.webform.fieldGroup">
             <template
               v-for="groupedFieldName in getGroupFields(
                 fields[fieldName]?.parent,
@@ -239,7 +240,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       />
     </UForm>
 
-    <div v-else class="text-center">
+    <div v-else :class="appConfig.stirTheme.webform.response">
       <div class="webform-response" v-html="webformConfirmation" />
     </div>
   </WrapNone>
