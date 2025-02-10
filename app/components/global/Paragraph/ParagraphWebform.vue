@@ -131,7 +131,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       ...transformPayloadToSnakeCase(state),
     }
 
-    const { data: submitData, error: submitError } = await useFetch(
+    const { data: submitData, error: submitError } = await $fetch(
       `${siteApi}/api/stir_webform_rest/submit`,
       {
         method: 'POST',
