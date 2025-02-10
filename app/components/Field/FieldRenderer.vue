@@ -3,12 +3,13 @@ import type { WebformFieldProps } from '~/types/formTypes'
 import { sanitizeHTML } from '~/utils/sanitizeHTML'
 
 // Import the field components locally
-import FieldInput from '@/components/Field/FieldInput.vue'
-import FieldTextarea from '@/components/Field/FieldTextarea.vue'
-import FieldSelect from '@/components/Field/FieldSelect.vue'
-import FieldRadio from '@/components/Field/FieldRadio.vue'
-import FieldDate from '@/components/Field/FieldDate.vue'
-import FieldProcessedText from '@/components/Field/FieldProcessedText.vue'
+import FieldInput from '@/components/Field/FieldInput'
+import FieldTextarea from '@/components/Field/FieldTextarea'
+import FieldSelect from '@/components/Field/FieldSelect'
+import FieldRadio from '@/components/Field/FieldRadio'
+import FieldCheckbox from '@/components/Field/FieldCheckbox'
+import FieldDate from '@/components/Field/FieldDate'
+import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
 const props = defineProps<{
   field: WebformFieldProps
@@ -23,6 +24,7 @@ const componentMap = {
   textarea: FieldTextarea,
   select: FieldSelect,
   radio: FieldRadio,
+  checkbox: FieldCheckbox,
   date: FieldDate,
   processed_text: FieldProcessedText,
 }
