@@ -28,12 +28,26 @@ const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
-const renderedFields = new Set<string>()
 
 const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
 
 // Maintain API order using Object.keys
 const orderedFieldNames = computed(() => Object.keys(fields))
+
+// Dynamically track grouped fields without manual clearing
+const groupedFields = computed(() => {
+  const grouped: Record<string, string[]> = {}
+
+  orderedFieldNames.value.forEach((fieldName) => {
+    const parent = fields[fieldName]?.parent
+    if (parent) {
+      if (!grouped[parent]) grouped[parent] = []
+      grouped[parent].push(fieldName)
+    }
+  })
+
+  return grouped
+})
 
 // Initialize state and Yup schema
 const schema = computed(() => buildYupSchema(fields))
@@ -48,14 +62,13 @@ function transformPayloadToSnakeCase(
   return result
 }
 
-// Helper to format the group name
 function formatGroupName(groupName: string): string {
   return groupName
-    .replace(/_/g, ' ') // Replace underscores with spaces
-    .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letters
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
-onMounted(async () => {
+onMounted(() => {
   for (const [key, field] of Object.entries(fields)) {
     state[key] = field['#default'] || ''
   }
@@ -76,26 +89,18 @@ function buildYupSchema(fields: Record<string, any>): ObjectSchema {
 }
 
 function shouldRenderGroupContainer(fieldName: string) {
-  const parent = fields[fieldName]?.parent
   return (
-    parent &&
-    !renderedFields.has(fieldName) &&
-    orderedFieldNames.value.some(
-      (name) => fields[name]?.parent === parent && !renderedFields.has(name),
-    )
+    fields[fieldName]?.parent &&
+    groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName
   )
-}
-
-function shouldRenderIndividualField(fieldName: string) {
-  return !fields[fieldName]?.parent && !renderedFields.has(fieldName)
 }
 
 function getGroupFields(parentName: string) {
-  const groupedFields = orderedFieldNames.value.filter(
-    (fieldName) => fields[fieldName]?.parent === parentName,
-  )
-  groupedFields.forEach((fieldName) => renderedFields.add(fieldName))
-  return groupedFields
+  return groupedFields.value[parentName] || []
+}
+
+function shouldRenderIndividualField(fieldName: string) {
+  return !fields[fieldName]?.parent
 }
 
 async function onSubmit(event: FormSubmitEvent<any>) {
@@ -103,6 +108,15 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   errors.value = {}
 
   try {
+    if (!config.public.turnstileDisable && !turnstileToken.value) {
+      toast.add({
+        title: 'Error',
+        description: 'Please complete the CAPTCHA',
+        color: 'error',
+      })
+      return
+    }
+
     const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
       '/api/getCsrfToken',
     )
@@ -112,23 +126,41 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
     const payload = {
       webform_id: webformId,
+      turnstile_token: turnstileToken.value || '',
       ...transformPayloadToSnakeCase(state),
     }
 
-    await $fetch(`${siteApi}/api/stir_webform_rest/submit`, {
-      method: 'POST',
-      headers: {
-        'x-csrf-token': csrfToken.value,
-        'Content-Type': 'application/json',
+    const { data: submitData, error: submitError } = await useFetch(
+      `${siteApi}/api/stir_webform_rest/submit`,
+      {
+        method: 'POST',
+        headers: {
+          'x-csrf-token': csrfToken.value,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload),
-    })
+    )
+
+    if (submitError?.value) {
+      toast.add({
+        title: 'Error',
+        description: `Error submitting form: ${submitError.value}`,
+        color: 'error',
+      })
+      return
+    }
 
     toast.add({
       title: 'Success!',
       description: 'Form submitted successfully!',
       color: 'success',
     })
+
+    for (const field in state) {
+      state[field] = ''
+    }
+    turnstileToken.value = ''
     isFormSubmitted.value = true
   } catch (validationError) {
     if (validationError.inner) {
@@ -136,7 +168,11 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         errors.value[err.path] = err.message
       })
     } else {
-      console.error('Validation error:', validationError)
+      toast.add({
+        title: 'Validation Error',
+        description: validationError.message || 'Unknown validation error',
+        color: 'error',
+      })
     }
   } finally {
     isLoading.value = false
