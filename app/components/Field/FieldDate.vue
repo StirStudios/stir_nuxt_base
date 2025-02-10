@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { shallowRef, watchEffect } from 'vue'
+import type { WebformFieldProps } from '~/types/formTypes'
 import {
   CalendarDate,
   DateFormatter,
   getLocalTimeZone,
 } from '@internationalized/date'
-import type { WebformFieldProps } from '~/types/formTypes'
 
-// Props from parent
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
@@ -23,13 +21,10 @@ const initialDate = props.state[props.fieldName]
 const modelValue = shallowRef(initialDate)
 
 // Date formatter for button display
-const df = new DateFormatter('en-US', {
-  dateStyle: 'medium',
-})
+const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 
-// Sync the selected date back to the form state in YYYY-MM-DD format
 watchEffect(() => {
-  props.state[props.fieldName] = modelValue.value.toString() // Ensures YYYY-MM-DD
+  props.state[props.fieldName] = modelValue.value.toString()
 })
 </script>
 
