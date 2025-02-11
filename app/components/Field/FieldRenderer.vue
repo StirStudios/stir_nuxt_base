@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types/formTypes'
-import { sanitizeHTML } from '~/utils/sanitizeHTML'
+import { cleanHTML } from '~/utils/cleanHTML'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 
 // Import field components locally
@@ -50,27 +50,26 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div v-if="isVisible">
-    <UFormField
-      :name="fieldName"
-      :label="field['#title']"
-      :required="!!field['#required']"
-    >
-      <template v-if="descriptionContent" #description>
-        <span v-html="sanitizeHTML(descriptionContent)" />
-      </template>
+  <UFormField
+    v-if="isVisible"
+    :name="fieldName"
+    :label="field['#title']"
+    :required="!!field['#required']"
+  >
+    <template v-if="descriptionContent" #description>
+      <span v-html="cleanHTML(descriptionContent)" />
+    </template>
 
-      <component
-        v-if="resolvedComponent"
-        :is="resolvedComponent"
-        :field="field"
-        :fieldName="fieldName"
-        :state="state"
-      />
+    <component
+      v-if="resolvedComponent"
+      :is="resolvedComponent"
+      :field="field"
+      :fieldName="fieldName"
+      :state="state"
+    />
 
-      <template v-if="helpContent" #help>
-        <span v-html="sanitizeHTML(helpContent)" />
-      </template>
-    </UFormField>
-  </div>
+    <template v-if="helpContent" #help>
+      <span v-html="cleanHTML(helpContent)" />
+    </template>
+  </UFormField>
 </template>
