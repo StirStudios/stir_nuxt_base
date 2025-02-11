@@ -79,7 +79,12 @@ onMounted(() => {
 // Build Yup schema for validation
 function buildYupSchema(fields: Record<string, any>): ObjectSchema {
   const shape: Record<string, any> = {}
+
   for (const [key, field] of Object.entries(fields)) {
+    if (!evaluateVisibility(field['#states'], state)) {
+      continue // Skip hidden fields
+    }
+
     const requiredError = field['#requiredError'] || 'This field is required'
     shape[key] = field['#required']
       ? field['#type'] === 'email'
@@ -87,6 +92,7 @@ function buildYupSchema(fields: Record<string, any>): ObjectSchema {
         : string().required(requiredError)
       : string().nullable()
   }
+
   return object().shape(shape)
 }
 
@@ -188,14 +194,6 @@ function isContainerVisible(containerName: string): boolean {
   return groupFields.some((fieldName) =>
     evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
   )
-}
-
-function isFieldVisible(fieldName: string): boolean {
-  const field = fields[fieldName]
-  if (!field?.states?.visible) {
-    return true // If no visibility conditions, assume visible
-  }
-  return evaluateVisibility(field.states.visible, state)
 }
 </script>
 
