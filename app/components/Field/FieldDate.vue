@@ -12,16 +12,20 @@ const props = defineProps<{
   state: Record<string, string>
 }>()
 
-// Initialize date
-const today = new Date()
-const initialDate = props.state[props.fieldName]
-  ? CalendarDate.fromString(props.state[props.fieldName])
-  : new CalendarDate(today.getFullYear(), today.getMonth() + 1, today.getDate())
-
-const modelValue = shallowRef(initialDate)
-
-// Date formatter for button display
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
+
+// Initialize date
+const [year, month, day] = (props.state[props.fieldName] ?? '')
+  .split('-')
+  .map(Number)
+
+const modelValue = ref(
+  new CalendarDate(
+    year || new Date().getFullYear(),
+    month || new Date().getMonth() + 1,
+    day || new Date().getDate(),
+  ),
+)
 
 watchEffect(() => {
   props.state[props.fieldName] = modelValue.value.toString()
