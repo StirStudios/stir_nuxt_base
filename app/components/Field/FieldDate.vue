@@ -14,28 +14,33 @@ const props = defineProps<{
 
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 
-// Initialize date
-const [year, month, day] = (props.state[props.fieldName] ?? '')
-  .split('-')
-  .map(Number)
+// Initialize modelValue as null when no date is provided
+const modelValue = ref<CalendarDate | null>(null)
 
-const modelValue = ref(
-  new CalendarDate(
-    year || new Date().getFullYear(),
-    month || new Date().getMonth() + 1,
-    day || new Date().getDate(),
-  ),
-)
+const storedDate = props.state[props.fieldName] ?? ''
+if (storedDate) {
+  const [year, month, day] = storedDate.split('-').map(Number)
+  if (year && month && day) {
+    modelValue.value = new CalendarDate(year, month, day)
+  }
+}
 
+// Sync the selected date to external form state
 watchEffect(() => {
-  props.state[props.fieldName] = modelValue.value.toString()
+  props.state[props.fieldName] = modelValue.value
+    ? modelValue.value.toString()
+    : ''
 })
 </script>
 
 <template>
   <UPopover>
     <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
-      {{ df.format(modelValue.toDate(getLocalTimeZone())) }}
+      {{
+        modelValue
+          ? df.format(modelValue.toDate(getLocalTimeZone()))
+          : 'Select Date'
+      }}
     </UButton>
 
     <template #content>
