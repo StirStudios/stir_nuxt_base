@@ -5,8 +5,14 @@ import { transformOptions } from '~/utils/transformOptions'
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
-  state: Record<string, string | number>
+  state: Record<string, any>
 }>()
+
+onMounted(() => {
+  if (props.state[props.fieldName] === undefined) {
+    props.state[props.fieldName] = ''
+  }
+})
 </script>
 
 <template>
