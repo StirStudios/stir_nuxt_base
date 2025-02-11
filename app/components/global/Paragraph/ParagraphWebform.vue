@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { object, string, ObjectSchema } from 'yup'
+import { evaluateVisibility } from '~/utils/evaluateVisibility'
 
 const props = withDefaults(
   defineProps<{
@@ -179,6 +180,23 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     isLoading.value = false
   }
 }
+
+function isContainerVisible(containerName: string): boolean {
+  const groupFields = getGroupFields(containerName)
+
+  // Check if any field in the container is visible
+  return groupFields.some((fieldName) =>
+    evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
+  )
+}
+
+function isFieldVisible(fieldName: string): boolean {
+  const field = fields[fieldName]
+  if (!field?.states?.visible) {
+    return true // If no visibility conditions, assume visible
+  }
+  return evaluateVisibility(field.states.visible, state)
+}
 </script>
 
 <template>
@@ -195,7 +213,12 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         v-for="(fieldName, index) in orderedFieldNames"
         :key="fieldName"
       >
-        <template v-if="shouldRenderGroupContainer(fieldName)">
+        <template
+          v-if="
+            shouldRenderGroupContainer(fieldName) &&
+            isContainerVisible(fields[fieldName]?.parent)
+          "
+        >
           <h2 :class="appConfig.stirTheme.webform.fieldGroupHeader">
             {{ formatGroupName(fields[fieldName]?.parent) }}
           </h2>
