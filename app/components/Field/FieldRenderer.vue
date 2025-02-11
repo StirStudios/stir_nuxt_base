@@ -57,7 +57,10 @@ watchEffect(() => {
     :required="!!field['#required']"
   >
     <template v-if="descriptionContent" #description>
-      <span v-html="cleanHTML(descriptionContent)" />
+      <div
+        :class="field['#type'] === 'checkbox' ? 'hidden' : ''"
+        v-html="cleanHTML(descriptionContent)"
+      />
     </template>
 
     <component
@@ -69,7 +72,7 @@ watchEffect(() => {
     />
 
     <template v-if="helpContent" #help>
-      <span v-html="cleanHTML(helpContent)" />
+      <div v-html="cleanHTML(helpContent)" />
     </template>
   </UFormField>
 </template>
