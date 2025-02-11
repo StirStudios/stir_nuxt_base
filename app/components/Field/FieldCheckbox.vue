@@ -8,11 +8,13 @@ const props = defineProps<{
   state: Record<string, boolean | string>
 }>()
 
-const descriptionContent = computed(() => props.field['#description'] || '')
+const descriptionContent = shallowRef<string>('')
 const checkboxValue = ref<boolean>(props.field['#defaultValue'] ?? false)
 
 onMounted(() => {
-  // Initialize parent state only if it's empty or undefined
+  descriptionContent.value = props.field['#description'] || ''
+
+  // Ensure state is initialized properly
   if (props.state[props.fieldName] === undefined) {
     props.state[props.fieldName] = checkboxValue.value
   }
@@ -25,8 +27,8 @@ onMounted(() => {
     class="w-full"
     @update:model-value="props.state[fieldName] = $event"
   >
-    <template v-if="descriptionContent" #description>
-      <div v-html="cleanHTML(descriptionContent)" />
+    <template #description>
+      <span v-html="cleanHTML(descriptionContent)" />
     </template>
   </UCheckbox>
 </template>
