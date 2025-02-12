@@ -1,23 +1,8 @@
 export function cleanHTML(html: string): string {
-  const allowedTags = [
-    'p',
-    'a',
-    'strong',
-    'em',
-    'br',
-    'ul',
-    'li',
-    'div',
-    'span',
-  ]
+  const allowedTags =
+    /<(\/?(ul|li|br|strong|b|i|em|p|span|div|a)(\s+[a-zA-Z-]+="[^"]*")*)\s*>/gi
 
-  return html
-    .replace(/<\/?([a-zA-Z0-9]+)([^>]*)>/g, (match, tag, attributes) => {
-      if (allowedTags.includes(tag.toLowerCase())) {
-        return `<${tag}${attributes}>`
-      }
-      return '' // Remove disallowed tags
-    })
-    .replace(/<\/a>\s*<a/g, '</a> <a') // Ensure links don't get merged
-    .replace(/(<a[^>]*>)([^<]+)(<\/a>)(\s*)(<\/a>)/g, '$1$2$5') // Remove duplicate closing tags
+  return html.replace(/<\/?[^>]+(>|$)/g, (tag) =>
+    allowedTags.test(tag) ? tag : '',
+  )
 }
