@@ -8,19 +8,13 @@ const props = defineProps<{
   state: Record<string, any>
 }>()
 
-// Transform options dynamically
 const transformedOptions = computed(() =>
   transformOptions(props.field['#options'] || {}),
 )
 
 onMounted(() => {
   if (props.state[props.fieldName] === undefined) {
-    // Ensure default values map correctly to transformed options
-    const defaultValue = props.field['#default'] ?? ''
-    const matchingOption = transformedOptions.value.find(
-      (opt) => opt.value === defaultValue,
-    )
-    props.state[props.fieldName] = matchingOption ? matchingOption.value : ''
+    props.state[props.fieldName] = ''
   }
 })
 </script>
@@ -32,8 +26,8 @@ onMounted(() => {
     orientation="horizontal"
     class="w-full"
   >
-    <template #label="{ item }">
-      <div v-if="item.label" v-html="item.label" />
+    <template #description="{ item }">
+      <span class="mt-2 block whitespace-pre-line">{{ item.description }}</span>
     </template>
   </URadioGroup>
 </template>
