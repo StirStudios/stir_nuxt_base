@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types/formTypes'
-import { cleanHTML } from '~/utils/cleanHTML'
+import { transformOptions } from '~/utils/transformOptions'
 
 const props = defineProps<{
   field: WebformFieldProps
@@ -8,20 +8,19 @@ const props = defineProps<{
   state: Record<string, any>
 }>()
 
-// Transform options to include labels and descriptions
-const transformedOptions = computed(() => {
-  return Object.entries(props.field['#options'] || {}).map(
-    ([value, option]) => ({
-      value,
-      label: option.label,
-      description: option.description ? cleanHTML(option.description) : '',
-    }),
-  )
-})
+// Transform options dynamically
+const transformedOptions = computed(() =>
+  transformOptions(props.field['#options'] || {}),
+)
 
 onMounted(() => {
   if (props.state[props.fieldName] === undefined) {
-    props.state[props.fieldName] = ''
+    // Ensure default values map correctly to transformed options
+    const defaultValue = props.field['#default'] ?? ''
+    const matchingOption = transformedOptions.value.find(
+      (opt) => opt.value === defaultValue,
+    )
+    props.state[props.fieldName] = matchingOption ? matchingOption.value : ''
   }
 })
 </script>
@@ -33,8 +32,8 @@ onMounted(() => {
     orientation="horizontal"
     class="w-full"
   >
-    <template #description="{ item }">
-      <div class="mt-2" v-if="item.description" v-html="item.description" />
+    <template #label="{ item }">
+      <div v-if="item.label" v-html="item.label" />
     </template>
   </URadioGroup>
 </template>
