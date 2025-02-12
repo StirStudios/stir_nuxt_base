@@ -54,6 +54,7 @@ const groupedFields = computed(() => {
 // Initialize state and Yup schema
 const schema = computed(() => buildYupSchema(fields))
 
+// Transform payload for submission using `originalKey`
 function transformPayloadToSnakeCase(
   payload: Record<string, any>,
 ): Record<string, any> {
@@ -64,12 +65,7 @@ function transformPayloadToSnakeCase(
   return result
 }
 
-function formatGroupName(groupName: string): string {
-  return groupName
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase())
-}
-
+// Initialize state with `originalKey`
 onMounted(() => {
   for (const [key, field] of Object.entries(fields)) {
     state[key] = field['#default'] || ''
@@ -218,7 +214,7 @@ function isContainerVisible(containerName: string): boolean {
           "
         >
           <h2 :class="appConfig.stirTheme.webform.fieldGroupHeader">
-            {{ formatGroupName(fields[fieldName]?.parent) }}
+            {{ fields[fieldName]?.parent }}
           </h2>
           <div :class="appConfig.stirTheme.webform.fieldGroup">
             <template
