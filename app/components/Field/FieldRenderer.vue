@@ -56,11 +56,11 @@ watchEffect(() => {
     :label="field['#title']"
     :required="!!field['#required']"
   >
-    <template v-if="descriptionContent" #description>
-      <div
-        :class="field['#type'] === 'checkbox' ? 'hidden' : ''"
-        v-html="cleanHTML(descriptionContent)"
-      />
+    <template
+      v-if="descriptionContent && field['#type'] !== 'checkbox'"
+      #description
+    >
+      <div v-html="cleanHTML(descriptionContent)" />
     </template>
 
     <component
