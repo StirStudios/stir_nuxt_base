@@ -12,7 +12,7 @@ const descriptionContent = shallowRef<string>('')
 const checkboxValue = ref<boolean>(props.field['#defaultValue'] ?? false)
 
 onMounted(() => {
-  descriptionContent.value = props.field['#description'] || ''
+  descriptionContent.value = cleanHTML(props.field['#description'] || '')
 
   // Ensure state is initialized properly
   if (props.state[props.fieldName] === undefined) {
@@ -28,7 +28,7 @@ onMounted(() => {
     @update:model-value="props.state[fieldName] = $event"
   >
     <template #description>
-      <span v-html="cleanHTML(descriptionContent)" />
+      <span v-html="descriptionContent" />
     </template>
   </UCheckbox>
 </template>
