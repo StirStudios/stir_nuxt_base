@@ -10,6 +10,7 @@ import FieldSelect from '@/components/Field/FieldSelect'
 import FieldRadio from '@/components/Field/FieldRadio'
 import FieldCheckbox from '@/components/Field/FieldCheckbox'
 import FieldDate from '@/components/Field/FieldDate'
+import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
 // Props from parent
@@ -28,6 +29,7 @@ const componentMap = {
   radio: FieldRadio,
   checkbox: FieldCheckbox,
   date: FieldDate,
+  address: FieldAddress,
   processed_text: FieldProcessedText,
 }
 
@@ -37,8 +39,10 @@ const resolvedComponent = computed(
 )
 
 // Compute description and help content
-const descriptionContent = computed(() => props.field['#description'] || '')
-const helpContent = computed(() => props.field['#help'] || '')
+const descriptionContent = computed(() =>
+  cleanHTML(props.field['#description'] || ''),
+)
+const helpContent = computed(() => cleanHTML(props.field['#help'] || ''))
 
 // Reactive visibility state
 const isVisible = ref(true)
@@ -56,12 +60,11 @@ watchEffect(() => {
     :label="field['#title']"
     :required="!!field['#required']"
   >
-    <template
+    <div
       v-if="descriptionContent && field['#type'] !== 'checkbox'"
-      #description
-    >
-      <div v-html="cleanHTML(descriptionContent)" />
-    </template>
+      class="help my-3 text-[var(--ui-text-muted)]"
+      v-html="descriptionContent"
+    />
 
     <component
       v-if="resolvedComponent"
@@ -71,8 +74,10 @@ watchEffect(() => {
       :state="state"
     />
 
-    <template v-if="helpContent" #help>
-      <div v-html="cleanHTML(helpContent)" />
-    </template>
+    <div
+      v-if="helpContent"
+      class="help my-3 text-(--ui-text-muted)"
+      v-html="helpContent"
+    />
   </UFormField>
 </template>
