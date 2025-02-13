@@ -1,22 +1,32 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types/formTypes'
 
-// Props from parent
 const props = defineProps<{
   field: Record<string, any>
   fieldName: string
   state: Record<string, any>
 }>()
 
-// Extract composite field structure
-const compositeFields = computed(() => props.field?.['#composite'] || {})
+// Ensure composite fields exist before accessing
+const compositeFields = computed(() => {
+  return typeof props.field?.['#composite'] === 'object'
+    ? props.field['#composite']
+    : {}
+})
 
-// Convert country options into `{ value, label }` format
-const countryOptions = computed(() =>
-  Object.entries(compositeFields.value.country?.options ?? {}).map(
-    ([key, label]) => ({ value: key, label }),
-  ),
-)
+// Ensure country options exist before accessing
+const countryOptions = computed(() => {
+  return compositeFields.value.country?.options
+    ? Object.entries(compositeFields.value.country.options).map(
+        ([key, label]) => ({ value: key, label }),
+      )
+    : []
+})
+
+// Ensure state[fieldName] is initialized before access
+if (!props.state[props.fieldName]) {
+  props.state[props.fieldName] = {}
+}
 </script>
 
 <template>
