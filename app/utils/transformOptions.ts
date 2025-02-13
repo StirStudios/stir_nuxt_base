@@ -1,9 +1,12 @@
 export function transformOptions(
-  options: Record<string, { label: string; description?: string }>,
+  options: Record<string, string | { label: string; description?: string }>,
 ) {
-  return Object.entries(options).map(([value, { label, description }]) => ({
+  return Object.entries(options).map(([value, option]) => ({
     value,
-    label,
-    description: description || '',
+    label: typeof option === 'string' ? option : option.label,
+    description:
+      typeof option === 'object' && option.description
+        ? option.description
+        : '',
   }))
 }
