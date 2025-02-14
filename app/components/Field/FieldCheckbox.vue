@@ -24,7 +24,7 @@ onMounted(() => {
 <template>
   <UCheckbox
     v-model="checkboxValue"
-    class="w-full"
+    class="form-input w-full"
     @update:model-value="props.state[fieldName] = $event"
   >
     <template #description>

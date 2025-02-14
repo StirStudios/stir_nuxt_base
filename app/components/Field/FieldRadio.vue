@@ -24,7 +24,7 @@ onMounted(() => {
     v-model="state[fieldName]"
     :items="transformedOptions"
     orientation="horizontal"
-    class="w-full"
+    class="form-input w-full"
   >
     <template #description="{ item }">
       <span class="mt-2 block whitespace-pre-line">{{ item.description }}</span>

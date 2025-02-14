@@ -41,7 +41,7 @@ if (!props.state[props.fieldName]) {
       <UInput
         v-if="key !== 'country'"
         v-model="state[fieldName][key]"
-        class="w-full"
+        class="form-input w-full"
       />
 
       <USelectMenu
