@@ -62,7 +62,7 @@ watchEffect(() => {
   >
     <div
       v-if="descriptionContent && field['#type'] !== 'checkbox'"
-      class="help my-3 text-[var(--ui-text-muted)]"
+      class="desc mb-3"
       v-html="descriptionContent"
     />
 
@@ -76,7 +76,7 @@ watchEffect(() => {
 
     <div
       v-if="helpContent"
-      class="help my-3 text-(--ui-text-muted)"
+      class="desc my-3 text-(--ui-text-muted)"
       v-html="helpContent"
     />
   </UFormField>

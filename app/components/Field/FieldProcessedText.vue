@@ -7,5 +7,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div v-html="field['#text']" class="processed-text-content" />
+  <div v-html="field['#text']" class="prose" />
 </template>
