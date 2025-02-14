@@ -72,17 +72,17 @@ export default defineAppConfig({
       slots: {
         labelWrapper: 'block text-sm/6 font-medium',
         container: 'mt-2',
-        description: 'my-3 text-[var(--ui-text-muted)] help',
-        help: 'my-3 help',
-        error: 'mt-2 text-[var(--ui-error)] help',
+        description: 'my-3 text-[var(--ui-text-muted)] leading-normal',
+        help: 'my-3 leading-normal',
+        error: 'mt-2 text-[var(--ui-error)] leading-normal',
       },
     },
-    radioGroup: {
-      slots: {
-        root: 'relative',
-        fieldset: 'flex',
-        legend: 'mb-3 block text-sm/6 font-medium help',
-      },
-    },
+    // radioGroup: {
+    //   slots: {
+    //     root: 'relative',
+    //     fieldset: 'flex',
+    //     legend: 'mb-3 block text-sm/6 font-medium help',
+    //   },
+    // },
   },
 })
