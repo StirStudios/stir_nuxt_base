@@ -5,15 +5,11 @@ import { buildYupSchema } from '~/utils/buildYupSchema'
 import { useScroll } from '~/composables/useScroll'
 import { useValidation } from '~/composables/useValidation'
 
-const props = withDefaults(
-  defineProps<{
-    webform: WebformDefinition
-  }>(),
-  {
-    webform: {} as WebformDefinition,
-  },
-)
+const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
+  webform: {} as WebformDefinition,
+})
 
+// Composables & Utilities
 const { onError } = useValidation()
 const { scrollToTop } = useScroll()
 const toast = useToast()
@@ -21,6 +17,7 @@ const config = useRuntimeConfig()
 const appConfig = useAppConfig()
 const siteApi = config.public.api
 
+// Destructure webform props
 const {
   fields = {},
   webformId = '',
@@ -29,6 +26,7 @@ const {
   actions = [],
 } = props.webform
 
+// Reactive state
 const csrfToken = ref('')
 const turnstileToken = ref('')
 const state = reactive({})
@@ -36,15 +34,18 @@ const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
 
-// Initialize state and Yup schema
+// Compute Yup schema dynamically
 const schema = computed(() => buildYupSchema(fields, state))
 
-const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
-
-// Maintain API order using Object.keys
+// Maintain API order of fields
 const orderedFieldNames = computed(() => Object.keys(fields))
 
-// Dynamically track grouped fields without manual clearing
+// Determine submit button label from actions
+const submitButtonLabel = computed(
+  () => actions[0]?.['#submit_Label'] || 'Submit',
+)
+
+// Group fields dynamically for better rendering
 const groupedFields = computed(() => {
   const grouped: Record<string, string[]> = {}
 
@@ -59,14 +60,11 @@ const groupedFields = computed(() => {
   return grouped
 })
 
-// Initialize state with `originalKey`
+// Initialize state with form defaults
 onMounted(() => {
   for (const [key, field] of Object.entries(fields)) {
     if (field['#composite']) {
-      if (!state[key] || typeof state[key] !== 'object') {
-        state[key] = {} // Ensure composite field is an object
-      }
-
+      state[key] = state[key] || {} // Ensure it's an object
       for (const subKey in field['#composite']) {
         state[key][subKey] =
           state[key][subKey] || field['#composite'][subKey]['value'] || ''
@@ -77,26 +75,29 @@ onMounted(() => {
   }
 })
 
-function shouldRenderGroupContainer(fieldName: string) {
-  return (
-    fields[fieldName]?.parent &&
-    groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName
+// Helper functions for field rendering
+const shouldRenderGroupContainer = (fieldName: string) =>
+  fields[fieldName]?.parent &&
+  groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName
+
+const getGroupFields = (parentName: string) =>
+  groupedFields.value[parentName] || []
+
+const shouldRenderIndividualField = (fieldName: string) =>
+  !fields[fieldName]?.parent
+
+const isContainerVisible = (containerName: string) =>
+  getGroupFields(containerName).some((fieldName) =>
+    evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
   )
-}
 
-function getGroupFields(parentName: string) {
-  return groupedFields.value[parentName] || []
-}
-
-function shouldRenderIndividualField(fieldName: string) {
-  return !fields[fieldName]?.parent
-}
-
+// Form submission handler
 async function onSubmit(event: FormSubmitEvent<any>) {
   isLoading.value = true
   errors.value = {}
 
   try {
+    // Validate CAPTCHA if required
     if (!config.public.turnstileDisable && !turnstileToken.value) {
       toast.add({
         title: 'Error',
@@ -106,17 +107,20 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       return
     }
 
+    // Fetch CSRF Token
     const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
       '/api/getCsrfToken',
     )
     csrfToken.value = token
 
+    // Prepare payload
     const payload = {
       webform_id: webformId,
       turnstile_token: turnstileToken.value || '',
       ...transformPayloadToSnakeCase(state),
     }
 
+    // Submit form data
     const { data: submitData, error: submitError } = await $fetch(
       `${siteApi}/api/stir_webform_rest/submit`,
       {
@@ -129,6 +133,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       },
     )
 
+    // Handle submission errors
     if (submitError?.value) {
       toast.add({
         title: 'Error',
@@ -138,17 +143,16 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       return
     }
 
+    // Success handling
     scrollToTop()
-
     toast.add({
       title: 'Success!',
       description: 'Form submitted successfully!',
       color: 'success',
     })
 
-    for (const field in state) {
-      state[field] = ''
-    }
+    // Reset form state
+    Object.keys(state).forEach((key) => (state[key] = ''))
     turnstileToken.value = ''
     isFormSubmitted.value = true
   } catch (validationError) {
@@ -166,15 +170,6 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   } finally {
     isLoading.value = false
   }
-}
-
-function isContainerVisible(containerName: string): boolean {
-  const groupFields = getGroupFields(containerName)
-
-  // Check if any field in the container is visible
-  return groupFields.some((fieldName) =>
-    evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
-  )
 }
 </script>
 
@@ -236,7 +231,7 @@ function isContainerVisible(containerName: string): boolean {
       </div>
 
       <UButton
-        :label="submitButtonLabel"
+        :label="actions[0]?.['#submit_Label'] || 'Submit'"
         :loading="isLoading"
         size="lg"
         type="submit"
