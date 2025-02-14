@@ -12,9 +12,9 @@ const modal = ref(false)
 </script>
 
 <template>
-  <div v-if="props.media && props.media.length" class="space-y-4">
+  <div v-if="media && media.length" class="space-y-4">
     <div
-      v-for="(item, index) in props.media"
+      v-for="(item, index) in media"
       :key="index"
       :class="[appConfig.stirTheme.mediaRounded, 'overflow-hidden']"
     >

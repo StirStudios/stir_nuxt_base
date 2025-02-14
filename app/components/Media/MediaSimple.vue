@@ -36,7 +36,7 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
         :title="item.title"
         :data-mid="item.mid"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        class="absolute left-0 top-0 h-full w-full"
+        class="absolute top-0 left-0 h-full w-full"
         frameborder="0"
         loading="lazy"
         allowfullscreen

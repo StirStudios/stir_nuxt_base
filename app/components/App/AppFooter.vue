@@ -1,23 +1,20 @@
 <script lang="ts" setup>
-import type { SiteInfoProps } from '~/types/BaseTypes'
+import { usePageContext } from '~/composables/usePageContext'
 
-const props = defineProps<{
-  site: SiteInfoProps
-}>()
-
+const { page, isAdministrator } = usePageContext()
 const currentYear = computed(() => new Date().getFullYear())
 
 const iconsSocialConfig = [
   {
     title: 'IMDB',
-    tooltip: `Follow ${props.site.site_info?.name} on IMDB`,
+    tooltip: `Follow ${page.site_info?.name} on IMDB`,
     url: '//imdb.com/name/CLIENT/',
     icon: 'i-simple-icons:imdb',
     iconSize: 'size-10',
   },
   {
     title: 'LinkedIn',
-    tooltip: `Follow ${props.site.site_info?.name} on LinkedIn`,
+    tooltip: `Follow ${page.site_info?.name} on LinkedIn`,
     url: '//linkedin.com/in/CLIENT',
     icon: 'i-simple-icons:linkedin',
     iconSize: 'size-10',
@@ -33,15 +30,15 @@ const iconsSocialConfig = [
     <UContainer>
       <div class="grid gap-4 text-center md:text-center lg:grid-cols-2">
         <div class="rights lg:text-left">
-          <ul v-if="site.footer_menu" class="mb-3">
-            <li v-for="menuItem in site.footer_menu" :key="menuItem.title">
+          <ul v-if="page.footer_menu" class="mb-3">
+            <li v-for="menuItem in page.footer_menu" :key="menuItem.title">
               <a class="item" :href="menuItem.url">
                 {{ menuItem.title }}
               </a>
             </li>
           </ul>
           <p class="mb-0 leading-relaxed">
-            © {{ site.site_info?.name }} {{ currentYear }}. All Rights
+            © {{ page.site_info?.name }} {{ currentYear }}. All Rights
             Reserved.<br />
             Website created & powered by
             <ULink
@@ -67,13 +64,13 @@ const iconsSocialConfig = [
             />
           </template>
           <div class="mt-3">
-            <UTooltip :text="`Email ${site.site_info?.name}`">
+            <UTooltip :text="`Email ${page.site_info?.name}`">
               <ULink
                 rel="noopener"
                 target="_blank"
-                :to="`mailto:${site.site_info?.mail}`"
+                :to="`mailto:${page.site_info?.mail}`"
               >
-                {{ site.site_info?.mail }}
+                {{ page.site_info?.mail }}
               </ULink>
             </UTooltip>
           </div>

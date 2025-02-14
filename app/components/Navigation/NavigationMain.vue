@@ -1,13 +1,7 @@
 <script lang="ts" setup>
-import type { SiteInfoProps } from '~/types/BaseTypes'
 import { usePageContext } from '~/composables/usePageContext'
 
-// Access the prop correctly
-const props = defineProps<{
-  site: SiteInfoProps
-}>()
-
-const { isAdministrator } = usePageContext(props.site)
+const { page, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const mainMenu = await fetchMenu('main')
 
@@ -89,7 +83,7 @@ onBeforeUnmount(() => {
       <div class="mx-auto flex flex-wrap items-center justify-between">
         <div class="order-1">
           <ULink aria-label="Site Logo" class="font-bold" to="/">
-            <template v-if="!site.site_info?.name">
+            <template v-if="!page.site_info?.name">
               <ClientOnly>
                 <AppLogo
                   :dark-mode="!isDark && !isScrolled && !isAdministrator"
@@ -97,7 +91,7 @@ onBeforeUnmount(() => {
               </ClientOnly>
             </template>
             <template v-else>
-              {{ site.site_info?.name }}
+              {{ page.site_info?.name }}
             </template>
           </ULink>
         </div>

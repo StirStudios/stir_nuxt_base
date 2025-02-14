@@ -1,5 +1,6 @@
-export function usePageContext(page?: Ref<any> | any) {
-  const normalizedPage = isRef(page) ? page.value : page
+export function usePageContext() {
+  const { getPage } = useDrupalCe()
+  const page = getPage()
   const route = useRoute()
 
   // Extract slug once for performance
@@ -8,18 +9,18 @@ export function usePageContext(page?: Ref<any> | any) {
   // Determine if this is the front page
   const isFront = computed(() => route.fullPath === '/' || slug === 'front')
 
-  // Check if the current user is an administrator
+  // Ensure we access the reactive value inside `page`
   const isAdministrator = computed(
-    () =>
-      normalizedPage?.current_user?.roles?.includes('administrator') || false,
+    () => page.value?.current_user?.roles?.includes('administrator') || false,
   )
 
-  // Determine CSS classes dynamically
+  // Determine body classes dynamically
   const bodyClasses = computed(
     () => `${slug || 'front'} ${isAdministrator.value ? 'logged-in' : ''}`,
   )
 
   return {
+    page,
     isFront,
     isAdministrator,
     bodyClasses,

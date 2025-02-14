@@ -1,11 +1,4 @@
-/* Don't do `@import "tailwindcss"`, do this instead: */
-@layer theme, base, components, utilities;
-
-@import 'tailwindcss/theme' layer(theme) theme(static);
-@import 'tailwindcss/preflight' layer(base);
-@import 'tailwindcss/utilities' layer(utilities);
-
-/* Then import "@nuxt/ui": */
+@import 'tailwindcss';
 @import '@nuxt/ui';
 
 @source "./safelist.txt";
@@ -27,7 +20,71 @@
   --color-primary-900: var(--ui-color-primary-900);
 }
 
+@layer base {
+  /* General styles */
+  * {
+    @apply antialiased;
+  }
+
+  /* Headings */
+  h1,
+  h2 {
+    @apply font-serif;
+  }
+
+  h1,
+  .display-h1 {
+    @apply mb-2 text-center text-5xl font-normal md:text-7xl;
+  }
+
+  h2,
+  .display-h2 {
+    @apply mb-5 text-3xl font-medium md:text-4xl;
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+
+  /* Section Prose Styling */
+  section {
+    .prose {
+      p,
+      ul,
+      ol {
+        @apply my-6;
+      }
+      p,
+      ul > li,
+      ol > li {
+        @apply leading-7;
+      }
+      ul > li,
+      ol > li {
+        @apply ms-4 list-disc;
+      }
+      a {
+        @apply text-primary-500;
+      }
+    }
+    .desc {
+      p {
+        @apply mb-6 leading-7 last:mb-0;
+      }
+    }
+  }
+
+  /* Blockquotes */
+  blockquote {
+    @apply text-lg;
+  }
+  blockquote em {
+    @apply text-sm;
+  }
+}
+
 @layer components {
+  /* Custom Carousel Styling */
   [aria-roledescription='carousel'] {
     .relative {
       @apply !aspect-1/1;
@@ -38,7 +95,28 @@
   }
 }
 
-/* Drupal Forms */
+/* Custom Width Utilities */
+.w-xxs {
+  @apply mx-auto w-full max-w-screen-sm;
+}
+
+.w-xs {
+  @apply mx-auto w-full lg:w-2/6;
+}
+
+.w-sm {
+  @apply mx-auto w-full sm:w-3/5 lg:w-2/5;
+}
+
+.w-md {
+  @apply mx-auto w-full lg:w-4/6;
+}
+
+.w-lg {
+  @apply mx-auto w-full lg:w-5/6;
+}
+
+/* Drupal Form Styling */
 .drupal-form {
   .form-item {
     label {

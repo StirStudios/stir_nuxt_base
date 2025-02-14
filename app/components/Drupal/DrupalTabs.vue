@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import type { UserProps } from '~/types/UserProps'
-import type { TabsProps } from '~/types/NavigationTypes'
+import { usePageContext } from '~/composables/usePageContext'
 
-const props = defineProps<{
-  user: UserProps
-  tabs: TabsProps
-}>()
-
+const { page } = usePageContext()
 const config = useRuntimeConfig()
 const siteApi = config.public.api
 
 const { fetchMenu } = useDrupalCe()
 const accountMenu = ref([])
+
+const user = computed(() => page.value?.current_user)
+const tabs = computed(() => page.value?.local_tasks)
 
 function getIconForLabel(label: string): string | null {
   const iconMap: Record<string, string> = {
@@ -52,7 +50,7 @@ await loadAccountMenu()
 
 // Map tabs to navigation links and assign icons
 const getLocalTaskLinks = () => {
-  return props.tabs.primary.map((tab) => ({
+  return tabs.primary.map((tab) => ({
     label: tab.label,
     to: tab.url,
     icon: getIconForLabel(tab.label),
@@ -71,11 +69,11 @@ const links = computed(() => {
     ],
   ]
 
-  const localTaskLinks = props.tabs.primary?.length ? [getLocalTaskLinks()] : []
+  const localTaskLinks = tabs.primary?.length ? [getLocalTaskLinks()] : []
 
   const accountDropdown = [
     {
-      label: props.user?.name || 'Account',
+      label: user?.name || 'Account',
       icon: getIconForLabel('My account'),
       children: accountMenu.value,
     },
