@@ -44,7 +44,7 @@ const gradientClass = computed(() => {
                   {{ item.header }}
                 </h3>
                 <div
-                  :class="['mt-4', item.classes || 'content']"
+                  :class="['mt-4', item.classes || 'content prose']"
                   v-html="item.text"
                 ></div>
                 <div class="mt-6">

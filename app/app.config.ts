@@ -72,9 +72,9 @@ export default defineAppConfig({
       slots: {
         labelWrapper: 'block text-sm/6 font-medium',
         container: 'mt-2',
-        description: 'my-3 text-[var(--ui-text-muted)] leading-normal',
-        help: 'my-3 leading-normal',
-        error: 'mt-2 text-[var(--ui-error)] leading-normal',
+        description: 'my-3',
+        help: 'my-3',
+        error: 'mt-2 text-[var(--ui-error)]',
       },
     },
     // radioGroup: {

@@ -15,7 +15,7 @@ defineProps<{
     >
       <div
         :class="[
-          item.classes ? item.classes : 'content',
+          item.classes ? item.classes : 'content prose',
           item.width,
           item.spacing,
         ]"
