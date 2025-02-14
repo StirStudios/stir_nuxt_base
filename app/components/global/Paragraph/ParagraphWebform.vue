@@ -238,8 +238,10 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       />
     </UForm>
 
-    <div v-else :class="appConfig.stirTheme.webform.response">
-      <div class="prose" v-html="webformConfirmation" />
-    </div>
+    <div
+      v-else
+      :class="`${appConfig.stirTheme.webform.response} prose`"
+      v-html="webformConfirmation"
+    />
   </WrapNone>
 </template>
