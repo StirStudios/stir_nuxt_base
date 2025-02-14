@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { object, string, ObjectSchema } from 'yup'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
+import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
+import { buildYupSchema } from '~/utils/buildYupSchema'
+import { useScroll } from '~/composables/useScroll'
+import { useValidation } from '~/composables/useValidation'
 
 const props = withDefaults(
   defineProps<{
@@ -11,6 +14,8 @@ const props = withDefaults(
   },
 )
 
+const { onError } = useValidation()
+const { scrollToTop } = useScroll()
 const toast = useToast()
 const config = useRuntimeConfig()
 const appConfig = useAppConfig()
@@ -30,6 +35,9 @@ const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
+
+// Initialize state and Yup schema
+const schema = computed(() => buildYupSchema(fields, state))
 
 const submitButtonLabel = actions[0]?.['#submit_Label'] || 'Submit'
 
@@ -51,46 +59,23 @@ const groupedFields = computed(() => {
   return grouped
 })
 
-// Initialize state and Yup schema
-const schema = computed(() => buildYupSchema(fields))
-
-// Transform payload for submission using `originalKey`
-function transformPayloadToSnakeCase(
-  payload: Record<string, any>,
-): Record<string, any> {
-  const result: Record<string, any> = {}
-  for (const [key, value] of Object.entries(payload)) {
-    result[key.replace(/([A-Z])/g, '_$1').toLowerCase()] = value
-  }
-  return result
-}
-
 // Initialize state with `originalKey`
 onMounted(() => {
   for (const [key, field] of Object.entries(fields)) {
-    state[key] = field['#default'] || ''
+    if (field['#composite']) {
+      if (!state[key] || typeof state[key] !== 'object') {
+        state[key] = {} // Ensure composite field is an object
+      }
+
+      for (const subKey in field['#composite']) {
+        state[key][subKey] =
+          state[key][subKey] || field['#composite'][subKey]['value'] || ''
+      }
+    } else {
+      state[key] = field['#default'] || ''
+    }
   }
 })
-
-// Build Yup schema for validation
-function buildYupSchema(fields: Record<string, any>): ObjectSchema {
-  const shape: Record<string, any> = {}
-
-  for (const [key, field] of Object.entries(fields)) {
-    if (!evaluateVisibility(field['#states'], state)) {
-      continue // Skip hidden fields
-    }
-
-    const requiredError = field['#requiredError'] || 'This field is required'
-    shape[key] = field['#required']
-      ? field['#type'] === 'email'
-        ? string().email('Invalid email').required(requiredError)
-        : string().required(requiredError)
-      : string().nullable()
-  }
-
-  return object().shape(shape)
-}
 
 function shouldRenderGroupContainer(fieldName: string) {
   return (
@@ -126,8 +111,6 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     )
     csrfToken.value = token
 
-    await schema.value.validate(state, { abortEarly: false })
-
     const payload = {
       webform_id: webformId,
       turnstile_token: turnstileToken.value || '',
@@ -154,6 +137,8 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       })
       return
     }
+
+    scrollToTop()
 
     toast.add({
       title: 'Success!',
@@ -202,6 +187,7 @@ function isContainerVisible(containerName: string): boolean {
       :schema="schema"
       :class="appConfig.stirTheme.webform.form"
       @submit="onSubmit"
+      @error="onError"
     >
       <template
         v-for="(fieldName, index) in orderedFieldNames"
