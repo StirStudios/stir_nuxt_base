@@ -11,7 +11,7 @@ export function usePageContext() {
 
   // Ensure we access the reactive value inside `page`
   const isAdministrator = computed(
-    () => page.value?.current_user?.roles?.includes('administrator') || false,
+    () => page.current_user?.roles?.includes('administrator') || false,
   )
 
   // Determine body classes dynamically
