@@ -74,14 +74,14 @@ export default defineAppConfig({
         container: 'mt-2',
         description: 'my-3 text-[var(--ui-text-muted)] help',
         help: 'my-3 help',
-        error: 'mt-2 text-[var(--ui-error)] error',
+        error: 'mt-2 text-[var(--ui-error)] help',
       },
     },
     radioGroup: {
       slots: {
         root: 'relative',
         fieldset: 'flex',
-        legend: 'mb-3 block text-sm/6 font-medium',
+        legend: 'mb-3 block text-sm/6 font-medium help',
       },
     },
   },
