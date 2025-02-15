@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import { usePageContext } from '~/composables/usePageContext'
 
+const appConfig = useAppConfig()
 const currentYear = computed(() => new Date().getFullYear())
 </script>
 
 <template>
-  <footer
-    aria-label="Site Footer"
-    class="mt-20 bg-gray-100 py-10 text-sm dark:bg-black"
-  >
+  <footer aria-label="Site Footer" :class="appConfig.stirTheme.footer">
     <UContainer>
       <div class="text-center">
         <NavigationAccount />

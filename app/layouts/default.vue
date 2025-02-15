@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 
-const { page, isAdministrator } = usePageContext()
-
-const adminClasses = computed(() => ({
-  'pt-[3.9rem]': isAdministrator,
-  'pt-[10rem]': !page.value?.content?.hero,
-}))
+const appConfig = useAppConfig()
+const { isAdministrator } = usePageContext()
 </script>
 
 <template>
@@ -14,7 +10,7 @@ const adminClasses = computed(() => ({
     <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
   </header>
-  <main id="main-content" role="main" :class="adminClasses">
+  <main id="main-content" role="main" :class="appConfig.stirTheme.main">
     <SiteMessages />
     <slot />
   </main>
