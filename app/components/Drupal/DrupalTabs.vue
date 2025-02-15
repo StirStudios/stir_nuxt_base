@@ -8,8 +8,10 @@ const siteApi = config.public.api
 const { fetchMenu } = useDrupalCe()
 const accountMenu = ref([])
 
+const tabs = computed(
+  () => page.value?.local_tasks ?? { primary: [], secondary: [] },
+)
 const user = computed(() => page.value?.current_user)
-const tabs = computed(() => page.value?.local_tasks)
 
 function getIconForLabel(label: string): string | null {
   const iconMap: Record<string, string> = {
@@ -50,7 +52,7 @@ await loadAccountMenu()
 
 // Map tabs to navigation links and assign icons
 const getLocalTaskLinks = () => {
-  return tabs.primary.map((tab) => ({
+  return tabs.value.primary.map((tab) => ({
     label: tab.label,
     to: tab.url,
     icon: getIconForLabel(tab.label),
@@ -69,11 +71,11 @@ const links = computed(() => {
     ],
   ]
 
-  const localTaskLinks = tabs.primary?.length ? [getLocalTaskLinks()] : []
+  const localTaskLinks = tabs.value.primary?.length ? [getLocalTaskLinks()] : []
 
   const accountDropdown = [
     {
-      label: user?.name || 'Account',
+      label: user.value?.name || 'Account',
       icon: getIconForLabel('My account'),
       children: accountMenu.value,
     },
