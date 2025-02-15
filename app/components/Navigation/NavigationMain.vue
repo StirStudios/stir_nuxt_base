@@ -83,16 +83,11 @@ onBeforeUnmount(() => {
       <div class="mx-auto flex flex-wrap items-center justify-between">
         <div class="order-1">
           <ULink aria-label="Site Logo" class="font-bold" to="/">
-            <template v-if="!page.site_info?.name">
-              <ClientOnly>
-                <AppLogo
-                  :dark-mode="!isDark && !isScrolled && !isAdministrator"
-                />
-              </ClientOnly>
-            </template>
-            <template v-else>
-              {{ page.site_info?.name }}
-            </template>
+            <ClientOnly>
+              <AppLogo
+                :dark-mode="!isDark && !isScrolled && !isAdministrator"
+              />
+            </ClientOnly>
           </ULink>
         </div>
         <div class="order-2 flex">

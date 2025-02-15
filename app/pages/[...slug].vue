@@ -4,8 +4,7 @@ const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
 const { isAdministrator, bodyClasses } = usePageContext()
 const appConfig = useAppConfig()
 
-const route = useRoute()
-const page = await fetchPage(route.path, { query: route.query })
+const page = await fetchPage(useRoute().path, { query: useRoute().query })
 
 const layout = getPageLayout(page)
 
@@ -23,13 +22,6 @@ useHead({
 
 <template>
   <NuxtLayout :name="layout">
-    <ParagraphHero
-      v-if="page.content.hero && page.content.hero.length > 0"
-      :hero="page.content.hero[0]"
-      :page-title="page.title"
-      :site-slogan="page.site_info.slogan"
-    />
-    <h1 v-else :class="appConfig.stirTheme.h1">{{ page.title }}</h1>
     <LazySiteBreadcrumbs v-if="appConfig.stirTheme.crumbs" />
     <component :is="renderCustomElements(page.content)" />
   </NuxtLayout>

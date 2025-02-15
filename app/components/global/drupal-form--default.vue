@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import type { DrupalFormProps } from '~/types/FormTypes'
-
-defineProps<DrupalFormProps>()
+defineProps<{
+  formId: string
+  attributes: object
+  method: string
+}>()
+defineSlots<{
+  default()
+}>()
 </script>
 
 <template>
@@ -14,7 +19,9 @@ defineProps<DrupalFormProps>()
         :action="useRoute().fullPath"
         class="drupal-form"
       >
-        <slot><div v-html="content" class="space-y-6" /></slot>
+        <slot>
+          <component :is="useDrupalCe().renderCustomElements($attrs.content)" />
+        </slot>
       </form>
     </div>
   </div>

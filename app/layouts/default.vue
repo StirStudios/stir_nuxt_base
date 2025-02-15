@@ -3,7 +3,7 @@ import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
 
-const heroClasses = computed(() => ({
+const adminClasses = computed(() => ({
   'pt-[3.9rem]': isAdministrator,
   'pt-[10rem]': !page.value?.content?.hero,
 }))
@@ -14,7 +14,7 @@ const heroClasses = computed(() => ({
     <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
   </header>
-  <main id="main-content" role="main" :class="heroClasses">
+  <main id="main-content" role="main" :class="adminClasses">
     <SiteMessages />
     <slot />
   </main>

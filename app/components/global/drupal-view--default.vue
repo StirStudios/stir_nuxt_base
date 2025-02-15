@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const props = defineProps<{
-  title: String
-  rows?: Object[]
-  pager?: Object
+defineProps<{
+  title: string
+  rows?: object[]
+  pager?: object
 }>()
 
 const { renderCustomElements } = useDrupalCe()
@@ -16,7 +16,7 @@ const { renderCustomElements } = useDrupalCe()
       v-for="(row, index) in rows"
       :key="index"
     />
-    <DrupalPagination
+    <DrupalViewsPagination
       :total-pages="pager.totalPages"
       :current="pager.current"
     />

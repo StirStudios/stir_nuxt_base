@@ -1,18 +1,12 @@
 <script setup lang="ts">
-import type { CrumbProps } from '~/types/NavigationTypes'
-
-const props = defineProps<CrumbProps>()
-
 const { getPage } = useDrupalCe()
 const page = getPage()
 
-const breadcrumbs = ref(
-  props.crumb && props.crumb.length > 0
-    ? props.crumb
-    : page.value?.breadcrumbs || [],
-)
+// Ensure breadcrumbs are reactive and fallback to page data
+const breadcrumbs = computed(() => page.value?.breadcrumbs || [])
 
-const breadcrumbLinks = ref(
+// Map breadcrumbs to UBreadcrumb items format
+const breadcrumbLinks = computed(() =>
   breadcrumbs.value.map((crumb) => ({
     label: crumb.label,
     to: crumb.url || null,

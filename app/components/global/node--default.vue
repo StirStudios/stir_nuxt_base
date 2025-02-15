@@ -1,9 +1,25 @@
 <script setup lang="ts">
-import type { PageProps } from '~/types/BaseTypes'
-
-defineProps<PageProps>()
+defineSlots<{
+  body()
+  image()
+}>()
+defineProps<{
+  title?: string
+  type?: string
+  created?: number | string
+  // Layout-builder support.
+  sections?: object
+}>()
 </script>
 
 <template>
-  <ParagraphLayout :section="section" />
+  <div class="node">
+    <h1 v-if="title" class="text-center">{{ title }}</h1>
+    <slot name="image">
+      <component :is="useDrupalCe().renderCustomElements($attrs.image)" />
+    </slot>
+    <slot name="body">
+      <component :is="useDrupalCe().renderCustomElements($attrs.body)" />
+    </slot>
+  </div>
 </template>
