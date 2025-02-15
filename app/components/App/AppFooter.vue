@@ -2,6 +2,7 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
+const appConfig = useAppConfig()
 const siteInfo = computed<SiteInfoProps>(
   () => page.value?.site_info ?? { name: '', slogan: '', mail: '' },
 )
@@ -26,10 +27,7 @@ const iconsSocialConfig = [
 </script>
 
 <template>
-  <footer
-    aria-label="Site Footer"
-    class="mt-20 bg-gray-100 py-10 text-sm dark:bg-black"
-  >
+  <footer aria-label="Site Footer" :class="appConfig.stirTheme.footer">
     <UContainer>
       <div class="grid gap-4 text-center md:text-center lg:grid-cols-2">
         <div class="rights lg:text-left">

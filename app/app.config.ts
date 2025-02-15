@@ -6,6 +6,8 @@ export default defineAppConfig({
   stirTheme: {
     crumbs: false,
     h1: 'mb-20 text-center text-6xl',
+    main: 'pt-[10rem]',
+    footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
     mediaRounded: 'rounded-xl',
     aspectRatios: {
       portrait: 'aspect-[9/16]',

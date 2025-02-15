@@ -2,10 +2,11 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
+const appConfig = useAppConfig()
 
 const heroClasses = computed(() => ({
   'pt-[3.9rem]': isAdministrator,
-  'pt-[10rem]': !page.value?.content?.hero,
+  appConfig.stirTheme.main: !page.value?.content?.hero,
 }))
 </script>
 
