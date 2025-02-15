@@ -122,7 +122,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
     // Submit form data
     const { data: submitData, error: submitError } = await $fetch(
-      `${siteApi}/api/stir_webform_rest/submit`,
+      `${siteApi}/api/webform_rest/submit`,
       {
         method: 'POST',
         headers: {
