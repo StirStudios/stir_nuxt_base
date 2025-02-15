@@ -22,6 +22,7 @@ useHead({
 
 <template>
   <NuxtLayout :name="layout">
+    <h1 :class="appConfig.stirTheme.h1">{{ page.title }}</h1>
     <LazySiteBreadcrumbs v-if="appConfig.stirTheme.crumbs" />
     <component :is="renderCustomElements(page.content)" />
   </NuxtLayout>

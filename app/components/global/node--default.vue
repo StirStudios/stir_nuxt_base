@@ -14,7 +14,6 @@ defineProps<{
 
 <template>
   <div class="node">
-    <h1 v-if="title" class="text-center">{{ title }}</h1>
     <slot name="image">
       <component :is="useDrupalCe().renderCustomElements($attrs.image)" />
     </slot>
