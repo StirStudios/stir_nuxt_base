@@ -2,6 +2,9 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
+const siteInfo = computed<SiteInfoProps>(
+  () => page.value?.site_info ?? { name: '', slogan: '', mail: '' },
+)
 const currentYear = computed(() => new Date().getFullYear())
 
 const iconsSocialConfig = [
