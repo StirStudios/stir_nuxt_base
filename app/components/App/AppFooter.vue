@@ -10,7 +10,7 @@ const currentYear = computed(() => new Date().getFullYear())
     class="mt-20 bg-gray-100 py-10 text-sm dark:bg-black"
   >
     <UContainer>
-      <div class="grid gap-4 text-center md:text-center lg:grid-cols-2">
+      <div class="text-center">
         <NavigationAccount />
         <p class="mb-0 leading-relaxed">
           © {{ currentYear }}. All Rights Reserved.
