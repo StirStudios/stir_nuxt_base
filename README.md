@@ -12,6 +12,14 @@ This setup provides a boilerplate theme layer for your **Lupus Decoupled** web a
 
 This theme layer can be used independently, but you will need a **Drupal installation** with **Lupus Decoupled** installed. For more details, refer to the official [Lupus Decoupled documentation](https://lupus-decoupled.org/get-started/create-new-project).
 
+You will also need to apply this patch so the Drupal user session is available:
+
+```bash
+"drupal/lupus_ce_renderer": {
+"User session to the API": "https://git.drupalcode.org/project/lupus_ce_renderer/-/merge_requests/44.patch"
+}
+```
+
 ### 1. Adjust the `.env` file
 
 Rename `example.local.env` to `.env`, then update it to match your environment settings.
