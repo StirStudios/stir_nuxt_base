@@ -15,8 +15,8 @@ This theme layer can be used independently, but you will need a **Drupal install
 You will also need to apply this patch so the Drupal user session is available:
 
 ```bash
-"drupal/lupus_ce_renderer": {
-"User session to the API": "https://git.drupalcode.org/project/lupus_ce_renderer/-/merge_requests/44.patch"
+"drupal/lupus_decoupled": {
+  "User session to the API": "https://git.drupalcode.org/project/lupus_decoupled/-/merge_requests/120.diff"
 }
 ```
 
