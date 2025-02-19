@@ -9,8 +9,6 @@ const page = await fetchPage(route.path, { query: route.query })
 
 const layout = getPageLayout(page)
 
-usePageHead(page)
-
 useHead({
   htmlAttrs: {
     lang: 'en',
@@ -18,6 +16,15 @@ useHead({
   bodyAttrs: {
     class: bodyClasses,
   },
+  title: page.value.title,
+  meta: page.value.metatags.meta,
+  link: page.value.metatags.link,
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(page.value.metatags.jsonld || []),
+    },
+  ],
 })
 </script>
 
