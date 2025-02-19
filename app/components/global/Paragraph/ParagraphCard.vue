@@ -37,9 +37,7 @@ const gradientClass = computed(() => {
             </div>
 
             <div class="flex-1">
-              <div
-                class="mx-auto max-w-xl text-center lg:max-w-lg lg:text-left"
-              >
+              <div class="mx-auto max-w-xl lg:max-w-lg lg:text-center">
                 <h3 class="text-xl font-bold tracking-tight md:text-3xl">
                   {{ item.header }}
                 </h3>
@@ -63,7 +61,7 @@ const gradientClass = computed(() => {
         </div>
 
         <div
-          class="absolute left-1/2 top-0 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
+          class="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
           aria-hidden="true"
         >
           <div
