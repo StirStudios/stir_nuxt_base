@@ -22,7 +22,7 @@ const gradientClass = computed(() => {
       :wrapper="item?.animate === true ? 'div' : undefined"
     >
       <div
-        class="relative isolate overflow-hidden rounded-xl bg-black/70 py-16 text-white sm:py-24 lg:py-32"
+        class="relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-24 lg:py-32"
       >
         <div class="mx-auto max-w-7xl px-6 md:px-12">
           <div
