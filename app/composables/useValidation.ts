@@ -1,7 +1,7 @@
 export const useValidation = () => {
   const toast = useToast()
 
-  const onError = async (event: FormErrorEvent) => {
+  const onError = (event: FormErrorEvent) => {
     if (event?.errors?.[0]?.id) {
       const element = document.getElementById(event.errors[0].id)
 
