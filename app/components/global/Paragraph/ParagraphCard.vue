@@ -61,7 +61,7 @@ const gradientClass = computed(() => {
         </div>
 
         <div
-          class="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
+          class="absolute top-0 left-1/2 -z-10 -translate-x-1/2 bg-black/70 blur-3xl xl:-top-6"
           aria-hidden="true"
         >
           <div
