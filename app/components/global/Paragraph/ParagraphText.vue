@@ -4,6 +4,8 @@ import type { RegionItemProps } from '~/types/ContentTypes'
 defineProps<{
   item: RegionItemProps
 }>()
+
+const classes = (item.classes ? `${item.classes} prose` : 'content').trim()
 </script>
 
 <template>
@@ -13,14 +15,7 @@ defineProps<{
       :aos="item?.direction"
       :wrapper="item?.animate === true ? 'div' : undefined"
     >
-      <div
-        :class="[
-          item.classes ? item.classes : 'content prose',
-          item.width,
-          item.spacing,
-        ]"
-        v-html="item.text"
-      />
+      <div :class="[classes, item.width, item.spacing]" v-html="item.text" />
     </WrapAnimate>
   </WrapNone>
 </template>
