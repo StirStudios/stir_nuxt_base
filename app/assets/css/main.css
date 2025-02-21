@@ -10,11 +10,6 @@
 }
 
 @layer base {
-  /* General styles */
-  * {
-    @apply antialiased;
-  }
-
   /* Headings */
   h1,
   h2 {
