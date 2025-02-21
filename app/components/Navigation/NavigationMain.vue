@@ -72,12 +72,11 @@ onBeforeUnmount(() => {
 <template>
   <nav
     aria-label="Site navigation"
-    class="fixed top-0 z-30 w-full transform bg-white/90 px-4 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70"
-    :class="{
-      '-translate-y-full': !showNavbar,
-      'pt-[3.9rem]': isAdministrator && showNavbar,
-    }"
     role="navigation"
+    :class="[
+      appConfig.stirTheme.navigation,
+      { '-translate-y-full': !showNavbar || !isScrolled },
+    ]"
   >
     <UContainer>
       <div class="mx-auto flex flex-wrap items-center justify-between">
