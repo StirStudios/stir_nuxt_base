@@ -11,7 +11,7 @@ const heroClasses = computed(() => ({
 </script>
 
 <template>
-  <header aria-label="Site header">
+  <header aria-label="Site header" :class="appConfig.stirTheme.header">
     <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
   </header>
