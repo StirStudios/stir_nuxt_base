@@ -1,14 +1,18 @@
+/* Tailwind & Nuxt UI imports */
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
+/* Safelist for dynamic Tailwind classes */
 @source "./safelist.txt";
 
+/* Tailwind Theme Variables */
 @theme {
   --font-sans: 'InterVariable', system-ui, sans-serif;
   --color-white: #f5f0eb;
   --color-black: #14161a;
 }
 
+/* Base Layer - Global styles */
 @layer base {
   /* Headings */
   h1,
@@ -68,6 +72,10 @@
 }
 
 @layer components {
+  .aos-init,
+  .aos-animate {
+    @apply opacity-0;
+  }
   /* Custom Carousel Styling */
   [aria-roledescription='carousel'] {
     .relative {
@@ -79,23 +87,25 @@
   }
 }
 
-/* Custom Width Utilities */
-.w-xxs {
-  @apply mx-auto w-full max-w-screen-sm;
-}
+/* Utility Classes */
+@layer utilities {
+  .w-xxs {
+    @apply mx-auto max-w-screen-sm;
+  }
 
-.w-xs {
-  @apply mx-auto w-full lg:w-2/6;
-}
+  .w-xs {
+    @apply mx-auto max-w-xs lg:max-w-2xl;
+  }
 
-.w-sm {
-  @apply mx-auto w-full sm:w-3/5 lg:w-2/5;
-}
+  .w-sm {
+    @apply mx-auto max-w-sm sm:max-w-xl lg:max-w-6xl;
+  }
 
-.w-md {
-  @apply mx-auto w-full lg:w-4/6;
-}
+  .w-md {
+    @apply mx-auto max-w-md sm:max-w-2xl lg:max-w-4xl;
+  }
 
-.w-lg {
-  @apply mx-auto w-full lg:w-5/6;
+  .w-lg {
+    @apply mx-auto max-w-lg sm:max-w-3xl lg:max-w-5xl;
+  }
 }
