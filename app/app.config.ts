@@ -40,7 +40,7 @@ export default defineAppConfig({
     },
     carousel: {
       padding: 'p-8 px-16 pb-12',
-      container: 'items-center rounded-lg bg-white',
+      container: 'items-center',
     },
     webform: {
       form: 'mx-auto space-y-8 md:max-w-lg',
