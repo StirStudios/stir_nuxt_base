@@ -11,10 +11,25 @@ const autoscroll = computed(() => props.autoscroll || false)
 
 // Dynamically calculate grid classes based on the amount of items
 const itemGrid = computed(() => {
-  const amount = props.amount || 3
-  const lgBasis = `lg:basis-1/${amount}`
-  const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : 'basis'
-  return `basis ${mdBasis} ${lgBasis}`
+  const amount = Math.max(1, props.amount || 3)
+
+  // Ensure Tailwind recognizes these classes
+  const predefinedClasses = [
+    'lg:basis-1/1',
+    'lg:basis-1/2',
+    'lg:basis-1/3',
+    'lg:basis-1/4',
+    'lg:basis-1/5',
+    'lg:basis-1/6',
+    'md:basis-1/1',
+    'md:basis-1/2',
+    'md:basis-1/3',
+    'md:basis-1/4',
+    'md:basis-1/5',
+    'md:basis-1/6',
+  ].join(' ')
+
+  return `basis md:basis-1/${Math.max(1, Math.ceil(amount / 2))} lg:basis-1/${amount} ${predefinedClasses}`
 })
 </script>
 
