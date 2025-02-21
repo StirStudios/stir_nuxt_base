@@ -31,7 +31,7 @@ const itemGrid = computed(() => {
       :autoplay="{ delay: interval || 2000 }"
       :items="items"
       :ui="{
-        viewport: `${appConfig.stirTheme.carousel.viewport}`,
+        root: `${appConfig.stirTheme.carousel.root}`,
         item: itemGrid,
       }"
     >
