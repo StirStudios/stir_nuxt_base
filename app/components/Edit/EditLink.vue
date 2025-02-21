@@ -6,7 +6,7 @@ defineProps<EditLinkProps>()
 
 <template>
   <UButton
-    class="absolute top-0 right-0 z-50 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    class="absolute top-0 right-0 z-25 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     icon="i-heroicons-pencil-square"
     v-if="link"
     :to="link"

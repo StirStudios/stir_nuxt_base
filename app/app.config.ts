@@ -41,7 +41,6 @@ export default defineAppConfig({
     carousel: {
       padding: 'p-8 px-16 pb-12',
       viewport: '',
-      container: 'items-center',
     },
     webform: {
       form: 'mx-auto space-y-8 md:max-w-lg',
@@ -57,19 +56,72 @@ export default defineAppConfig({
     },
   },
   ui: {
-    // strategy: 'override',
     colors: {
       primary: 'lime',
       neutral: 'zinc',
     },
+    // navigationMenu: {
+    //   slots: {
+    //     link: 'font-medium text-md',
+    //   },
+    //   variants: {
+    //     active: {
+    //       false: {
+    //         link: 'text-(--ui-text-highlighted)',
+    //       },
+    //     },
+    //   },
+    //   compoundVariants: [
+    //     {
+    //       color: 'primary',
+    //       variant: 'pill',
+    //       active: true,
+    //       class: {
+    //         link: 'text-(--ui-highlighted)',
+    //       },
+    //     },
+    //     {
+    //       variant: 'pill',
+    //       active: true,
+    //       highlight: false,
+    //       class: {
+    //         link: 'before:bg-transparent hover:bg-(--ui-bg-elevated) hover:text-(--ui-highlighted)',
+    //       },
+    //     },
+    //   ],
+    // },
     button: {
       slots: {
         base: 'transition-all duration-300',
       },
+      // variants: {
+      //   size: {
+      //     lg: {
+      //       leadingIcon: 'size-6',
+      //       trailingIcon: 'size-6',
+      //     },
+      //     xl: {
+      //       base: 'px-6 py-3 text-md gap-2',
+      //       leadingIcon: 'size-8',
+      //       trailingIcon: 'size-8',
+      //     },
+      //   },
+      // },
       defaultVariants: {
-        size: 'lg',
+        // color: 'primary',
+        // variant: 'solid',
+        size: 'xl',
       },
     },
+    // slideover: {
+    //   variants: {
+    //     side: {
+    //       right: {
+    //         content: 'right-0 inset-y-0 w-full max-w-full',
+    //       },
+    //     },
+    //   },
+    // },
     formField: {
       slots: {
         labelWrapper: 'block text-sm/6 font-medium',
@@ -77,5 +129,16 @@ export default defineAppConfig({
         error: 'mt-2 text-[var(--ui-error)]',
       },
     },
+    // carousel: {
+    //   variants: {
+    //     orientation: {
+    //       horizontal: {
+    //         item: 'ps-0',
+    //         prev: '-start-12 top-1/2 -translate-y-1/2',
+    //         next: '-end-12 top-1/2 -translate-y-1/2',
+    //       },
+    //     },
+    //   },
+    // },
   },
 })
