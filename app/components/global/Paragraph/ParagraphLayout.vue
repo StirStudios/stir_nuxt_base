@@ -79,8 +79,6 @@ const getNodeProps = (item) => {
     return {
       webform: item.webform,
     }
-  } else if (item.element === 'field-entity-reference-revisions') {
-    return null
   } else {
     return {
       item: item,
