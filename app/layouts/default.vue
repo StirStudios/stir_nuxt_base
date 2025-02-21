@@ -11,8 +11,8 @@ const heroClasses = computed(() => ({
 </script>
 
 <template>
+  <DrupalTabs v-if="isAdministrator" />
   <header aria-label="Site header">
-    <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
   </header>
   <main id="main-content" role="main" :class="heroClasses">
