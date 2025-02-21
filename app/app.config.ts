@@ -43,7 +43,7 @@ export default defineAppConfig({
     },
     carousel: {
       padding: 'p-8 px-16 pb-12',
-      viewport: '',
+      root: '',
     },
     webform: {
       form: 'mx-auto space-y-8 md:max-w-lg',

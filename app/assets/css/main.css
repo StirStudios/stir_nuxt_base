@@ -65,25 +65,22 @@
   /* Blockquotes */
   blockquote {
     @apply text-lg;
-  }
-  blockquote em {
-    @apply text-sm;
+    em {
+      @apply text-sm;
+    }
   }
 }
 
+/* Attribute-based selectors must be placed outside of @layer */
+[aria-roledescription='carousel'] img {
+  @apply m-auto aspect-1/1 object-cover;
+}
+
+/* Component-Specific Styles */
 @layer components {
   .aos-init,
   .aos-animate {
     @apply opacity-0;
-  }
-  /* Custom Carousel Styling */
-  [aria-roledescription='carousel'] {
-    .relative {
-      @apply !aspect-1/1;
-    }
-    img {
-      @apply m-auto aspect-1/1 object-cover;
-    }
   }
 }
 
