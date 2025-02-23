@@ -41,11 +41,8 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   routeRules: {
-    '/admincontrol/login': {
+    '/admincontrol': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
-    },
-    '/admincontrol/password': {
-      redirect: `${process.env.DRUPAL_URL}/admincontrol/password`,
     },
   },
   modules: [
