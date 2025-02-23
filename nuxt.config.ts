@@ -40,6 +40,14 @@ export default defineNuxtConfig({
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
   devtools: { enabled: true },
+  routeRules: {
+    '/admincontrol/login': {
+      redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
+    },
+    '/admincontrol/password': {
+      redirect: `${process.env.DRUPAL_URL}/admincontrol/password`,
+    },
+  },
   modules: [
     [
       '@nuxtjs/turnstile',
