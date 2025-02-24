@@ -14,18 +14,9 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
   },
-  css: ['~/assets/css/main.css'],
+  // css: ['~/assets/css/main.css'],
   features: {
     inlineStyles: false,
-  },
-  // Absolute must for us to run under DDEV.
-  // https://stackoverflow.com/questions/72016669/how-to-config-vite-hmr-port-in-nuxt3-config
-  hooks: {
-    'vite:extendConfig': (config) => {
-      if (typeof config.server!.hmr === 'object') {
-        config.server!.hmr.protocol = 'wss'
-      }
-    },
   },
   app: {
     head: {
@@ -33,7 +24,6 @@ export default defineNuxtConfig({
         class: 'scroll-smooth',
       },
     },
-    // pageTransition: { name: 'page', mode: 'out-in' },
   },
   site: {
     url: process.env.NUXT_URL,
@@ -41,8 +31,14 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   routeRules: {
+    '/admincontrol/login': {
+      redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
+    },
     '/admincontrol': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
+    },
+    '/admincontrol/password': {
+      redirect: `${process.env.DRUPAL_URL}/admincontrol/password`,
     },
   },
   modules: [
