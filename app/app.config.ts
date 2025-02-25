@@ -24,7 +24,7 @@ export default defineAppConfig({
         'after:to-bg-black-10 relative mb-10 flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50',
       isFront: 'h-screen',
       text: {
-        base: 'relative p-5 text-center',
+        base: 'z-10 max-w-2xl relative p-5 text-center',
         isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
       },
     },

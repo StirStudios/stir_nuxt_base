@@ -4,6 +4,7 @@ import type { HeroProps } from '~/types/MediaTypes'
 import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 
+const appConfig = useAppConfig()
 const { observeVideos } = useIntersectionObserver()
 const { isFront } = usePageContext()
 
@@ -25,33 +26,26 @@ const media = computed(() => hero.media?.[0] || {})
     <EditLink :link="hero.editLink" />
     <section
       :class="[
-        appConfig.stirTheme.hero.overlay,
-        isFront
-          ? appConfig.stirTheme.hero.isFront
-          : appConfig.stirTheme.hero.base,
+        appConfig.stirTheme.hero.base,
+        isFront ? appConfig.stirTheme.hero.isFront : '',
       ]"
     >
-      >
       <div
-        class="z-10 max-w-2xl"
-        :class="
-          isFront
-          ? appConfig.stirTheme.hero.text.isFront
-          : appConfig.stirTheme.hero.text.base,
-        "
+        :class="[
+          appConfig.stirTheme.hero.text.base,
+          isFront ? appConfig.stirTheme.hero.text.isFront : '',
+        ]"
       >
         <WrapAnimate
           :aos="hero?.direction"
           :wrapper="hero?.animate === true ? 'div' : undefined"
         >
-          <template v-if="pageTitle && isFront">
-            <h1 class="sr-only">{{ pageTitle }}</h1>
-            <h2 class="display-h1 text-left">{{ siteSlogan }}</h2>
-          </template>
-          <h1 v-else-if="pageTitle" class="mb-0 text-white">
-            {{ pageTitle }}
-          </h1>
-          <div v-if="hero.text" class="hero-copy prose" v-html="hero.text" />
+          <HeroContent
+            :page-title="pageTitle"
+            :site-slogan="siteSlogan"
+            :hero-text="hero.text"
+            :is-front="isFront"
+          />
         </WrapAnimate>
       </div>
       <img
