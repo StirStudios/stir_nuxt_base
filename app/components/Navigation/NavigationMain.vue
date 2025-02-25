@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
     aria-label="Site navigation"
     role="navigation"
     :class="[
-      appConfig.stirTheme.navigation,
+      appConfig.stirTheme.navigation.base,
       { '-translate-y-full': !showNavbar || !isScrolled },
     ]"
   >
@@ -144,7 +144,12 @@ onBeforeUnmount(() => {
   <USlideover v-model:open="isOpen" title="Menu">
     <template #header>
       <div class="flex items-center justify-between">
-        <ULink aria-label="Logo" to="/" @click="isOpen = false">
+        <ULink
+          v-if="appConfig.stirTheme.navigation.slideover.logo"
+          aria-label="Logo"
+          to="/"
+          @click="isOpen = false"
+        >
           <AppLogo />
         </ULink>
         <UButton
@@ -161,12 +166,6 @@ onBeforeUnmount(() => {
       <UNavigationMenu
         orientation="vertical"
         :items="navLinks"
-        :ui="{
-          base: 'my-3 uppercase',
-          label: 'text-center w-full',
-          padding: 'px-3.5 py-2.5',
-          size: 'text-lg',
-        }"
         @click="isOpen = false"
       />
     </template>

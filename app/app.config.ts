@@ -7,8 +7,12 @@ export default defineAppConfig({
     crumbs: false,
     h1: 'mb-20 text-center text-6xl',
     header: 'md:px-auto fixed top-0 z-30 w-full',
-    navigation:
-      'transform bg-white/90 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70',
+    navigation: {
+      base: 'transform bg-white/90 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70',
+      slideover: {
+        logo: false,
+      },
+    },
     main: 'pt-[10rem]',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
     mediaRounded: 'rounded-xl',
