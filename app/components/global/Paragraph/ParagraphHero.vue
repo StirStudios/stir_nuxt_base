@@ -24,15 +24,20 @@ const media = computed(() => hero.media?.[0] || {})
   <WrapNone :wrapper="hero.editLink ? 'div' : undefined">
     <EditLink :link="hero.editLink" />
     <section
-      class="after:to-bg-black-10 relative mb-10 flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50"
-      :class="isFront ? 'h-screen' : 'min-h-[15rem] lg:h-[30rem]'"
+      :class="[
+        appConfig.stirTheme.hero.overlay,
+        isFront
+          ? appConfig.stirTheme.hero.isFront
+          : appConfig.stirTheme.hero.base,
+      ]"
     >
+      >
       <div
         class="z-10 max-w-2xl"
         :class="
           isFront
-            ? 'absolute bottom-0 left-0 p-10 lg:p-24'
-            : 'relative p-5 text-center'
+          ? appConfig.stirTheme.hero.text.isFront
+          : appConfig.stirTheme.hero.text.base,
         "
       >
         <WrapAnimate
