@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
       <div class="mx-auto flex flex-wrap items-center justify-between">
         <div class="order-1">
           <ULink aria-label="Site Logo" class="font-bold" to="/">
-            <template v-if="!page.site_info?.name">
+            <template v-if="appConfig.stirTheme.navigation.logo">
               <ClientOnly>
                 <AppLogo
                   :dark-mode="!isDark && !isScrolled && !isAdministrator"
