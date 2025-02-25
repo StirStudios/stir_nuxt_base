@@ -43,7 +43,7 @@ const media = computed(() => hero.media?.[0] || {})
           <HeroContent
             :page-title="pageTitle"
             :site-slogan="siteSlogan"
-            :hero-text="hero.text"
+            :hero-text="hero?.text"
             :is-front="isFront"
           />
         </WrapAnimate>

@@ -11,7 +11,7 @@ export default defineAppConfig({
       logo: true,
       base: 'transform bg-white/90 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70',
       slideover: {
-        logo: false,
+        logo: true,
       },
     },
     main: 'pt-[10rem]',
