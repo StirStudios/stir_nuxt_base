@@ -8,8 +8,15 @@
 /* Tailwind Theme Variables */
 @theme {
   --font-sans: 'InterVariable', system-ui, sans-serif;
+
+  --container-8xl: 96rem;
+
   --color-white: #f5f0eb;
   --color-black: #14161a;
+}
+
+:root {
+  --ui-container: var(--container-8xl);
 }
 
 /* Base Layer - Global styles */
