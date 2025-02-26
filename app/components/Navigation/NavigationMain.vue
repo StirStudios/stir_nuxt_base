@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
       {
         '-translate-y-full':
           !showNavbar ||
-          (appConfig.stirTheme.navigation.isHidden ? !isScrolled : isScrolled),
+          (appConfig.stirTheme.navigation.isHidden && !isScrolled),
       },
     ]"
   >
