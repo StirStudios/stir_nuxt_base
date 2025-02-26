@@ -26,6 +26,7 @@ const media = computed(() => hero.media?.[0] || {})
     <EditLink :link="hero.editLink" />
     <section
       :class="[
+        appConfig.stirTheme.hero.base,
         appConfig.stirTheme.hero.overlay,
         isFront ? appConfig.stirTheme.hero.isFront : '',
       ]"
