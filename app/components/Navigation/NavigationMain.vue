@@ -75,7 +75,11 @@ onBeforeUnmount(() => {
     role="navigation"
     :class="[
       appConfig.stirTheme.navigation.base,
-      { '-translate-y-full': !showNavbar || !isScrolled },
+      {
+        '-translate-y-full':
+          !showNavbar ||
+          (appConfig.stirTheme.navigation.isHidden && isScrolled),
+      },
     ]"
   >
     <UContainer>

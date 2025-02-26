@@ -9,6 +9,7 @@ export default defineAppConfig({
     header: 'md:px-auto fixed top-0 z-30 w-full',
     navigation: {
       logo: true,
+      isHidden: false,
       base: 'transform bg-white/90 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70',
       slideover: {
         logo: true,
