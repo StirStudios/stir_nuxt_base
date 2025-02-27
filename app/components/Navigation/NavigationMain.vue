@@ -110,7 +110,13 @@ onBeforeUnmount(() => {
             </template>
           </UNavigationMenu>
         </div>
-        <div class="order-2 flex md:order-3">
+
+        <div
+          class="order-2 flex md:order-3"
+          :class="{
+            'md:hidden': appConfig.colorMode?.forced,
+          }"
+        >
           <IconsColorMode />
           <UButton
             aria-label="Site navigation toggle"
