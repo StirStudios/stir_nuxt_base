@@ -1,6 +1,12 @@
+<script lang="ts" setup>
+const appConfig = useAppConfig()
+</script>
+
 <template>
   <UApp>
-    <NuxtLoadingIndicator />
+    <NuxtLoadingIndicator
+      :color="appConfig.stirTheme.loadingIndicator || undefined"
+    />
     <a
       href="#main-content"
       tabindex="0"
