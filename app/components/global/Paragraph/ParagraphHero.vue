@@ -53,7 +53,10 @@ const media = computed(() => hero.media?.[0] || {})
       <img
         v-if="media.type === 'image'"
         :alt="media.alt || ''"
-        class="absolute min-h-full w-auto max-w-none min-w-full"
+        :class="[
+          appConfig.stirTheme.hero.image.base,
+          isFront ? appConfig.stirTheme.hero.image.isFront : 'max-w-none',
+        ]"
         :height="media.height || ''"
         :sizes="media.sizes || ''"
         :src="media.src || ''"

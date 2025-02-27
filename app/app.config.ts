@@ -31,6 +31,10 @@ export default defineAppConfig({
       overlay:
         'after:to-bg-black-10 relative flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50',
       isFront: 'h-screen',
+      image: {
+        base: 'absolute min-h-full w-auto max-w-none min-w-full',
+        isFront: 'object-right-85 object-cover',
+      },
       text: {
         base: 'z-10 max-w-2xl relative p-5 text-center',
         isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
