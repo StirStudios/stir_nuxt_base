@@ -98,6 +98,12 @@ onBeforeUnmount(() => {
         </div>
         <div class="order-2 flex">
           <UNavigationMenu
+            :highlight="appConfig.stirTheme.navigation.highlight"
+            :highlight-color="
+              appConfig.stirTheme.navigation.highlight.show
+                ? appConfig.stirTheme.navigation.highlight.color
+                : ''
+            "
             class="hidden border-none md:block"
             :items="navLinks"
           >
