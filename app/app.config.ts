@@ -10,7 +10,9 @@ export default defineAppConfig({
     navigation: {
       logo: true,
       isHidden: false,
-      base: 'transform bg-white/90 py-3 shadow backdrop-blur-md duration-500 dark:bg-gray-950/70',
+      transparentTop: true,
+      base: 'transform py-3 duration-500',
+      background: 'bg-white/90 shadow backdrop-blur-md dark:bg-gray-950/70',
       slideover: {
         logo: true,
       },
@@ -25,7 +27,7 @@ export default defineAppConfig({
       fourThree: 'aspect-[4/3]',
     },
     hero: {
-      base: 'min-h-[15rem] lg:h-[30rem]',
+      base: 'min-h-[15rem] lg:min-h-[30rem]',
       overlay:
         'after:to-bg-black-10 relative flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50',
       isFront: 'h-screen',

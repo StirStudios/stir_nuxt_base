@@ -14,9 +14,6 @@ try {
   console.error('Error fetching menu:', error)
 }
 
-// Set color mode toggle
-const { isDark } = useColorModeToggle()
-
 // Map over the array of menu items to create navLinks
 const navLinks = mainMenuArray.map((menuItem) => ({
   label: menuItem.title,
@@ -75,6 +72,11 @@ onBeforeUnmount(() => {
     role="navigation"
     :class="[
       appConfig.stirTheme.navigation.base,
+      appConfig.stirTheme.navigation.transparentTop &&
+      !isScrolled &&
+      !isAdministrator
+        ? ''
+        : appConfig.stirTheme.navigation.background,
       {
         '-translate-y-full':
           !showNavbar ||
@@ -87,11 +89,7 @@ onBeforeUnmount(() => {
         <div class="order-1">
           <ULink aria-label="Site Logo" class="font-bold" to="/">
             <template v-if="appConfig.stirTheme.navigation.logo">
-              <ClientOnly>
-                <AppLogo
-                  :dark-mode="!isDark && !isScrolled && !isAdministrator"
-                />
-              </ClientOnly>
+              <AppLogo />
             </template>
             <template v-else>
               {{ page.site_info?.name }}
@@ -113,34 +111,20 @@ onBeforeUnmount(() => {
           </UNavigationMenu>
         </div>
         <div class="order-2 flex md:order-3">
-          <ClientOnly>
-            <UButton
-              v-if="!appConfig.colorMode.forced"
-              aria-label="Theme"
-              color="black"
-              :icon="
-                isDark
-                  ? 'i-heroicons-moon-20-solid'
-                  : 'i-heroicons-sun-20-solid'
-              "
-              size="lg"
-              variant="ghost"
-              @click="isDark = !isDark"
-            />
-            <UButton
-              aria-label="Site navigation toggle"
-              class="block flex items-center md:hidden"
-              color="black"
-              :icon="
-                navbarOpen
-                  ? 'i-heroicons-x-mark-solid'
-                  : 'i-heroicons-bars-3-solid'
-              "
-              size="xl"
-              variant="ghost"
-              @click="isOpen = true"
-            />
-          </ClientOnly>
+          <IconsColorMode />
+          <UButton
+            aria-label="Site navigation toggle"
+            class="block flex items-center md:hidden"
+            color="black"
+            :icon="
+              navbarOpen
+                ? 'i-heroicons-x-mark-solid'
+                : 'i-heroicons-bars-3-solid'
+            "
+            size="xl"
+            variant="ghost"
+            @click="isOpen = true"
+          />
         </div>
       </div>
     </UContainer>
