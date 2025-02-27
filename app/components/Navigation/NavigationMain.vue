@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
       appConfig.stirTheme.navigation.base,
       appConfig.stirTheme.navigation.transparentTop &&
       !isScrolled &&
-      !isAdministrator
+      isAdministrator
         ? ''
         : appConfig.stirTheme.navigation.background,
       {

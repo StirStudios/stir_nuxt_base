@@ -4,6 +4,8 @@ export default defineAppConfig({
     preference: 'dark',
   },
   stirTheme: {
+    // loadingIndicator:
+    // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
     crumbs: false,
     h1: 'mb-20 text-center text-6xl',
     header: 'md:px-auto fixed top-0 z-30 w-full',
@@ -89,36 +91,52 @@ export default defineAppConfig({
       primary: 'lime',
       neutral: 'zinc',
     },
-    // navigationMenu: {
-    //   slots: {
-    //     link: 'font-medium text-md',
-    //   },
-    //   variants: {
-    //     active: {
-    //       false: {
-    //         link: 'text-(--ui-text-highlighted)',
+    //     navigationMenu: {
+    //       slots: {
+    //         link: 'font-medium text-md',
     //       },
-    //     },
-    //   },
-    //   compoundVariants: [
-    //     {
-    //       color: 'primary',
-    //       variant: 'pill',
-    //       active: true,
-    //       class: {
-    //         link: 'text-(--ui-highlighted)',
+    //       variants: {
+    //         active: {
+    //           false: {
+    //             link: 'text-(--ui-text-highlighted)',
+    //           },
+    //         },
     //       },
+    //       compoundVariants: [
+    //         {
+    //           orientation: 'horizontal',
+    //           highlight: true,
+    //           class: {
+    //             link: ['after:-bottom-1 after:h-[2px]'],
+    //           },
+    //         },
+    //         {
+    //           disabled: false,
+    //           active: false,
+    //           variant: 'pill',
+    //           class: {
+    //             link: ['hover:text-(--ui-primary) bg-transparent'],
+    //           },
+    //         },
+    //
+    //         {
+    //           color: 'primary',
+    //           variant: 'pill',
+    //           active: true,
+    //           class: {
+    //             link: 'transition-all duration-300 text-(--ui-text-primary)',
+    //           },
+    //         },
+    //         {
+    //           variant: 'pill',
+    //           active: true,
+    //           highlight: false,
+    //           class: {
+    //             link: 'before:bg-transparent hover:bg-transparent hover:text-red-500 after:h-px:after after:bg-red-500',
+    //           },
+    //         },
+    //       ],
     //     },
-    //     {
-    //       variant: 'pill',
-    //       active: true,
-    //       highlight: false,
-    //       class: {
-    //         link: 'before:bg-transparent hover:bg-(--ui-bg-elevated) hover:text-(--ui-highlighted)',
-    //       },
-    //     },
-    //   ],
-    // },
     button: {
       slots: {
         base: 'transition-all duration-300',
