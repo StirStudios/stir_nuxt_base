@@ -233,7 +233,6 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       <UButton
         :label="actions[0]?.['#submit_Label'] || 'Submit'"
         :loading="isLoading"
-        size="lg"
         type="submit"
       />
     </UForm>
