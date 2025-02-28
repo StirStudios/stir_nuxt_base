@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "3.0.0-alpha.13",
+    "@nuxt/ui": "^3.0.0-alpha.13",
     "@nuxtjs/robots": "^5.2.4",
     "@nuxtjs/sitemap": "^7.2.6",
     "@nuxtjs/turnstile": "^0.9.12",
@@ -46,10 +46,5 @@
     "npm": {
       "publish": false
     }
-  },
-  "resolutions": {
-    "tailwindcss": "4.0.7",
-    "@tailwindcss/postcss": "4.0.7",
-    "@tailwindcss/vite": "4.0.7"
   }
 }

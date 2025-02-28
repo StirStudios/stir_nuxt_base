@@ -1,5 +1,5 @@
 /* Tailwind & Nuxt UI imports */
-@import 'tailwindcss';
+@import 'tailwindcss' theme(static);
 @import '@nuxt/ui';
 
 /* Safelist for dynamic Tailwind classes */
