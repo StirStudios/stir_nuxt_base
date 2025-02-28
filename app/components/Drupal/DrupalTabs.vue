@@ -95,5 +95,7 @@ const links = computed(() => {
       linkLeadingIcon: 'text-black dark:text-white',
     }"
     content-orientation="vertical"
+    highlight
+    highlight-color="primary"
   />
 </template>
