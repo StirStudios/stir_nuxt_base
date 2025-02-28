@@ -74,6 +74,12 @@ export default defineAppConfig({
     carousel: {
       padding: 'p-8 px-16 pb-12',
       root: '',
+      arrows: {
+        // prev: { color: 'neutral', variant: 'outline', size: 'md' },
+        // next: { color: 'neutral', variant: 'outline', size: 'md' },
+        // prevIcon: 'i-lucide-chevron-left',
+        // nextIcon: 'i-lucide-chevron-right',
+      },
     },
     webform: {
       form: 'mx-auto space-y-8 md:max-w-lg',

@@ -30,6 +30,10 @@ const itemGrid = computed(() => {
       :dots="showIndicators"
       :autoplay="{ delay: interval || 2000 }"
       :items="items"
+      :prev="appConfig.stirTheme.carousel.arrows.prev"
+      :next="appConfig.stirTheme.carousel.arrows.next"
+      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
+      :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
       :ui="{
         root: `${appConfig.stirTheme.carousel.root}`,
         item: itemGrid,
