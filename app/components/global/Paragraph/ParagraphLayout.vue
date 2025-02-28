@@ -70,7 +70,7 @@ const getNodeProps = (item) => {
         carouselInterval: item.carouselInterval,
         spacing: item.spacing,
         width: item.width,
-        amount: item.gridCount,
+        gridCount: item.gridCount,
         animate: item.animate,
         direction: item.direction,
       },
