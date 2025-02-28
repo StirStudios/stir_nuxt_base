@@ -3,8 +3,9 @@
 @import '@nuxt/ui';
 
 /* Safelist for dynamic Tailwind classes */
-@source "./safelist.txt";
+@source "../../../safelist.txt";
 @source "../../../main.css";
+@source "../app.config.ts";
 
 /* Tailwind Theme Variables */
 @theme {
