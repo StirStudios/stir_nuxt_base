@@ -12,7 +12,7 @@ export default defineAppConfig({
     navigation: {
       logo: true,
       isHidden: false,
-      transparentTop: true,
+      transparentTop: false,
       base: 'transform py-3 duration-500',
       background: 'bg-white/90 shadow backdrop-blur-md dark:bg-gray-950/70',
       color: 'primary',
