@@ -11,7 +11,7 @@ const viewGridClasses = computed(() => {
   const { viewCols, viewGap } = appConfig.stirTheme.grid
   const gridCount = props.item.gridCount
 
-  return `grid ${viewGap} ${viewGrid[gridCount] || ''}`.trim()
+  return `grid ${viewGap} ${viewCols[gridCount] || ''}`.trim()
 })
 
 const filteredRows = computed(
