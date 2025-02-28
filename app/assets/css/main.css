@@ -4,6 +4,7 @@
 
 /* Safelist for dynamic Tailwind classes */
 @source "./safelist.txt";
+@source "../../../main.css";
 
 /* Tailwind Theme Variables */
 @theme {
