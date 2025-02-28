@@ -11,7 +11,7 @@ const autoscroll = computed(() => props.autoscroll || false)
 
 // Dynamically calculate grid classes based on the amount of items
 const itemGrid = computed(() => {
-  const amount = props.amount || 3
+  const amount = props.amount || 1
   const lgBasis = `lg:basis-1/${amount}`
   const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : 'basis'
   return `basis ${mdBasis} ${lgBasis}`
