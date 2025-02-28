@@ -61,6 +61,17 @@ const getNodeProps = (node, title) => {
             :key="node.uuid"
             v-bind="getNodeProps(node, row.title)"
           />
+          <USeparator
+            v-if="
+              appConfig.stirTheme.grid.separator?.condition.includes(
+                row.element,
+              )
+            "
+            :color="appConfig.stirTheme.grid.separator?.color"
+            :type="appConfig.stirTheme.grid.separator?.solid"
+            :size="appConfig.stirTheme.grid.separator?.size"
+            :class="appConfig.stirTheme.grid.separator?.base"
+          />
         </div>
       </div>
     </div>
