@@ -6,6 +6,7 @@ const appConfig = useAppConfig()
 
 const heroClasses = computed(() => ({
   [appConfig.stirTheme.main]: !page.value?.content?.hero,
+  'mt-[3.1rem]': isAdministrator,
 }))
 </script>
 
