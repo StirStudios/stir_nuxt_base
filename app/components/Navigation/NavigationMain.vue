@@ -96,27 +96,18 @@ onBeforeUnmount(() => {
             </template>
           </ULink>
         </div>
-        <div class="order-2 flex">
-          <UNavigationMenu
-            :highlight="appConfig.stirTheme.navigation.highlight.show"
-            :highlight-color="
-              appConfig.stirTheme.navigation.highlight.show
-                ? appConfig.stirTheme.navigation.highlight.color
-                : ''
-            "
-            class="hidden border-none md:block"
-            :items="navLinks"
-          >
-            <template #default="{ link }">
-              <span
-                class="group-hover:text-primary relative block w-full duration-500"
-              >
-                {{ link.label }}
-              </span>
-            </template>
-          </UNavigationMenu>
-        </div>
-
+        <UNavigationMenu
+          :highlight="appConfig.stirTheme.navigation.highlight.show"
+          :highlight-color="
+            appConfig.stirTheme.navigation.highlight.show
+              ? appConfig.stirTheme.navigation.highlight.color
+              : ''
+          "
+          :color="appConfig.stirTheme.navigation.color"
+          :variant="appConfig.stirTheme.navigation.variant"
+          class="order-2 flex hidden border-none md:block"
+          :items="navLinks"
+        />
         <div
           class="order-2 flex md:order-3"
           :class="{
