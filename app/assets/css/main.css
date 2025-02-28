@@ -1,14 +1,12 @@
 /* Tailwind & Nuxt UI imports */
-@import 'tailwindcss';
+@import 'tailwindcss' theme(static);
 @import '@nuxt/ui';
 
 /* Safelist for dynamic Tailwind classes */
-@source "../../../safelist.txt";
-@source "../../../main.css";
-@source "../app.config.ts";
+@source "./safelist.txt";
 
 /* Tailwind Theme Variables */
-@theme {
+@theme static {
   --font-sans: 'InterVariable', system-ui, sans-serif;
 
   --container-8xl: 96rem;
