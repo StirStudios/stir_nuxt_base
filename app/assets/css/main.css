@@ -6,7 +6,7 @@
 @source "./safelist.txt";
 
 /* Tailwind Theme Variables */
-@theme {
+@theme static {
   --font-sans: 'InterVariable', system-ui, sans-serif;
 
   --container-8xl: 96rem;
