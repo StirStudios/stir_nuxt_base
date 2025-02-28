@@ -72,10 +72,12 @@ onBeforeUnmount(() => {
     role="navigation"
     :class="[
       appConfig.stirTheme.navigation.base,
-      // Apply no background if transparentTop is true and not scrolled (for admin and non-admin)
-      appConfig.stirTheme.navigation.transparentTop &&
-      !isScrolled &&
-      (!isAdministrator || isAdministrator)
+      // Check for admin and transparentTop logic
+      (isAdministrator &&
+        appConfig.stirTheme.navigation.transparentTop &&
+        !isScrolled) ||
+      // Non-admin check for transparentTop and isScrolled
+      (appConfig.stirTheme.navigation.transparentTop && !isScrolled)
         ? ''
         : appConfig.stirTheme.navigation.background,
       {
