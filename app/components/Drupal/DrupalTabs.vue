@@ -86,8 +86,6 @@ if (props.tabs.primary && props.tabs.primary.length > 0) {
         base: 'text-xs',
         label: 'truncate relative hidden md:block',
       }"
-      highlight
-      highlight-color="primary"
     />
   </div>
 </template>
