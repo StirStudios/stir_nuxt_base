@@ -65,6 +65,7 @@ export default defineAppConfig({
       container: 'mx-auto container px-4 md:px-5',
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
+      smBasis: '',
       // separator: {
       //   condition: 'node-',
       //   base: 'mt-16 mb-10 xl:mt-28 max-w-screen-sm lg:w-[20rem] mx-auto',
