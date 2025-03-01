@@ -19,8 +19,8 @@ const itemGrid = computed(() => {
 
   // Handle sm basis customization using appConfig, default to 'basis-auto'
   const smBasis = appConfig.stirTheme.grid.smBasis
-    ? `sm:basis-${appConfig.stirTheme.grid.smBasis}`
-    : 'sm:basis-auto' // Default for small screens
+    ? `basis-auto sm:basis-${appConfig.stirTheme.grid.smBasis}`
+    : 'basis-auto'
 
   return `${smBasis} ${mdBasis} ${lgBasis}`.trim()
 })
