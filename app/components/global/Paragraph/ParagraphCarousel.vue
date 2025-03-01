@@ -14,14 +14,12 @@ const interval = computed(() => props.interval || 5000)
 const itemGrid = computed(() => {
   const amount = props.amount || 1
   const lgBasis = `lg:basis-1/${amount}` // Set lg basis based on amount
-  const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : '' // Set md basis conditionally
-
-  // Handle sm basis customization using appConfig, default to 'basis-auto'
+  const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : ''
   const smBasis = appConfig.stirTheme.grid.smBasis
     ? `sm:basis-1/${appConfig.stirTheme.grid.smBasis}`
-    : 'sm:basis-auto' // Default for small screens
+    : ''
 
-  return `${smBasis} ${mdBasis} ${lgBasis}`.trim() // Return combined classes
+  return [smBasis, mdBasis, lgBasis].filter(Boolean).join(' ')
 })
 </script>
 
