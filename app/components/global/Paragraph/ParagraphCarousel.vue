@@ -13,16 +13,9 @@ const interval = computed(() => props.interval || 5000)
 // Dynamically calculate grid classes based on the amount of items
 const itemGrid = computed(() => {
   const amount = props.amount || 1
-  const lgBasis = `lg:basis-${amount}`
-  const mdBasis =
-    amount > 1 ? `md:basis-${Math.ceil(amount / 2)}` : 'basis-auto'
-
-  // Handle sm basis customization using appConfig, default to 'basis-auto'
-  const smBasis = appConfig.stirTheme.grid.smBasis
-    ? `basis-auto sm:basis-${appConfig.stirTheme.grid.smBasis}`
-    : 'basis-auto'
-
-  return `${smBasis} ${mdBasis} ${lgBasis}`.trim()
+  const lgBasis = `lg:basis-1/${amount}`
+  const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : 'basis'
+  return `basis ${mdBasis} ${lgBasis}`
 })
 </script>
 
