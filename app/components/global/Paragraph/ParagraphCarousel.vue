@@ -8,6 +8,7 @@ const showIndicators = computed(() => props.indicators || false)
 const showArrows = computed(() => props.arrows || false)
 const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
+const interval = computed(() => props.interval || 5000)
 
 // Dynamically calculate grid classes based on the amount of items
 const itemGrid = computed(() => {
@@ -28,7 +29,7 @@ const itemGrid = computed(() => {
       :fade="transitionFade"
       :arrows="showArrows"
       :dots="showIndicators"
-      :autoplay="{ delay: interval || 2000 }"
+      :autoplay="{ delay: interval }"
       :items="items"
       :prev="appConfig.stirTheme.carousel.arrows.prev"
       :next="appConfig.stirTheme.carousel.arrows.next"
