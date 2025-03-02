@@ -48,7 +48,7 @@ const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
       item: item,
-      amount: item.carouselCount,
+      amount: item.gridCount,
       header: item.header,
       indicators: item.carouselIndicators,
       arrows: item.carouselArrows,

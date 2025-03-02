@@ -9,18 +9,7 @@ const showArrows = computed(() => props.arrows || false)
 const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
-
-// Dynamically calculate grid classes based on the amount of items
-const itemGrid = computed(() => {
-  const amount = props.amount || 1
-  const lgBasis = `lg:basis-1/${amount}` // Set lg basis based on amount
-  const mdBasis = amount > 1 ? `md:basis-1/${Math.ceil(amount / 2)}` : ''
-  const smBasis = appConfig.stirTheme.grid.smBasis
-    ? `sm:basis-1/${appConfig.stirTheme.grid.smBasis}`
-    : ''
-
-  return [smBasis, mdBasis, lgBasis].filter(Boolean).join(' ')
-})
+const gridCount = computed(() => props.amount || 5000)
 </script>
 
 <template>
@@ -41,7 +30,7 @@ const itemGrid = computed(() => {
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
       :ui="{
         root: `${appConfig.stirTheme.carousel.root}`,
-        item: itemGrid,
+        item: gridCount,
       }"
     >
       <template v-if="item.element">
