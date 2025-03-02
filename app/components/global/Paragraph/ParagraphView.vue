@@ -9,9 +9,9 @@ const props = defineProps<{
 
 const viewGridClasses = computed(() => {
   const { viewGap } = appConfig.stirTheme.grid
-  const gridCount = props.item.gridCount
+  const gridCount = props.item.gridItems
 
-  return `grid ${viewGap} ${gridCount || ''}`.trim()
+  return `grid ${viewGap} ${gridItems || ''}`.trim()
 })
 
 const filteredRows = computed(
@@ -43,7 +43,7 @@ const getNodeProps = (node, title) => {
     <div :class="[!item.carousel ? item.width : '', item.spacing]">
       <template v-if="item.carousel">
         <ParagraphCarousel
-          :amount="item.gridCount"
+          :amount="item.gridItems"
           :indicators="item.carouselIndicators"
           :arrows="item.carouselArrows"
           :fade="item.carouselFade"

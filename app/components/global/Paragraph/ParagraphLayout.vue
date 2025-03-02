@@ -48,7 +48,7 @@ const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
       item: item,
-      amount: item.gridCount,
+      amount: item.gridItems,
       header: item.header,
       indicators: item.carouselIndicators,
       arrows: item.carouselArrows,
@@ -70,7 +70,7 @@ const getNodeProps = (item) => {
         carouselInterval: item.carouselInterval,
         spacing: item.spacing,
         width: item.width,
-        gridCount: item.gridCount,
+        gridItems: item.gridItems,
         animate: item.animate,
         direction: item.direction,
       },

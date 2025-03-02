@@ -9,7 +9,7 @@ const showArrows = computed(() => props.arrows || false)
 const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
-const gridCount = computed(() => props.amount || 5000)
+const gridItems = computed(() => props.amount || 5000)
 </script>
 
 <template>
@@ -30,7 +30,7 @@ const gridCount = computed(() => props.amount || 5000)
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
       :ui="{
         root: `${appConfig.stirTheme.carousel.root}`,
-        item: gridCount,
+        item: gridItems,
       }"
     >
       <template v-if="item.element">
