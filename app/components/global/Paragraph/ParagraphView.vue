@@ -12,7 +12,7 @@ const props = defineProps<{
  */
 const viewGridClasses = computed(() => {
   const { viewGap } = appConfig.stirTheme.grid
-  return ['grid', viewGap, props.item.gridItems].filter(Boolean).join(' ')
+  return [viewGap, props.item.gridItems].filter(Boolean).join(' ')
 })
 
 /**

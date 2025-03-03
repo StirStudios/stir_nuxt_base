@@ -25,7 +25,7 @@ const interval = computed(() => props.interval || 5000)
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
       :ui="{
         root: `${appConfig.stirTheme.carousel.root}`,
-        item: gridItems,
+        item: amount,
       }"
     >
       <template v-if="item.element">
