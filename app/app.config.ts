@@ -55,12 +55,6 @@ export default defineAppConfig({
         three_column: 'sm:grid-cols-2 lg:grid-cols-3',
         four_column: 'sm:grid-cols-2 lg:grid-cols-4',
       },
-      viewCols: {
-        2: 'sm:grid-cols-2',
-        3: 'sm:grid-cols-2 md:grid-cols-3',
-        4: 'sm:grid-cols-2 md:grid-cols-4',
-        5: 'sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5',
-      },
       wrapCols: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
       container: 'mx-auto container px-4 md:px-5',
       gap: 'gap-4 md:gap-6 lg:gap-10',
