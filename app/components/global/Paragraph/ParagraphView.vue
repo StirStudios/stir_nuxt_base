@@ -7,31 +7,33 @@ const props = defineProps<{
   item: ViewItemProps
 }>()
 
+/**
+ * Computes the grid classes dynamically.
+ */
 const viewGridClasses = computed(() => {
   const { viewGap } = appConfig.stirTheme.grid
-  const gridCount = props.item.gridItems
-
-  return `grid ${viewGap} ${gridItems || ''}`.trim()
+  return ['grid', viewGap, props.item.gridItems].filter(Boolean).join(' ')
 })
 
-const filteredRows = computed(
-  () =>
-    props.item.rows?.map((row) => ({
-      ...row,
-      section: row.section?.filter(
-        (node) => node.element !== 'paragraph-layout',
-      ),
-    })) || [],
-)
+/**
+ * Filters out 'paragraph-layout' sections.
+ */
+const filteredRows = computed(() => {
+  return (props.item.rows || []).map((row) => ({
+    ...row,
+    section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
+  }))
+})
 
-const getNodeProps = (node, title) => {
-  return {
-    item: {
-      title: title,
-      ...node,
-    },
-  }
-}
+/**
+ * Constructs node props dynamically.
+ */
+const getNodeProps = (node, title) => ({
+  item: {
+    title,
+    ...node,
+  },
+})
 </script>
 
 <template>
@@ -63,7 +65,7 @@ const getNodeProps = (node, title) => {
           />
           <USeparator
             v-if="
-              appConfig.stirTheme.grid.separator?.condition.includes(
+              appConfig.stirTheme.grid.separator?.condition?.includes(
                 row.element,
               )
             "

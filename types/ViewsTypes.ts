@@ -8,7 +8,7 @@ export interface ViewItemProps extends LayoutProps {
   element: string
   viewId: string
   title: string
-  gridCount: number
+  gridItems: number
   carousel?: boolean
   carouselInterval?: number
   showIndicators?: boolean
