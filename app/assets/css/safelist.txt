@@ -466,7 +466,7 @@ xl:block
 sm:columns-2
 mx-auto
 m-auto
-lg:w-lg
+sm:w-lg
 lg:w-2xl
 lg:w-3xl
 lg:w-4xl

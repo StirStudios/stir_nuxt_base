@@ -46,7 +46,7 @@ const additionalClasses = [
   'lg:block',
   'mx-auto',
   'm-auto',
-  'lg:w-lg',
+  'sm:w-lg',
   'lg:w-2xl',
   'lg:w-3xl',
   'lg:w-4xl',
