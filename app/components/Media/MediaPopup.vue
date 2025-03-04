@@ -55,7 +55,7 @@ const modal = ref(false)
       <UModal
         v-model:open="modal"
         fullscreen
-        title="Media Viewer"
+        :title="item.alt"
         :description="item.alt"
       >
         <template #header>
