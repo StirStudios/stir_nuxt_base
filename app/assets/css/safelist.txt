@@ -478,4 +478,4 @@ xl:w-xs
 xl:w-sm
 xl:w-md
 xl:w-lg
-sm:columns-2
+sm:columns-2 lg:block

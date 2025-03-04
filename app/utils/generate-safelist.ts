@@ -47,7 +47,7 @@ breakpoints.forEach((bp) => {
 })
 
 // ✅ Add a single custom class
-safelist.add('sm:columns-2')
+safelist.add('sm:columns-2 lg:block')
 
 // Write to a `.txt` file for Tailwind to read
 const safelistPath = path.resolve('app/assets/css/safelist.txt')
