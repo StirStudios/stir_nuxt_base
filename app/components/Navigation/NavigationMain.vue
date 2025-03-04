@@ -131,32 +131,38 @@ onBeforeUnmount(() => {
       </div>
     </div>
   </nav>
-  <USlideover v-model:open="isOpen" title="Menu">
+  <USlideover
+    v-model:open="isOpen"
+    title="Menu"
+    :ui="{
+      header: 'flex items-center justify-between gap-1.5 p-4 sm:px-6 min-h-16',
+    }"
+  >
     <template #header>
-      <div class="flex items-center justify-between">
-        <ULink
-          v-if="appConfig.stirTheme.navigation.slideover.logo"
-          aria-label="Logo"
-          to="/"
-          @click="isOpen = false"
-        >
-          <AppLogo />
-        </ULink>
-        <UButton
-          aria-label="Close"
-          class="-my-1"
-          color="gray"
-          icon="i-heroicons-x-mark-20-solid"
-          variant="ghost"
-          @click="isOpen = false"
-        />
-      </div>
+      <ULink
+        v-if="appConfig.stirTheme.navigation.slideover.logo"
+        aria-label="Logo"
+        to="/"
+        @click="isOpen = false"
+      >
+        <AppLogo />
+      </ULink>
+      <UButton
+        aria-label="Close"
+        class="-my-1"
+        color="gray"
+        icon="i-heroicons-x-mark-20-solid"
+        variant="ghost"
+        @click="isOpen = false"
+      />
     </template>
     <template #body>
       <UNavigationMenu
+        :ui="{
+          link: appConfig.stirTheme.navigation.slideover.link,
+        }"
         orientation="vertical"
         :items="navLinks"
-        @click="isOpen = false"
       />
     </template>
   </USlideover>

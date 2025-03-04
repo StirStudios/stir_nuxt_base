@@ -23,6 +23,7 @@ export default defineAppConfig({
       },
       slideover: {
         logo: true,
+        link: 'text-xl text-center block my-3 uppercase',
       },
     },
     main: 'pt-[10rem]',
