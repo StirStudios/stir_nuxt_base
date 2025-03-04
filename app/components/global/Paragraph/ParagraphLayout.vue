@@ -92,30 +92,29 @@ const getNodeProps = (item) => {
   <template v-for="layout in section" :key="layout.id">
     <section
       v-if="isValidParagraphLayout(layout)"
-      :id="layout.label ?? null"
-      :class="[
-        layout.classes || 'content',
-        layout.spacing,
-        layout.width,
-        getClassForLayout(layout),
-      ]"
+      :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
     >
       <template v-if="layout.header">
         <h2 v-html="layout.header" />
       </template>
       <div
-        v-for="regionItem in layout.regions"
-        :key="regionItem[0]?.uuid"
-        :class="regionItem[0].region"
+        :id="layout.label ?? null"
+        :class="[layout.width, getClassForLayout(layout)]"
       >
-        <template v-for="item in regionItem" :key="item.uuid">
-          <article>
-            <component
-              :is="resolveComponent(item.element)"
-              v-bind="getNodeProps(item)"
-            />
-          </article>
-        </template>
+        <div
+          v-for="regionItem in layout.regions"
+          :key="regionItem[0]?.uuid"
+          :class="regionItem[0].region"
+        >
+          <template v-for="item in regionItem" :key="item.uuid">
+            <article>
+              <component
+                :is="resolveComponent(item.element)"
+                v-bind="getNodeProps(item)"
+              />
+            </article>
+          </template>
+        </div>
       </div>
     </section>
     <section v-else :class="appConfig.stirTheme.grid.container">
