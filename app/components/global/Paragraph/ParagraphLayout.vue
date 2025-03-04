@@ -96,7 +96,7 @@ const getNodeProps = (item) => {
     >
       <template v-if="layout.header">
         <h2
-          :class="layout.classes ? layout.classes : ''"
+          :class="appConfig.stirTheme.grid.container"
           v-html="layout.header"
         />
       </template>
