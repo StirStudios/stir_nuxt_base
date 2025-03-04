@@ -95,7 +95,10 @@ const getNodeProps = (item) => {
       :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
     >
       <template v-if="layout.header">
-        <h2 v-html="layout.header" />
+        <h2
+          :class="layout.classes ? layout.classes : ''"
+          v-html="layout.header"
+        />
       </template>
       <div
         :id="layout.label ?? null"
