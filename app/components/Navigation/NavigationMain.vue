@@ -85,53 +85,51 @@ onBeforeUnmount(() => {
       },
     ]"
   >
-    <UContainer>
-      <div class="mx-auto flex flex-wrap items-center justify-between">
-        <div class="order-1">
-          <ULink aria-label="Site Logo" class="font-bold" to="/">
-            <template v-if="appConfig.stirTheme.navigation.logo">
-              <AppLogo />
-            </template>
-            <template v-else>
-              {{ page.site_info?.name }}
-            </template>
-          </ULink>
-        </div>
-        <UNavigationMenu
-          :highlight="appConfig.stirTheme.navigation.highlight.show"
-          :highlight-color="
-            appConfig.stirTheme.navigation.highlight.show
-              ? appConfig.stirTheme.navigation.highlight.color
-              : ''
-          "
-          :color="appConfig.stirTheme.navigation.color"
-          :variant="appConfig.stirTheme.navigation.variant"
-          class="order-2 flex hidden border-none md:block"
-          :items="navLinks"
-        />
-        <div
-          class="order-2 flex md:order-3"
-          :class="{
-            'md:hidden': appConfig.colorMode?.forced,
-          }"
-        >
-          <IconsColorMode />
-          <UButton
-            aria-label="Site navigation toggle"
-            class="block flex items-center md:hidden"
-            color="black"
-            :icon="
-              navbarOpen
-                ? 'i-heroicons-x-mark-solid'
-                : 'i-heroicons-bars-3-solid'
-            "
-            size="xl"
-            variant="ghost"
-            @click="isOpen = true"
-          />
-        </div>
+    <div
+      :class="`${appConfig.stirTheme.container} mx-auto flex flex-wrap items-center justify-between`"
+    >
+      <div class="order-1">
+        <ULink aria-label="Site Logo" class="font-bold" to="/">
+          <template v-if="appConfig.stirTheme.navigation.logo">
+            <AppLogo />
+          </template>
+          <template v-else>
+            {{ page.site_info?.name }}
+          </template>
+        </ULink>
       </div>
-    </UContainer>
+      <UNavigationMenu
+        :highlight="appConfig.stirTheme.navigation.highlight.show"
+        :highlight-color="
+          appConfig.stirTheme.navigation.highlight.show
+            ? appConfig.stirTheme.navigation.highlight.color
+            : ''
+        "
+        :color="appConfig.stirTheme.navigation.color"
+        :variant="appConfig.stirTheme.navigation.variant"
+        class="order-2 flex hidden border-none md:block"
+        :items="navLinks"
+      />
+      <div
+        class="order-2 flex md:order-3"
+        :class="{
+          'md:hidden': appConfig.colorMode?.forced,
+        }"
+      >
+        <IconsColorMode />
+        <UButton
+          aria-label="Site navigation toggle"
+          class="block flex items-center md:hidden"
+          color="black"
+          :icon="
+            navbarOpen ? 'i-heroicons-x-mark-solid' : 'i-heroicons-bars-3-solid'
+          "
+          size="xl"
+          variant="ghost"
+          @click="isOpen = true"
+        />
+      </div>
+    </div>
   </nav>
   <USlideover v-model:open="isOpen" title="Menu">
     <template #header>
