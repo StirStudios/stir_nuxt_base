@@ -83,10 +83,10 @@ export default defineAppConfig({
       },
     },
     webform: {
-      form: 'mx-auto space-y-8 md:max-w-lg',
+      form: 'space-y-8',
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: '',
-      response: 'mx-auto space-y-8 text-center md:max-w-lg',
+      response: 'space-y-8 text-center',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
