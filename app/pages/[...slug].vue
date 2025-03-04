@@ -36,7 +36,9 @@ useHead({
       :page-title="page.title"
       :site-slogan="page.site_info.slogan"
     />
-    <h1 v-else :class="appConfig.stirTheme.h1">{{ page.title }}</h1>
+    <h1 v-else :class="[appConfig.stirTheme.h1, appConfig.stirTheme.container]">
+      {{ page.title }}
+    </h1>
     <LazySiteBreadcrumbs v-if="appConfig.stirTheme.crumbs" />
     <component :is="renderCustomElements(page.content)" />
   </NuxtLayout>
