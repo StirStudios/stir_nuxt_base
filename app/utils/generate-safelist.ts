@@ -46,8 +46,25 @@ breakpoints.forEach((bp) => {
   widthClasses.forEach((cls) => safelist.add(`${bp}${cls}`)) // ✅ Add width utilities
 })
 
-// ✅ Add a single custom class
-safelist.add('sm:columns-2 lg:block')
+// ✅ Add additional required classes
+const additionalClasses = [
+  'sm:columns-2',
+  'lg:block',
+  'mx-auto',
+  'w-full',
+  'max-w-screen-sm',
+  'lg:w-2/6',
+  'sm:w-3/5',
+  'lg:w-2/5',
+  'lg:w-4/6',
+  'lg:w-5/6',
+  'xl:w-xs',
+  'xl:w-sm',
+  'xl:w-md',
+  'xl:w-lg',
+]
+
+additionalClasses.forEach((cls) => safelist.add(cls))
 
 // Write to a `.txt` file for Tailwind to read
 const safelistPath = path.resolve('app/assets/css/safelist.txt')

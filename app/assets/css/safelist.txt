@@ -478,4 +478,13 @@ xl:w-xs
 xl:w-sm
 xl:w-md
 xl:w-lg
-sm:columns-2 lg:block
+sm:columns-2
+lg:block
+mx-auto
+w-full
+max-w-screen-sm
+lg:w-2/6
+sm:w-3/5
+lg:w-2/5
+lg:w-4/6
+lg:w-5/6
