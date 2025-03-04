@@ -36,6 +36,9 @@ breakpoints.forEach((bp) => {
   spacingClasses.forEach((cls) => safelist.add(`${bp}${cls}`))
 })
 
+// ✅ Add a single custom class
+safelist.add('sm:columns-2')
+
 // Write to a `.txt` file for Tailwind to read
 const safelistPath = path.resolve('app/assets/css/safelist.txt')
 fs.writeFileSync(safelistPath, Array.from(safelist).join('\n'))

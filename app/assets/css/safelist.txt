@@ -453,3 +453,4 @@ xl:mb-20
 xl:ml-20
 xl:mx-20
 xl:my-20
+sm:columns-2
