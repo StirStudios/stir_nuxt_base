@@ -4,7 +4,12 @@ import type { CarouselProps } from '~/types/MediaTypes'
 const props = defineProps<CarouselProps>()
 
 const appConfig = useAppConfig()
+const showIndicators = computed(() => props.indicators || false)
+const showArrows = computed(() => props.arrows || false)
+const transitionFade = computed(() => props.fade || false)
+const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
+const gridItems = computed(() => props.amount || 5000)
 </script>
 
 <template>

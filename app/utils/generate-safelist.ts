@@ -25,15 +25,6 @@ const spacingClasses = spacings.flatMap((size) => [
   `my-${size}`,
 ])
 
-// Custom width classes
-const widthClasses = [
-  'w-xxs', // max-w-screen-sm
-  'w-xs', // lg:w-2/6
-  'w-sm', // sm:w-3/5 lg:w-2/5
-  'w-md', // lg:w-4/6
-  'w-lg', // lg:w-5/6
-]
-
 // Generate all needed class variants
 const safelist = new Set<string>()
 
@@ -43,26 +34,14 @@ breakpoints.forEach((bp) => {
   spans.forEach((span) => safelist.add(`${bp}${span}`))
   gaps.forEach((gap) => safelist.add(`${bp}${gap}`))
   spacingClasses.forEach((cls) => safelist.add(`${bp}${cls}`))
-  widthClasses.forEach((cls) => safelist.add(`${bp}${cls}`)) // ✅ Add width utilities
+
+  // ✅ Add `hidden` and `block` for each breakpoint
+  safelist.add(`${bp}hidden`)
+  safelist.add(`${bp}block`)
 })
 
 // ✅ Add additional required classes
-const additionalClasses = [
-  'sm:columns-2',
-  'lg:block',
-  'mx-auto',
-  'w-full',
-  'max-w-screen-sm',
-  'lg:w-2/6',
-  'sm:w-3/5',
-  'lg:w-2/5',
-  'lg:w-4/6',
-  'lg:w-5/6',
-  'xl:w-xs',
-  'xl:w-sm',
-  'xl:w-md',
-  'xl:w-lg',
-]
+const additionalClasses = ['sm:columns-2', 'lg:block', 'mx-auto', 'm-auto']
 
 additionalClasses.forEach((cls) => safelist.add(cls))
 
