@@ -95,10 +95,7 @@ const getNodeProps = (item) => {
       :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
     >
       <template v-if="layout.header">
-        <h2
-          :class="appConfig.stirTheme.grid.container"
-          v-html="layout.header"
-        />
+        <h2 :class="appConfig.stirTheme.container" v-html="layout.header" />
       </template>
       <div
         :id="layout.label ?? null"
@@ -120,7 +117,7 @@ const getNodeProps = (item) => {
         </div>
       </div>
     </section>
-    <section v-else :class="appConfig.stirTheme.grid.container">
+    <section v-else :class="appConfig.stirTheme.container">
       <component
         v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
