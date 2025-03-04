@@ -73,6 +73,11 @@ export default defineAppConfig({
       2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
       3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
     },
+    gradients: {
+      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
+      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
+      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
+    },
     carousel: {
       padding: 'p-8 px-16 pb-12',
       root: '',
