@@ -26,6 +26,7 @@ export default defineAppConfig({
       },
     },
     main: 'pt-[10rem]',
+    container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
     mediaRounded: 'rounded-xl',
     aspectRatios: {
@@ -50,16 +51,14 @@ export default defineAppConfig({
     },
     grid: {
       cols: {
-        one_column: 'sm:grid-cols-1 lg:grid-cols-1',
-        two_column: 'sm:grid-cols-1 lg:grid-cols-2',
+        one_column: '',
+        two_column: 'lg:grid-cols-2',
         three_column: 'sm:grid-cols-2 lg:grid-cols-3',
         four_column: 'sm:grid-cols-2 lg:grid-cols-4',
       },
       wrapCols: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
-      container: 'mx-auto container px-4 md:px-5',
       gap: 'gap-4 md:gap-6 lg:gap-10',
       viewGap: 'gap-5 lg:gap-10 xl:gap-16',
-      smBasis: '',
       // separator: {
       //   condition: 'node-',
       //   base: 'mt-16 mb-10 xl:mt-28 max-w-screen-sm lg:w-[20rem] mx-auto',

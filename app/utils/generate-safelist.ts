@@ -41,7 +41,16 @@ breakpoints.forEach((bp) => {
 })
 
 // ✅ Add additional required classes
-const additionalClasses = ['sm:columns-2', 'lg:block', 'mx-auto', 'm-auto']
+const additionalClasses = [
+  'sm:columns-2',
+  'lg:block',
+  'mx-auto',
+  'm-auto',
+  'lg:w-lg',
+  'lg:w-2xl',
+  'lg:w-3xl',
+  'lg:w-4xl',
+]
 
 additionalClasses.forEach((cls) => safelist.add(cls))
 

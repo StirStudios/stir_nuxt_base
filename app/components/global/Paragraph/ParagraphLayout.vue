@@ -25,17 +25,18 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
-  const { container, cols, gap } = appConfig.stirTheme.grid
+  const container = appConfig.stirTheme.container
+  const { cols, gap } = appConfig.stirTheme.grid
 
   return (layout: SectionProps) => {
     // Retrieve grid class for layout directly from config
-    const gridClass = cols[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
+    const gridClass = cols[layout.layout] || ''
     const appliedContainerClass = layout.container ? container : ''
 
     return [
       'grid',
       'grid-cols-1', // Base grid definition
-      gap, // Apply responsive gap from config
+      gridClass ? gap : '', // Only add gap if gridClass is set
       gridClass, // Combined responsive grid class from config
       appliedContainerClass,
     ]
@@ -91,32 +92,33 @@ const getNodeProps = (item) => {
   <template v-for="layout in section" :key="layout.id">
     <section
       v-if="isValidParagraphLayout(layout)"
-      :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
+      :id="layout.label ?? null"
+      :class="[
+        layout.classes || 'content',
+        layout.spacing,
+        layout.width,
+        getClassForLayout(layout),
+      ]"
     >
       <template v-if="layout.header">
         <h2 v-html="layout.header" />
       </template>
       <div
-        :id="layout.label ?? null"
-        :class="[layout.width, getClassForLayout(layout)]"
+        v-for="regionItem in layout.regions"
+        :key="regionItem[0]?.uuid"
+        :class="regionItem[0].region"
       >
-        <div
-          v-for="regionItem in layout.regions"
-          :key="regionItem[0]?.uuid"
-          :class="regionItem[0].region"
-        >
-          <template v-for="item in regionItem" :key="item.uuid">
-            <article>
-              <component
-                :is="resolveComponent(item.element)"
-                v-bind="getNodeProps(item)"
-              />
-            </article>
-          </template>
-        </div>
+        <template v-for="item in regionItem" :key="item.uuid">
+          <article>
+            <component
+              :is="resolveComponent(item.element)"
+              v-bind="getNodeProps(item)"
+            />
+          </article>
+        </template>
       </div>
     </section>
-    <section v-else class="container mx-auto">
+    <section v-else :class="appConfig.stirTheme.grid.container">
       <component
         v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
