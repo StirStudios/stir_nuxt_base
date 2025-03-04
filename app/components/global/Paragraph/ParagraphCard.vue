@@ -22,7 +22,7 @@ const gradientClass = computed(() => {
       :wrapper="item?.animate === true ? 'div' : undefined"
     >
       <div
-        class="relative isolate overflow-hidden rounded-xl py-16 text-white sm:py-24 lg:py-32"
+        class="relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-24 lg:py-32"
       >
         <div class="mx-auto max-w-7xl px-6 md:px-12">
           <div
@@ -37,14 +37,12 @@ const gradientClass = computed(() => {
             </div>
 
             <div class="flex-1">
-              <div
-                class="mx-auto max-w-xl text-center lg:max-w-lg lg:text-left"
-              >
+              <div class="mx-auto max-w-xl lg:max-w-lg lg:text-center">
                 <h3 class="text-xl font-bold tracking-tight md:text-3xl">
                   {{ item.header }}
                 </h3>
                 <div
-                  :class="['mt-4', item.classes || 'content']"
+                  :class="['mt-4', item.classes || 'content prose']"
                   v-html="item.text"
                 ></div>
                 <div class="mt-6">
@@ -63,7 +61,7 @@ const gradientClass = computed(() => {
         </div>
 
         <div
-          class="absolute left-1/2 top-0 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
+          class="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
           aria-hidden="true"
         >
           <div

@@ -1,0 +1,115 @@
+/* Tailwind & Nuxt UI imports */
+@import 'tailwindcss' theme(static);
+@import '@nuxt/ui';
+
+/* Safelist for dynamic Tailwind classes */
+@source "./safelist.txt";
+
+/* Tailwind Theme Variables */
+@theme static {
+  --font-sans: 'InterVariable', system-ui, sans-serif;
+
+  --container-8xl: 96rem;
+
+  --color-white: #ffffff;
+  --color-black: #14161a;
+}
+
+:root {
+  --ui-container: var(--container-8xl);
+}
+
+/* Base Layer - Global styles */
+@layer base {
+  /* Headings */
+  h1,
+  h2 {
+    @apply font-serif;
+  }
+
+  h1,
+  .display-h1 {
+    @apply mb-2 text-center text-5xl font-normal md:text-7xl;
+  }
+
+  h2,
+  .display-h2 {
+    @apply mb-5 text-3xl font-medium md:text-4xl;
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+
+  /* Section Prose Styling */
+  section {
+    .prose {
+      p,
+      ul,
+      ol {
+        @apply my-6;
+      }
+      p,
+      ul > li,
+      ol > li {
+        @apply leading-7;
+      }
+      ul > li,
+      ol > li {
+        @apply ms-4 list-disc;
+      }
+      a {
+        @apply text-primary-500;
+      }
+    }
+    .desc {
+      p {
+        @apply mb-6 leading-7 last:mb-0;
+      }
+    }
+  }
+
+  /* Blockquotes */
+  blockquote {
+    @apply text-lg;
+    em {
+      @apply text-sm;
+    }
+  }
+}
+
+/* Attribute-based selectors must be placed outside of @layer */
+[aria-roledescription='carousel'] img {
+  @apply m-auto aspect-1/1 object-cover;
+}
+
+/* Component-Specific Styles */
+@layer components {
+  .aos-init,
+  .aos-animate {
+    @apply opacity-0;
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  .w-xxs {
+    @apply mx-auto max-w-screen-sm;
+  }
+
+  .w-xs {
+    @apply mx-auto max-w-xs lg:max-w-2xl;
+  }
+
+  .w-sm {
+    @apply mx-auto max-w-sm sm:max-w-xl lg:max-w-6xl;
+  }
+
+  .w-md {
+    @apply mx-auto max-w-md sm:max-w-2xl lg:max-w-4xl;
+  }
+
+  .w-lg {
+    @apply mx-auto max-w-lg sm:max-w-3xl lg:max-w-5xl;
+  }
+}
