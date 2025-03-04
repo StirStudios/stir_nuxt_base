@@ -89,6 +89,11 @@ mb-20
 ml-20
 mx-20
 my-20
+w-xxs
+w-xs
+w-sm
+w-md
+w-lg
 sm:basis-1/1
 sm:basis-1/2
 sm:basis-1/3
@@ -180,6 +185,11 @@ sm:mb-20
 sm:ml-20
 sm:mx-20
 sm:my-20
+sm:w-xxs
+sm:w-xs
+sm:w-sm
+sm:w-md
+sm:w-lg
 md:basis-1/1
 md:basis-1/2
 md:basis-1/3
@@ -271,6 +281,11 @@ md:mb-20
 md:ml-20
 md:mx-20
 md:my-20
+md:w-xxs
+md:w-xs
+md:w-sm
+md:w-md
+md:w-lg
 lg:basis-1/1
 lg:basis-1/2
 lg:basis-1/3
@@ -362,6 +377,11 @@ lg:mb-20
 lg:ml-20
 lg:mx-20
 lg:my-20
+lg:w-xxs
+lg:w-xs
+lg:w-sm
+lg:w-md
+lg:w-lg
 xl:basis-1/1
 xl:basis-1/2
 xl:basis-1/3
@@ -453,4 +473,9 @@ xl:mb-20
 xl:ml-20
 xl:mx-20
 xl:my-20
+xl:w-xxs
+xl:w-xs
+xl:w-sm
+xl:w-md
+xl:w-lg
 sm:columns-2
