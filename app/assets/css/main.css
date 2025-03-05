@@ -1,9 +1,8 @@
-@import 'tailwindcss';
+@import 'tailwindcss' theme(static);
 @import '@nuxt/ui';
+@import './typography';
 
-@source "./safelist.txt";
-
-@theme {
+@theme static {
   --font-sans: 'InterVariable', system-ui, sans-serif;
   --color-black: #14161a;
 
@@ -17,67 +16,4 @@
   --color-primary-700: var(--ui-color-primary-700);
   --color-primary-800: var(--ui-color-primary-800);
   --color-primary-900: var(--ui-color-primary-900);
-}
-
-@layer base {
-  /* General styles */
-  * {
-    @apply antialiased;
-  }
-
-  /* Headings */
-  h1,
-  h2 {
-    @apply font-serif;
-  }
-
-  h1,
-  .display-h1 {
-    @apply mb-2 text-center text-5xl font-normal md:text-7xl;
-  }
-
-  h2,
-  .display-h2 {
-    @apply mb-5 text-3xl font-medium md:text-4xl;
-  }
-
-  h3 {
-    @apply text-lg;
-  }
-
-  /* Section Prose Styling */
-  section {
-    .prose {
-      p,
-      ul,
-      ol {
-        @apply my-6;
-      }
-      p,
-      ul > li,
-      ol > li {
-        @apply leading-7;
-      }
-      ul > li,
-      ol > li {
-        @apply ms-4 list-disc;
-      }
-      a {
-        @apply text-primary-500;
-      }
-    }
-    .desc {
-      p {
-        @apply mb-6 leading-7 last:mb-0;
-      }
-    }
-  }
-
-  /* Blockquotes */
-  blockquote {
-    @apply text-lg;
-  }
-  blockquote em {
-    @apply text-sm;
-  }
 }
