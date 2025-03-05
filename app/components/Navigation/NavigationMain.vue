@@ -79,7 +79,9 @@ onBeforeUnmount(() => {
     }"
     role="navigation"
   >
-    <UContainer>
+    <div
+      :class="`${appConfig.stirTheme.container} mx-auto flex flex-wrap items-center justify-between`"
+    >
       <div class="mx-auto flex flex-wrap items-center justify-between">
         <div class="order-1">
           <ULink aria-label="Site Logo" class="font-bold" to="/">
@@ -135,7 +137,7 @@ onBeforeUnmount(() => {
           </ClientOnly>
         </div>
       </div>
-    </UContainer>
+    </div>
   </nav>
   <USlideover v-model:open="isOpen" title="Menu">
     <template #header>
