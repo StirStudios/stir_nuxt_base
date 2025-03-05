@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
   await useDrupalCe()
-const { isAdministrator, bodyClasses } = usePageContext()
+const { bodyClasses } = usePageContext()
 const appConfig = useAppConfig()
 
 const route = useRoute()
