@@ -12,26 +12,26 @@
     "lint": "eslint --ext .ts,.js,.vue, --ignore-path .gitignore .",
     "release": "release-it"
   },
-  "devDependencies": {
-    "@types/node": "^22.13.4",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
-    "@vue/eslint-config-typescript": "^14.4.0",
-    "eslint": "^9.20.1",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-vue": "^9.32.0",
-    "prettier": "^3.5.1",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "release-it": "^18.1.2",
-    "vue-eslint-parser": "^9.4.3"
-  },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "https://pkg.pr.new/@nuxt/ui@e7e7585",
+    "@nuxt/ui": "3.0.0-beta.2",
     "nuxt": "^3.15.4",
     "nuxtjs-drupal-ce": "^2.2.5",
-    "tailwindcss": "4.0.6"
+    "tailwindcss": "4.0.10"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
+    "@vue/eslint-config-typescript": "^14.4.0",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.2",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-vue": "^10.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "release-it": "^18.1.2",
+    "vue-eslint-parser": "^10.1.1"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
