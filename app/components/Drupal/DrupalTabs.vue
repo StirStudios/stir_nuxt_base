@@ -94,8 +94,8 @@ const links = computed(() => {
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-black dark:text-white',
     }"
-    content-orientation="vertical"
     highlight
     highlight-color="primary"
+    content-orientation="vertical"
   />
 </template>
