@@ -25,18 +25,18 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@types/node": "^22.13.5",
-    "@typescript-eslint/eslint-plugin": "^8.25.0",
-    "@typescript-eslint/parser": "^8.25.0",
+    "@types/node": "^22.13.9",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
     "@vue/eslint-config-typescript": "^14.4.0",
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-vue": "^9.32.0",
-    "prettier": "^3.5.2",
+    "eslint-plugin-vue": "^10.0.0",
+    "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "release-it": "^18.1.2",
-    "vue-eslint-parser": "^9.4.3"
+    "vue-eslint-parser": "^10.0.0"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",

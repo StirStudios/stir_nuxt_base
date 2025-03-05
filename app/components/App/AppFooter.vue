@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { usePageContext } from '~/composables/usePageContext'
 
-const { page, isAdministrator } = usePageContext()
+const { page } = usePageContext()
 const appConfig = useAppConfig()
 const siteInfo = computed<SiteInfoProps>(
   () => page.value?.site_info ?? { name: '', slogan: '', mail: '' },
