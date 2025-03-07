@@ -1,0 +1,65 @@
+@layer base {
+  /* Headings */
+  h1,
+  h2 {
+    @apply font-serif;
+  }
+
+  h1,
+  .display-h1 {
+    @apply clamp(3rem,4vw,4.5rem) mb-2 font-normal; /* text-5xl - md:text-7xl */
+  }
+
+  h2,
+  .display-h2 {
+    @apply clamp(1.875rem,4vw,2.25rem) mb-5 font-medium; /* text-3xl font-medium md:text-4xl */
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+
+  a,
+  button {
+    @apply cursor-pointer;
+  }
+
+  /* Section Prose Styling */
+  section {
+    .prose {
+      p,
+      ul,
+      ol {
+        @apply py-3 leading-7;
+      }
+
+      p,
+      ul > li,
+      ol > li {
+        @apply leading-7;
+      }
+
+      ul > li,
+      ol > li {
+        @apply ms-4 list-disc;
+      }
+
+      a {
+        @apply text-primary-500;
+      }
+    }
+  }
+
+  /* Blockquotes */
+  blockquote {
+    @apply text-lg;
+    em {
+      @apply text-sm;
+    }
+  }
+
+  .aos-init,
+  .aos-animate {
+    @apply opacity-0;
+  }
+}
