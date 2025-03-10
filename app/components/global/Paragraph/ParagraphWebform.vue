@@ -1,74 +1,104 @@
 <script setup lang="ts">
-import type { WebformProps } from '~/types/FormTypes'
-import { object, string, type InferType } from 'yup'
+import { evaluateVisibility } from '~/utils/evaluateVisibility'
+import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
+import { buildYupSchema } from '~/utils/buildYupSchema'
+import { useScroll } from '~/composables/useScroll'
+import { useValidation } from '~/composables/useValidation'
 
+const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
+  webform: {} as WebformDefinition,
+})
+
+// Composables & Utilities
+const { onError } = useValidation()
+const { scrollToTop } = useScroll()
 const toast = useToast()
-
-const props = defineProps<WebformProps>()
-
-// Reactive state for form data and CSRF token
-const formData = reactive<{ [key: string]: string }>({})
-const csrfToken = ref('')
-const webformId = props.webform[0]?.webformId
-const webformSubmissions = props.webform[0]?.webformSubmissions
 const config = useRuntimeConfig()
+const appConfig = useAppConfig()
 const siteApi = config.public.api
-const turnstile = ref()
+
+// Destructure webform props
+const {
+  fields = {},
+  webformId = '',
+  webformSubmissions = '',
+  webformConfirmation = '',
+  actions = [],
+} = props.webform
+
+// Reactive state
+const csrfToken = ref('')
+const turnstileToken = ref('')
+const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
+const errors = ref<Record<string, string>>({})
 
-// Reactive state for form fields
-const state = reactive<{ [key: string]: any }>({})
+// Compute Yup schema dynamically
+const schema = computed(() => buildYupSchema(fields, state))
 
-// Dynamic schema creation based on webform fields
-const schema = object(
-  Object.keys(props.webform[0].fields).reduce(
-    (acc, fieldName) => {
-      const field = props.webform[0].fields[fieldName]
-      if (field['#type'] === 'email') {
-        acc[fieldName] = string()
-          .email('Invalid email format')
-          .required(field['#requiredError'] || 'Email is required')
-          .nullable()
-      } else {
-        acc[fieldName] = field['#required']
-          ? string()
-              .required(field['#requiredError'] || 'Required')
-              .nullable()
-          : string().nullable()
-      }
-      return acc
-    },
-    {} as { [key: string]: any },
-  ),
+// Maintain API order of fields
+const orderedFieldNames = computed(() => Object.keys(fields))
+
+// Determine submit button label from actions
+const submitButtonLabel = computed(
+  () => actions[0]?.['#submit_Label'] || 'Submit',
 )
 
-// Infer the schema type for TypeScript
-type Schema = InferType<typeof schema>
+// Group fields dynamically for better rendering
+const groupedFields = computed(() => {
+  const grouped: Record<string, string[]> = {}
 
-// Initialize the state with dynamic fields on mounted
-onMounted(async () => {
-  try {
-    // Fetch the CSRF token
-    const { data: csrfData } = await useFetch('/api/token')
-    csrfToken.value = csrfData.value?.csrfToken || ''
-
-    // Initialize formData and state for dynamic fields from props
-    const fields = props.webform[0]?.fields || {}
-    for (const field in fields) {
-      formData[field] = ''
-      state[field] = '' // Initialize state as well for reactivity
+  orderedFieldNames.value.forEach((fieldName) => {
+    const parent = fields[fieldName]?.parent
+    if (parent) {
+      if (!grouped[parent]) grouped[parent] = []
+      grouped[parent].push(fieldName)
     }
-  } catch (error) {
-    console.error('Error fetching CSRF token:', error)
+  })
+
+  return grouped
+})
+
+// Initialize state with form defaults
+onMounted(() => {
+  for (const [key, field] of Object.entries(fields)) {
+    if (field['#composite']) {
+      state[key] = state[key] || {} // Ensure it's an object
+      for (const subKey in field['#composite']) {
+        state[key][subKey] =
+          state[key][subKey] || field['#composite'][subKey]['value'] || ''
+      }
+    } else {
+      state[key] = field['#default'] || ''
+    }
   }
 })
 
-// Submission handler
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+// Helper functions for field rendering
+const shouldRenderGroupContainer = (fieldName: string) =>
+  fields[fieldName]?.parent &&
+  groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName
+
+const getGroupFields = (parentName: string) =>
+  groupedFields.value[parentName] || []
+
+const shouldRenderIndividualField = (fieldName: string) =>
+  !fields[fieldName]?.parent
+
+const isContainerVisible = (containerName: string) =>
+  getGroupFields(containerName).some((fieldName) =>
+    evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
+  )
+
+// Form submission handler
+async function onSubmit(event: FormSubmitEvent<any>) {
   isLoading.value = true
+  errors.value = {}
+
   try {
-    if (!config.public.turnstileDisable && !turnstile.value) {
+    // Validate CAPTCHA if required
+    if (!config.public.turnstileDisable && !turnstileToken.value) {
       toast.add({
         title: 'Error',
         description: 'Please complete the CAPTCHA',
@@ -77,18 +107,21 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       return
     }
 
-    // Populate formData with values from state
-    Object.keys(state).forEach((fieldName) => {
-      formData[fieldName] = state[fieldName] || ''
-    })
+    // Fetch CSRF Token
+    const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
+      '/api/getCsrfToken',
+    )
+    csrfToken.value = token
 
+    // Prepare payload
     const payload = {
       webform_id: webformId,
-      ...formData,
+      turnstile_token: turnstileToken.value || '',
+      ...transformPayloadToSnakeCase(state),
     }
 
-    // Send the form submission
-    const { data: submitData, error: submitError } = await useFetch(
+    // Submit form data
+    const { data: submitData, error: submitError } = await $fetch(
       `${siteApi}/api/stir_webform_rest/submit`,
       {
         method: 'POST',
@@ -100,35 +133,40 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       },
     )
 
-    if (submitError.value) {
+    // Handle submission errors
+    if (submitError?.value) {
       toast.add({
         title: 'Error',
-        description: 'Error submitting form: ' + submitError.value,
-        color: 'red',
+        description: `Error submitting form: ${submitError.value}`,
+        color: 'error',
       })
       return
+    }
+
+    // Success handling
+    scrollToTop()
+    toast.add({
+      title: 'Success!',
+      description: 'Form submitted successfully!',
+      color: 'success',
+    })
+
+    // Reset form state
+    Object.keys(state).forEach((key) => (state[key] = ''))
+    turnstileToken.value = ''
+    isFormSubmitted.value = true
+  } catch (validationError) {
+    if (validationError.inner) {
+      validationError.inner.forEach((err: any) => {
+        errors.value[err.path] = err.message
+      })
     } else {
       toast.add({
-        title: 'Success!',
-        description: 'Form submitted successfully!',
-        color: 'lime',
+        title: 'Validation Error',
+        description: validationError.message || 'Unknown validation error',
+        color: 'error',
       })
     }
-
-    // Clear form state and formData after successful submission
-    for (const field in state) {
-      state[field] = ''
-      formData[field] = ''
-    }
-
-    isLoading.value = false
-    isFormSubmitted.value = true
-  } catch (error) {
-    toast.add({
-      title: 'Error',
-      description: 'Error during submission: ' + error.message,
-      color: 'red',
-    })
   } finally {
     isLoading.value = false
   }
@@ -140,71 +178,69 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <EditLink :link="webformSubmissions" />
     <UForm
       v-if="!isFormSubmitted"
-      class="mx-auto space-y-4 md:max-w-lg"
-      :schema="schema"
       :state="state"
+      :schema="schema"
+      :class="appConfig.stirTheme.webform.form"
       @submit="onSubmit"
+      @error="onError"
     >
       <template
-        v-for="(field, fieldName) in webform[0].fields"
+        v-for="(fieldName, index) in orderedFieldNames"
         :key="fieldName"
       >
-        <UFormGroup
-          :description="field['#description']"
-          :label="field['#title']"
-          :name="fieldName"
-          :ui="{
-            label: {
-              base: 'text-sm block mb-1 font-medium text-gray-200 dark:text-gray-200',
-            },
-            help: 'mt-0 text-sm text-gray-500 dark:text-gray-400 italic pt-2 pb-0',
-            error: 'mt-2 py-0 text-red-500 dark:text-red-400 text-sm',
-          }"
+        <template
+          v-if="
+            shouldRenderGroupContainer(fieldName) &&
+            isContainerVisible(fields[fieldName]?.parent)
+          "
         >
-          <UInput
-            v-if="field['#type'] === 'textfield' || field['#type'] === 'email'"
-            v-model="state[fieldName]"
-            :placeholder="field['#placeholder']"
-            :type="field['#type']"
+          <h2 :class="appConfig.stirTheme.webform.fieldGroupHeader">
+            {{ fields[fieldName]?.parent }}
+          </h2>
+          <div :class="appConfig.stirTheme.webform.fieldGroup">
+            <template
+              v-for="groupedFieldName in getGroupFields(
+                fields[fieldName]?.parent,
+              )"
+              :key="groupedFieldName"
+            >
+              <FieldRenderer
+                :field="fields[groupedFieldName]"
+                :fieldName="groupedFieldName"
+                :state="state"
+              />
+            </template>
+          </div>
+        </template>
+
+        <template v-else-if="shouldRenderIndividualField(fieldName)">
+          <FieldRenderer
+            :field="fields[fieldName]"
+            :fieldName="fieldName"
+            :state="state"
           />
-          <UTextarea
-            v-if="field['#type'] === 'textarea'"
-            v-model="state[fieldName]"
-            :placeholder="field['#placeholder']"
-          />
-          <template v-if="field['#help']" #help>
-            {{ field['#help'] }}
-          </template>
-        </UFormGroup>
+        </template>
       </template>
-      <template v-for="action in webform[0].actions" :key="action['#type']">
-        <p
-          class="mb-1 block pb-0 text-sm font-medium text-gray-700 dark:text-gray-200"
-        >
-          Let us know you're human
-        </p>
-        <ClientOnly>
-          <NuxtTurnstile v-model="turnstile" />
-        </ClientOnly>
-        <UButton
-          :label="action['#submit_Label']"
-          :loading="isLoading"
-          size="lg"
-          type="submit"
+
+      <div v-if="!config.public.turnstileDisable">
+        <p class="mb-2 text-sm font-medium">Let us know you’re human</p>
+        <NuxtTurnstile
+          v-model="turnstileToken"
+          sitekey="your-turnstile-site-key"
         />
-      </template>
+      </div>
+
+      <UButton
+        :label="actions[0]?.['#submit_Label'] || 'Submit'"
+        :loading="isLoading"
+        type="submit"
+      />
     </UForm>
-    <UNotification
+
+    <div
       v-else
-      :id="webformId"
-      class="mx-auto md:max-w-lg"
-      color="lime"
-      icon="i-heroicons-check-circle"
-      :timeout="0"
-    >
-      <template #description="{ description }">
-        <span v-html="webform[0].webformConfirmation" />
-      </template>
-    </UNotification>
+      :class="`${appConfig.stirTheme.webform.response} prose`"
+      v-html="webformConfirmation"
+    />
   </WrapNone>
 </template>

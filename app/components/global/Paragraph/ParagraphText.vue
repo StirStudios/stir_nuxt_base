@@ -15,7 +15,7 @@ defineProps<{
     >
       <div
         :class="[
-          item.classes ? item.classes : 'content',
+          [item.classes, 'prose'].filter(Boolean).join(' '),
           item.width,
           item.spacing,
         ]"

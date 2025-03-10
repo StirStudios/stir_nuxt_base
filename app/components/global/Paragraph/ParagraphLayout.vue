@@ -25,17 +25,18 @@ const isValidParagraphLayout = computed(() => {
 })
 
 const getClassForLayout = computed(() => {
-  const { container, cols, gap } = appConfig.stirTheme.grid
+  const container = appConfig.stirTheme.container
+  const { cols, gap } = appConfig.stirTheme.grid
 
   return (layout: SectionProps) => {
     // Retrieve grid class for layout directly from config
-    const gridClass = cols[layout.layout] || 'sm:grid-cols-1 lg:grid-cols-1'
+    const gridClass = cols[layout.layout] || ''
     const appliedContainerClass = layout.container ? container : ''
 
     return [
       'grid',
       'grid-cols-1', // Base grid definition
-      gap, // Apply responsive gap from config
+      gridClass ? gap : '', // Only add gap if gridClass is set
       gridClass, // Combined responsive grid class from config
       appliedContainerClass,
     ]
@@ -48,12 +49,14 @@ const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
       item: item,
-      amount: item.carouselCount,
+      amount: item.gridItems,
       header: item.header,
       indicators: item.carouselIndicators,
       arrows: item.carouselArrows,
+      fade: item.carouselFade,
+      autoscroll: item.carouselAutoscroll,
       interval: item.carouselInterval,
-      items: item.media || item.textRepeat || [],
+      items: item.media,
       width: item.width,
     }
   } else if (item.element === 'paragraph-view') {
@@ -63,10 +66,12 @@ const getNodeProps = (item) => {
         carousel: item.carousel,
         carouselIndicators: item.carouselIndicators,
         carouselArrows: item.carouselArrows,
+        carouselFade: item.carouselFade,
+        carouselAutoscroll: item.carouselAutoscroll,
         carouselInterval: item.carouselInterval,
         spacing: item.spacing,
         width: item.width,
-        gridCount: item.gridCount,
+        gridItems: item.gridItems,
         animate: item.animate,
         direction: item.direction,
       },
@@ -75,8 +80,6 @@ const getNodeProps = (item) => {
     return {
       webform: item.webform,
     }
-  } else if (item.element === 'field-entity-reference-revisions') {
-    return null
   } else {
     return {
       item: item,
@@ -92,7 +95,7 @@ const getNodeProps = (item) => {
       :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
     >
       <template v-if="layout.header">
-        <h2 v-html="layout.header" />
+        <h2 :class="appConfig.stirTheme.container" v-html="layout.header" />
       </template>
       <div
         :id="layout.label ?? null"
@@ -114,7 +117,7 @@ const getNodeProps = (item) => {
         </div>
       </div>
     </section>
-    <section v-else class="container mx-auto">
+    <section v-else :class="appConfig.stirTheme.container">
       <component
         v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"

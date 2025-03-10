@@ -12,9 +12,9 @@ const modal = ref(false)
 </script>
 
 <template>
-  <div v-if="props.media && props.media.length" class="space-y-4">
+  <div v-if="media && media.length" class="space-y-4">
     <div
-      v-for="(item, index) in props.media"
+      v-for="(item, index) in media"
       :key="index"
       :class="[appConfig.stirTheme.mediaRounded, 'overflow-hidden']"
     >
@@ -52,71 +52,60 @@ const modal = ref(false)
           <span class="sr-only">Play Video</span>
         </button>
       </div>
-
       <UModal
+        v-model:open="modal"
         fullscreen
-        v-model="modal"
-        aria-labelledby="modal-title"
-        role="dialog"
-        :ui="{
-          background: 'bg-none',
-          shadow: 'shadow-none',
-        }"
+        :title="item.alt"
+        :description="item.alt"
       >
-        <UCard
-          :ui="{
-            background: 'bg-none',
-          }"
-        >
-          <template #header>
-            <div class="flex items-center justify-end">
-              <UButton
-                color="primary"
-                variant="solid"
-                icon="i-heroicons-x-mark-20-solid"
-                class="rounded-md"
-                @click="modal = false"
+        <template #header>
+          <div class="flex items-center justify-end">
+            <UButton
+              color="primary"
+              icon="i-heroicons-x-mark-20-solid"
+              variant="ghost"
+              class="rounded-md"
+              @click="modal = false"
+            />
+          </div>
+        </template>
+        <template #body>
+          <div
+            v-if="item.mediaEmbed"
+            class="flex min-h-[90vh] w-full items-center justify-center"
+          >
+            <div
+              :class="[
+                'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
+                appConfig.stirTheme.mediaRounded,
+                aspectRatios(item.width, item.height),
+              ]"
+            >
+              <iframe
+                v-if="modal"
+                :src="item.mediaEmbed"
+                :title="item.title"
+                class="absolute top-0 left-0 h-full w-full"
+                frameborder="0"
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                loading="lazy"
               />
             </div>
-          </template>
-
-          <template v-if="item.mediaEmbed">
-            <div class="flex min-h-[90vh] w-full items-center justify-center">
-              <div
-                :class="[
-                  'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
-                  appConfig.stirTheme.mediaRounded,
-                  aspectRatios(item.width, item.height),
-                ]"
-              >
-                <iframe
-                  v-if="modal"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  class="absolute left-0 top-0 h-full w-full"
-                  frameborder="0"
-                  loading="lazy"
-                  :src="item.mediaEmbed"
-                  :title="item.title"
-                />
-              </div>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="m-10 flex justify-center overflow-auto">
-              <img
-                :alt="item.alt"
-                :class="[
-                  appConfig.stirTheme.mediaRounded,
-                  'max-h-[80vh] w-auto object-contain',
-                ]"
-                :height="item.height"
-                :src="item.src"
-                :width="item.width"
-              />
-            </div>
-          </template>
-        </UCard>
+          </div>
+          <div v-else class="m-10 flex justify-center overflow-auto">
+            <img
+              :alt="item.alt"
+              :class="[
+                appConfig.stirTheme.mediaRounded,
+                'max-h-[80vh] w-auto object-contain',
+              ]"
+              :src="item.src"
+              :width="item.width"
+              :height="item.height"
+            />
+          </div>
+        </template>
       </UModal>
     </div>
   </div>

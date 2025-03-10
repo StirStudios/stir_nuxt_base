@@ -1,91 +1,101 @@
 <script setup lang="ts">
-import type { TabsProps } from '~/types/NavigationTypes'
+import { usePageContext } from '~/composables/usePageContext'
 
-const props = defineProps<TabsProps>()
+const { page } = usePageContext()
 const config = useRuntimeConfig()
 const siteApi = config.public.api
 
-// Function to format local task links
-const getLocalTaskLinks = () => {
-  return props.tabs.primary.map((tab) => ({
-    label: tab.label,
-    to: tab.url,
-    icon: filterIconByLabel(tab.label),
-  }))
+const { fetchMenu } = useDrupalCe()
+const accountMenu = ref([])
+
+const tabs = computed(
+  () => page.value?.local_tasks ?? { primary: [], secondary: [] },
+)
+const user = computed(() => page.value?.current_user)
+
+function getIconForLabel(label: string): string | null {
+  const iconMap: Record<string, string> = {
+    'Drupal CMS': 'i-heroicons-home',
+    Settings: 'i-heroicons-cog',
+    View: 'i-heroicons-eye',
+    Edit: 'i-heroicons-pencil',
+    Delete: 'i-heroicons-trash',
+    Revisions: 'i-heroicons-document-duplicate',
+    Export: 'i-heroicons-arrow-up-tray',
+    API: 'i-heroicons-code-bracket',
+    'Log out': 'i-heroicons-arrow-left-start-on-rectangle',
+    'My account': 'i-heroicons-user-circle',
+  }
+
+  return iconMap[label] || null
 }
 
-// Custom function to filter icons based on tab labels
-const filterIconByLabel = (label: string) => {
-  switch (label) {
-    case 'View':
-      return 'i-heroicons-eye'
-    case 'Edit':
-      return 'i-heroicons-pencil'
-    case 'Delete':
-      return 'i-heroicons-trash'
-    case 'Revisions':
-      return 'i-heroicons-document-duplicate'
-    case 'Export':
-      return 'i-heroicons-arrow-up-tray'
-    case 'API':
-      return 'i-heroicons-code-bracket'
-    default:
-      return null
+// Load account menu items and dynamically assign icons
+async function loadAccountMenu() {
+  try {
+    const menuResponse = await fetchMenu('account')
+    const menuItems = Array.isArray(menuResponse?._value)
+      ? menuResponse._value
+      : []
+
+    accountMenu.value = menuItems.map((item) => ({
+      label: item.title,
+      to: item.relative || item.url,
+      icon: getIconForLabel(item.title),
+    }))
+  } catch (error) {
+    console.error('Error fetching account menu:', error)
   }
 }
 
-let links = []
+await loadAccountMenu()
 
-if (props.tabs.primary && props.tabs.primary.length > 0) {
-  links = [
-    [
-      {
-        label: 'Drupal CMS',
-        icon: 'i-heroicons-home',
-        to: `${siteApi}/admin/content`,
-      },
-    ],
-    [...getLocalTaskLinks()],
-    [
-      {
-        label: 'Log out',
-        icon: 'i-heroicons-arrow-left-start-on-rectangle',
-        to: `${siteApi}/user/logout`,
-      },
-    ],
-  ]
-} else {
-  links = [
-    [
-      {
-        label: 'Drupal CMS',
-        icon: 'i-heroicons-home',
-        to: `${siteApi}/admin/content`,
-      },
-    ],
-    [
-      {
-        label: 'Log out',
-        icon: 'i-heroicons-arrow-left-start-on-rectangle',
-        to: `${siteApi}/user/logout`,
-      },
-    ],
-  ]
+// Map tabs to navigation links and assign icons
+const getLocalTaskLinks = () => {
+  return tabs.value.primary.map((tab) => ({
+    label: tab.label,
+    to: tab.url,
+    icon: getIconForLabel(tab.label),
+  }))
 }
+
+// Dynamically compute navigation links
+const links = computed(() => {
+  const baseLinks = [
+    [
+      {
+        label: 'Drupal CMS',
+        icon: getIconForLabel('Drupal CMS'),
+        to: `${siteApi}/admin/content`,
+      },
+    ],
+  ]
+
+  const localTaskLinks = tabs.value.primary?.length ? [getLocalTaskLinks()] : []
+
+  const accountDropdown = [
+    {
+      label: user.value?.name || 'Account',
+      icon: getIconForLabel('My account'),
+      children: accountMenu.value,
+    },
+  ]
+
+  return [...baseLinks, ...localTaskLinks, accountDropdown]
+})
 </script>
 
 <template>
-  <div
-    aria-label="Admin navigation"
-    role="navigation"
-    class="md:px-auto sticky top-0 z-50 h-[3.1rem] w-full bg-zinc-200 px-4 px-8 text-black shadow shadow-gray-300 backdrop-blur-md dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
-  >
-    <UHorizontalNavigation
-      :links="links"
-      :ui="{
-        base: 'text-xs',
-        label: 'truncate relative hidden md:block',
-      }"
-    />
-  </div>
+  <UNavigationMenu
+    :items="links"
+    :ui="{
+      root: 'sticky top-0 z-50 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 p-4 shadow',
+      link: 'text-xs text-black dark:text-white',
+      linkLabel: 'hidden md:block',
+      linkLeadingIcon: 'text-black dark:text-white',
+    }"
+    highlight
+    highlight-color="primary"
+    content-orientation="vertical"
+  />
 </template>

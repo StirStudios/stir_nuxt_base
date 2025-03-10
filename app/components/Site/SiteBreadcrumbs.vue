@@ -21,10 +21,9 @@ const breadcrumbLinks = ref(
 </script>
 
 <template>
-  <UBreadcrumb
-    v-if="breadcrumbLinks.length > 0"
-    class="mx-auto max-w-7xl px-8 py-4"
-    divider="/"
-    :links="breadcrumbLinks"
-  />
+  <UBreadcrumb :items="breadcrumbLinks" v-if="breadcrumbLinks.length > 0">
+    <template #separator>
+      <span class="mx-2 text-(--ui-text-muted)">/</span>
+    </template>
+  </UBreadcrumb>
 </template>

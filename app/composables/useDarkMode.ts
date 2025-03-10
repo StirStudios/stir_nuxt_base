@@ -1,4 +1,4 @@
-export default function useColorModeToggle() {
+export default function useDarkMode() {
   const colorMode = useColorMode()
 
   const isDark = computed({
@@ -10,7 +10,5 @@ export default function useColorModeToggle() {
     },
   })
 
-  return {
-    isDark,
-  }
+  return { isDark, colorMode }
 }

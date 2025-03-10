@@ -29,10 +29,12 @@ export interface MediaProps {
 export interface CarouselProps extends LayoutProps {
   items: MediaProps[]
   header?: string
-  amount?: number
+  amount?: string
   interval?: number
   indicators?: boolean
   arrows?: boolean
+  fade?: boolean
+  autoscroll?: boolean
   width?: string
   vid?: string
 }

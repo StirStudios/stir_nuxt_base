@@ -7,31 +7,33 @@ const props = defineProps<{
   item: ViewItemProps
 }>()
 
+/**
+ * Computes the grid classes dynamically.
+ */
 const viewGridClasses = computed(() => {
-  const { viewCols, viewGap } = appConfig.stirTheme.grid
-  const gridCount = props.item.gridCount
-
-  return `grid ${viewGap} ${viewGrid[gridCount] || ''}`.trim()
+  const { viewGap } = appConfig.stirTheme.grid
+  return [viewGap, props.item.gridItems].filter(Boolean).join(' ')
 })
 
-const filteredRows = computed(
-  () =>
-    props.item.rows?.map((row) => ({
-      ...row,
-      section: row.section?.filter(
-        (node) => node.element !== 'paragraph-layout',
-      ),
-    })) || [],
-)
+/**
+ * Filters out 'paragraph-layout' sections.
+ */
+const filteredRows = computed(() => {
+  return (props.item.rows || []).map((row) => ({
+    ...row,
+    section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
+  }))
+})
 
-const getNodeProps = (node, title) => {
-  return {
-    item: {
-      title: title,
-      ...node,
-    },
-  }
-}
+/**
+ * Constructs node props dynamically.
+ */
+const getNodeProps = (node, title) => ({
+  item: {
+    title,
+    ...node,
+  },
+})
 </script>
 
 <template>
@@ -43,9 +45,11 @@ const getNodeProps = (node, title) => {
     <div :class="[!item.carousel ? item.width : '', item.spacing]">
       <template v-if="item.carousel">
         <ParagraphCarousel
-          :amount="item.gridCount"
+          :amount="item.gridItems"
           :indicators="item.carouselIndicators"
           :arrows="item.carouselArrows"
+          :fade="item.carouselFade"
+          :autoscroll="item.carouselAutoscroll"
           :interval="item.carouselInterval"
           :items="filteredRows"
           :vid="item.viewId"
@@ -58,6 +62,17 @@ const getNodeProps = (node, title) => {
             v-for="node in row.section"
             :key="node.uuid"
             v-bind="getNodeProps(node, row.title)"
+          />
+          <USeparator
+            v-if="
+              appConfig.stirTheme.grid.separator?.condition?.includes(
+                row.element,
+              )
+            "
+            :color="appConfig.stirTheme.grid.separator?.color"
+            :type="appConfig.stirTheme.grid.separator?.solid"
+            :size="appConfig.stirTheme.grid.separator?.size"
+            :class="appConfig.stirTheme.grid.separator?.base"
           />
         </div>
       </div>
