@@ -7,7 +7,7 @@ const appConfig = useAppConfig()
 const route = useRoute()
 const page = await fetchPage(route.path, { query: route.query })
 
-const layout = getPageLayout(page)
+const layout = getPageLayout(page) || 'default'
 
 useHead({
   htmlAttrs: {
