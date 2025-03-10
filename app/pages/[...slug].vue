@@ -1,13 +1,12 @@
 <script setup lang="ts">
-const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
-  await useDrupalCe()
+const { fetchPage, renderCustomElements, getPageLayout } = await useDrupalCe()
 const { bodyClasses } = usePageContext()
 const appConfig = useAppConfig()
 
 const route = useRoute()
 const page = await fetchPage(route.path, { query: route.query })
 
-const layout = getPageLayout(page) || 'default'
+const layout = getPageLayout(page)
 
 useHead({
   htmlAttrs: {
