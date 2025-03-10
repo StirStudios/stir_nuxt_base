@@ -7,12 +7,12 @@
 
   h1,
   .display-h1 {
-    @apply clamp(3rem,4vw,4.5rem) mb-2 font-normal; /* text-5xl - md:text-7xl */
+    @apply mb-2 text-center text-5xl font-normal md:text-7xl;
   }
 
   h2,
   .display-h2 {
-    @apply clamp(1.875rem,4vw,2.25rem) mb-5 font-medium; /* text-3xl font-medium md:text-4xl */
+    @apply mb-5 text-3xl font-medium md:text-4xl;
   }
 
   h3 {
