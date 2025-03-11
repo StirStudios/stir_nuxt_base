@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+// Tu run: node ./app/utils/generate-safelist.ts
+
 // Define breakpoints and common class prefixes
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
 const fractions = ['1/1', '1/2', '1/3', '1/4', '1/5']
@@ -50,6 +52,8 @@ const additionalClasses = [
   'lg:w-2xl',
   'lg:w-3xl',
   'lg:w-4xl',
+  'lg:grid-cols-[8fr_4fr]',
+  'lg:grid-cols-[4fr_8fr]',
 ]
 
 additionalClasses.forEach((cls) => safelist.add(cls))
