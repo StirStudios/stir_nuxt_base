@@ -29,7 +29,7 @@ const getClassForLayout = computed(() => {
   const defaultGap = appConfig.stirTheme.grid.gap || 'gap-4'
 
   return (layout: SectionProps) => {
-    const gridClass = layout.grid_class || 'grid-cols-1'
+    const gridClass = layout.gridClass || 'grid-cols-1'
     const appliedContainerClass = layout.container ? container : ''
 
     return [gridClass, defaultGap, appliedContainerClass]

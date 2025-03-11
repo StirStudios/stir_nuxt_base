@@ -7,6 +7,7 @@ export interface SectionProps extends LayoutProps {
   uuid: string
   layout?: string
   label?: string
+  gridClass?: string
   regions: Record<string, RegionItemProps[]>
 }
 
