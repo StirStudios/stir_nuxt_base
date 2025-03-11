@@ -32,7 +32,7 @@ const iconsSocialConfig = [
       :class="`${appConfig.stirTheme.container} grid gap-4 text-center md:text-center lg:grid-cols-2`"
     >
       <div class="rights lg:text-left">
-        <ul v-if="page.footer_menu" class="mb-3">
+        <ul v-if="page.footer_menu.length" class="mb-3">
           <li v-for="menuItem in page.footer_menu" :key="menuItem.title">
             <a class="item" :href="menuItem.url">
               {{ menuItem.title }}
