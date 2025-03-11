@@ -470,3 +470,5 @@ sm:w-lg
 lg:w-2xl
 lg:w-3xl
 lg:w-4xl
+lg:grid-cols-[8fr_4fr]
+lg:grid-cols-[4fr_8fr]

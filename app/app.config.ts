@@ -84,7 +84,8 @@ export default defineAppConfig({
       },
     },
     webform: {
-      form: 'space-y-8',
+      form: 'space-y-5',
+      labelsFloating: false,
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: '',
       response: 'space-y-8 text-center',
@@ -182,8 +183,18 @@ export default defineAppConfig({
     formField: {
       slots: {
         labelWrapper: 'block text-sm/6 font-medium',
-        container: 'mt-2',
-        error: 'mt-2 text-[var(--ui-error)]',
+        container: 'mt-1',
+        error: 'mt-1 text-[var(--ui-error)]',
+      },
+    },
+    input: {
+      defaultVariants: {
+        size: 'xl',
+      },
+    },
+    textarea: {
+      defaultVariants: {
+        size: 'xl',
       },
     },
     // carousel: {
