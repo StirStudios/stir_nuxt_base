@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
-  await useDrupalCe()
+const { fetchPage, renderCustomElements, getPageLayout } = await useDrupalCe()
 const { bodyClasses } = usePageContext()
 const appConfig = useAppConfig()
 

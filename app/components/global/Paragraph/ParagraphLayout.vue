@@ -26,20 +26,13 @@ const isValidParagraphLayout = computed(() => {
 
 const getClassForLayout = computed(() => {
   const container = appConfig.stirTheme.container
-  const { cols, gap } = appConfig.stirTheme.grid
+  const defaultGap = appConfig.stirTheme.grid.gap || 'gap-4'
 
   return (layout: SectionProps) => {
-    // Retrieve grid class for layout directly from config
-    const gridClass = cols[layout.layout] || ''
+    const gridClass = layout.gridClass || 'grid-cols-1'
     const appliedContainerClass = layout.container ? container : ''
 
-    return [
-      'grid',
-      'grid-cols-1', // Base grid definition
-      gridClass ? gap : '', // Only add gap if gridClass is set
-      gridClass, // Combined responsive grid class from config
-      appliedContainerClass,
-    ]
+    return [gridClass, defaultGap, appliedContainerClass]
       .filter(Boolean)
       .join(' ')
   }

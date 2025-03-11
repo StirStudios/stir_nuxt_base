@@ -7,7 +7,7 @@
 
   h1,
   .display-h1 {
-    @apply mb-2 text-5xl font-normal md:text-7xl;
+    @apply mb-2 text-center text-5xl font-normal md:text-7xl;
   }
 
   h2,

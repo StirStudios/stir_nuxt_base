@@ -35,6 +35,7 @@ export interface WebformFieldProps {
   '#requiredError'?: string
   '#options'?: Record<string, string>
   '#text'?: string
+  floatingLabel?: boolean
 }
 
 export interface WebformActionProps {
