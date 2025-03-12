@@ -16,7 +16,7 @@ const modal = ref(false)
     <div
       v-for="(item, index) in media"
       :key="index"
-      :class="[appConfig.stirTheme.mediaRounded, 'overflow-hidden']"
+      :class="[appConfig.stirTheme.media.rounded, 'overflow-hidden']"
     >
       <div
         :class="[
@@ -76,8 +76,8 @@ const modal = ref(false)
           >
             <div
               :class="[
-                'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
-                appConfig.stirTheme.mediaRounded,
+                appConfig.stirTheme.media.base,
+                appConfig.stirTheme.media.rounded,
                 aspectRatios(item.width, item.height),
               ]"
             >
@@ -97,7 +97,7 @@ const modal = ref(false)
             <img
               :alt="item.alt"
               :class="[
-                appConfig.stirTheme.mediaRounded,
+                appConfig.stirTheme.media.rounded,
                 'max-h-[80vh] w-auto object-contain',
               ]"
               :src="item.src"

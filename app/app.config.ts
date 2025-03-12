@@ -29,7 +29,10 @@ export default defineAppConfig({
     main: 'pt-[10rem]',
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
-    mediaRounded: 'rounded-xl',
+    media: {
+      base: 'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
+      rounded: 'rounded-xl',
+    },
     aspectRatios: {
       portrait: 'aspect-[9/16]',
       landscape: 'aspect-[16/9]',

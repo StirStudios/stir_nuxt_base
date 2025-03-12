@@ -16,8 +16,8 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
     <div
       v-if="item.mediaEmbed"
       :class="[
-        'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
-        appConfig.stirTheme.mediaRounded,
+        appConfig.stirTheme.media.base,
+        appConfig.stirTheme.media.rounded,
         aspectRatios(item.width, item.height),
       ]"
     >
@@ -48,7 +48,7 @@ const loadedImages = reactive<{ [key: string]: boolean }>({})
         :class="[
           'object-fit shadow-2xl transition-opacity duration-1000 ease-in-out',
           'media media-' + item.mid,
-          appConfig.stirTheme.mediaRounded,
+          appConfig.stirTheme.media.rounded,
           {
             'opacity-100': loadedImages[item.mid],
             'opacity-0': !loadedImages[item.mid],
