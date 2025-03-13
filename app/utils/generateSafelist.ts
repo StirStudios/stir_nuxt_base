@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-// Tu run: node ./app/utils/generate-safelist.ts
+// Tu run: node ./app/utils/generateSafelist.ts
 
 // Define breakpoints and common class prefixes
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
