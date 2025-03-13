@@ -15,9 +15,7 @@ const appConfig = useAppConfig()
     >
       Skip to main content
     </a>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <NuxtPage />
     <LazyAppScrollToTop />
   </UApp>
 </template>
