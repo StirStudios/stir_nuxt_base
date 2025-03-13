@@ -52,7 +52,7 @@ const filteredRows = computed(() => {
             :is="
               componentExists(props.item.element)
                 ? resolveComponent(props.item.element)
-                : 'paragraph-view-default'
+                : 'ParagraphDefault'
             "
             v-bind="{ item: row }"
           />

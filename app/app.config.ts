@@ -30,7 +30,7 @@ export default defineAppConfig({
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
     media: {
-      base: 'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
+      base: 'relative w-full overflow-hidden rounded-xl',
       rounded: 'rounded-xl',
     },
     aspectRatios: {

@@ -50,12 +50,12 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    // [
-    //   '@nuxtjs/turnstile',
-    //   {
-    //     siteKey: `${process.env.TURNSTILE_KEY}`,
-    //   },
-    // ],
+    [
+      '@nuxtjs/turnstile',
+      {
+        siteKey: `${process.env.TURNSTILE_KEY}`,
+      },
+    ],
     [
       '@nuxtjs/robots',
       {

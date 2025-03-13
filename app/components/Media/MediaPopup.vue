@@ -22,19 +22,10 @@ const modal = ref(false)
         :class="[
           'relative transform-gpu overflow-hidden transition-transform duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
-          'before:absolute before:inset-0 before:z-0 before:bg-black before:opacity-40',
+          'before:absolute before:inset-0 before:z-1 before:bg-black before:opacity-40',
         ]"
       >
-        <img
-          :alt="item.alt"
-          class="absolute z-[-1] h-full w-full object-cover"
-          :height="item.height"
-          :loading="item.loading"
-          :sizes="item.sizes"
-          :src="item.src"
-          :srcset="item.srcset"
-          :width="item.width"
-        />
+        <MediaImage v-if="item.srcset" :item="item" />
         <button
           aria-label="Play Video"
           class="group absolute inset-0 z-10 flex cursor-pointer items-center justify-center text-white"
@@ -54,57 +45,17 @@ const modal = ref(false)
       </div>
       <UModal
         v-model:open="modal"
-        fullscreen
         :title="item.alt"
         :description="item.alt"
+        :ui="{
+          content: 'max-w-5xl',
+          body: 'flex items-center justify-center',
+          description: 'sr-only',
+        }"
       >
-        <template #header>
-          <div class="flex items-center justify-end">
-            <UButton
-              color="primary"
-              icon="i-heroicons-x-mark-20-solid"
-              variant="ghost"
-              class="rounded-md"
-              @click="modal = false"
-            />
-          </div>
-        </template>
         <template #body>
-          <div
-            v-if="item.mediaEmbed"
-            class="flex min-h-[90vh] w-full items-center justify-center"
-          >
-            <div
-              :class="[
-                appConfig.stirTheme.media.base,
-                appConfig.stirTheme.media.rounded,
-                aspectRatios(item.width, item.height),
-              ]"
-            >
-              <iframe
-                v-if="modal"
-                :src="item.mediaEmbed"
-                :title="item.title"
-                class="absolute top-0 left-0 h-full w-full"
-                frameborder="0"
-                allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                loading="lazy"
-              />
-            </div>
-          </div>
-          <div v-else class="m-10 flex justify-center overflow-auto">
-            <img
-              :alt="item.alt"
-              :class="[
-                appConfig.stirTheme.media.rounded,
-                'max-h-[80vh] w-auto object-contain',
-              ]"
-              :src="item.src"
-              :width="item.width"
-              :height="item.height"
-            />
-          </div>
+          <MediaVideo v-if="item.mediaEmbed" :item="item" />
+          <MediaImage v-else-if="item.src" :item="item" />
         </template>
       </UModal>
     </div>
