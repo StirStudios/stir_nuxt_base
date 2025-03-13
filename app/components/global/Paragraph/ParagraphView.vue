@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ViewProps } from '~/types/ViewTypes'
-import { componentExists } from '~/utils/componentUtils'
+import { componentExists } from '~/utils/componentExists'
 
 const appConfig = useAppConfig()
 
