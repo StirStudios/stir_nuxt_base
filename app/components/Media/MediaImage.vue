@@ -7,15 +7,12 @@ const loaded = ref(false)
 </script>
 
 <template>
-  <div class="relative h-full w-full">
-    <USkeleton
-      v-if="!loaded"
-      class="absolute inset-0 h-full w-full object-cover"
-    />
+  <div class="relative">
+    <USkeleton v-if="!loaded" class="absolute inset-0" />
     <client-only>
       <img
         :alt="item.alt || ''"
-        class="object-cover shadow-2xl transition-opacity duration-500 ease-in-out"
+        class="h-full w-full shadow-2xl transition-opacity duration-500 ease-in-out"
         :class="loaded ? 'opacity-100' : 'opacity-0'"
         :height="item.height"
         :loading="item.loading || 'lazy'"

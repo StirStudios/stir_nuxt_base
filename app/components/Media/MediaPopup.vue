@@ -23,7 +23,7 @@ const modal = ref(false)
           'relative transform-gpu overflow-hidden transition-transform duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
           item.mediaEmbed
-            ? 'before:absolute before:inset-0 before:z-1 before:bg-black before:opacity-40'
+            ? 'brightness-50 transition-all group-hover:brightness-75'
             : '',
         ]"
       >
