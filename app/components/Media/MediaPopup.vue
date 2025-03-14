@@ -22,7 +22,9 @@ const modal = ref(false)
         :class="[
           'relative transform-gpu overflow-hidden transition-transform duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
-          'before:absolute before:inset-0 before:z-1 before:bg-black before:opacity-40',
+          item.mediaEmbed
+            ? 'before:absolute before:inset-0 before:z-1 before:bg-black before:opacity-40'
+            : '',
         ]"
       >
         <MediaImage v-if="item.srcset" :item="item" />
@@ -49,7 +51,7 @@ const modal = ref(false)
         :description="item.alt"
         :ui="{
           content: 'max-w-5xl',
-          body: 'flex items-center justify-center',
+          body: item.mediaEmbed ? 'flex items-center justify-center' : 'm-auto',
           description: 'sr-only',
         }"
       >
