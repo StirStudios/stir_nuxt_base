@@ -7,7 +7,7 @@ const nextNode = page.value?.next_node as NodeLinkProps | null
 </script>
 
 <template>
-  <div class="container mb-5 flex justify-between">
+  <div class="container m-auto mb-5 flex justify-between">
     <UButton
       v-if="prevNode"
       icon="i-heroicons-chevron-left"
