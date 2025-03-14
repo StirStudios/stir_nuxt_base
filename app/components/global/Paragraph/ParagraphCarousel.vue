@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
+import { componentExists } from '~/utils/componentExists'
 
 const props = defineProps<CarouselProps>()
 
@@ -34,12 +35,14 @@ const gridItems = computed(() => props.amount || 5000)
       }"
     >
       <template v-if="item.element">
-        <template v-for="(sectionItem, index) in item.section" :key="index">
-          <component
-            :is="resolveComponent(sectionItem.element)"
-            :item="sectionItem"
-          />
-        </template>
+        <component
+          :is="
+            componentExists(item.element)
+              ? resolveComponent(item.element)
+              : 'ParagraphDefault'
+          "
+          v-bind="{ item }"
+        />
       </template>
       <template v-else>
         <MediaSimple :media="[item]" v-if="item.type === 'image'" />
