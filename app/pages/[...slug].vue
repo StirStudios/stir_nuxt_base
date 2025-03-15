@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { fetchPage, renderCustomElements, getPageLayout } = await useDrupalCe()
-const { bodyClasses } = usePageContext()
+const { bodyClasses, isFront } = usePageContext()
 const appConfig = useAppConfig()
 
 const route = useRoute()
@@ -35,7 +35,13 @@ useHead({
       :page-title="page.title"
       :site-slogan="page.site_info.slogan"
     />
-    <h1 v-else :class="[appConfig.stirTheme.h1, appConfig.stirTheme.container]">
+    <h1
+      v-else
+      :class="[
+        isFront ? appConfig.stirTheme.front?.h1 : appConfig.stirTheme.h1,
+        appConfig.stirTheme.container,
+      ]"
+    >
       {{ page.title }}
     </h1>
     <LazySiteBreadcrumbs v-if="appConfig.stirTheme.crumbs" />
