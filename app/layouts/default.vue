@@ -5,7 +5,7 @@ const { page, isAdministrator, isFront } = usePageContext()
 const appConfig = useAppConfig()
 
 const heroClasses = computed(() => ({
-  [isFront && appConfig.stirTheme.front?.main
+  [isFront.value && appConfig.stirTheme.front?.main
     ? appConfig.stirTheme.front.main
     : appConfig.stirTheme.main || '']: !page.value?.content?.hero,
   'mt-[3.1rem]': isAdministrator.value,
