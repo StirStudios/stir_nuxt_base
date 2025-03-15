@@ -3,7 +3,9 @@
  * @param name - The component name.
  * @returns {boolean} - Returns true if the component exists, otherwise false.
  */
-export const componentExists = (name: string): boolean => {
+export const componentExists = (name: unknown): boolean => {
+  if (typeof name !== 'string' || !name) return false // Ensure it's a valid string
+
   const nuxtApp = useNuxtApp()
 
   const formatName = (name: string) =>

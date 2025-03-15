@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 
+const appConfig = useAppConfig()
+
 defineProps<{ item: MediaProps }>()
 
 const loaded = ref(false)
@@ -12,8 +14,12 @@ const loaded = ref(false)
     <client-only>
       <img
         :alt="item.alt || ''"
-        class="h-full w-full shadow-2xl transition-opacity duration-500 ease-in-out"
-        :class="loaded ? 'opacity-100' : 'opacity-0'"
+        :class="[
+          appConfig.stirTheme.media.base,
+          appConfig.stirTheme.media.rounded,
+          loaded ? 'opacity-100' : 'opacity-0',
+          'transition-opacity duration-500 ease-in-out',
+        ]"
         :height="item.height"
         :loading="item.loading || 'lazy'"
         :sizes="item.sizes"
