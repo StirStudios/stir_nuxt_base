@@ -44,14 +44,15 @@ const filteredRows = computed(() => {
           :interval="item.carouselInterval"
           :items="filteredRows"
           :vid="item.viewId"
+          :item-element="item.element"
         />
       </template>
       <div v-else :class="viewGridClasses">
         <div v-for="row in filteredRows" :key="row.created" class="item">
           <component
             :is="
-              componentExists(props.item.element)
-                ? resolveComponent(props.item.element)
+              componentExists(item.element)
+                ? resolveComponent(item.element)
                 : 'ParagraphDefault'
             "
             v-bind="{ item: row }"

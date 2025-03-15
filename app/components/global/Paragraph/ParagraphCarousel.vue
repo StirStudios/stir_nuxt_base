@@ -10,7 +10,7 @@ const showArrows = computed(() => props.arrows || false)
 const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
-const gridItems = computed(() => props.amount || 5000)
+const itemElement = computed(() => props.itemElement || false)
 </script>
 
 <template>
@@ -34,14 +34,14 @@ const gridItems = computed(() => props.amount || 5000)
         item: amount,
       }"
     >
-      <template v-if="item.element">
+      <template v-if="itemElement">
         <component
           :is="
-            componentExists(item.element)
-              ? resolveComponent(item.element)
+            componentExists(itemElement)
+              ? resolveComponent(itemElement)
               : 'ParagraphDefault'
           "
-          v-bind="{ item }"
+          :item="item"
         />
       </template>
       <template v-else>
