@@ -20,7 +20,7 @@ const modal = ref(false)
     >
       <div
         :class="[
-          'relative transform-gpu overflow-hidden transition-transform duration-500 ease-in-out will-change-transform hover:scale-110',
+          'relative transform-gpu overflow-hidden transition-all duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
           item.mediaEmbed
             ? 'brightness-50 transition-all group-hover:brightness-75'
@@ -37,7 +37,7 @@ const modal = ref(false)
             v-if="item.mediaEmbed"
             aria-hidden="true"
             aria-label="Play Video"
-            class="transform-gpu transition-transform duration-500 ease-in-out will-change-transform hover:scale-125 hover:drop-shadow-md"
+            class="transform-gpu transition-all duration-500 ease-in-out will-change-transform hover:scale-125 hover:drop-shadow-md"
             color="white"
             name="i-heroicons-play-circle"
             size="60"
