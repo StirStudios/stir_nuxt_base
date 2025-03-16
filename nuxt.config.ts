@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     },
   },
   site: {
+    name: process.env.NUXT_NAME,
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
   },
