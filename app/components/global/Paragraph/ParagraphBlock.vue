@@ -5,13 +5,14 @@ import { componentExists } from '~/utils/componentExists'
 const props = defineProps<ParagraphBlockProps>()
 
 // Extract block data safely
-const blockData = computed(
-  () => props.blocks?.decoupled?.[props.blockName]?.paragraphBlock?.[0] ?? null,
-)
+const blockData = computed(() => {
+  return props.blocks?.decoupled?.[props.blockName]?.paragraphBlock?.[0] ?? null
+})
 
 // Determine the correct component to render
 const resolvedComponent = computed(() => {
-  const element = blockData.value?.element ?? ''
+  const element =
+    blockData.value?.content?.element ?? blockData.value?.element ?? ''
   return componentExists(element) ? element : 'ParagraphDefault'
 })
 
@@ -22,13 +23,16 @@ const itemData = computed(() => {
   switch (blockData.value.element) {
     case 'paragraph-carousel':
       return {
-        items: blockData.value.media ?? [],
+        items: Array.isArray(blockData.value.media)
+          ? blockData.value.media
+          : [],
         carouselArrows: blockData.value.carouselArrows ?? false,
         carouselAutoscroll: blockData.value.carouselAutoscroll ?? false,
         carouselFade: blockData.value.carouselFade ?? false,
         carouselIndicators: blockData.value.carouselIndicators ?? false,
         carouselInterval: blockData.value.carouselInterval ?? 5000,
         gridItems: blockData.value.gridItems ?? '',
+        width: blockData.value.width ?? 'w-full',
       }
 
     case 'paragraph-view':
