@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SectionProps } from '~/types/ContentTypes'
+import { componentExists } from '~/utils/componentExists'
 
 const appConfig = useAppConfig()
 
@@ -102,7 +103,11 @@ const getNodeProps = (item) => {
           <template v-for="item in regionItem" :key="item.uuid">
             <article>
               <component
-                :is="resolveComponent(item.element)"
+                :is="
+                  componentExists(item.element)
+                    ? resolveComponent(item.element)
+                    : 'ParagraphDefault'
+                "
                 v-bind="getNodeProps(item)"
               />
             </article>

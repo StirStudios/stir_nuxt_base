@@ -26,10 +26,17 @@ export default defineAppConfig({
         link: 'text-xl text-center block my-3 uppercase',
       },
     },
+    // front: {
+    //   h1: 'sr-only',
+    //   main: 'mt-0',
+    // },
     main: 'pt-[10rem]',
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
-    mediaRounded: 'rounded-xl',
+    media: {
+      base: 'relative h-full w-full overflow-hidden object-cover',
+      rounded: 'rounded-xl',
+    },
     aspectRatios: {
       portrait: 'aspect-[9/16]',
       landscape: 'aspect-[16/9]',
