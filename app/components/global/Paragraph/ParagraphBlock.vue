@@ -9,14 +9,10 @@ const blockData = computed(() => {
   return props.blocks?.decoupled?.[props.blockName]?.paragraphBlock?.[0] ?? null
 })
 
-// If no block data, return nothing
-if (!blockData.value) {
-  defineRender(() => null)
-}
-
 // Determine the correct component to render
 const resolvedComponent = computed(() => {
-  const element = blockData.value?.element ?? ''
+  if (!blockData.value) return null
+  const element = blockData.value.element ?? ''
   return componentExists(element) ? element : 'ParagraphDefault'
 })
 
@@ -68,7 +64,7 @@ const itemData = computed(() => {
 
 <template>
   <component
-    v-if="blockData"
+    v-if="blockData && resolvedComponent"
     :is="resolvedComponent"
     v-bind="{ item: itemData }"
   />
