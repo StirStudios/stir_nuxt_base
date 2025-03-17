@@ -37,8 +37,14 @@ const itemData = computed(() => {
 
     case 'paragraph-view':
       return {
-        ...(blockData.value.content ?? {}),
-        rows: blockData.value.content?.rows ?? [],
+        viewId: blockData.value.content?.viewId ?? '',
+        displayId: blockData.value.content?.displayId ?? '',
+        rows: Array.isArray(blockData.value.content?.rows)
+          ? blockData.value.content.rows
+          : [],
+        exposedFilters: blockData.value.content?.exposedFilters ?? [],
+        exposedSorts: blockData.value.content?.exposedSorts ?? [],
+        pager: blockData.value.content?.pager ?? { current: 0, totalItems: 0 },
         carousel: blockData.value.carousel ?? false,
         carouselIndicators: blockData.value.carouselIndicators ?? false,
         carouselArrows: blockData.value.carouselArrows ?? false,
