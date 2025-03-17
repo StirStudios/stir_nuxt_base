@@ -37,23 +37,24 @@ const itemData = computed(() => {
 
     case 'paragraph-view':
       return {
-        ...blockData.value.content,
-        carousel: blockData.value.carousel,
-        carouselIndicators: blockData.value.carouselIndicators,
-        carouselArrows: blockData.value.carouselArrows,
-        carouselFade: blockData.value.carouselFade,
-        carouselAutoscroll: blockData.value.carouselAutoscroll,
-        carouselInterval: blockData.value.carouselInterval,
-        spacing: blockData.value.spacing,
-        width: blockData.value.width,
-        gridItems: blockData.value.gridItems,
-        animate: blockData.value.animate,
-        direction: blockData.value.direction,
+        ...(blockData.value.content ?? {}),
+        rows: blockData.value.content?.rows ?? [],
+        carousel: blockData.value.carousel ?? false,
+        carouselIndicators: blockData.value.carouselIndicators ?? false,
+        carouselArrows: blockData.value.carouselArrows ?? false,
+        carouselFade: blockData.value.carouselFade ?? false,
+        carouselAutoscroll: blockData.value.carouselAutoscroll ?? false,
+        carouselInterval: blockData.value.carouselInterval ?? 5000,
+        spacing: blockData.value.spacing ?? '',
+        width: blockData.value.width ?? '',
+        gridItems: blockData.value.gridItems ?? '',
+        animate: blockData.value.animate ?? false,
+        direction: blockData.value.direction ?? '',
       }
 
     case 'paragraph-webform':
       return {
-        webform: blockData.value.webform,
+        webform: blockData.value.webform ?? null,
       }
 
     default:
