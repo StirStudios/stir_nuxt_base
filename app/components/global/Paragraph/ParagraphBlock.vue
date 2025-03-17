@@ -1,25 +1,60 @@
 <script setup lang="ts">
+import type { ParagraphBlockProps } from '~/types/ContentTypes'
 import { componentExists } from '~/utils/componentExists'
 
-defineProps<{
-  blockName: string // Pass the block name (e.g., "gin_test")
-  blocks: Record<string, any> // The blocks object from the API response
-}>()
+const props = defineProps<ParagraphBlockProps>()
 
-// Get the block data safely
-const blockData = computed(() => {
-  return blocks?.decoupled?.[blockName]?.paragraphBlock?.[0] || null
-})
+// Extract block data safely
+const blockData = computed(
+  () => props.blocks?.decoupled?.[props.blockName]?.paragraphBlock?.[0] ?? null,
+)
 
-// Get the element name dynamically
+// Determine the correct component to render
 const resolvedComponent = computed(() => {
-  const element = blockData.value?.content?.element || ''
+  const element = blockData.value?.element ?? ''
   return componentExists(element) ? element : 'ParagraphDefault'
 })
 
-// Extract the item to bind
+// Extract data based on element type
 const itemData = computed(() => {
-  return blockData.value?.content?.rows?.[0] || []
+  if (!blockData.value) return {}
+
+  switch (blockData.value.element) {
+    case 'paragraph-carousel':
+      return {
+        items: blockData.value.media ?? [],
+        carouselArrows: blockData.value.carouselArrows ?? false,
+        carouselAutoscroll: blockData.value.carouselAutoscroll ?? false,
+        carouselFade: blockData.value.carouselFade ?? false,
+        carouselIndicators: blockData.value.carouselIndicators ?? false,
+        carouselInterval: blockData.value.carouselInterval ?? 5000,
+        gridItems: blockData.value.gridItems ?? '',
+      }
+
+    case 'paragraph-view':
+      return {
+        ...blockData.value.content,
+        carousel: blockData.value.carousel,
+        carouselIndicators: blockData.value.carouselIndicators,
+        carouselArrows: blockData.value.carouselArrows,
+        carouselFade: blockData.value.carouselFade,
+        carouselAutoscroll: blockData.value.carouselAutoscroll,
+        carouselInterval: blockData.value.carouselInterval,
+        spacing: blockData.value.spacing,
+        width: blockData.value.width,
+        gridItems: blockData.value.gridItems,
+        animate: blockData.value.animate,
+        direction: blockData.value.direction,
+      }
+
+    case 'paragraph-webform':
+      return {
+        webform: blockData.value.webform,
+      }
+
+    default:
+      return blockData.value
+  }
 })
 </script>
 
