@@ -5,9 +5,14 @@ import { componentExists } from '~/utils/componentExists'
 const props = defineProps<ParagraphBlockProps>()
 
 // Extract block data safely
-const blockData = computed(
-  () => props.blocks?.decoupled?.[props.blockName]?.paragraphBlock?.[0] ?? null,
-)
+const blockData = computed(() => {
+  return props.blocks?.decoupled?.[props.blockName]?.paragraphBlock?.[0] ?? null
+})
+
+// If no block data, return nothing
+if (!blockData.value) {
+  defineRender(() => null)
+}
 
 // Determine the correct component to render
 const resolvedComponent = computed(() => {
@@ -17,7 +22,7 @@ const resolvedComponent = computed(() => {
 
 // Extract data based on element type
 const itemData = computed(() => {
-  if (!blockData.value) return {}
+  if (!blockData.value) return null
 
   switch (blockData.value.element) {
     case 'paragraph-carousel':
@@ -67,5 +72,4 @@ const itemData = computed(() => {
     :is="resolvedComponent"
     v-bind="{ item: itemData }"
   />
-  <p v-else class="text-center text-gray-500">No content available.</p>
 </template>
