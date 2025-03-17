@@ -1,11 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-// Tu run: node ./app/utils/generate-safelist.ts
+// Tu run: node ./app/utils/generateSafelist.ts
 
 // Define breakpoints and common class prefixes
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
-const fractions = ['1/1', '1/2', '1/3', '1/4', '1/5']
+const fractions = ['1/1', '1/2', '1/3', '1/4', '1/5', '1/6', '1/7', '1/8']
 const columns = Array.from({ length: 6 }, (_, i) => `grid-cols-${i + 1}`)
 const spans = Array.from({ length: 4 }, (_, i) => `col-span-${i + 1}`)
 const gaps = Array.from({ length: 20 }, (_, i) => `gap-${i + 1}`)

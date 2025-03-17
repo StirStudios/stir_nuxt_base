@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ViewProps } from '~/types/ViewTypes'
+import { componentExists } from '~/utils/componentExists'
 
 const appConfig = useAppConfig()
 
@@ -24,16 +25,6 @@ const filteredRows = computed(() => {
     section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
   }))
 })
-
-/**
- * Constructs node props dynamically.
- */
-const getNodeProps = (node, title) => ({
-  item: {
-    title,
-    ...node,
-  },
-})
 </script>
 
 <template>
@@ -53,15 +44,18 @@ const getNodeProps = (node, title) => ({
           :interval="item.carouselInterval"
           :items="filteredRows"
           :vid="item.viewId"
+          :item-element="item.element"
         />
       </template>
       <div v-else :class="viewGridClasses">
         <div v-for="row in filteredRows" :key="row.created" class="item">
           <component
-            :is="resolveComponent(node.element)"
-            v-for="node in row.section"
-            :key="node.uuid"
-            v-bind="getNodeProps(node, row.title)"
+            :is="
+              componentExists(item.element)
+                ? resolveComponent(item.element)
+                : 'ParagraphDefault'
+            "
+            v-bind="{ item: row }"
           />
           <USeparator
             v-if="

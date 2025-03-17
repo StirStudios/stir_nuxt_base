@@ -37,6 +37,7 @@ export interface CarouselProps extends LayoutProps {
   autoscroll?: boolean
   width?: string
   vid?: string
+  itemElement?: string
 }
 
 export interface VideoPlayer {

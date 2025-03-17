@@ -35,3 +35,8 @@ export interface TextProps extends LayoutProps {
 export interface HTMLInjectionProps {
   html: string
 }
+
+export interface ParagraphBlockProps {
+  blockName: string
+  blocks: Record<string, any>
+}
