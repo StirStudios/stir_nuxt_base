@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   site: {
     name: process.env.NUXT_NAME,
     url: process.env.NUXT_URL,
-    indexable: process.env.NUXT_SITE_ENV === 'production' ? true : false,
+    indexable: process.env.NUXT_ENVIRONMENT === 'production' ? true : false,
   },
   routeRules: {
     // General pages cached for 1 day using SWR
