@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
-
-const appConfig = useAppConfig()
+import { useVideoPlayers } from '~/composables/useVideoPlayers'
 
 defineProps<{ item: MediaProps }>()
+
+const appConfig = useAppConfig()
+const { initializePlayers } = useVideoPlayers()
+
+onMounted(() => {
+  initializePlayers()
+})
 </script>
 
 <template>

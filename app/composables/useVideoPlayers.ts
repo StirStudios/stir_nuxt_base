@@ -41,18 +41,18 @@ export function useVideoPlayers() {
 
   // Modularized playersReady function for single-player handling
   function playersReady(iframeKey: string, player: VideoPlayer) {
-    if (player.isReady) {
-      // If already ready, store in the players map
+    player.on('ready', () => {
       videoPlayers.value.set(iframeKey, player)
-      console.log(`Player ${iframeKey} is ready immediately.`)
-    } else {
-      // Listen for the "ready" event if not ready yet
-      player.on('ready', () => {
-        videoPlayers.value.set(iframeKey, player)
-        console.log(`Player ${iframeKey} is now ready.`)
-        addFullscreenExitOnEnd()
-      })
-    }
+      addFullscreenExitOnEnd()
+      resetOnEnd(iframeKey, player)
+    })
+  }
+
+  function resetOnEnd(iframeKey: string, player: VideoPlayer) {
+    player.on('ended', () => {
+      player.setCurrentTime(0)
+      player.pause()
+    })
   }
 
   function addEventToAllPlayers(event: string, callback: () => void) {
