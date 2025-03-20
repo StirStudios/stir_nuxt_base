@@ -95,7 +95,7 @@ export default defineAppConfig({
       labelsFloating: false,
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: '',
-      response: 'space-y-8 text-center',
+      response: 'space-y-8 px-6 py-3 bg-neutral-100 rounded-lg italic',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',

@@ -91,6 +91,9 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     api: process.env.DRUPAL_URL,
+    turnstile: {
+      secretKey: process.env.TURNSTILE_SECRET,
+    },
     public: {
       api: process.env.DRUPAL_URL,
       turnstileDisable: process.env.NUXT_ENVIRONMENT === 'local',

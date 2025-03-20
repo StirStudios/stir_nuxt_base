@@ -104,57 +104,72 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         description: 'Please complete the CAPTCHA',
         color: 'error',
       })
+      isLoading.value = false
       return
     }
 
     // Fetch CSRF Token
-    const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
-      '/api/getCsrfToken',
-    )
-    csrfToken.value = token
-
-    // Prepare payload
-    const payload = {
-      webform_id: webformId,
-      turnstile_token: turnstileToken.value || '',
-      ...transformPayloadToSnakeCase(state),
+    try {
+      const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
+        '/api/getCsrfToken',
+      )
+      csrfToken.value = token
+    } catch {
+      toast.add({
+        title: 'Error',
+        description: 'Failed to retrieve CSRF token. Please try again.',
+        color: 'error',
+      })
+      isLoading.value = false
+      return
     }
 
-    // Submit form data
-    const { data: submitData, error: submitError } = await $fetch(
-      `${siteApi}/api/stir_webform_rest/submit`,
-      {
+    // Prepare Payload
+    const payload = {
+      webform_id: webformId,
+      ...transformPayloadToSnakeCase({
+        ...state,
+        turnstile_response: turnstileToken.value,
+      }),
+    }
+
+    // Submit Form Data
+    try {
+      await $fetch(`${siteApi}/api/stir_webform_rest/submit`, {
         method: 'POST',
         headers: {
           'x-csrf-token': csrfToken.value,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
-      },
-    )
+      })
 
-    // Handle submission errors
-    if (submitError?.value) {
+      // Handle Successful Submission
+      scrollToTop()
+      toast.add({
+        title: 'Success!',
+        description: 'Form submitted successfully!',
+        color: 'success',
+      })
+
+      // Reset Form State
+      Object.keys(state).forEach((key) => (state[key] = ''))
+      turnstileToken.value = ''
+      isFormSubmitted.value = true
+    } catch (error) {
+      // Extract API Error Message Safely
+      let errorMessage =
+        error?.response?._data?.error?.message ||
+        error?.response?._data?.message ||
+        'Form submission failed. Please try again.'
+
+      // Show Toast Notification with Error
       toast.add({
         title: 'Error',
-        description: `Error submitting form: ${submitError.value}`,
+        description: `Error submitting form: ${errorMessage}`,
         color: 'error',
       })
-      return
     }
-
-    // Success handling
-    scrollToTop()
-    toast.add({
-      title: 'Success!',
-      description: 'Form submitted successfully!',
-      color: 'success',
-    })
-
-    // Reset form state
-    Object.keys(state).forEach((key) => (state[key] = ''))
-    turnstileToken.value = ''
-    isFormSubmitted.value = true
   } catch (validationError) {
     if (validationError.inner) {
       validationError.inner.forEach((err: any) => {
@@ -224,10 +239,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
       <div v-if="!config.public.turnstileDisable">
         <p class="mb-2 text-sm font-medium">Let us know you’re human</p>
-        <NuxtTurnstile
-          v-model="turnstileToken"
-          sitekey="your-turnstile-site-key"
-        />
+        <NuxtTurnstile v-model="turnstileToken" />
       </div>
 
       <UButton
