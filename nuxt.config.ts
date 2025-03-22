@@ -85,6 +85,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     api: process.env.DRUPAL_URL,
+    apiKey: process.env.DRUPAL_API_KEY || '',
     turnstile: {
       secretKey: process.env.TURNSTILE_SECRET,
     },
