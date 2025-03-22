@@ -97,91 +97,45 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   errors.value = {}
 
   try {
-    // Validate CAPTCHA if required
-    if (!config.public.turnstileDisable && !turnstileToken.value) {
-      toast.add({
-        title: 'Error',
-        description: 'Please complete the CAPTCHA',
-        color: 'error',
-      })
-      isLoading.value = false
-      return
-    }
-
-    // Fetch CSRF Token
-    try {
-      const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
-        '/api/getCsrfToken',
-      )
-      csrfToken.value = token
-    } catch {
-      toast.add({
-        title: 'Error',
-        description: 'Failed to retrieve CSRF token. Please try again.',
-        color: 'error',
-      })
-      isLoading.value = false
-      return
-    }
-
     // Prepare Payload
     const payload = {
       webform_id: webformId,
-      ...transformPayloadToSnakeCase({
-        ...state,
-        turnstile_response: turnstileToken.value,
-      }),
+      ...transformPayloadToSnakeCase(state),
+      turnstile_response: turnstileToken.value,
     }
 
     // Submit Form Data
-    try {
-      await $fetch(`${siteApi}/api/stir_webform_rest/submit`, {
-        method: 'POST',
-        headers: {
-          'x-csrf-token': csrfToken.value,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
+    await $fetch('/api/webform/submit', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
 
-      // Handle Successful Submission
-      scrollToTop()
-      toast.add({
-        title: 'Success!',
-        description: 'Form submitted successfully!',
-        color: 'success',
-      })
+    // Handle Successful Submission
+    scrollToTop()
+    toast.add({
+      title: 'Success!',
+      description: 'Form submitted successfully!',
+      color: 'success',
+    })
 
-      // Reset Form State
-      Object.keys(state).forEach((key) => (state[key] = ''))
-      turnstileToken.value = ''
-      isFormSubmitted.value = true
-    } catch (error) {
-      // Extract API Error Message Safely
-      let errorMessage =
-        error?.response?._data?.error?.message ||
-        error?.response?._data?.message ||
-        'Form submission failed. Please try again.'
+    // Reset Form
+    Object.keys(state).forEach((key) => (state[key] = ''))
+    turnstileToken.value = ''
+    isFormSubmitted.value = true
+  } catch (error) {
+    console.error('Submission Error:', error)
 
-      // Show Toast Notification with Error
-      toast.add({
-        title: 'Error',
-        description: `Error submitting form: ${errorMessage}`,
-        color: 'error',
-      })
-    }
-  } catch (validationError) {
-    if (validationError.inner) {
-      validationError.inner.forEach((err: any) => {
-        errors.value[err.path] = err.message
-      })
-    } else {
-      toast.add({
-        title: 'Validation Error',
-        description: validationError.message || 'Unknown validation error',
-        color: 'error',
-      })
-    }
+    // Handle Errors from Backend
+    let errorMessage =
+      error?.response?._data?.error?.message ||
+      error?.response?._data?.message ||
+      'Form submission failed. Please try again.'
+
+    toast.add({
+      title: 'Error',
+      description: `Error submitting form: ${errorMessage}`,
+      color: 'error',
+    })
   } finally {
     isLoading.value = false
   }
