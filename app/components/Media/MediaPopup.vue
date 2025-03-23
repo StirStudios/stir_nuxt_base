@@ -22,11 +22,11 @@ const openModal = (item: MediaProps) => {
     <div
       v-for="(item, index) in media"
       :key="index"
-      :class="[appConfig.stirTheme.media.rounded, 'group overflow-hidden']"
+      :class="[appConfig.stirTheme.media.rounded, 'overflow-hidden']"
     >
       <div
         :class="[
-          'relative transform-gpu overflow-hidden transition-all duration-500 ease-in-out will-change-transform hover:scale-110',
+          'group relative transform-gpu overflow-hidden transition-all duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
         ]"
       >
