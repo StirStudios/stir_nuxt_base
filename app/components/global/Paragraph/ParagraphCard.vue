@@ -23,17 +23,29 @@ const gradientClass = computed(() => {
         <div class="mx-auto max-w-7xl px-6 md:px-12">
           <div
             :class="[
-              'flex flex-col items-center space-y-8 lg:space-y-0',
+              'flex flex-col items-center gap-8 lg:flex-row',
               item.media ? 'lg:flex-row lg:space-x-8' : '',
             ]"
           >
-            <div v-if="item.media" class="flex-1">
+            <div
+              v-if="item.media"
+              :class="[
+                'flex-1',
+                item.placement,
+                item.placement === 'order-2' ? 'mt-10' : '',
+              ]"
+            >
               <MediaPopup v-if="item.overlay" :media="item.media" />
               <MediaSimple v-else :media="item.media" />
             </div>
 
-            <div class="flex-1">
-              <div class="mx-auto max-w-xl lg:max-w-lg lg:text-center">
+            <div
+              :class="[
+                'flex-1',
+                item.placement === 'order-1' ? 'order-2' : 'order-1',
+              ]"
+            >
+              <div class="lg:max-w-lg lg:text-center">
                 <h3 class="text-xl font-bold tracking-tight md:text-3xl">
                   {{ item.header }}
                 </h3>
