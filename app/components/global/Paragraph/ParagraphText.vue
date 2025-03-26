@@ -7,8 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
+  <EditLink :link="item.editLink">
     <WrapAnimate :effect="item?.direction" :animate="item?.animate">
       <div
         :class="[
@@ -19,5 +18,5 @@ defineProps<{
         v-html="item.text"
       />
     </WrapAnimate>
-  </WrapNone>
+  </EditLink>
 </template>

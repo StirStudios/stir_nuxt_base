@@ -22,8 +22,7 @@ const media = computed(() => hero.media?.[0] || {})
 </script>
 
 <template>
-  <WrapNone :wrapper="hero.editLink ? 'div' : undefined">
-    <EditLink :link="hero.editLink" />
+  <EditLink :link="item.editLink">
     <section
       :class="[
         appConfig.stirTheme.hero.overlay,
@@ -74,5 +73,5 @@ const media = computed(() => hero.media?.[0] || {})
         <source :src="media.mediaEmbed" type="video/mp4" />
       </video>
     </section>
-  </WrapNone>
+  </EditLink>
 </template>

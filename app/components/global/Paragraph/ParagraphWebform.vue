@@ -143,8 +143,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 </script>
 
 <template>
-  <WrapNone :wrapper="webformSubmissions ? 'div' : undefined">
-    <EditLink :link="webformSubmissions" />
+  <EditLink :link="webformSubmissions">
     <UForm
       v-if="!isFormSubmitted"
       :state="state"
@@ -208,5 +207,5 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       :class="`${appConfig.stirTheme.webform.response} prose`"
       v-html="webformConfirmation"
     />
-  </WrapNone>
+  </EditLink>
 </template>

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import type { LayoutProps } from '~/types/UtilityTypes'
-
 const appConfig = useAppConfig()
 
-withDefaults(defineProps<LayoutProps>(), {
-  wrapper: undefined,
-  classes: '',
-})
+const props = defineProps<{
+  wrapper?: boolean
+  header?: string
+  classes?: string
+}>()
 
 const classes = computed(() => appConfig.stirTheme.grid.wrapCols)
 </script>
@@ -14,11 +13,9 @@ const classes = computed(() => appConfig.stirTheme.grid.wrapCols)
 <template>
   <template v-if="wrapper">
     <h2 v-if="header" class="mb-10 text-center">{{ header }}</h2>
-    <component :is="wrapper" :class="classes">
+    <div :class="classes">
       <slot />
-    </component>
+    </div>
   </template>
-  <template v-else>
-    <slot />
-  </template>
+  <slot v-else />
 </template>

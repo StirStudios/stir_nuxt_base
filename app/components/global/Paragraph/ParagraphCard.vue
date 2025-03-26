@@ -15,8 +15,7 @@ const gradientClass = computed(() => {
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
+  <EditLink :link="item.editLink">
     <WrapAnimate :effect="item?.direction" :animate="item?.animate">
       <div
         class="relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-24 lg:py-32"
@@ -87,5 +86,5 @@ const gradientClass = computed(() => {
         </div>
       </div>
     </WrapAnimate>
-  </WrapNone>
+  </EditLink>
 </template>

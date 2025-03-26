@@ -1,7 +1,3 @@
-export interface WrapperProps {
-  wrapper?: unknown
-}
-
 // AnimationProps
 export interface AosProps {
   animate?: boolean
@@ -23,7 +19,7 @@ export interface LinkProps {
 // LayoutProps
 export interface LayoutProps {
   container?: boolean
-  wrapper?: string
+  wrapper?: boolean
   classes?: string
   spacing?: string
   width?: string

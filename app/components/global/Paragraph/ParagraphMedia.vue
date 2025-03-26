@@ -10,12 +10,8 @@ defineProps<{
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
-    <WrapGrid
-      :header="item.header"
-      :wrapper="item.grid === true ? 'div' : undefined"
-    >
+  <EditLink :link="item.editLink">
+    <WrapGrid :header="item.header" :wrapper="item.grid">
       <div
         v-for="media in item.media"
         :key="media.mid"
@@ -39,5 +35,5 @@ defineProps<{
         </WrapAnimate>
       </div>
     </WrapGrid>
-  </WrapNone>
+  </EditLink>
 </template>
