@@ -6,7 +6,6 @@ export interface WrapperProps {
 export interface AosProps {
   wrapper?: string
   aos?: string
-  aosDelay?: number
 }
 
 export interface MediaSettings extends LayoutProps {

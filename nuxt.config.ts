@@ -44,6 +44,8 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxt/ui',
+    'motion-v/nuxt',
     [
       '@nuxtjs/turnstile',
       {
@@ -73,7 +75,6 @@ export default defineNuxtConfig({
         ],
       },
     ],
-    '@nuxt/ui',
     [
       'nuxtjs-drupal-ce',
       {

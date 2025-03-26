@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import type { AosProps } from '~/types/UtilityTypes'
+import { getMotionEffect } from '~/utils/animations'
+import { motion } from 'motion-v'
 
-withDefaults(defineProps<AosProps>(), {
+const props = withDefaults(defineProps<AosProps>(), {
   aos: 'fade-up',
   wrapper: undefined,
-  aosDelay: 0,
 })
+
+const motionEffect = getMotionEffect(props.aos)
 </script>
 
 <template>
-  <component
-    :is="wrapper"
+  <motion.div
     v-if="wrapper"
-    :data-aos="aos"
-    :data-aos-delay="aosDelay"
-    data-aos-once="true"
+    :initial="motionEffect.initial"
+    :whileInView="motionEffect.whileInView"
+    :transition="motionEffect.transition"
   >
     <slot />
-  </component>
+  </motion.div>
   <slot v-else />
 </template>
