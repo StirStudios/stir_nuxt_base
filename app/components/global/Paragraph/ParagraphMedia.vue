@@ -12,19 +12,16 @@ defineProps<{
 <template>
   <WrapNone :wrapper="item.editLink ? 'div' : undefined">
     <EditLink :link="item.editLink" />
-    <WrapAnimate
-      :aos="item.direction"
-      :wrapper="item.animate === true ? 'div' : undefined"
+    <WrapGrid
+      :header="item.header"
+      :wrapper="item.grid === true ? 'div' : undefined"
     >
-      <WrapGrid
-        :header="item.header"
-        :wrapper="item.grid === true ? 'div' : undefined"
+      <div
+        v-for="media in item.media"
+        :key="media.mid"
+        :class="'media media-' + media.mid"
       >
-        <div
-          v-for="media in item.media"
-          :key="media.mid"
-          :class="'media media-' + media.mid"
-        >
+        <WrapAnimate :effect="item.direction" :animate="item.animate">
           <template
             v-if="
               item.overlay === true ||
@@ -39,8 +36,8 @@ defineProps<{
           <template v-else>
             <MediaSimple :media="[media]" />
           </template>
-        </div>
-      </WrapGrid>
-    </WrapAnimate>
+        </WrapAnimate>
+      </div>
+    </WrapGrid>
   </WrapNone>
 </template>

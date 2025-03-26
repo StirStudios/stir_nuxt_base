@@ -138,9 +138,5 @@ export const getMotionEffect = (direction: string) => {
     // Add more cases as needed
   }
 
-  return (
-    effects[direction] || {
-      transition: transitionConfig, // Default transition
-    }
-  )
+  return effects[direction] || { transition: transitionConfig } // Default transition
 }

@@ -17,10 +17,7 @@ const gradientClass = computed(() => {
 <template>
   <WrapNone :wrapper="item.editLink ? 'div' : undefined">
     <EditLink :link="item.editLink" />
-    <WrapAnimate
-      :aos="item?.direction"
-      :wrapper="item?.animate === true ? 'div' : undefined"
-    >
+    <WrapAnimate :effect="item?.direction" :animate="item?.animate">
       <div
         class="relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-24 lg:py-32"
       >

@@ -28,27 +28,24 @@ const filteredRows = computed(() => {
 </script>
 
 <template>
-  <WrapAnimate
-    :aos="item?.direction"
-    :wrapper="item?.animate === true ? 'div' : undefined"
-  >
-    <h3 v-if="item.title">{{ item.title }}</h3>
-    <div :class="[!item.carousel ? item.width : '', item.spacing]">
-      <template v-if="item.carousel">
-        <ParagraphCarousel
-          :amount="item.gridItems"
-          :indicators="item.carouselIndicators"
-          :arrows="item.carouselArrows"
-          :fade="item.carouselFade"
-          :autoscroll="item.carouselAutoscroll"
-          :interval="item.carouselInterval"
-          :items="filteredRows"
-          :vid="item.viewId"
-          :item-element="item.element"
-        />
-      </template>
-      <div v-else :class="viewGridClasses">
-        <div v-for="row in filteredRows" :key="row.created" class="item">
+  <h3 v-if="item.title">{{ item.title }}</h3>
+  <div :class="[!item.carousel ? item.width : '', item.spacing]">
+    <template v-if="item.carousel">
+      <ParagraphCarousel
+        :amount="item.gridItems"
+        :indicators="item.carouselIndicators"
+        :arrows="item.carouselArrows"
+        :fade="item.carouselFade"
+        :autoscroll="item.carouselAutoscroll"
+        :interval="item.carouselInterval"
+        :items="filteredRows"
+        :vid="item.viewId"
+        :item-element="item.element"
+      />
+    </template>
+    <div v-else :class="viewGridClasses">
+      <div v-for="row in filteredRows" :key="row.created" class="item">
+        <WrapAnimate :effect="item?.direction" :animate="item?.animate">
           <component
             :is="
               componentExists(item.element)
@@ -68,8 +65,8 @@ const filteredRows = computed(() => {
             :size="appConfig.stirTheme.grid.separator?.size"
             :class="appConfig.stirTheme.grid.separator?.base"
           />
-        </div>
+        </WrapAnimate>
       </div>
     </div>
-  </WrapAnimate>
+  </div>
 </template>

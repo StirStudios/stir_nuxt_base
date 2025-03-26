@@ -4,8 +4,9 @@ export interface WrapperProps {
 
 // AnimationProps
 export interface AosProps {
-  wrapper?: string
-  aos?: string
+  animate?: boolean
+  effect?: string
+  stagger?: number
 }
 
 export interface MediaSettings extends LayoutProps {

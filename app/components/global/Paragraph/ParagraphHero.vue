@@ -38,10 +38,7 @@ const media = computed(() => hero.media?.[0] || {})
           isFront ? appConfig.stirTheme.hero.text.isFront : '',
         ]"
       >
-        <WrapAnimate
-          :aos="hero?.direction"
-          :wrapper="hero?.animate === true ? 'div' : undefined"
-        >
+        <WrapAnimate :effect="item?.direction" :animate="item?.animate">
           <HeroContent
             :page-title="pageTitle"
             :site-slogan="siteSlogan"
