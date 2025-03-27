@@ -6,14 +6,23 @@ import path from 'path'
 // Define breakpoints
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
 
-// Define dynamic class lists
-const columns = Array.from({ length: 6 }, (_, i) => `grid-cols-${i + 1}`)
-const spans = Array.from({ length: 4 }, (_, i) => `col-span-${i + 1}`)
-const gaps = Array.from({ length: 30 }, (_, i) => `gap-${i + 1}`) // Extended to 30
-const columnsDynamic = Array.from({ length: 10 }, (_, i) => `columns-${i + 1}`) // Extended for columns-{n}
+// ✅ Limit grid columns to a max of 5
+const columns = Array.from({ length: 5 }, (_, i) => `grid-cols-${i + 1}`)
 
-// Define common spacing sizes
-const spacings = [2, 5, 10, 15, 20, 25] // Added 15 for consistency
+// ✅ Limit col-span to a max of 3 (we rarely go higher)
+const spans = Array.from({ length: 3 }, (_, i) => `col-span-${i + 1}`)
+
+// ✅ Limit gaps to a max of 10
+const gaps = Array.from({ length: 10 }, (_, i) => `gap-${i + 1}`)
+
+// ✅ Limit basis to only 1/2, 1/3, 1/4, and 1/5
+const basisValues = ['basis-1/2', 'basis-1/3', 'basis-1/4', 'basis-1/5']
+
+// ✅ Limit columns-{n} to a max of 5 (for multi-column layouts)
+const columnsDynamic = Array.from({ length: 5 }, (_, i) => `columns-${i + 1}`)
+
+// ✅ Limit spacing sizes to a reasonable range
+const spacings = [2, 5, 10, 15, 20] // Removed 25 for efficiency
 const spacingClasses = spacings.flatMap((size) => [
   `p-${size}`,
   `pt-${size}`,
@@ -36,9 +45,10 @@ const safelist = new Set<string>()
 
 breakpoints.forEach((bp) => {
   columns.forEach((col) => safelist.add(`${bp}${col}`))
-  columnsDynamic.forEach((col) => safelist.add(`${bp}${col}`)) // ✅ Ensures `columns-{n}`
+  columnsDynamic.forEach((col) => safelist.add(`${bp}${col}`))
   spans.forEach((span) => safelist.add(`${bp}${span}`))
   gaps.forEach((gap) => safelist.add(`${bp}${gap}`))
+  basisValues.forEach((basis) => safelist.add(`${bp}${basis}`))
   spacingClasses.forEach((cls) => safelist.add(`${bp}${cls}`))
 
   // ✅ Add visibility helpers for each breakpoint
@@ -48,14 +58,6 @@ breakpoints.forEach((bp) => {
 
 // ✅ Add additional required classes
 const additionalClasses = [
-  'sm:columns-2',
-  'md:columns-3',
-  'lg:columns-4',
-  'xl:columns-5',
-  'sm:gap-2',
-  'md:gap-5',
-  'lg:gap-10',
-  'xl:gap-15',
   'lg:block',
   'mx-auto',
   'm-auto',
