@@ -9,14 +9,6 @@ const props = defineProps<{
 }>()
 
 /**
- * Computes the grid classes dynamically.
- */
-const viewGridClasses = computed(() => {
-  const { viewGap } = appConfig.stirTheme.grid
-  return [viewGap, props.item.gridItems].filter(Boolean).join(' ')
-})
-
-/**
  * Filters out 'paragraph-layout' sections.
  */
 const filteredRows = computed(() => {
@@ -43,7 +35,7 @@ const filteredRows = computed(() => {
         :item-element="item.element"
       />
     </template>
-    <div v-else :class="viewGridClasses">
+    <div v-else :class="item.gridItems">
       <div v-for="row in filteredRows" :key="row.created" class="item">
         <WrapAnimate :effect="item?.direction" :animate="item?.animate">
           <component

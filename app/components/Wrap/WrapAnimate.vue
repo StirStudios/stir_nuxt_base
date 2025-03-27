@@ -3,24 +3,23 @@ import type { AosProps } from '~/types/UtilityTypes'
 import { getMotionEffect } from '~/utils/animations'
 import { motion } from 'motion-v'
 
+const appConfig = useAppConfig()
+
 const props = withDefaults(defineProps<AosProps>(), {
   effect: 'fade-up',
   animate: false,
-  stagger: 0.5,
 })
 
-const motionEffect = getMotionEffect(props.effect)
+const motionEffects = getMotionEffect(props.effect)
 </script>
 
 <template>
   <motion.div
     v-if="animate"
-    :initial="motionEffect.initial"
-    :whileInView="motionEffect.whileInView"
-    :transition="{
-      ...motionEffect.transition,
-      stagger: stagger ? stagger : undefined,
-    }"
+    :variants="motionEffects"
+    initial="hidden"
+    whileInView="show"
+    :inViewOptions="{ once: appConfig.stirTheme.animations.once }"
   >
     <slot />
   </motion.div>

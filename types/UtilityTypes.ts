@@ -2,7 +2,6 @@
 export interface AosProps {
   animate?: boolean
   effect?: string
-  stagger?: number
 }
 
 export interface MediaSettings extends LayoutProps {
@@ -19,7 +18,6 @@ export interface LinkProps {
 // LayoutProps
 export interface LayoutProps {
   container?: boolean
-  wrapper?: boolean
   classes?: string
   spacing?: string
   width?: string

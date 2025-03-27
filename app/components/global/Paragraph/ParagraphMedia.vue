@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
 
+const appConfig = useAppConfig()
+
 defineProps<{
   item: {
     settings: MediaSettings
@@ -11,29 +13,29 @@ defineProps<{
 
 <template>
   <EditLink :link="item.editLink">
-    <WrapGrid :header="item.header" :wrapper="item.grid">
-      <div
+    <WrapGrid :header="item.header" :classes="item.gridItems">
+      <WrapAnimate
         v-for="media in item.media"
+        class="media"
+        :effect="item.direction"
+        :animate="item.animate"
         :key="media.mid"
-        :class="'media media-' + media.mid"
       >
-        <WrapAnimate :effect="item.direction" :animate="item.animate">
-          <template
-            v-if="
-              item.overlay === true ||
-              (media.type === 'video' && media.type === 'image')
-            "
-          >
-            <MediaPopup :media="[media]" />
-          </template>
-          <template v-else-if="media.type === 'audio'">
-            <div v-html="media.mediaEmbed" />
-          </template>
-          <template v-else>
-            <MediaSimple :media="[media]" />
-          </template>
-        </WrapAnimate>
-      </div>
+        <template
+          v-if="
+            item.overlay === true ||
+            (media.type === 'video' && media.type === 'image')
+          "
+        >
+          <MediaPopup :media="[media]" />
+        </template>
+        <template v-else-if="media.type === 'audio'">
+          <div v-html="media.mediaEmbed" />
+        </template>
+        <template v-else>
+          <MediaSimple :media="[media]" />
+        </template>
+      </WrapAnimate>
     </WrapGrid>
   </EditLink>
 </template>

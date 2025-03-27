@@ -25,17 +25,14 @@ const isValidParagraphLayout = computed(() => {
   }
 })
 
-const getClassForLayout = computed(() => {
+const classLayout = computed(() => {
   const container = appConfig.stirTheme.container
-  const defaultGap = appConfig.stirTheme.grid.gap || 'gap-4'
 
   return (layout: SectionProps) => {
     const gridClass = layout.gridClass || 'grid-cols-1'
     const appliedContainerClass = layout.container ? container : ''
 
-    return [gridClass, defaultGap, appliedContainerClass]
-      .filter(Boolean)
-      .join(' ')
+    return [gridClass, appliedContainerClass].filter(Boolean).join(' ')
   }
 })
 
@@ -93,7 +90,7 @@ const getNodeProps = (item) => {
       </template>
       <div
         :id="layout.label ?? null"
-        :class="[layout.width, getClassForLayout(layout)]"
+        :class="[layout.width, classLayout(layout)]"
       >
         <div
           v-for="regionItem in layout.regions"
