@@ -5,6 +5,7 @@ import { usePageContext } from '~/composables/usePageContext'
 const { page, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const appConfig = useAppConfig()
+const theme = appConfig.stirTheme
 const route = useRoute()
 
 // Fetch menu items
@@ -24,24 +25,20 @@ const navbarOpen = ref(false)
 const isScrolled = computed(() => y.value > 50)
 const isOpen = ref(false) // Controls mobile menu slideover
 
-// Handle scroll behavior efficiently
+// Scroll behavior logic
 const handleScroll = useThrottleFn(() => {
-  if (y.value < 0) return
-  if (Math.abs(y.value - lastScrollPosition.value) < 40) return
-
+  if (y.value < 0 || Math.abs(y.value - lastScrollPosition.value) < 40) return
   showNavbar.value = y.value < lastScrollPosition.value
   lastScrollPosition.value = y.value
   navbarOpen.value = false
-}, 100) // Throttle for performance
+}, 100)
 
-// Watch the scroll position
+// Watch scroll position
 watch(y, handleScroll)
 
 // On mount, check if there's a hash in the URL
 onMounted(() => {
-  if (route.hash) {
-    isScrolled.value = true
-  }
+  if (route.hash) isScrolled.value = true
 })
 </script>
 
@@ -50,25 +47,22 @@ onMounted(() => {
     aria-label="Site navigation"
     role="navigation"
     :class="[
-      appConfig.stirTheme.navigation.base,
-      appConfig.stirTheme.navigation.transparentTop &&
-      !isScrolled &&
-      (!isAdministrator || isAdministrator)
+      theme.navigation.base,
+      theme.navigation.transparentTop && !isScrolled && !isAdministrator
         ? ''
-        : appConfig.stirTheme.navigation.background,
+        : theme.navigation.background,
       {
         '-translate-y-full':
-          !showNavbar ||
-          (appConfig.stirTheme.navigation.isHidden && !isScrolled),
+          !showNavbar || (theme.navigation.isHidden && !isScrolled),
       },
     ]"
   >
     <div
-      :class="`${appConfig.stirTheme.container} mx-auto flex flex-wrap items-center justify-between`"
+      :class="`${theme.container} mx-auto flex flex-wrap items-center justify-between`"
     >
       <div class="order-1">
         <ULink aria-label="Site Logo" class="font-bold" to="/">
-          <template v-if="appConfig.stirTheme.navigation.logo">
+          <template v-if="theme.navigation.logo">
             <AppLogo />
           </template>
           <template v-else>
@@ -76,23 +70,25 @@ onMounted(() => {
           </template>
         </ULink>
       </div>
+
       <UNavigationMenu
-        :highlight="appConfig.stirTheme.navigation.highlight.show"
+        :highlight="theme.navigation.highlight.show"
         :highlight-color="
-          appConfig.stirTheme.navigation.highlight.show
-            ? appConfig.stirTheme.navigation.highlight.color
+          theme.navigation.highlight.show
+            ? theme.navigation.highlight.color
             : ''
         "
-        :color="appConfig.stirTheme.navigation.color"
-        :variant="appConfig.stirTheme.navigation.variant"
-        class="order-2 flex hidden border-none md:block"
+        :color="theme.navigation.color"
+        :variant="theme.navigation.variant"
+        class="order-2 hidden md:block"
         :items="navLinks"
       />
+
       <div class="order-2 flex md:order-3">
         <IconsColorMode />
         <UButton
           aria-label="Site navigation toggle"
-          class="block flex items-center md:hidden"
+          class="md:hidden"
           color="black"
           :icon="
             isOpen ? 'i-heroicons-x-mark-solid' : 'i-heroicons-bars-3-solid'
@@ -104,6 +100,7 @@ onMounted(() => {
       </div>
     </div>
   </nav>
+
   <USlideover
     v-model:open="isOpen"
     title="Menu"
@@ -113,7 +110,7 @@ onMounted(() => {
   >
     <template #header>
       <ULink
-        v-if="appConfig.stirTheme.navigation.slideover.logo"
+        v-if="theme.navigation.slideover.logo"
         aria-label="Logo"
         to="/"
         @click="isOpen = false"
@@ -129,11 +126,10 @@ onMounted(() => {
         @click="isOpen = false"
       />
     </template>
+
     <template #body>
       <UNavigationMenu
-        :ui="{
-          link: appConfig.stirTheme.navigation.slideover.link,
-        }"
+        :ui="{ link: theme.navigation.slideover.link }"
         orientation="vertical"
         :items="navLinks"
       />

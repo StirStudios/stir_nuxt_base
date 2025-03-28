@@ -1,26 +1,25 @@
 <script setup lang="ts">
-import type { ViewProps } from '~/types/ViewTypes'
+import type { ViewItemProps } from '~/types/ViewTypes'
 import { componentExists } from '~/utils/componentExists'
-
-const appConfig = useAppConfig()
 
 const props = defineProps<{
   item: ViewItemProps
 }>()
 
-/**
- * Filters out 'paragraph-layout' sections.
- */
-const filteredRows = computed(() => {
-  return (props.item.rows || []).map((row) => ({
+const { grid } = useAppConfig().stirTheme
+
+// Filters out 'paragraph-layout' sections
+const filteredRows = computed(() =>
+  (props.item.rows || []).map((row) => ({
     ...row,
     section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
-  }))
-})
+  })),
+)
 </script>
 
 <template>
   <h3 v-if="item.title">{{ item.title }}</h3>
+
   <div :class="[!item.carousel ? item.width : '', item.spacing]">
     <template v-if="item.carousel">
       <ParagraphCarousel
@@ -35,6 +34,7 @@ const filteredRows = computed(() => {
         :item-element="item.element"
       />
     </template>
+
     <div v-else :class="item.gridItems">
       <div v-for="row in filteredRows" :key="row.created" class="item">
         <WrapAnimate :effect="item?.direction">
@@ -46,16 +46,13 @@ const filteredRows = computed(() => {
             "
             v-bind="{ item: row }"
           />
+
           <USeparator
-            v-if="
-              appConfig.stirTheme.grid.separator?.condition?.includes(
-                row.element,
-              )
-            "
-            :color="appConfig.stirTheme.grid.separator?.color"
-            :type="appConfig.stirTheme.grid.separator?.solid"
-            :size="appConfig.stirTheme.grid.separator?.size"
-            :class="appConfig.stirTheme.grid.separator?.base"
+            v-if="grid.separator?.condition?.includes(row.element)"
+            :color="grid.separator?.color"
+            :type="grid.separator?.solid"
+            :size="grid.separator?.size"
+            :class="grid.separator?.base"
           />
         </WrapAnimate>
       </div>

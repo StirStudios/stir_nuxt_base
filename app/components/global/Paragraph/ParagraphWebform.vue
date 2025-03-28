@@ -3,6 +3,7 @@ import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
 import { useValidation } from '~/composables/useValidation'
+import { useWindowScroll } from '@vueuse/core'
 
 const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
   webform: {} as WebformDefinition,
@@ -13,8 +14,9 @@ const { onError } = useValidation()
 const { y } = useWindowScroll()
 const toast = useToast()
 const config = useRuntimeConfig()
-const appConfig = useAppConfig()
 const siteApi = config.public.api
+
+const { webform: themeWebform } = useAppConfig().stirTheme
 
 // Destructure webform props
 const {
@@ -47,7 +49,6 @@ const submitButtonLabel = computed(
 // Group fields dynamically for better rendering
 const groupedFields = computed(() => {
   const grouped: Record<string, string[]> = {}
-
   orderedFieldNames.value.forEach((fieldName) => {
     const parent = fields[fieldName]?.parent
     if (parent) {
@@ -55,7 +56,6 @@ const groupedFields = computed(() => {
       grouped[parent].push(fieldName)
     }
   })
-
   return grouped
 })
 
@@ -125,7 +125,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     console.error('Submission Error:', error)
 
     // Handle Errors from Backend
-    let errorMessage =
+    const errorMessage =
       error?.response?._data?.error?.message ||
       error?.response?._data?.message ||
       'Form submission failed. Please try again.'
@@ -147,7 +147,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
       v-if="!isFormSubmitted"
       :state="state"
       :schema="schema"
-      :class="appConfig.stirTheme.webform.form"
+      :class="themeWebform.form"
       @submit="onSubmit"
       @error="onError"
     >
@@ -161,10 +161,10 @@ async function onSubmit(event: FormSubmitEvent<any>) {
             isContainerVisible(fields[fieldName]?.parent)
           "
         >
-          <h2 :class="appConfig.stirTheme.webform.fieldGroupHeader">
+          <h2 :class="themeWebform.fieldGroupHeader">
             {{ fields[fieldName]?.parent }}
           </h2>
-          <div :class="appConfig.stirTheme.webform.fieldGroup">
+          <div :class="themeWebform.fieldGroup">
             <template
               v-for="groupedFieldName in getGroupFields(
                 fields[fieldName]?.parent,
@@ -194,16 +194,12 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         <NuxtTurnstile v-model="turnstileToken" />
       </div>
 
-      <UButton
-        :label="actions[0]?.['#submit_Label'] || 'Submit'"
-        :loading="isLoading"
-        type="submit"
-      />
+      <UButton :label="submitButtonLabel" :loading="isLoading" type="submit" />
     </UForm>
 
     <div
       v-else
-      :class="`${appConfig.stirTheme.webform.response} prose`"
+      :class="`${themeWebform.response} prose`"
       v-html="webformConfirmation"
     />
   </EditLink>

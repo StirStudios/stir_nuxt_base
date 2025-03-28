@@ -2,11 +2,9 @@
 import { useWindowScroll } from '@vueuse/core'
 
 const { y } = useWindowScroll()
-const appConfig = useAppConfig()
+const theme = useAppConfig().stirTheme.scrollButton
 
-const showButton = computed(
-  () => y.value > appConfig.stirTheme.scrollButton.showAtScrollY,
-)
+const showButton = computed(() => y.value > theme.showAtScrollY)
 
 const scrollToTop = () => {
   y.value = 0
@@ -17,15 +15,11 @@ const scrollToTop = () => {
   <ClientOnly>
     <UButton
       aria-label="Scroll to top of page"
-      :class="`${appConfig.stirTheme.scrollButton.base} ${showButton ? 'opacity-100' : 'opacity-0'}`"
+      :class="[theme.base, showButton ? 'opacity-100' : 'opacity-0']"
       @click="scrollToTop"
-      :variant="appConfig.stirTheme.scrollButton.variant"
+      :variant="theme.variant"
     >
-      <UIcon
-        aria-hidden="true"
-        class="size-7"
-        :name="appConfig.stirTheme.scrollButton.icon"
-      />
+      <UIcon aria-hidden="true" class="size-7" :name="theme.icon" />
       <span class="sr-only">Scroll to top of page</span>
     </UButton>
   </ClientOnly>

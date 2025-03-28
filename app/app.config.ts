@@ -69,6 +69,11 @@ export default defineAppConfig({
       //   size: 'xs',
       // },
     },
+    card: {
+      base: 'relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-24 lg:py-32',
+      effect:
+        'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
+    },
     gradients: {
       1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
       2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',

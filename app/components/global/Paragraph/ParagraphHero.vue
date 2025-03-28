@@ -4,7 +4,6 @@ import type { HeroProps } from '~/types/MediaTypes'
 import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 
-const appConfig = useAppConfig()
 const { observeVideos } = useIntersectionObserver()
 const { isFront } = usePageContext()
 
@@ -14,6 +13,8 @@ const { hero, pageTitle, siteSlogan } = defineProps<{
   siteSlogan: string
 }>()
 
+const { hero: heroTheme } = useAppConfig().stirTheme
+
 onMounted(() => {
   observeVideos(0.1) // Trigger when 10% of the element is visible
 })
@@ -22,22 +23,14 @@ const media = computed(() => hero.media?.[0] || {})
 </script>
 
 <template>
-  <EditLink :link="item.editLink">
+  <EditLink :link="hero?.editLink">
     <section
-      :class="[
-        appConfig.stirTheme.hero.overlay,
-        isFront
-          ? appConfig.stirTheme.hero.isFront
-          : appConfig.stirTheme.hero.base,
-      ]"
+      :class="[heroTheme.overlay, isFront ? heroTheme.isFront : heroTheme.base]"
     >
       <div
-        :class="[
-          appConfig.stirTheme.hero.text.base,
-          isFront ? appConfig.stirTheme.hero.text.isFront : '',
-        ]"
+        :class="[heroTheme.text.base, isFront ? heroTheme.text.isFront : '']"
       >
-        <WrapAnimate :effect="item?.direction">
+        <WrapAnimate :effect="hero?.direction">
           <HeroContent
             :page-title="pageTitle"
             :site-slogan="siteSlogan"
@@ -46,12 +39,13 @@ const media = computed(() => hero.media?.[0] || {})
           />
         </WrapAnimate>
       </div>
+
       <img
         v-if="media.type === 'image'"
         :alt="media.alt || ''"
         :class="[
-          appConfig.stirTheme.hero.image.base,
-          isFront ? appConfig.stirTheme.hero.image.isFront : 'max-w-none',
+          heroTheme.image.base,
+          isFront ? heroTheme.image.isFront : 'max-w-none',
         ]"
         :height="media.height || ''"
         :sizes="media.sizes || ''"
@@ -59,6 +53,7 @@ const media = computed(() => hero.media?.[0] || {})
         :srcset="media.srcset || ''"
         :width="media.width || ''"
       />
+
       <video
         v-else-if="media.type === 'video'"
         class="absolute min-h-full w-auto max-w-none min-w-full"

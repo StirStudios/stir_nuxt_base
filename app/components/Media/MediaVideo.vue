@@ -3,9 +3,9 @@ import type { MediaProps } from '~/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
 import { useVideoPlayers } from '~/composables/useVideoPlayers'
 
-defineProps<{ item: MediaProps }>()
+const props = defineProps<{ item: MediaProps }>()
 
-const appConfig = useAppConfig()
+const { media: mediaTheme } = useAppConfig().stirTheme
 const { initializePlayers } = useVideoPlayers()
 
 onMounted(() => {
@@ -17,8 +17,8 @@ onMounted(() => {
   <div
     v-if="item.mediaEmbed"
     :class="[
-      appConfig.stirTheme.media.base,
-      appConfig.stirTheme.media.rounded,
+      mediaTheme.base,
+      mediaTheme.rounded,
       aspectRatios(item.width, item.height),
     ]"
   >

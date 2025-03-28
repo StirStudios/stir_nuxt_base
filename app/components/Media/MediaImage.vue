@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 
-const appConfig = useAppConfig()
+const props = defineProps<{ item: MediaProps }>()
 
-defineProps<{ item: MediaProps }>()
-
+const { media } = useAppConfig().stirTheme
 const loaded = ref(false)
 </script>
 
 <template>
   <div class="relative">
     <USkeleton v-if="!loaded" class="absolute inset-0" />
-    <client-only>
+
+    <ClientOnly>
       <img
         :alt="item.alt || ''"
         :class="[
-          appConfig.stirTheme.media.base,
-          appConfig.stirTheme.media.rounded,
+          media.base,
+          media.rounded,
           loaded ? 'opacity-100' : 'opacity-0',
           'transition-opacity duration-500 ease-in-out',
         ]"
@@ -28,6 +28,6 @@ const loaded = ref(false)
         :width="item.width"
         @load="loaded = true"
       />
-    </client-only>
+    </ClientOnly>
   </div>
 </template>
