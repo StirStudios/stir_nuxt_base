@@ -11,10 +11,11 @@ const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
 const itemElement = computed(() => props.itemElement || false)
+const edttLink = computed(() => props.editLink || false)
 </script>
 
 <template>
-  <EditLink :link="item.editLink">
+  <EditLink :link="edttLink">
     <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
       <h2 v-if="header" class="mb-5">{{ header }}</h2>
       <UCarousel

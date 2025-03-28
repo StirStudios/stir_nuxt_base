@@ -38,6 +38,7 @@ export interface CarouselProps extends LayoutProps {
   width?: string
   vid?: string
   itemElement?: string
+  editLink?: string
 }
 
 export interface VideoPlayer {
