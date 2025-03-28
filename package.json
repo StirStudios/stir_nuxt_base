@@ -1,7 +1,7 @@
 {
   "name": "stir_nuxt_base",
   "type": "module",
-  "version": "2.0.38",
+  "version": "2.0.39",
   "packageManager": "pnpm@9.12.3",
   "scripts": {
     "build": "nuxi build",
