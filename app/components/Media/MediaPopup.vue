@@ -33,7 +33,7 @@ const openModal = (item: MediaProps) => {
         <MediaImage v-if="item.srcset" :item="item" />
         <div
           v-if="item.mediaEmbed"
-          class="absolute inset-0 z-10 bg-black opacity-50 transition-opacity duration-300 group-hover:opacity-30"
+          class="absolute inset-0 z-10 bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-10"
         />
         <button
           aria-label="Play Video"
