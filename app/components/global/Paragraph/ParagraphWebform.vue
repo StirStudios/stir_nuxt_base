@@ -2,7 +2,6 @@
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
-import { useScroll } from '~/composables/useScroll'
 import { useValidation } from '~/composables/useValidation'
 
 const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
@@ -11,7 +10,7 @@ const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
 
 // Composables & Utilities
 const { onError } = useValidation()
-const { scrollToTop } = useScroll()
+const { y } = useWindowScroll()
 const toast = useToast()
 const config = useRuntimeConfig()
 const appConfig = useAppConfig()
@@ -111,7 +110,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     })
 
     // Handle Successful Submission
-    scrollToTop()
+    y.value = 0
     toast.add({
       title: 'Success!',
       description: 'Form submitted successfully!',

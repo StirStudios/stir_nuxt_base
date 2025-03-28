@@ -1,68 +1,47 @@
 <script lang="ts" setup>
+import { useWindowScroll, useThrottleFn } from '@vueuse/core'
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
+const appConfig = useAppConfig()
+const route = useRoute()
+
+// Fetch menu items
 const mainMenu = await fetchMenu('main')
-
-// Fetch main menu with error handling
-let mainMenuArray = []
-try {
-  const mainMenu = await fetchMenu('main')
-  mainMenuArray = mainMenu.value
-} catch (error) {
-  console.error('Error fetching menu:', error)
-}
-
-// Map over the array of menu items to create navLinks
-const navLinks = mainMenuArray.map((menuItem) => ({
+const navLinks = mainMenu.value.map((menuItem) => ({
   label: menuItem.title,
   to: menuItem.external
     ? menuItem.absolute
     : `/${menuItem.alias}${menuItem.options?.fragment ? `#${menuItem.options.fragment}` : ''}`,
 }))
 
-const appConfig = useAppConfig()
+// Scroll behavior state
+const { y } = useWindowScroll()
+const lastScrollPosition = ref(0)
 const showNavbar = ref(true)
 const navbarOpen = ref(false)
-const lastScrollPosition = ref(0)
-const isOpen = ref(false)
-const isScrolled = ref(false)
-const route = useRoute()
+const isScrolled = computed(() => y.value > 50)
+const isOpen = ref(false) // Controls mobile menu slideover
 
-// Scroll event handler
-const onScroll = () => {
-  const currentScrollPosition =
-    window.pageYOffset || document.documentElement.scrollTop
-  if (currentScrollPosition < 0) return
-  if (Math.abs(currentScrollPosition - lastScrollPosition.value) < 40) return
-  showNavbar.value = currentScrollPosition < lastScrollPosition.value
-  lastScrollPosition.value = currentScrollPosition
+// Handle scroll behavior efficiently
+const handleScroll = useThrottleFn(() => {
+  if (y.value < 0) return
+  if (Math.abs(y.value - lastScrollPosition.value) < 40) return
+
+  showNavbar.value = y.value < lastScrollPosition.value
+  lastScrollPosition.value = y.value
   navbarOpen.value = false
-  isScrolled.value = currentScrollPosition > 50
-}
+}, 100) // Throttle for performance
 
-// Throttle scroll event handler
-let scrollTimeout: number | null = null
-const throttledOnScroll = () => {
-  if (scrollTimeout) return
-  scrollTimeout = window.setTimeout(() => {
-    onScroll()
-    scrollTimeout = null
-  }, 100)
-}
+// Watch the scroll position
+watch(y, handleScroll)
 
+// On mount, check if there's a hash in the URL
 onMounted(() => {
-  window.addEventListener('scroll', throttledOnScroll)
-  onScroll()
   if (route.hash) {
     isScrolled.value = true
   }
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', throttledOnScroll)
-  if (scrollTimeout) clearTimeout(scrollTimeout)
 })
 </script>
 
@@ -72,7 +51,6 @@ onBeforeUnmount(() => {
     role="navigation"
     :class="[
       appConfig.stirTheme.navigation.base,
-      // Apply no background if transparentTop is true and not scrolled (for admin and non-admin)
       appConfig.stirTheme.navigation.transparentTop &&
       !isScrolled &&
       (!isAdministrator || isAdministrator)
@@ -110,19 +88,14 @@ onBeforeUnmount(() => {
         class="order-2 flex hidden border-none md:block"
         :items="navLinks"
       />
-      <div
-        class="order-2 flex md:order-3"
-        :class="{
-          'md:hidden': appConfig.colorMode?.forced,
-        }"
-      >
+      <div class="order-2 flex md:order-3">
         <IconsColorMode />
         <UButton
           aria-label="Site navigation toggle"
           class="block flex items-center md:hidden"
           color="black"
           :icon="
-            navbarOpen ? 'i-heroicons-x-mark-solid' : 'i-heroicons-bars-3-solid'
+            isOpen ? 'i-heroicons-x-mark-solid' : 'i-heroicons-bars-3-solid'
           "
           size="xl"
           variant="ghost"

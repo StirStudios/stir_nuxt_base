@@ -1,27 +1,16 @@
 <script setup lang="ts">
-const showButton = ref(false)
+import { useWindowScroll } from '@vueuse/core'
 
+const { y } = useWindowScroll()
 const appConfig = useAppConfig()
 
-const handleScroll = () => {
-  showButton.value =
-    window.scrollY > appConfig.stirTheme.scrollButton.showAtScrollY
-}
+const showButton = computed(
+  () => y.value > appConfig.stirTheme.scrollButton.showAtScrollY,
+)
 
 const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  })
+  y.value = 0
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 </script>
 
 <template>
