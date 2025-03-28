@@ -1,6 +1,5 @@
 // AnimationProps
 export interface AosProps {
-  animate?: boolean
   effect?: string
 }
 

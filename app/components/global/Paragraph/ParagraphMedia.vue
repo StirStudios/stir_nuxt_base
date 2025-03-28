@@ -16,9 +16,7 @@ defineProps<{
     <WrapGrid :header="item.header" :classes="item.gridItems">
       <WrapAnimate
         v-for="media in item.media"
-        class="media"
         :effect="item.direction"
-        :animate="item.animate"
         :key="media.mid"
       >
         <template

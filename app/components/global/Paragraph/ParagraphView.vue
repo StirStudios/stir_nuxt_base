@@ -37,7 +37,7 @@ const filteredRows = computed(() => {
     </template>
     <div v-else :class="item.gridItems">
       <div v-for="row in filteredRows" :key="row.created" class="item">
-        <WrapAnimate :effect="item?.direction" :animate="item?.animate">
+        <WrapAnimate :effect="item?.direction">
           <component
             :is="
               componentExists(item.element)

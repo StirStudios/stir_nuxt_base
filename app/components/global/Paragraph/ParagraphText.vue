@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <EditLink :link="item.editLink">
-    <WrapAnimate :effect="item?.direction" :animate="item?.animate">
+    <WrapAnimate :effect="item?.direction">
       <div
         :class="[
           [item.classes, 'prose'].filter(Boolean).join(' '),

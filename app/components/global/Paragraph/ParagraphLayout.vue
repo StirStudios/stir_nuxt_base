@@ -63,7 +63,6 @@ const getNodeProps = (item) => {
         spacing: item.spacing,
         width: item.width,
         gridItems: item.gridItems,
-        animate: item.animate,
         direction: item.direction,
       },
     }

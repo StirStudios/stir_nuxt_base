@@ -7,7 +7,6 @@ const appConfig = useAppConfig()
 
 const props = withDefaults(defineProps<AosProps>(), {
   effect: 'fade-up',
-  animate: false,
 })
 
 const motionEffects = getMotionEffect(props.effect)
@@ -15,11 +14,12 @@ const motionEffects = getMotionEffect(props.effect)
 
 <template>
   <motion.div
-    v-if="animate"
+    v-if="effect"
     :variants="motionEffects"
     initial="hidden"
     whileInView="show"
     :inViewOptions="{ once: appConfig.stirTheme.animations.once }"
+    class="media"
   >
     <slot />
   </motion.div>

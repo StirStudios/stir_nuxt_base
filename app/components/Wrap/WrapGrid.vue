@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const appConfig = useAppConfig()
 
-const props = defineProps<{
+defineProps<{
   header?: string
   classes?: string
 }>()
