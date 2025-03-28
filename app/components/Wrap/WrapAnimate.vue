@@ -5,9 +5,7 @@ import { motion } from 'motion-v'
 
 const appConfig = useAppConfig()
 
-const props = withDefaults(defineProps<AosProps>(), {
-  effect: 'fade-up',
-})
+const props = defineProps<AosProps>()
 
 const motionEffects = getMotionEffect(props.effect)
 </script>
