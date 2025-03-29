@@ -70,7 +70,7 @@ export default defineAppConfig({
       // },
     },
     card: {
-      base: 'relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-24 lg:py-32',
+      base: 'relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-20',
       effect:
         'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
     },
@@ -88,6 +88,9 @@ export default defineAppConfig({
         // prevIcon: 'i-lucide-chevron-left',
         // nextIcon: 'i-lucide-chevron-right',
       },
+    },
+    popup: {
+      header: true,
     },
     webform: {
       form: 'space-y-5',

@@ -2,7 +2,7 @@
 import type { MediaProps } from '~/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
 
-const appConfig = useAppConfig()
+const { media: rounded, popup } = useAppConfig().stirTheme
 
 const props = defineProps<{
   media?: MediaProps[]
@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const modal = ref(false)
 const activeMedia = ref<MediaProps | null>(null)
+const header = computed(() => popup?.header ?? true)
 
 const openModal = (item: MediaProps) => {
   activeMedia.value = item
@@ -18,11 +19,12 @@ const openModal = (item: MediaProps) => {
 </script>
 
 <template>
+  {{ header }}
   <div v-if="media?.length" class="space-y-4">
     <div
       v-for="(item, index) in media"
       :key="index"
-      :class="[appConfig.stirTheme.media.rounded, 'overflow-hidden']"
+      :class="[rounded, 'overflow-hidden']"
     >
       <div
         :class="[
@@ -57,10 +59,16 @@ const openModal = (item: MediaProps) => {
       :title="activeMedia?.alt"
       :description="activeMedia?.alt"
       :ui="{
-        content: 'max-w-5xl',
-        body: activeMedia?.mediaEmbed
-          ? 'flex items-center justify-center'
-          : 'm-auto',
+        header: header
+          ? 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16'
+          : 'sr-only',
+        content: 'max-w-5xl ring-0',
+        body: header
+          ? activeMedia?.mediaEmbed
+            ? 'flex items-center justify-center'
+            : 'm-auto'
+          : '!p-0 bg-transparent',
+        title: 'text-(--ui-text-highlighted) font-semibold text-xl mb-0',
         description: 'sr-only',
       }"
     >
