@@ -89,7 +89,7 @@ export default defineAppConfig({
         // nextIcon: 'i-lucide-chevron-right',
       },
     },
-    popup: {
+    modal: {
       header: true,
     },
     webform: {

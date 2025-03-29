@@ -2,7 +2,10 @@
 import type { MediaProps } from '~/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
 
-const { media: rounded, popup } = useAppConfig().stirTheme
+const {
+  media: { rounded },
+  modal: { header },
+} = useAppConfig().stirTheme
 
 const props = defineProps<{
   media?: MediaProps[]
@@ -10,7 +13,6 @@ const props = defineProps<{
 
 const modal = ref(false)
 const activeMedia = ref<MediaProps | null>(null)
-const header = computed(() => popup?.header ?? true)
 
 const openModal = (item: MediaProps) => {
   activeMedia.value = item
