@@ -19,7 +19,6 @@ const openModal = (item: MediaProps) => {
 </script>
 
 <template>
-  {{ header }}
   <div v-if="media?.length" class="space-y-4">
     <div
       v-for="(item, index) in media"
