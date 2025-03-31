@@ -1,12 +1,6 @@
-export interface WrapperProps {
-  wrapper?: unknown
-}
-
 // AnimationProps
 export interface AosProps {
-  wrapper?: string
-  aos?: string
-  aosDelay?: number
+  effect?: string
 }
 
 export interface MediaSettings extends LayoutProps {
@@ -23,7 +17,6 @@ export interface LinkProps {
 // LayoutProps
 export interface LayoutProps {
   container?: boolean
-  wrapper?: string
   classes?: string
   spacing?: string
   width?: string

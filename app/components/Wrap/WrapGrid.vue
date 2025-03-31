@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import type { LayoutProps } from '~/types/UtilityTypes'
-
 const appConfig = useAppConfig()
 
-withDefaults(defineProps<LayoutProps>(), {
-  wrapper: undefined,
-  classes: '',
-})
-
-const classes = computed(() => appConfig.stirTheme.grid.wrapCols)
+defineProps<{
+  header?: string
+  classes?: string
+}>()
 </script>
 
 <template>
-  <template v-if="wrapper">
+  <template v-if="classes">
     <h2 v-if="header" class="mb-10 text-center">{{ header }}</h2>
-    <component :is="wrapper" :class="classes">
+    <div :class="`matrix ${classes}`">
       <slot />
-    </component>
+    </div>
   </template>
-  <template v-else>
-    <slot />
-  </template>
+  <slot v-else />
 </template>

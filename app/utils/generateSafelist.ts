@@ -1,15 +1,36 @@
 import fs from 'fs'
 import path from 'path'
 
-// Tu run: node ./app/utils/generateSafelist.ts
+// Run this script with: node ./app/utils/generateSafelist.ts
 
-// Define breakpoints and common class prefixes
+// Define breakpoints
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
-const fractions = ['1/1', '1/2', '1/3', '1/4', '1/5', '1/6', '1/7', '1/8']
-const columns = Array.from({ length: 6 }, (_, i) => `grid-cols-${i + 1}`)
-const spans = Array.from({ length: 4 }, (_, i) => `col-span-${i + 1}`)
-const gaps = Array.from({ length: 20 }, (_, i) => `gap-${i + 1}`)
-const spacings = [2, 5, 10, 20]
+
+// ✅ Limit grid columns to a max of 5
+const columns = Array.from({ length: 5 }, (_, i) => `grid-cols-${i + 1}`)
+
+// ✅ Limit col-span to a max of 3 (we rarely go higher)
+const spans = Array.from({ length: 3 }, (_, i) => `col-span-${i + 1}`)
+
+// ✅ Limit gaps to a max of 10
+const gaps = Array.from({ length: 10 }, (_, i) => `gap-${i + 1}`)
+
+// ✅ Limit basis to only 1/2, 1/3, 1/4, and 1/5
+const basisValues = [
+  'basis-1/1',
+  'basis-1/2',
+  'basis-1/3',
+  'basis-1/4',
+  'basis-1/5',
+  'basis-1/6',
+  'basis-1/7',
+]
+
+// ✅ Limit columns-{n} to a max of 5 (for multi-column layouts)
+const columnsDynamic = Array.from({ length: 5 }, (_, i) => `columns-${i + 1}`)
+
+// ✅ Limit spacing sizes to a reasonable range
+const spacings = [2, 5, 10, 15, 20] // Removed 25 for efficiency
 const spacingClasses = spacings.flatMap((size) => [
   `p-${size}`,
   `pt-${size}`,
@@ -27,24 +48,24 @@ const spacingClasses = spacings.flatMap((size) => [
   `my-${size}`,
 ])
 
-// Generate all needed class variants
+// Generate safelist
 const safelist = new Set<string>()
 
 breakpoints.forEach((bp) => {
-  fractions.forEach((frac) => safelist.add(`${bp}basis-${frac}`))
   columns.forEach((col) => safelist.add(`${bp}${col}`))
+  columnsDynamic.forEach((col) => safelist.add(`${bp}${col}`))
   spans.forEach((span) => safelist.add(`${bp}${span}`))
   gaps.forEach((gap) => safelist.add(`${bp}${gap}`))
+  basisValues.forEach((basis) => safelist.add(`${bp}${basis}`))
   spacingClasses.forEach((cls) => safelist.add(`${bp}${cls}`))
 
-  // ✅ Add `hidden` and `block` for each breakpoint
+  // ✅ Add visibility helpers for each breakpoint
   safelist.add(`${bp}hidden`)
   safelist.add(`${bp}block`)
 })
 
 // ✅ Add additional required classes
 const additionalClasses = [
-  'sm:columns-2',
   'lg:block',
   'mx-auto',
   'm-auto',
@@ -58,7 +79,7 @@ const additionalClasses = [
 
 additionalClasses.forEach((cls) => safelist.add(cls))
 
-// Write to a `.txt` file for Tailwind to read
+// ✅ Write to Tailwind safelist file
 const safelistPath = path.resolve('app/assets/css/safelist.txt')
 fs.writeFileSync(safelistPath, Array.from(safelist).join('\n'))
 

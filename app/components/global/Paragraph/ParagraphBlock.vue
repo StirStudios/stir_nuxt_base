@@ -47,7 +47,6 @@ const itemData = computed(() => {
         spacing: blockData.value.spacing,
         width: blockData.value.width,
         gridItems: blockData.value.gridItems,
-        animate: blockData.value.animate,
         direction: blockData.value.direction,
       }
 

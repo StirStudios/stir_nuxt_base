@@ -2,16 +2,11 @@
 import type { SectionProps } from '~/types/ContentTypes'
 import { componentExists } from '~/utils/componentExists'
 
-const appConfig = useAppConfig()
+const props = defineProps<{
+  section?: SectionProps[]
+}>()
 
-withDefaults(
-  defineProps<{
-    section?: SectionProps[]
-  }>(),
-  {
-    section: [],
-  },
-)
+const { container, card } = useAppConfig().stirTheme
 
 // Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
@@ -25,24 +20,18 @@ const isValidParagraphLayout = computed(() => {
   }
 })
 
-const getClassForLayout = computed(() => {
-  const container = appConfig.stirTheme.container
-  const defaultGap = appConfig.stirTheme.grid.gap || 'gap-4'
-
+const classLayout = computed(() => {
   return (layout: SectionProps) => {
     const gridClass = layout.gridClass || 'grid-cols-1'
-    const appliedContainerClass = layout.container ? container : ''
-
-    return [gridClass, defaultGap, appliedContainerClass]
-      .filter(Boolean)
-      .join(' ')
+    const containerClass = layout.container ? container : ''
+    return [gridClass, containerClass].filter(Boolean).join(' ')
   }
 })
 
 const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
-      item: item,
+      item,
       amount: item.gridItems,
       header: item.header,
       indicators: item.carouselIndicators,
@@ -66,7 +55,6 @@ const getNodeProps = (item) => {
         spacing: item.spacing,
         width: item.width,
         gridItems: item.gridItems,
-        animate: item.animate,
         direction: item.direction,
       },
     }
@@ -76,7 +64,7 @@ const getNodeProps = (item) => {
     }
   } else {
     return {
-      item: item,
+      item,
     }
   }
 }
@@ -89,11 +77,16 @@ const getNodeProps = (item) => {
       :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
     >
       <template v-if="layout.header">
-        <h2 :class="appConfig.stirTheme.container" v-html="layout.header" />
+        <h2 :class="container" v-html="layout.header" />
       </template>
+
       <div
         :id="layout.label ?? null"
-        :class="[layout.width, getClassForLayout(layout)]"
+        :class="[
+          layout.width,
+          classLayout(layout),
+          layout.card ? card.base : '',
+        ]"
       >
         <div
           v-for="regionItem in layout.regions"
@@ -113,9 +106,12 @@ const getNodeProps = (item) => {
             </article>
           </template>
         </div>
+
+        <CardGradient v-if="layout.card" :layout="layout" />
       </div>
     </section>
-    <section v-else :class="appConfig.stirTheme.container">
+
+    <section v-else :class="container">
       <component
         v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
