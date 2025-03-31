@@ -26,6 +26,8 @@ export interface RegionItemProps extends LayoutProps {
   alt?: string
   width?: string
   height?: string
+  align?: string
+  spacing?: string
 }
 
 export interface TextProps extends LayoutProps {

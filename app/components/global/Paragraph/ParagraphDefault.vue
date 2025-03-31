@@ -18,14 +18,4 @@ defineProps<{ item: ViewItemProps }>()
       :description="`The component '${node.element}' does not exist. Using default fallback.`"
     />
   </template>
-  <USlideover
-    v-if="isAdministrator"
-    title="API Data"
-    close-icon="i-lucide-arrow-right"
-  >
-    <UButton class="mt-5" label="Data" size="sm" color="primary" />
-    <template #content>
-      <pre class="overflow-x-auto p-10 text-xs">{{ item }}</pre>
-    </template>
-  </USlideover>
 </template>

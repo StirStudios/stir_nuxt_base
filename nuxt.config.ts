@@ -31,13 +31,6 @@ export default defineNuxtConfig({
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_ENVIRONMENT === 'production' ? true : false,
   },
-  routeRules: {
-    // General pages cached for 1 day using SWR
-    // '/**': { swr: 86400 },
-    '/admincontrol/login': {
-      redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
-    },
-  },
   devtools: { enabled: true },
   routeRules: {
     '/admincontrol': {
@@ -51,6 +44,8 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxt/ui',
+    'motion-v/nuxt',
     [
       '@nuxtjs/turnstile',
       {
@@ -80,17 +75,21 @@ export default defineNuxtConfig({
         ],
       },
     ],
-    '@nuxt/ui',
     [
       'nuxtjs-drupal-ce',
       {
         drupalBaseUrl: process.env.DRUPAL_URL,
         exposeAPIRouteRules: true,
+        disableFormHandler: true,
       },
     ],
   ],
   runtimeConfig: {
     api: process.env.DRUPAL_URL,
+    apiKey: process.env.DRUPAL_API_KEY || '',
+    turnstile: {
+      secretKey: process.env.TURNSTILE_SECRET,
+    },
     public: {
       api: process.env.DRUPAL_URL,
       turnstileDisable: process.env.NUXT_ENVIRONMENT === 'local',

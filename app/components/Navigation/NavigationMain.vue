@@ -1,68 +1,44 @@
 <script lang="ts" setup>
+import { useWindowScroll, useThrottleFn } from '@vueuse/core'
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
+const appConfig = useAppConfig()
+const theme = appConfig.stirTheme
+const route = useRoute()
+
+// Fetch menu items
 const mainMenu = await fetchMenu('main')
-
-// Fetch main menu with error handling
-let mainMenuArray = []
-try {
-  const mainMenu = await fetchMenu('main')
-  mainMenuArray = mainMenu.value
-} catch (error) {
-  console.error('Error fetching menu:', error)
-}
-
-// Map over the array of menu items to create navLinks
-const navLinks = mainMenuArray.map((menuItem) => ({
+const navLinks = mainMenu.value.map((menuItem) => ({
   label: menuItem.title,
   to: menuItem.external
     ? menuItem.absolute
     : `/${menuItem.alias}${menuItem.options?.fragment ? `#${menuItem.options.fragment}` : ''}`,
 }))
 
-const appConfig = useAppConfig()
+// Scroll behavior state
+const { y } = useWindowScroll()
+const lastScrollPosition = ref(0)
 const showNavbar = ref(true)
 const navbarOpen = ref(false)
-const lastScrollPosition = ref(0)
-const isOpen = ref(false)
-const isScrolled = ref(false)
-const route = useRoute()
+const isScrolled = computed(() => y.value > 50)
+const isOpen = ref(false) // Controls mobile menu slideover
 
-// Scroll event handler
-const onScroll = () => {
-  const currentScrollPosition =
-    window.pageYOffset || document.documentElement.scrollTop
-  if (currentScrollPosition < 0) return
-  if (Math.abs(currentScrollPosition - lastScrollPosition.value) < 40) return
-  showNavbar.value = currentScrollPosition < lastScrollPosition.value
-  lastScrollPosition.value = currentScrollPosition
+// Scroll behavior logic
+const handleScroll = useThrottleFn(() => {
+  if (y.value < 0 || Math.abs(y.value - lastScrollPosition.value) < 40) return
+  showNavbar.value = y.value < lastScrollPosition.value
+  lastScrollPosition.value = y.value
   navbarOpen.value = false
-  isScrolled.value = currentScrollPosition > 50
-}
+}, 100)
 
-// Throttle scroll event handler
-let scrollTimeout: number | null = null
-const throttledOnScroll = () => {
-  if (scrollTimeout) return
-  scrollTimeout = window.setTimeout(() => {
-    onScroll()
-    scrollTimeout = null
-  }, 100)
-}
+// Watch scroll position
+watch(y, handleScroll)
 
+// On mount, check if there's a hash in the URL
 onMounted(() => {
-  window.addEventListener('scroll', throttledOnScroll)
-  onScroll()
-  if (route.hash) {
-    isScrolled.value = true
-  }
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', throttledOnScroll)
-  if (scrollTimeout) clearTimeout(scrollTimeout)
+  if (route.hash) isScrolled.value = true
 })
 </script>
 
@@ -71,26 +47,22 @@ onBeforeUnmount(() => {
     aria-label="Site navigation"
     role="navigation"
     :class="[
-      appConfig.stirTheme.navigation.base,
-      // Apply no background if transparentTop is true and not scrolled (for admin and non-admin)
-      appConfig.stirTheme.navigation.transparentTop &&
-      !isScrolled &&
-      (!isAdministrator || isAdministrator)
+      theme.navigation.base,
+      theme.navigation.transparentTop && !isScrolled && !isAdministrator
         ? ''
-        : appConfig.stirTheme.navigation.background,
+        : theme.navigation.background,
       {
         '-translate-y-full':
-          !showNavbar ||
-          (appConfig.stirTheme.navigation.isHidden && !isScrolled),
+          !showNavbar || (theme.navigation.isHidden && !isScrolled),
       },
     ]"
   >
     <div
-      :class="`${appConfig.stirTheme.container} mx-auto flex flex-wrap items-center justify-between`"
+      :class="`${theme.container} mx-auto flex flex-wrap items-center justify-between`"
     >
       <div class="order-1">
         <ULink aria-label="Site Logo" class="font-bold" to="/">
-          <template v-if="appConfig.stirTheme.navigation.logo">
+          <template v-if="theme.navigation.logo">
             <AppLogo />
           </template>
           <template v-else>
@@ -98,31 +70,31 @@ onBeforeUnmount(() => {
           </template>
         </ULink>
       </div>
+
       <UNavigationMenu
-        :highlight="appConfig.stirTheme.navigation.highlight.show"
+        :highlight="theme.navigation.highlight.show"
         :highlight-color="
-          appConfig.stirTheme.navigation.highlight.show
-            ? appConfig.stirTheme.navigation.highlight.color
+          theme.navigation.highlight.show
+            ? theme.navigation.highlight.color
             : ''
         "
-        :color="appConfig.stirTheme.navigation.color"
-        :variant="appConfig.stirTheme.navigation.variant"
-        class="order-2 flex hidden border-none md:block"
+        :color="theme.navigation.color"
+        :variant="theme.navigation.variant"
+        :class="[
+          'order-2 hidden md:block',
+          appConfig.colorMode?.forced ? 'ml-auto' : '',
+        ]"
         :items="navLinks"
       />
-      <div
-        class="order-2 flex md:order-3"
-        :class="{
-          'md:hidden': appConfig.colorMode?.forced,
-        }"
-      >
+
+      <div class="order-2 flex md:order-3">
         <IconsColorMode />
         <UButton
           aria-label="Site navigation toggle"
-          class="block flex items-center md:hidden"
+          class="md:hidden"
           color="black"
           :icon="
-            navbarOpen ? 'i-heroicons-x-mark-solid' : 'i-heroicons-bars-3-solid'
+            isOpen ? 'i-heroicons-x-mark-solid' : 'i-heroicons-bars-3-solid'
           "
           size="xl"
           variant="ghost"
@@ -131,6 +103,7 @@ onBeforeUnmount(() => {
       </div>
     </div>
   </nav>
+
   <USlideover
     v-model:open="isOpen"
     title="Menu"
@@ -140,7 +113,7 @@ onBeforeUnmount(() => {
   >
     <template #header>
       <ULink
-        v-if="appConfig.stirTheme.navigation.slideover.logo"
+        v-if="theme.navigation.slideover.logo"
         aria-label="Logo"
         to="/"
         @click="isOpen = false"
@@ -156,11 +129,10 @@ onBeforeUnmount(() => {
         @click="isOpen = false"
       />
     </template>
+
     <template #body>
       <UNavigationMenu
-        :ui="{
-          link: appConfig.stirTheme.navigation.slideover.link,
-        }"
+        :ui="{ link: theme.navigation.slideover.link }"
         orientation="vertical"
         :items="navLinks"
       />

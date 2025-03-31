@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
 
+const appConfig = useAppConfig()
+
 defineProps<{
   item: {
     settings: MediaSettings
@@ -10,20 +12,18 @@ defineProps<{
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
-    <WrapAnimate
-      :aos="item.direction"
-      :wrapper="item.animate === true ? 'div' : undefined"
-    >
+  <EditLink :link="item.editLink">
+    <WrapAlign :align="item.align">
       <WrapGrid
         :header="item.header"
-        :wrapper="item.grid === true ? 'div' : undefined"
+        :classes="
+          [item.gridItems, item.width, item.spacing].filter(Boolean).join(' ')
+        "
       >
-        <div
+        <WrapAnimate
           v-for="media in item.media"
+          :effect="item.direction"
           :key="media.mid"
-          :class="'media media-' + media.mid"
         >
           <template
             v-if="
@@ -39,8 +39,8 @@ defineProps<{
           <template v-else>
             <MediaSimple :media="[media]" />
           </template>
-        </div>
+        </WrapAnimate>
       </WrapGrid>
-    </WrapAnimate>
-  </WrapNone>
+    </WrapAlign>
+  </EditLink>
 </template>

@@ -1,42 +1,25 @@
 <script setup lang="ts">
-const showButton = ref(false)
+import { useWindowScroll } from '@vueuse/core'
 
-const appConfig = useAppConfig()
+const { y } = useWindowScroll()
+const theme = useAppConfig().stirTheme.scrollButton
 
-const handleScroll = () => {
-  showButton.value =
-    window.scrollY > appConfig.stirTheme.scrollButton.showAtScrollY
-}
+const showButton = computed(() => y.value > theme.showAtScrollY)
 
 const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  })
+  y.value = 0
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 </script>
 
 <template>
   <ClientOnly>
     <UButton
       aria-label="Scroll to top of page"
-      :class="`${appConfig.stirTheme.scrollButton.base} ${showButton ? 'opacity-100' : 'opacity-0'}`"
+      :class="[theme.base, showButton ? 'opacity-100' : 'opacity-0']"
       @click="scrollToTop"
-      :variant="appConfig.stirTheme.scrollButton.variant"
+      :variant="theme.variant"
     >
-      <UIcon
-        aria-hidden="true"
-        class="size-7"
-        :name="appConfig.stirTheme.scrollButton.icon"
-      />
+      <UIcon aria-hidden="true" class="size-7" :name="theme.icon" />
       <span class="sr-only">Scroll to top of page</span>
     </UButton>
   </ClientOnly>
