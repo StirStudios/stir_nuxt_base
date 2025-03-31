@@ -80,7 +80,10 @@ onMounted(() => {
         "
         :color="theme.navigation.color"
         :variant="theme.navigation.variant"
-        class="order-2 hidden md:block"
+        :class="[
+          'order-2 hidden md:block',
+          appConfig.colorMode?.forced ? 'ml-auto' : '',
+        ]"
         :items="navLinks"
       />
 
