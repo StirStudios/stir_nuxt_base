@@ -7,16 +7,16 @@
 
   h1,
   .display-h1 {
-    @apply mb-2 text-center text-5xl font-normal md:text-7xl;
+    @apply mb-2 text-center text-[clamp(2rem,5vw,4.5rem)] font-normal;
   }
 
   h2,
   .display-h2 {
-    @apply mb-5 text-3xl font-medium md:text-4xl;
+    @apply mb-5 text-[clamp(1.75rem,4vw,3rem)] font-medium;
   }
 
   h3 {
-    @apply text-lg;
+    @apply text-[clamp(1.5rem,3vw,2.25rem)];
   }
 
   a,
@@ -56,10 +56,5 @@
     em {
       @apply text-sm;
     }
-  }
-
-  .aos-init,
-  .aos-animate {
-    @apply opacity-0;
   }
 }

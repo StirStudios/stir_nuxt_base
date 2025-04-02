@@ -91,7 +91,7 @@ const getNodeProps = (item) => {
         <div
           v-for="regionItem in layout.regions"
           :key="regionItem[0]?.uuid"
-          :class="regionItem[0].region"
+          :class="[regionItem[0].region, layout.align]"
         >
           <template v-for="item in regionItem" :key="item.uuid">
             <article>
