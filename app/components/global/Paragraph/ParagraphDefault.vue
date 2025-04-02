@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { componentExists } from '~/utils/componentExists'
-const { isAdministrator } = usePageContext()
 defineProps<{ item: ViewItemProps }>()
 </script>
 
@@ -12,10 +11,10 @@ defineProps<{ item: ViewItemProps }>()
     <UAlert
       v-else
       color="error"
-      variant="subtle"
+      :description="`The component '${node.element}' does not exist. Using default fallback.`"
       icon="i-lucide-terminal"
       title="Missing component"
-      :description="`The component '${node.element}' does not exist. Using default fallback.`"
+      variant="subtle"
     />
   </template>
 </template>

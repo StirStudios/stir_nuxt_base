@@ -14,7 +14,7 @@ const gradientClass = computed(() =>
 </script>
 
 <template>
-  <div v-if="layout.card" :class="card.effect" aria-hidden="true">
+  <div v-if="layout.card" aria-hidden="true" :class="card.effect">
     <div
       class="aspect-[1155/678] w-[72.1875rem] opacity-30"
       :class="gradientClass"

@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to submit form to Drupal',
+      statusMessage: 'Form submission failed. Please try again later.',
       data: error,
     })
   }

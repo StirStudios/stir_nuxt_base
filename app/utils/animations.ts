@@ -6,7 +6,7 @@ const defaultTransitionConfig = {
   stiffness: 250,
   damping: 40,
   delay: 0.2,
-  staggerChildren: 0.3, // ✅ Only works if inside a motion parent container
+  staggerChildren: 0.3,
 }
 
 // Function to Get Motion Effect Based on Direction
@@ -19,7 +19,7 @@ export const getMotionEffect = (
     show: { opacity: 1, transition: transitionConfig },
   }
 
-  // ✅ All Animation Variants Restored
+  // All Animation Variants Restored
   const effects = {
     // Fade Animations
     'fade-in': baseEffect,
@@ -122,5 +122,5 @@ export const getMotionEffect = (
     },
   }
 
-  return effects[direction] || baseEffect
+  return effects[direction as keyof typeof effects] || baseEffect
 }

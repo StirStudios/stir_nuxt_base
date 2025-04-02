@@ -1,31 +1,38 @@
-import { object, string, ObjectSchema } from 'yup'
+import { object, string, type ObjectSchema, type AnySchema } from 'yup'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
+import type { WebformFieldProps } from '~/types/FormTypes'
 
 export function buildYupSchema(
-  fields: Record<string, any>,
-  state: Record<string, any>,
-): ObjectSchema {
-  const shape: Record<string, any> = {}
+  fields: Record<string, WebformFieldProps>,
+  state: Record<string, unknown>,
+): ObjectSchema<Record<string, unknown>> {
+  const shape: Record<string, AnySchema> = {}
 
   for (const [key, field] of Object.entries(fields)) {
-    if (!evaluateVisibility(field['#states'], state)) continue
+    if (
+      field['#states']?.visible &&
+      !evaluateVisibility(field['#states'], state)
+    ) {
+      continue
+    }
 
     const requiredError = field['#requiredError'] || 'This field is required'
 
-    if (field['#composite']) {
-      shape[key] = object().shape(
-        Object.fromEntries(
-          Object.entries(field['#composite']).map(([subKey, subField]) => [
-            subKey,
-            string()
-              .nullable()
-              .when([], {
-                is: () => field['#required'] || subField['#required'],
-                then: (schema) => schema.required(requiredError),
-              }),
-          ]),
-        ),
-      )
+    if ('#composite' in field && typeof field['#composite'] === 'object') {
+      const subShape: Record<string, AnySchema> = {}
+
+      for (const [subKey, subField] of Object.entries(
+        field['#composite'] as Record<string, WebformFieldProps>,
+      )) {
+        subShape[subKey] = string()
+          .nullable()
+          .when([], {
+            is: () => field['#required'] || subField['#required'],
+            then: (schema) => schema.required(requiredError),
+          })
+      }
+
+      shape[key] = object().shape(subShape)
     } else {
       shape[key] = string()
         .nullable()

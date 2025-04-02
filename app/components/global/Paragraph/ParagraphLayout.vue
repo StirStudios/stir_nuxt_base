@@ -2,7 +2,7 @@
 import type { SectionProps } from '~/types/ContentTypes'
 import { componentExists } from '~/utils/componentExists'
 
-const props = defineProps<{
+defineProps<{
   section?: SectionProps[]
 }>()
 
@@ -113,8 +113,8 @@ const getNodeProps = (item) => {
 
     <section v-else :class="container">
       <component
-        v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
+        v-if="getNodeProps(layout) !== null"
         v-bind="getNodeProps(layout)"
       />
     </section>

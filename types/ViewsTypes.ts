@@ -1,4 +1,4 @@
-import { LayoutProps } from './UtilityTypes'
+import type { LayoutProps } from './UtilityTypes'
 
 export interface ViewProps {
   item: ViewItemProps

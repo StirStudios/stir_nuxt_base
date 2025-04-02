@@ -7,7 +7,7 @@ const {
   modal: { header },
 } = useAppConfig().stirTheme
 
-const props = defineProps<{
+defineProps<{
   media?: MediaProps[]
 }>()
 
@@ -45,20 +45,20 @@ const openModal = (item: MediaProps) => {
         >
           <UIcon
             v-if="item.mediaEmbed"
+            aria-hidden="true"
+            color="white"
             name="i-heroicons-play-circle"
             size="60"
-            color="white"
-            aria-hidden="true"
           />
           <span class="sr-only">Play Video</span>
         </button>
       </div>
     </div>
     <UModal
-      v-model:open="modal"
       v-if="activeMedia"
-      :title="activeMedia?.alt"
+      v-model:open="modal"
       :description="activeMedia?.alt"
+      :title="activeMedia?.alt"
       :ui="{
         header: header
           ? 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16'

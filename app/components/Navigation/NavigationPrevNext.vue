@@ -10,25 +10,25 @@ const nextNode = page.value?.next_node as NodeLinkProps | null
   <div class="container m-auto mb-5 flex justify-between">
     <UButton
       v-if="prevNode"
-      icon="i-heroicons-chevron-left"
-      size="xl"
       color="primary"
-      square
-      variant="link"
+      icon="i-heroicons-chevron-left"
       label="Previous"
+      size="xl"
+      square
       :to="prevNode.url"
+      variant="link"
     />
     <UButton
       v-if="nextNode"
-      icon="i-heroicons-chevron-right"
-      size="xl"
-      color="primary"
-      square
-      variant="link"
-      label="Next"
-      trailing
-      :to="nextNode.url"
       class="ml-auto"
+      color="primary"
+      icon="i-heroicons-chevron-right"
+      label="Next"
+      size="xl"
+      square
+      :to="nextNode.url"
+      trailing
+      variant="link"
     />
   </div>
 </template>

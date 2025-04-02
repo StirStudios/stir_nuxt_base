@@ -24,14 +24,14 @@ const filteredRows = computed(() =>
     <template v-if="item.carousel">
       <ParagraphCarousel
         :amount="item.gridItems"
-        :indicators="item.carouselIndicators"
         :arrows="item.carouselArrows"
-        :fade="item.carouselFade"
         :autoscroll="item.carouselAutoscroll"
+        :fade="item.carouselFade"
+        :indicators="item.carouselIndicators"
         :interval="item.carouselInterval"
+        :item-element="item.element"
         :items="filteredRows"
         :vid="item.viewId"
-        :item-element="item.element"
       />
     </template>
 
@@ -49,10 +49,10 @@ const filteredRows = computed(() =>
 
           <USeparator
             v-if="grid.separator?.condition?.includes(row.element)"
-            :color="grid.separator?.color"
-            :type="grid.separator?.solid"
-            :size="grid.separator?.size"
             :class="grid.separator?.base"
+            :color="grid.separator?.color"
+            :size="grid.separator?.size"
+            :type="grid.separator?.solid"
           />
         </WrapAnimate>
       </div>

@@ -32,10 +32,10 @@ const media = computed(() => hero.media?.[0] || {})
       >
         <WrapAnimate :effect="hero?.direction">
           <HeroContent
-            :page-title="pageTitle"
-            :site-slogan="siteSlogan"
             :hero-text="hero?.text"
             :is-front="isFront"
+            :page-title="pageTitle"
+            :site-slogan="siteSlogan"
           />
         </WrapAnimate>
       </div>
@@ -57,13 +57,13 @@ const media = computed(() => hero.media?.[0] || {})
       <video
         v-else-if="media.type === 'video'"
         class="absolute min-h-full w-auto max-w-none min-w-full"
+        disablepictureinpicture
         height="640"
+        loop
         muted
+        playsinline
         preload="metadata"
         width="360"
-        playsinline
-        disablepictureinpicture
-        loop
       >
         <source :src="media.mediaEmbed" type="video/mp4" />
       </video>

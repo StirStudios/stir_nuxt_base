@@ -5,7 +5,7 @@ import { buildYupSchema } from '~/utils/buildYupSchema'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
-const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
+const props = withDefaults(defineProps<{ webform?: WebformDefinition }>(), {
   webform: {} as WebformDefinition,
 })
 
@@ -14,7 +14,6 @@ const { onError } = useValidation()
 const { y } = useWindowScroll()
 const toast = useToast()
 const config = useRuntimeConfig()
-const siteApi = config.public.api
 
 const { webform: themeWebform } = useAppConfig().stirTheme
 
@@ -28,7 +27,6 @@ const {
 } = props.webform
 
 // Reactive state
-const csrfToken = ref('')
 const turnstileToken = ref('')
 const state = reactive({})
 const isFormSubmitted = ref(false)
@@ -91,7 +89,7 @@ const isContainerVisible = (containerName: string) =>
   )
 
 // Form submission handler
-async function onSubmit(event: FormSubmitEvent<any>) {
+async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   isLoading.value = true
   errors.value = {}
 
@@ -145,16 +143,13 @@ async function onSubmit(event: FormSubmitEvent<any>) {
   <EditLink :link="webformSubmissions">
     <UForm
       v-if="!isFormSubmitted"
-      :state="state"
-      :schema="schema"
       :class="themeWebform.form"
-      @submit="onSubmit"
+      :schema="schema"
+      :state="state"
       @error="onError"
+      @submit="onSubmit"
     >
-      <template
-        v-for="(fieldName, index) in orderedFieldNames"
-        :key="fieldName"
-      >
+      <template v-for="fieldName in orderedFieldNames" :key="fieldName">
         <template
           v-if="
             shouldRenderGroupContainer(fieldName) &&
@@ -173,7 +168,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
             >
               <FieldRenderer
                 :field="fields[groupedFieldName]"
-                :fieldName="groupedFieldName"
+                :field-name="groupedFieldName"
                 :state="state"
               />
             </template>
@@ -183,7 +178,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         <template v-else-if="shouldRenderIndividualField(fieldName)">
           <FieldRenderer
             :field="fields[fieldName]"
-            :fieldName="fieldName"
+            :field-name="fieldName"
             :state="state"
           />
         </template>
