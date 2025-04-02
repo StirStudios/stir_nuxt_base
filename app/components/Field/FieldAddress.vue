@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import type { WebformFieldProps } from '~/types/formTypes'
-
 const props = defineProps<{
-  field: Record<string, any>
+  field: Record<string, unknown>
   fieldName: string
-  state: Record<string, any>
+  state: Record<string, Record<string, string>>
 }>()
 
 // Ensure composite fields exist before accessing

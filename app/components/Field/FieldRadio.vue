@@ -5,7 +5,7 @@ import { transformOptions } from '~/utils/transformOptions'
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
-  state: Record<string, any>
+  state: Record<string, string>
 }>()
 
 const transformedOptions = computed(() =>

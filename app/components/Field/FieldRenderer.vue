@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 import { cleanHTML } from '~/utils/cleanHTML'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 
@@ -19,7 +19,7 @@ const appConfig = useAppConfig()
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
-  state: Record<string, any>
+  state: WebformState
 }>()
 
 // Map the field types to components

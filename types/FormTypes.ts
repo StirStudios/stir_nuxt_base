@@ -48,3 +48,8 @@ export interface WebformActionProps {
   '#title': string
   '#submit_Label': string
 }
+
+export type WebformState = Record<
+  string,
+  string | number | boolean | string[] | undefined | object
+>

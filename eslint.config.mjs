@@ -16,6 +16,7 @@ export default withNuxt({
     'vue/no-v-html': 'off',
     'vue/this-in-template': 'off',
     'vue/html-self-closing': 'off',
+    'vue/no-mutating-props': 'off',
     'vue/no-unused-vars':
       process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     quotes: ['error', 'single'],
