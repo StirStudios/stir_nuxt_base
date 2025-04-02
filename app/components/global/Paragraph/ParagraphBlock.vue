@@ -63,8 +63,8 @@ const itemData = computed(() => {
 
 <template>
   <component
-    v-if="blockData && resolvedComponent"
     :is="resolvedComponent"
+    v-if="blockData && resolvedComponent"
     v-bind="{ item: itemData }"
   />
 </template>

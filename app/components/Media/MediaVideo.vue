@@ -3,7 +3,7 @@ import type { MediaProps } from '~/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
 import { useVideoPlayers } from '~/composables/useVideoPlayers'
 
-const props = defineProps<{ item: MediaProps }>()
+defineProps<{ item: MediaProps }>()
 
 const { media: mediaTheme } = useAppConfig().stirTheme
 const { initializePlayers } = useVideoPlayers()
@@ -33,14 +33,14 @@ onMounted(() => {
     </div>
     <iframe
       v-else
-      :src="item.mediaEmbed"
-      :title="item.title"
-      :data-mid="item.mid"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
       class="absolute inset-0 h-full w-full"
+      :data-mid="item.mid"
       frameborder="0"
       loading="lazy"
-      allowfullscreen
+      :src="item.mediaEmbed"
+      :title="item.title"
     />
   </div>
 </template>

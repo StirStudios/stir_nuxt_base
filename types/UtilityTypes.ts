@@ -11,7 +11,7 @@ export interface MediaSettings extends LayoutProps {
 export interface LinkProps {
   uri: string
   title?: string
-  options?: Record<string, any>
+  options?: Record<string, unknown>
 }
 
 // LayoutProps

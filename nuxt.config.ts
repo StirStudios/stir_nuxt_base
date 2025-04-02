@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     server: {
       allowedHosts:
         process.env.NODE_ENV === 'development'
-          ? [process.env.SERVER_DOMAIN_CLIENT]
+          ? ([process.env.SERVER_DOMAIN_CLIENT].filter(Boolean) as string[])
           : [],
     },
   },
@@ -44,6 +44,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    '@nuxt/eslint',
     '@nuxt/ui',
     'motion-v/nuxt',
     [

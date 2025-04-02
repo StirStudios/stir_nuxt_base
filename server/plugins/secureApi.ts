@@ -13,7 +13,7 @@ export default defineNitroPlugin((nitroApp) => {
   })
 
   // Stop execution immediately for 403 responses
-  nitroApp.hooks.hook('response', (event) => {
+  nitroApp.hooks.hook('beforeResponse', (event) => {
     if (event.node.res.statusCode === 403) {
       throw createError({
         statusCode: 403,

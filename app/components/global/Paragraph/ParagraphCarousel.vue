@@ -18,17 +18,17 @@ const itemElement = computed(() => props.itemElement || false)
     <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       v-slot="{ item }"
-      loop
-      :auto-scroll="autoscroll"
-      :fade="transitionFade"
       :arrows="showArrows"
-      :dots="showIndicators"
+      :auto-scroll="autoscroll"
       :autoplay="{ delay: interval }"
+      :dots="showIndicators"
+      :fade="transitionFade"
       :items="items"
-      :prev="appConfig.stirTheme.carousel.arrows.prev"
+      loop
       :next="appConfig.stirTheme.carousel.arrows.next"
-      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
+      :prev="appConfig.stirTheme.carousel.arrows.prev"
+      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
       :ui="{
         root: `${appConfig.stirTheme.carousel.root}`,
         item: amount,
@@ -45,8 +45,8 @@ const itemElement = computed(() => props.itemElement || false)
         />
       </template>
       <template v-else>
-        <MediaSimple :media="[item]" v-if="item.type === 'image'" />
-        <MediaPopup :media="[item]" v-else-if="item.type === 'video'" />
+        <MediaSimple v-if="item.type === 'image'" :media="[item]" />
+        <MediaPopup v-else-if="item.type === 'video'" :media="[item]" />
       </template>
     </UCarousel>
   </div>

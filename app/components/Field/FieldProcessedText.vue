@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types/formTypes'
 
-const props = defineProps<{
+defineProps<{
   field: WebformFieldProps
 }>()
 </script>
 
 <template>
-  <div v-html="field['#text']" class="prose" />
+  <div class="prose" v-html="field['#text']" />
 </template>

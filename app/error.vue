@@ -1,6 +1,10 @@
 <script setup lang="ts">
-defineProps(['error'])
+defineProps<{
+  error: NuxtError
+}>()
+
 const clearHome = () => clearError({ redirect: '/' })
+
 useHead({
   title: 'Ooops',
 })

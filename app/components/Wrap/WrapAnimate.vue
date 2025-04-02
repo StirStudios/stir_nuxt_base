@@ -13,11 +13,11 @@ const motionEffects = getMotionEffect(props.effect)
 <template>
   <motion.div
     v-if="effect"
-    :variants="motionEffects"
-    initial="hidden"
-    whileInView="show"
-    :inViewOptions="{ once: appConfig.stirTheme.animations.once }"
     class="media"
+    :in-view-options="{ once: appConfig.stirTheme.animations.once }"
+    initial="hidden"
+    :variants="motionEffects"
+    while-in-view="show"
   >
     <slot />
   </motion.div>

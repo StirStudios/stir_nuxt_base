@@ -13,10 +13,10 @@ const button = props.item.link?.[0] || null
     <div :class="['flex w-full', item.align, item.spacing, item.width]">
       <UButton
         v-if="button?.uri"
-        :label="button.title || 'Learn More'"
-        :to="button.uri"
         class="mt-4"
+        :label="button.title || 'Learn More'"
         target="_blank"
+        :to="button.uri"
       />
     </div>
   </EditLink>

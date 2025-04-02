@@ -1,24 +1,40 @@
+interface VisibilityCondition {
+  [selector: string]: { value: string }
+}
+
+interface States {
+  visible?: (VisibilityCondition | 'or')[] | VisibilityCondition
+}
+
 export function evaluateVisibility(
-  states: Record<string, any>,
-  state: Record<string, any>,
+  states: States,
+  state: Record<string, unknown>,
 ): boolean {
-  if (!states || !states.visible || states.visible.length === 0) {
+  if (
+    !states ||
+    !states.visible ||
+    (Array.isArray(states.visible) && states.visible.length === 0)
+  ) {
     return true // No conditions defined, always visible
   }
 
   // If 'visible' is an array, handle OR logic
   if (Array.isArray(states.visible)) {
-    let lastConditionResult = false
     for (const condition of states.visible) {
       if (condition === 'or') {
         // Continue to next condition
         continue
       }
 
-      const [selector, valueCondition] = Object.entries(condition)[0]
+      const entry = Object.entries(condition)[0]
+      if (!entry) {
+        continue // Skip if no entry
+      }
+
+      const [selector, valueCondition] = entry
       const targetFieldName = selector.match(/name="(.+?)"/)?.[1]
 
-      if (!targetFieldName) {
+      if (!targetFieldName || typeof valueCondition !== 'object') {
         continue // Skip invalid selectors
       }
 
@@ -42,7 +58,7 @@ export function evaluateVisibility(
   for (const [selector, valueCondition] of Object.entries(states.visible)) {
     const targetFieldName = selector.match(/name="(.+?)"/)?.[1]
 
-    if (!targetFieldName) {
+    if (!targetFieldName || typeof valueCondition !== 'object') {
       continue // Skip invalid selectors
     }
 
