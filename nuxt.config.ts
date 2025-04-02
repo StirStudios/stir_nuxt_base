@@ -2,14 +2,14 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  // vite: {
-  //   server: {
-  //     allowedHosts:
-  //       process.env.NODE_ENV === 'development'
-  //         ? ([process.env.SERVER_DOMAIN_CLIENT].filter(Boolean) as string[])
-  //         : [],
-  //   },
-  // },
+  vite: {
+    server: {
+      allowedHosts:
+        process.env.NODE_ENV === 'development'
+          ? ([process.env.SERVER_DOMAIN_CLIENT].filter(Boolean) as string[])
+          : [],
+    },
+  },
   compatibilityDate: '2025-03-04',
   nitro: {
     compressPublicAssets: true,
