@@ -9,8 +9,8 @@ defineProps<EditLinkProps>()
     <UButton
       class="absolute top-0 right-0 z-20 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       icon="i-heroicons-pencil-square"
-      :to="link"
       size="xs"
+      :to="link"
     />
     <slot />
   </div>

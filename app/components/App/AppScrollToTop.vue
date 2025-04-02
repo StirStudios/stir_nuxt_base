@@ -16,8 +16,8 @@ const scrollToTop = () => {
     <UButton
       aria-label="Scroll to top of page"
       :class="[theme.base, showButton ? 'opacity-100' : 'opacity-0']"
-      @click="scrollToTop"
       :variant="theme.variant"
+      @click="scrollToTop"
     >
       <UIcon aria-hidden="true" class="size-7" :name="theme.icon" />
       <span class="sr-only">Scroll to top of page</span>

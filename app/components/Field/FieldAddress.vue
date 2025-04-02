@@ -34,8 +34,8 @@ if (!props.state[props.fieldName]) {
     <UFormField
       v-for="(fieldData, key) in compositeFields"
       :key="key"
-      :name="`${fieldName}.${key}`"
       :label="fieldData.label"
+      :name="`${fieldName}.${key}`"
       :required="!!field['#required']"
     >
       <UInput
@@ -47,11 +47,11 @@ if (!props.state[props.fieldName]) {
       <USelectMenu
         v-else
         v-model="state[fieldName].country"
-        placeholder="Select Country"
-        :items="countryOptions"
-        valueKey="label"
-        labelKey="label"
         class="w-full"
+        :items="countryOptions"
+        label-key="label"
+        placeholder="Select Country"
+        value-key="label"
       />
     </UFormField>
   </div>

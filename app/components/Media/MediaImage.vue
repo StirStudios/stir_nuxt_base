@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 
-const props = defineProps<{ item: MediaProps }>()
+defineProps<{ item: MediaProps }>()
 
 const { media } = useAppConfig().stirTheme
 const loaded = ref(false)

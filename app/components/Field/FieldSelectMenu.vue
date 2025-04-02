@@ -18,8 +18,8 @@ onMounted(() => {
 <template>
   <USelectMenu
     v-model="state[fieldName]"
-    placeholder="Select"
-    :items="transformOptions(field['#options'] || {})"
     class="w-full"
+    :items="transformOptions(field['#options'] || {})"
+    placeholder="Select"
   />
 </template>

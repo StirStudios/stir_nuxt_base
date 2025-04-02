@@ -1,3 +1,7 @@
+type FormErrorEvent = {
+  errors: { id: string; message?: string }[]
+}
+
 export const useValidation = () => {
   const toast = useToast()
 

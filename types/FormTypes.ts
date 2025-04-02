@@ -1,6 +1,6 @@
 export interface DrupalFormProps {
   formId: string
-  attributes: Record<string, any>
+  attributes: Record<string, unknown>
   method: string
   content?: string
 }
@@ -35,6 +35,11 @@ export interface WebformFieldProps {
   '#requiredError'?: string
   '#options'?: Record<string, string>
   '#text'?: string
+  '#states'?: {
+    visible?:
+      | Record<string, { value: string }>
+      | Array<Record<string, { value: string }> | 'or'>
+  }
   floatingLabel?: boolean
 }
 

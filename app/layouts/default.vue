@@ -17,7 +17,7 @@ const heroClasses = computed(() => ({
     <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
   </header>
-  <main id="main-content" role="main" :class="heroClasses">
+  <main id="main-content" :class="heroClasses" role="main">
     <SiteMessages />
     <slot />
   </main>

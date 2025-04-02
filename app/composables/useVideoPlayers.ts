@@ -16,7 +16,7 @@ export function useVideoPlayers() {
     ],
   })
 
-  watch(isScriptLoaded, (loaded) => {
+  watch(isScriptLoaded, (loaded: boolean) => {
     if (loaded) {
       initializePlayers()
     }
@@ -31,7 +31,9 @@ export function useVideoPlayers() {
       if (!iframeKey || videoPlayers.value.has(iframeKey)) return
 
       try {
-        const player: VideoPlayer = new (window as any).playerjs.Player(iframe)
+        const player: VideoPlayer = new window.playerjs.Player(
+          iframe as HTMLIFrameElement,
+        )
         playersReady(iframeKey, player) // Check readiness for the specific player
       } catch (error) {
         console.error(`Error initializing player for ${iframeKey}:`, error)
@@ -40,7 +42,7 @@ export function useVideoPlayers() {
   }
 
   // Modularized playersReady function for single-player handling
-  function playersReady(iframeKey: string, player: VideoPlayer) {
+  function playersReady(iframeKey: string, player: VideoPlayer): void {
     player.on('ready', () => {
       videoPlayers.value.set(iframeKey, player)
       addFullscreenExitOnEnd()
@@ -48,31 +50,31 @@ export function useVideoPlayers() {
     })
   }
 
-  function resetOnEnd(iframeKey: string, player: VideoPlayer) {
+  function resetOnEnd(_iframeKey: string, player: VideoPlayer): void {
     player.on('ended', () => {
       player.setCurrentTime(0)
       player.pause()
     })
   }
 
-  function addEventToAllPlayers(event: string, callback: () => void) {
-    videoPlayers.value.forEach((player) => {
+  function addEventToAllPlayers(event: string, callback: () => void): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('event', event)) {
         player.on(event, callback)
       }
     })
   }
 
-  function playAllPlayers() {
-    videoPlayers.value.forEach((player) => {
+  function playAllPlayers(): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('method', 'play')) {
         player.play()
       }
     })
   }
 
-  function pauseAllPlayers() {
-    videoPlayers.value.forEach((player) => {
+  function pauseAllPlayers(): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('method', 'pause')) {
         player.pause()
       }
@@ -89,32 +91,32 @@ export function useVideoPlayers() {
     })
   }
 
-  function muteAllPlayers() {
-    videoPlayers.value.forEach((player) => {
+  function muteAllPlayers(): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('method', 'mute')) {
         player.mute()
       }
     })
   }
 
-  function unmuteAllPlayers() {
-    videoPlayers.value.forEach((player) => {
+  function unmuteAllPlayers(): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('method', 'unmute')) {
         player.unmute()
       }
     })
   }
 
-  function setVolumeForAll(value: number) {
-    videoPlayers.value.forEach((player) => {
+  function setVolumeForAll(value: number): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('method', 'setVolume')) {
         player.setVolume(value)
       }
     })
   }
 
-  function seekAllPlayers(timeInSeconds: number) {
-    videoPlayers.value.forEach((player) => {
+  function seekAllPlayers(timeInSeconds: number): void {
+    videoPlayers.value.forEach((player: VideoPlayer) => {
       if (player.isReady && player.supports('method', 'setCurrentTime')) {
         player.setCurrentTime(timeInSeconds)
       }

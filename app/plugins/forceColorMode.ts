@@ -1,4 +1,3 @@
-// forceColorMode.ts (plugin)
 export default defineNuxtPlugin((nuxtApp) => {
   const colorMode = useColorMode()
   const appConfig = useAppConfig()

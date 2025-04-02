@@ -1,23 +1,26 @@
-export function transformPayloadToSnakeCase(
-  payload: Record<string, any>,
-): Record<string, any> {
-  const result: Record<string, any> = {}
+export function transformPayloadToSnakeCase<T extends Record<string, unknown>>(
+  payload: T,
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
 
   for (const [key, value] of Object.entries(payload)) {
     const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase()
 
     if (typeof value === 'object' && value !== null) {
-      if (value.hasOwnProperty('address')) {
+      if (Object.prototype.hasOwnProperty.call(value, 'address')) {
+        const address = value as Record<string, unknown>
         result[snakeKey] = {
-          address: value.address || '',
-          address_2: value.address_2 || '',
-          city: value.city || '',
-          state_province: value.stateProvince || '',
-          postal_code: value.postalCode || '',
-          country: value.country || '',
+          address: address.address || '',
+          address_2: address.address_2 || '',
+          city: address.city || '',
+          state_province: address.stateProvince || '',
+          postal_code: address.postalCode || '',
+          country: address.country || '',
         }
       } else {
-        result[snakeKey] = transformPayloadToSnakeCase(value)
+        result[snakeKey] = transformPayloadToSnakeCase(
+          value as Record<string, unknown>,
+        )
       }
     } else {
       result[snakeKey] = value

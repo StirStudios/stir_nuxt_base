@@ -45,7 +45,6 @@ onMounted(() => {
 <template>
   <nav
     aria-label="Site navigation"
-    role="navigation"
     :class="[
       theme.navigation.base,
       theme.navigation.transparentTop && !isScrolled && !isAdministrator
@@ -56,6 +55,7 @@ onMounted(() => {
           !showNavbar || (theme.navigation.isHidden && !isScrolled),
       },
     ]"
+    role="navigation"
   >
     <div
       :class="`${theme.container} mx-auto flex flex-wrap items-center justify-between`"
@@ -72,19 +72,19 @@ onMounted(() => {
       </div>
 
       <UNavigationMenu
+        :class="[
+          'order-2 hidden md:block',
+          appConfig.colorMode?.forced ? 'ml-auto' : '',
+        ]"
+        :color="theme.navigation.color"
         :highlight="theme.navigation.highlight.show"
         :highlight-color="
           theme.navigation.highlight.show
             ? theme.navigation.highlight.color
             : ''
         "
-        :color="theme.navigation.color"
-        :variant="theme.navigation.variant"
-        :class="[
-          'order-2 hidden md:block',
-          appConfig.colorMode?.forced ? 'ml-auto' : '',
-        ]"
         :items="navLinks"
+        :variant="theme.navigation.variant"
       />
 
       <div class="order-2 flex md:order-3">
@@ -132,9 +132,9 @@ onMounted(() => {
 
     <template #body>
       <UNavigationMenu
-        :ui="{ link: theme.navigation.slideover.link }"
-        orientation="vertical"
         :items="navLinks"
+        orientation="vertical"
+        :ui="{ link: theme.navigation.slideover.link }"
       />
     </template>
   </USlideover>

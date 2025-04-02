@@ -1,5 +1,5 @@
-import { LayoutProps, LinkProps } from './UtilityTypes'
-import { MediaProps } from './MediaTypes'
+import type { LayoutProps, LinkProps } from './UtilityTypes'
+import type { MediaProps } from './MediaTypes'
 
 export interface SectionProps extends LayoutProps {
   element: string

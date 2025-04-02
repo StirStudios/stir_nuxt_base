@@ -21,7 +21,7 @@ const breadcrumbLinks = ref(
 </script>
 
 <template>
-  <UBreadcrumb :items="breadcrumbLinks" v-if="breadcrumbLinks.length > 0">
+  <UBreadcrumb v-if="breadcrumbLinks.length > 0" :items="breadcrumbLinks">
     <template #separator>
       <span class="mx-2 text-(--ui-text-muted)">/</span>
     </template>

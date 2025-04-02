@@ -22,9 +22,9 @@ onMounted(() => {
 <template>
   <URadioGroup
     v-model="state[fieldName]"
+    class="form-input w-full"
     :items="transformedOptions"
     orientation="horizontal"
-    class="form-input w-full"
   >
     <template #description="{ item }">
       <span class="mt-2 block whitespace-pre-line">{{ item.description }}</span>

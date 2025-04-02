@@ -1,5 +1,5 @@
-import { HeroProps } from './MediaTypes'
-import { SectionProps } from './ContentTypes'
+import type { HeroProps } from './MediaTypes'
+import type { SectionProps } from './ContentTypes'
 
 export interface NodeLinkProps {
   nid: string

@@ -66,8 +66,8 @@ watchEffect(() => {
 <template>
   <UFormField
     v-if="isVisible"
-    :name="fieldName"
     :label="!useFloatingLabels ? field['#title'] : ''"
+    :name="fieldName"
     :required="!!field['#required']"
   >
     <div
@@ -77,11 +77,11 @@ watchEffect(() => {
     />
 
     <component
-      v-if="resolvedComponent"
       :is="resolvedComponent"
+      v-if="resolvedComponent"
       :field="field"
-      :fieldName="fieldName"
-      :floatingLabel="useFloatingLabels"
+      :field-name="fieldName"
+      :floating-label="useFloatingLabels"
       :state="state"
     />
 

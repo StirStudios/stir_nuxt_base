@@ -56,10 +56,10 @@ const gradientClass = computed(() => {
                 <div class="mt-6">
                   <ClientOnly v-if="item.link?.[0]?.uri">
                     <UButton
-                      :label="item.link[0].title || 'Learn More'"
-                      :to="item.link[0].uri"
                       class="mt-4"
+                      :label="item.link[0].title || 'Learn More'"
                       target="_blank"
+                      :to="item.link[0].uri"
                     />
                   </ClientOnly>
                 </div>
@@ -69,8 +69,8 @@ const gradientClass = computed(() => {
         </div>
 
         <div
-          class="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
           aria-hidden="true"
+          class="absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6"
         >
           <div
             class="aspect-[1155/678] w-[72.1875rem] opacity-30"
