@@ -19,8 +19,7 @@
     "@nuxtjs/robots": "^5.2.8",
     "@nuxtjs/sitemap": "^7.2.9",
     "@nuxtjs/turnstile": "^0.9.16",
-    "motion-dom": "12.6.3",
-    "motion-v": "1.0.0-alpha.4",
+    "motion-v": "1.0.0-beta.0",
     "nuxt": "^3.16.2",
     "nuxtjs-drupal-ce": "^2.2.6",
     "tailwindcss": "^4.1.0",
@@ -41,11 +40,6 @@
     },
     "npm": {
       "publish": false
-    }
-  },
-  "pnpm": {
-    "overrides": {
-      "motion-dom": "12.6.1"
     }
   }
 }
