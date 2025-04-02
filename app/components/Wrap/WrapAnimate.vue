@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AosProps } from '~/types/UtilityTypes'
 import { getMotionEffect } from '~/utils/animations'
-// import { motion } from 'motion-v'
+import { motion } from 'motion-v'
 
 const appConfig = useAppConfig()
 
