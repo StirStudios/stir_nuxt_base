@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <div v-if="align" :class="['flex w-full', align]">
+  <div v-if="align" :class="['w-full', align]">
     <slot />
   </div>
   <slot v-else />
