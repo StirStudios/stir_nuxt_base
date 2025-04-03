@@ -26,10 +26,17 @@ export default defineAppConfig({
         link: 'text-xl text-center block my-3 uppercase',
       },
     },
+    // front: {
+    //   h1: 'sr-only',
+    //   main: 'mt-0',
+    // },
     main: 'pt-[10rem]',
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
-    mediaRounded: 'rounded-xl',
+    media: {
+      base: 'relative h-full w-full overflow-hidden object-cover',
+      rounded: 'rounded-xl',
+    },
     aspectRatios: {
       portrait: 'aspect-[9/16]',
       landscape: 'aspect-[16/9]',
@@ -50,16 +57,10 @@ export default defineAppConfig({
         isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
       },
     },
+    animations: {
+      once: false,
+    },
     grid: {
-      cols: {
-        one_column: '',
-        two_column: 'lg:grid-cols-2',
-        three_column: 'sm:grid-cols-2 lg:grid-cols-3',
-        four_column: 'sm:grid-cols-2 lg:grid-cols-4',
-      },
-      wrapCols: 'grid gap-5 lg:gap-10 xl:gap-16 grid-cols-2 lg:grid-cols-4',
-      gap: 'gap-4 md:gap-6 lg:gap-10',
-      viewGap: 'gap-5 lg:gap-10 xl:gap-16',
       // separator: {
       //   condition: 'node-',
       //   base: 'mt-16 mb-10 xl:mt-28 max-w-screen-sm lg:w-[20rem] mx-auto',
@@ -67,6 +68,11 @@ export default defineAppConfig({
       //   type: 'solid',
       //   size: 'xs',
       // },
+    },
+    card: {
+      base: 'relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-20',
+      effect:
+        'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
     },
     gradients: {
       1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
@@ -83,11 +89,15 @@ export default defineAppConfig({
         // nextIcon: 'i-lucide-chevron-right',
       },
     },
+    modal: {
+      header: true,
+    },
     webform: {
-      form: 'space-y-8',
+      form: 'space-y-5',
+      labelsFloating: false,
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: '',
-      response: 'space-y-8 text-center',
+      response: 'space-y-8 px-6 py-3 bg-neutral-100 rounded-lg italic',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
@@ -182,8 +192,18 @@ export default defineAppConfig({
     formField: {
       slots: {
         labelWrapper: 'block text-sm/6 font-medium',
-        container: 'mt-2',
-        error: 'mt-2 text-[var(--ui-error)]',
+        container: 'mt-1',
+        error: 'mt-1 text-[var(--ui-error)]',
+      },
+    },
+    input: {
+      defaultVariants: {
+        size: 'xl',
+      },
+    },
+    textarea: {
+      defaultVariants: {
+        size: 'xl',
       },
     },
     // carousel: {

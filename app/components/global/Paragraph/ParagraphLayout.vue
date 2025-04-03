@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import type { SectionProps } from '~/types/ContentTypes'
+import { componentExists } from '~/utils/componentExists'
 
-const appConfig = useAppConfig()
+defineProps<{
+  section?: SectionProps[]
+}>()
 
-withDefaults(
-  defineProps<{
-    section?: SectionProps[]
-  }>(),
-  {
-    section: [],
-  },
-)
+const { container, card } = useAppConfig().stirTheme
 
 // Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
@@ -24,31 +20,18 @@ const isValidParagraphLayout = computed(() => {
   }
 })
 
-const getClassForLayout = computed(() => {
-  const container = appConfig.stirTheme.container
-  const { cols, gap } = appConfig.stirTheme.grid
-
+const classLayout = computed(() => {
   return (layout: SectionProps) => {
-    // Retrieve grid class for layout directly from config
-    const gridClass = cols[layout.layout] || ''
-    const appliedContainerClass = layout.container ? container : ''
-
-    return [
-      'grid',
-      'grid-cols-1', // Base grid definition
-      gridClass ? gap : '', // Only add gap if gridClass is set
-      gridClass, // Combined responsive grid class from config
-      appliedContainerClass,
-    ]
-      .filter(Boolean)
-      .join(' ')
+    const gridClass = layout.gridClass || 'grid-cols-1'
+    const containerClass = layout.container ? container : ''
+    return [gridClass, containerClass].filter(Boolean).join(' ')
   }
 })
 
 const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
-      item: item,
+      item,
       amount: item.gridItems,
       header: item.header,
       indicators: item.carouselIndicators,
@@ -72,7 +55,6 @@ const getNodeProps = (item) => {
         spacing: item.spacing,
         width: item.width,
         gridItems: item.gridItems,
-        animate: item.animate,
         direction: item.direction,
       },
     }
@@ -82,7 +64,7 @@ const getNodeProps = (item) => {
     }
   } else {
     return {
-      item: item,
+      item,
     }
   }
 }
@@ -95,32 +77,44 @@ const getNodeProps = (item) => {
       :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
     >
       <template v-if="layout.header">
-        <h2 :class="appConfig.stirTheme.container" v-html="layout.header" />
+        <h2 :class="container" v-html="layout.header" />
       </template>
+
       <div
         :id="layout.label ?? null"
-        :class="[layout.width, getClassForLayout(layout)]"
+        :class="[
+          layout.width,
+          classLayout(layout),
+          layout.card ? card.base : '',
+        ]"
       >
         <div
           v-for="regionItem in layout.regions"
           :key="regionItem[0]?.uuid"
-          :class="regionItem[0].region"
+          :class="[regionItem[0].region, regionItem[0].align]"
         >
           <template v-for="item in regionItem" :key="item.uuid">
-            <article>
+            <article :class="item.element">
               <component
-                :is="resolveComponent(item.element)"
+                :is="
+                  componentExists(item.element)
+                    ? resolveComponent(item.element)
+                    : 'ParagraphDefault'
+                "
                 v-bind="getNodeProps(item)"
               />
             </article>
           </template>
         </div>
+
+        <CardGradient v-if="layout.card" :layout="layout" />
       </div>
     </section>
-    <section v-else :class="appConfig.stirTheme.container">
+
+    <section v-else :class="container">
       <component
-        v-if="getNodeProps(layout) !== null"
         :is="resolveComponent(layout.element)"
+        v-if="getNodeProps(layout) !== null"
         v-bind="getNodeProps(layout)"
       />
     </section>

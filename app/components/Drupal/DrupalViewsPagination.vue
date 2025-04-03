@@ -16,11 +16,11 @@ const hellipRight = props.totalPages - props.current > props.maxLinks / 2
 
 <template>
   <div class="views-pager">
-    <nav class="isolate inline-flex gap-1 -space-x-px" aria-label="Pagination">
+    <nav aria-label="Pagination" class="isolate inline-flex gap-1 -space-x-px">
       <a
         v-if="previousURL"
-        :href="previousURL"
         class="relative inline-flex min-w-10 items-center px-2 py-2 text-sm"
+        :href="previousURL"
       >
         <span class="sr-only">Previous</span>
         &lt;&lt;
@@ -39,13 +39,13 @@ const hellipRight = props.totalPages - props.current > props.maxLinks / 2
             (n - 1 > current && n - 1 < current + maxLinks / 2 + 1)
           "
           :key="n"
-          :href="'?page=' + (n - 1)"
           :class="{
             'relative z-10 inline-flex min-w-10 items-center px-4 py-2':
               n - 1 == current,
             'relative inline-flex min-w-10 items-center px-4 py-2':
               n - 1 != current,
           }"
+          :href="'?page=' + (n - 1)"
         >
           {{ n }}
         </component>
@@ -57,8 +57,8 @@ const hellipRight = props.totalPages - props.current > props.maxLinks / 2
       >
       <a
         v-if="nextURL"
-        :href="nextURL"
         class="relative inline-flex min-w-10 items-center px-2 py-2"
+        :href="nextURL"
       >
         <span class="sr-only">Next</span>
         &gt;&gt;

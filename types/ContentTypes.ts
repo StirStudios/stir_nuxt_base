@@ -1,5 +1,5 @@
-import { LayoutProps, LinkProps } from './UtilityTypes'
-import { MediaProps } from './MediaTypes'
+import type { LayoutProps, LinkProps } from './UtilityTypes'
+import type { MediaProps } from './MediaTypes'
 
 export interface SectionProps extends LayoutProps {
   element: string
@@ -7,7 +7,9 @@ export interface SectionProps extends LayoutProps {
   uuid: string
   layout?: string
   label?: string
+  gridClass?: string
   regions: Record<string, RegionItemProps[]>
+  align?: string
 }
 
 export interface RegionItemProps extends LayoutProps {
@@ -25,6 +27,8 @@ export interface RegionItemProps extends LayoutProps {
   alt?: string
   width?: string
   height?: string
+  align?: string
+  spacing?: string
 }
 
 export interface TextProps extends LayoutProps {
@@ -33,4 +37,9 @@ export interface TextProps extends LayoutProps {
 
 export interface HTMLInjectionProps {
   html: string
+}
+
+export interface ParagraphBlockProps {
+  blockName: string
+  blocks: Record<string, any>
 }

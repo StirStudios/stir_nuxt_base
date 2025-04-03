@@ -1,12 +1,10 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page } = usePageContext()
-const appConfig = useAppConfig()
-const siteInfo = computed<SiteInfoProps>(
-  () => page.value?.site_info ?? { name: '', slogan: '', mail: '' },
-)
-const currentYear = computed(() => new Date().getFullYear())
+const theme = useAppConfig().stirTheme
+
+const currentYear = new Date().getFullYear()
 
 const iconsSocialConfig = [
   {
@@ -14,29 +12,28 @@ const iconsSocialConfig = [
     tooltip: `Follow ${page.site_info?.name} on IMDB`,
     url: '//imdb.com/name/CLIENT/',
     icon: 'i-simple-icons:imdb',
-    iconSize: 'size-10',
   },
   {
     title: 'LinkedIn',
     tooltip: `Follow ${page.site_info?.name} on LinkedIn`,
     url: '//linkedin.com/in/CLIENT',
     icon: 'i-simple-icons:linkedin',
-    iconSize: 'size-10',
   },
 ]
 </script>
 
 <template>
-  <footer aria-label="Site Footer" :class="appConfig.stirTheme.footer">
+  <footer aria-label="Site Footer" :class="theme.footer">
     <div
-      :class="`${appConfig.stirTheme.container} grid gap-4 text-center md:text-center lg:grid-cols-2`"
+      :class="[
+        theme.container,
+        'grid gap-4 text-center md:text-center lg:grid-cols-2',
+      ]"
     >
       <div class="rights lg:text-left">
-        <ul v-if="page.footer_menu" class="mb-3">
+        <ul v-if="page.footer_menu.length" class="mb-3">
           <li v-for="menuItem in page.footer_menu" :key="menuItem.title">
-            <a class="item" :href="menuItem.url">
-              {{ menuItem.title }}
-            </a>
+            <ULink class="item" :to="menuItem.url">{{ menuItem.title }}</ULink>
           </li>
         </ul>
         <p class="mb-0 leading-relaxed">
@@ -45,7 +42,6 @@ const iconsSocialConfig = [
           Website created & powered by
           <ULink
             active-class="text-primary-400"
-            class="underline"
             inactive-class="text-primary-500 hover:text-primary-400"
             rel="noopener"
             target="_blank"
@@ -56,15 +52,11 @@ const iconsSocialConfig = [
         </p>
       </div>
       <div class="social lg:text-right">
-        <template v-for="(icon, index) in iconsSocialConfig" :key="index">
-          <IconsSocial
-            :title="icon.title"
-            :tooltip="icon.tooltip"
-            :url="icon.url"
-            :icon="icon.icon"
-            :iconSize="icon.iconSize"
-          />
-        </template>
+        <IconsSocial
+          v-for="(icon, index) in iconsSocialConfig"
+          :key="index"
+          v-bind="icon"
+        />
         <div class="mt-3">
           <UTooltip :text="`Email ${page.site_info?.name}`">
             <ULink

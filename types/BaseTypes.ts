@@ -1,10 +1,16 @@
-import { HeroProps } from './MediaTypes'
-import { SectionProps } from './ContentTypes'
+import type { HeroProps } from './MediaTypes'
+import type { SectionProps } from './ContentTypes'
 
 export interface NodeLinkProps {
   nid: string
   title: string
   url: string
+}
+
+export interface PathProps {
+  alias: string
+  pid: string
+  langcode: string
 }
 
 export interface PageProps {
@@ -17,6 +23,7 @@ export interface PageProps {
   siteInfo?: SiteInfoProps
   prev_node?: NodeLinkProps | null
   next_node?: NodeLinkProps | null
+  path?: PathProps
 }
 
 export interface SiteInfoProps {

@@ -2,49 +2,50 @@
 import type { MediaProps } from '~/types/MediaTypes'
 import { aspectRatios } from '~/utils/aspectRatios'
 
-const appConfig = useAppConfig()
+const {
+  media: { rounded },
+  modal: { header },
+} = useAppConfig().stirTheme
 
-const props = defineProps<{
+defineProps<{
   media?: MediaProps[]
 }>()
 
 const modal = ref(false)
+const activeMedia = ref<MediaProps | null>(null)
+
+const openModal = (item: MediaProps) => {
+  activeMedia.value = item
+  modal.value = true
+}
 </script>
 
 <template>
-  <div v-if="media && media.length" class="space-y-4">
+  <div v-if="media?.length" class="space-y-4">
     <div
       v-for="(item, index) in media"
       :key="index"
-      :class="[appConfig.stirTheme.mediaRounded, 'overflow-hidden']"
+      :class="[rounded, 'overflow-hidden']"
     >
       <div
         :class="[
-          'relative transform-gpu overflow-hidden transition-transform duration-500 ease-in-out will-change-transform hover:scale-110',
+          'group relative transform-gpu overflow-hidden transition-all duration-500 ease-in-out will-change-transform hover:scale-110',
           aspectRatios(item.width, item.height),
-          'before:absolute before:inset-0 before:z-0 before:bg-black before:opacity-40',
         ]"
       >
-        <img
-          :alt="item.alt"
-          class="absolute z-[-1] h-full w-full object-cover"
-          :height="item.height"
-          :loading="item.loading"
-          :sizes="item.sizes"
-          :src="item.src"
-          :srcset="item.srcset"
-          :width="item.width"
+        <MediaImage v-if="item.srcset" :item="item" />
+        <div
+          v-if="item.mediaEmbed"
+          class="absolute inset-0 z-10 bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-10"
         />
         <button
           aria-label="Play Video"
-          class="group absolute inset-0 z-10 flex cursor-pointer items-center justify-center text-white"
-          @click="modal = !modal"
+          class="absolute inset-0 z-20 flex cursor-pointer items-center justify-center text-white transition-transform duration-500 ease-in-out hover:scale-125 hover:drop-shadow-md"
+          @click="openModal(item)"
         >
           <UIcon
             v-if="item.mediaEmbed"
             aria-hidden="true"
-            aria-label="Play Video"
-            class="transform-gpu transition-transform duration-500 ease-in-out will-change-transform hover:scale-125 hover:drop-shadow-md"
             color="white"
             name="i-heroicons-play-circle"
             size="60"
@@ -52,61 +53,30 @@ const modal = ref(false)
           <span class="sr-only">Play Video</span>
         </button>
       </div>
-      <UModal
-        v-model:open="modal"
-        fullscreen
-        :title="item.alt"
-        :description="item.alt"
-      >
-        <template #header>
-          <div class="flex items-center justify-end">
-            <UButton
-              color="primary"
-              icon="i-heroicons-x-mark-20-solid"
-              variant="ghost"
-              class="rounded-md"
-              @click="modal = false"
-            />
-          </div>
-        </template>
-        <template #body>
-          <div
-            v-if="item.mediaEmbed"
-            class="flex min-h-[90vh] w-full items-center justify-center"
-          >
-            <div
-              :class="[
-                'relative w-full overflow-hidden rounded-xl xl:max-w-[50vw]',
-                appConfig.stirTheme.mediaRounded,
-                aspectRatios(item.width, item.height),
-              ]"
-            >
-              <iframe
-                v-if="modal"
-                :src="item.mediaEmbed"
-                :title="item.title"
-                class="absolute top-0 left-0 h-full w-full"
-                frameborder="0"
-                allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                loading="lazy"
-              />
-            </div>
-          </div>
-          <div v-else class="m-10 flex justify-center overflow-auto">
-            <img
-              :alt="item.alt"
-              :class="[
-                appConfig.stirTheme.mediaRounded,
-                'max-h-[80vh] w-auto object-contain',
-              ]"
-              :src="item.src"
-              :width="item.width"
-              :height="item.height"
-            />
-          </div>
-        </template>
-      </UModal>
     </div>
+    <UModal
+      v-if="activeMedia"
+      v-model:open="modal"
+      :description="activeMedia?.alt"
+      :title="activeMedia?.alt"
+      :ui="{
+        header: header
+          ? 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16'
+          : 'sr-only',
+        content: 'max-w-5xl ring-0',
+        body: header
+          ? activeMedia?.mediaEmbed
+            ? 'flex items-center justify-center'
+            : 'm-auto'
+          : '!p-0 bg-transparent',
+        title: 'text-(--ui-text-highlighted) font-semibold text-xl mb-0',
+        description: 'sr-only',
+      }"
+    >
+      <template #body>
+        <MediaVideo v-if="activeMedia?.mediaEmbed" :item="activeMedia" />
+        <MediaImage v-else-if="activeMedia?.src" :item="activeMedia" />
+      </template>
+    </UModal>
   </div>
 </template>

@@ -1,4 +1,12 @@
-import { LayoutProps } from './UtilityTypes'
+import type { LayoutProps } from './UtilityTypes'
+
+declare global {
+  interface Window {
+    playerjs: {
+      Player: new (iframe: HTMLIFrameElement) => VideoPlayer
+    }
+  }
+}
 
 export interface HeroProps extends LayoutProps {
   title: string
@@ -37,6 +45,8 @@ export interface CarouselProps extends LayoutProps {
   autoscroll?: boolean
   width?: string
   vid?: string
+  itemElement?: string
+  editLink?: string
 }
 
 export interface VideoPlayer {
@@ -53,3 +63,5 @@ export interface VideoPlayer {
   on: (event: string, callback: () => void) => void
   off: (event: string, callback?: () => void) => void
 }
+
+export {}

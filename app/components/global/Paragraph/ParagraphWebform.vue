@@ -2,20 +2,20 @@
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
-import { useScroll } from '~/composables/useScroll'
 import { useValidation } from '~/composables/useValidation'
+import { useWindowScroll } from '@vueuse/core'
 
-const props = withDefaults(defineProps<{ webform: WebformDefinition }>(), {
+const props = withDefaults(defineProps<{ webform?: WebformDefinition }>(), {
   webform: {} as WebformDefinition,
 })
 
 // Composables & Utilities
 const { onError } = useValidation()
-const { scrollToTop } = useScroll()
+const { y } = useWindowScroll()
 const toast = useToast()
 const config = useRuntimeConfig()
-const appConfig = useAppConfig()
-const siteApi = config.public.api
+
+const { webform: themeWebform } = useAppConfig().stirTheme
 
 // Destructure webform props
 const {
@@ -27,7 +27,6 @@ const {
 } = props.webform
 
 // Reactive state
-const csrfToken = ref('')
 const turnstileToken = ref('')
 const state = reactive({})
 const isFormSubmitted = ref(false)
@@ -48,7 +47,6 @@ const submitButtonLabel = computed(
 // Group fields dynamically for better rendering
 const groupedFields = computed(() => {
   const grouped: Record<string, string[]> = {}
-
   orderedFieldNames.value.forEach((fieldName) => {
     const parent = fields[fieldName]?.parent
     if (parent) {
@@ -56,7 +54,6 @@ const groupedFields = computed(() => {
       grouped[parent].push(fieldName)
     }
   })
-
   return grouped
 })
 
@@ -92,81 +89,50 @@ const isContainerVisible = (containerName: string) =>
   )
 
 // Form submission handler
-async function onSubmit(event: FormSubmitEvent<any>) {
+async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   isLoading.value = true
   errors.value = {}
 
   try {
-    // Validate CAPTCHA if required
-    if (!config.public.turnstileDisable && !turnstileToken.value) {
-      toast.add({
-        title: 'Error',
-        description: 'Please complete the CAPTCHA',
-        color: 'error',
-      })
-      return
-    }
-
-    // Fetch CSRF Token
-    const { csrfToken: token } = await $fetch<{ csrfToken: string }>(
-      '/api/getCsrfToken',
-    )
-    csrfToken.value = token
-
-    // Prepare payload
+    // Prepare Payload
     const payload = {
       webform_id: webformId,
-      turnstile_token: turnstileToken.value || '',
       ...transformPayloadToSnakeCase(state),
+      turnstile_response: turnstileToken.value,
     }
 
-    // Submit form data
-    const { data: submitData, error: submitError } = await $fetch(
-      `${siteApi}/api/stir_webform_rest/submit`,
-      {
-        method: 'POST',
-        headers: {
-          'x-csrf-token': csrfToken.value,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      },
-    )
+    // Submit Form Data
+    await $fetch('/api/webform/submit', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
 
-    // Handle submission errors
-    if (submitError?.value) {
-      toast.add({
-        title: 'Error',
-        description: `Error submitting form: ${submitError.value}`,
-        color: 'error',
-      })
-      return
-    }
-
-    // Success handling
-    scrollToTop()
+    // Handle Successful Submission
+    y.value = 0
     toast.add({
       title: 'Success!',
       description: 'Form submitted successfully!',
       color: 'success',
     })
 
-    // Reset form state
+    // Reset Form
     Object.keys(state).forEach((key) => (state[key] = ''))
     turnstileToken.value = ''
     isFormSubmitted.value = true
-  } catch (validationError) {
-    if (validationError.inner) {
-      validationError.inner.forEach((err: any) => {
-        errors.value[err.path] = err.message
-      })
-    } else {
-      toast.add({
-        title: 'Validation Error',
-        description: validationError.message || 'Unknown validation error',
-        color: 'error',
-      })
-    }
+  } catch (error) {
+    console.error('Submission Error:', error)
+
+    // Handle Errors from Backend
+    const errorMessage =
+      error?.response?._data?.error?.message ||
+      error?.response?._data?.message ||
+      'Form submission failed. Please try again.'
+
+    toast.add({
+      title: 'Error',
+      description: `Error submitting form: ${errorMessage}`,
+      color: 'error',
+    })
   } finally {
     isLoading.value = false
   }
@@ -174,30 +140,26 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 </script>
 
 <template>
-  <WrapNone :wrapper="webformSubmissions ? 'div' : undefined">
-    <EditLink :link="webformSubmissions" />
+  <EditLink :link="webformSubmissions">
     <UForm
       v-if="!isFormSubmitted"
-      :state="state"
+      :class="themeWebform.form"
       :schema="schema"
-      :class="appConfig.stirTheme.webform.form"
-      @submit="onSubmit"
+      :state="state"
       @error="onError"
+      @submit="onSubmit"
     >
-      <template
-        v-for="(fieldName, index) in orderedFieldNames"
-        :key="fieldName"
-      >
+      <template v-for="fieldName in orderedFieldNames" :key="fieldName">
         <template
           v-if="
             shouldRenderGroupContainer(fieldName) &&
             isContainerVisible(fields[fieldName]?.parent)
           "
         >
-          <h2 :class="appConfig.stirTheme.webform.fieldGroupHeader">
+          <h2 :class="themeWebform.fieldGroupHeader">
             {{ fields[fieldName]?.parent }}
           </h2>
-          <div :class="appConfig.stirTheme.webform.fieldGroup">
+          <div :class="themeWebform.fieldGroup">
             <template
               v-for="groupedFieldName in getGroupFields(
                 fields[fieldName]?.parent,
@@ -206,7 +168,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
             >
               <FieldRenderer
                 :field="fields[groupedFieldName]"
-                :fieldName="groupedFieldName"
+                :field-name="groupedFieldName"
                 :state="state"
               />
             </template>
@@ -216,7 +178,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
         <template v-else-if="shouldRenderIndividualField(fieldName)">
           <FieldRenderer
             :field="fields[fieldName]"
-            :fieldName="fieldName"
+            :field-name="fieldName"
             :state="state"
           />
         </template>
@@ -224,23 +186,16 @@ async function onSubmit(event: FormSubmitEvent<any>) {
 
       <div v-if="!config.public.turnstileDisable">
         <p class="mb-2 text-sm font-medium">Let us know you’re human</p>
-        <NuxtTurnstile
-          v-model="turnstileToken"
-          sitekey="your-turnstile-site-key"
-        />
+        <NuxtTurnstile v-model="turnstileToken" />
       </div>
 
-      <UButton
-        :label="actions[0]?.['#submit_Label'] || 'Submit'"
-        :loading="isLoading"
-        type="submit"
-      />
+      <UButton :label="submitButtonLabel" :loading="isLoading" type="submit" />
     </UForm>
 
     <div
       v-else
-      :class="`${appConfig.stirTheme.webform.response} prose`"
+      :class="`${themeWebform.response} prose`"
       v-html="webformConfirmation"
     />
-  </WrapNone>
+  </EditLink>
 </template>
