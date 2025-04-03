@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import type { AosProps } from '~/types/UtilityTypes'
+import { getMotionEffect } from '~/utils/animations'
+import { motion } from 'motion-v'
 
-withDefaults(defineProps<AosProps>(), {
-  aos: 'fade-up',
-  wrapper: undefined,
-  aosDelay: 0,
-})
+const appConfig = useAppConfig()
+
+const props = defineProps<AosProps>()
+
+const motionEffects = getMotionEffect(props.effect)
 </script>
 
 <template>
-  <component
-    :is="wrapper"
-    v-if="wrapper"
-    :data-aos="aos"
-    :data-aos-delay="aosDelay"
-    data-aos-once="true"
+  <motion.div
+    v-if="effect"
+    class="media"
+    :in-view-options="{ once: appConfig.stirTheme.animations.once }"
+    initial="hidden"
+    :variants="motionEffects"
+    while-in-view="show"
   >
     <slot />
-  </component>
+  </motion.div>
   <slot v-else />
 </template>

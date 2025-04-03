@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
+import { componentExists } from '~/utils/componentExists'
 
 const props = defineProps<CarouselProps>()
 
@@ -9,7 +10,7 @@ const showArrows = computed(() => props.arrows || false)
 const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
-const gridItems = computed(() => props.amount || 5000)
+const itemElement = computed(() => props.itemElement || false)
 </script>
 
 <template>
@@ -17,33 +18,35 @@ const gridItems = computed(() => props.amount || 5000)
     <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       v-slot="{ item }"
-      loop
-      :auto-scroll="autoscroll"
-      :fade="transitionFade"
       :arrows="showArrows"
-      :dots="showIndicators"
+      :auto-scroll="autoscroll"
       :autoplay="{ delay: interval }"
+      :dots="showIndicators"
+      :fade="transitionFade"
       :items="items"
-      :prev="appConfig.stirTheme.carousel.arrows.prev"
+      loop
       :next="appConfig.stirTheme.carousel.arrows.next"
-      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
+      :prev="appConfig.stirTheme.carousel.arrows.prev"
+      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
       :ui="{
         root: `${appConfig.stirTheme.carousel.root}`,
         item: amount,
       }"
     >
-      <template v-if="item.element">
-        <template v-for="(sectionItem, index) in item.section" :key="index">
-          <component
-            :is="resolveComponent(sectionItem.element)"
-            :item="sectionItem"
-          />
-        </template>
+      <template v-if="itemElement">
+        <component
+          :is="
+            componentExists(itemElement)
+              ? resolveComponent(itemElement)
+              : 'ParagraphDefault'
+          "
+          :item="item"
+        />
       </template>
       <template v-else>
-        <MediaSimple :media="[item]" v-if="item.type === 'image'" />
-        <MediaPopup :media="[item]" v-else-if="item.type === 'video'" />
+        <MediaSimple v-if="item.type === 'image'" :media="[item]" />
+        <MediaPopup v-else-if="item.type === 'video'" :media="[item]" />
       </template>
     </UCarousel>
   </div>

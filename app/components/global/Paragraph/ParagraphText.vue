@@ -7,20 +7,18 @@ defineProps<{
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
-    <WrapAnimate
-      :aos="item?.direction"
-      :wrapper="item?.animate === true ? 'div' : undefined"
-    >
-      <div
-        :class="[
-          [item.classes, 'prose'].filter(Boolean).join(' '),
-          item.width,
-          item.spacing,
-        ]"
-        v-html="item.text"
-      />
+  <EditLink :link="item.editLink">
+    <WrapAnimate :effect="item?.direction">
+      <WrapAlign :align="item.align">
+        <div
+          :class="[
+            [item.classes, 'prose'].filter(Boolean).join(' '),
+            item.width,
+            item.spacing,
+          ]"
+          v-html="item.text"
+        />
+      </WrapAlign>
     </WrapAnimate>
-  </WrapNone>
+  </EditLink>
 </template>

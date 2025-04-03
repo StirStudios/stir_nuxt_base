@@ -1,10 +1,18 @@
-<script setup>
-defineProps({
-  pageTitle: String,
-  siteSlogan: String,
-  heroText: String,
-  isFront: Boolean,
-})
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    pageTitle?: string
+    siteSlogan?: string
+    heroText?: string
+    isFront?: boolean
+  }>(),
+  {
+    pageTitle: '',
+    siteSlogan: '',
+    heroText: '',
+    isFront: false,
+  },
+)
 </script>
 
 <template>

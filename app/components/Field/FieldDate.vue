@@ -35,7 +35,7 @@ watchEffect(() => {
 
 <template>
   <UPopover>
-    <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+    <UButton color="neutral" icon="i-lucide-calendar" variant="subtle">
       {{
         modelValue
           ? df.format(modelValue.toDate(getLocalTimeZone()))

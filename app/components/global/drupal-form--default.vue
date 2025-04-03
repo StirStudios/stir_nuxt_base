@@ -8,13 +8,13 @@ defineProps<DrupalFormProps>()
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form
-        :formId="formId"
-        :method="method"
         v-bind="attributes"
         :action="useRoute().fullPath"
         class="drupal-form"
+        :formId="formId"
+        :method="method"
       >
-        <slot><div v-html="content" class="space-y-6" /></slot>
+        <slot><div class="space-y-6" v-html="content" /></slot>
       </form>
     </div>
   </div>
@@ -29,7 +29,8 @@ defineProps<DrupalFormProps>()
     label {
       @apply mb-2 block text-sm font-medium text-(--ui-text);
     }
-    input {
+    input,
+    textarea {
       @apply w-full gap-1.5 rounded-[calc(var(--ui-radius)*1.5)] border-0 bg-(--ui-bg) px-2.5 py-2.5 text-sm text-(--ui-text-highlighted) ring ring-(--ui-border-accented) transition-colors ring-inset placeholder:text-(--ui-text-dimmed) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary) focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
     }
   }

@@ -10,20 +10,18 @@ defineProps<{
 </script>
 
 <template>
-  <WrapNone :wrapper="item.editLink ? 'div' : undefined">
-    <EditLink :link="item.editLink" />
-    <WrapAnimate
-      :aos="item.direction"
-      :wrapper="item.animate === true ? 'div' : undefined"
-    >
+  <EditLink :link="item.editLink">
+    <WrapAlign :align="item.align">
       <WrapGrid
+        :classes="
+          [item.gridItems, item.width, item.spacing].filter(Boolean).join(' ')
+        "
         :header="item.header"
-        :wrapper="item.grid === true ? 'div' : undefined"
       >
-        <div
+        <WrapAnimate
           v-for="media in item.media"
           :key="media.mid"
-          :class="'media media-' + media.mid"
+          :effect="item.direction"
         >
           <template
             v-if="
@@ -39,8 +37,8 @@ defineProps<{
           <template v-else>
             <MediaSimple :media="[media]" />
           </template>
-        </div>
+        </WrapAnimate>
       </WrapGrid>
-    </WrapAnimate>
-  </WrapNone>
+    </WrapAlign>
+  </EditLink>
 </template>

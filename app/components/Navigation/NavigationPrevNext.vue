@@ -1,34 +1,34 @@
 <script setup lang="ts">
 import type { NodeLinkProps } from '~/types/BaseTypes'
+const { page } = usePageContext()
 
-defineProps<{
-  prevNode?: NodeLinkProps | null
-  nextNode?: NodeLinkProps | null
-}>()
+const prevNode = page.value?.prev_node as NodeLinkProps | null
+const nextNode = page.value?.next_node as NodeLinkProps | null
 </script>
 
 <template>
-  <div class="flex justify-between">
+  <div class="container m-auto mb-5 flex justify-between">
     <UButton
       v-if="prevNode"
-      icon="i-heroicons-chevron-left"
-      size="sm"
       color="primary"
-      square
-      variant="solid"
+      icon="i-heroicons-chevron-left"
       label="Previous"
+      size="xl"
+      square
       :to="prevNode.url"
+      variant="link"
     />
     <UButton
       v-if="nextNode"
-      icon="i-heroicons-chevron-right"
-      size="sm"
+      class="ml-auto"
       color="primary"
-      square
-      variant="solid"
+      icon="i-heroicons-chevron-right"
       label="Next"
-      trailing
+      size="xl"
+      square
       :to="nextNode.url"
+      trailing
+      variant="link"
     />
   </div>
 </template>
