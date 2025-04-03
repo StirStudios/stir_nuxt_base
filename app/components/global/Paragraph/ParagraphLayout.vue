@@ -94,7 +94,7 @@ const getNodeProps = (item) => {
           :class="[regionItem[0].region, regionItem[0].align]"
         >
           <template v-for="item in regionItem" :key="item.uuid">
-            <article>
+            <article :class="item.element">
               <component
                 :is="
                   componentExists(item.element)
