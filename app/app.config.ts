@@ -93,11 +93,20 @@ export default defineAppConfig({
       header: true,
     },
     webform: {
-      form: 'space-y-5',
-      labelsFloating: false,
+      spacing: 'space-y-5',
+      spacingLarge: 'space-y-10',
+      labels: {
+        floating: false,
+        base: [
+          'pointer-events-none absolute -top-1.5 left-0 text-xs font-medium text-(--ui-text-dimmed) transition-all',
+          'peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-(--ui-text-dimmed)',
+          'peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-(--ui-text-highlighted)',
+        ],
+      },
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: '',
       response: 'space-y-8 px-6 py-3 bg-neutral-100 rounded-lg italic',
+      variant: 'material',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
@@ -191,19 +200,42 @@ export default defineAppConfig({
     // },
     formField: {
       slots: {
-        labelWrapper: 'block text-sm/6 font-medium',
+        label: 'block font-medium text-(--ui-text-dimmed)',
         container: 'mt-1',
         error: 'mt-1 text-[var(--ui-error)]',
       },
     },
     input: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-black/50 dark:border-b-zinc-500 focus:dark:border-b-white aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
       defaultVariants: {
         size: 'xl',
       },
     },
     textarea: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-black/50 dark:border-b-zinc-500 focus:dark:border-b-white aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
       defaultVariants: {
         size: 'xl',
+        variant: 'material',
       },
     },
     // carousel: {

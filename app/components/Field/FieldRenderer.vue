@@ -13,7 +13,7 @@ import FieldDate from '@/components/Field/FieldDate'
 import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
-const appConfig = useAppConfig()
+const { webform } = useAppConfig().stirTheme
 
 // Props from parent
 const props = defineProps<{
@@ -40,7 +40,7 @@ const useFloatingLabels = computed(
   () =>
     props.field['#floating_label'] !== undefined
       ? props.field['#floating_label'] // Per-field setting
-      : appConfig.stirTheme.webform.labelsFloating, // Global default
+      : webform.labels.floating, // Global default
 )
 
 // Dynamically resolve the component

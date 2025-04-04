@@ -143,7 +143,11 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   <EditLink :link="webformSubmissions">
     <UForm
       v-if="!isFormSubmitted"
-      :class="themeWebform.form"
+      :class="
+        themeWebform.variant === 'material'
+          ? themeWebform.spacingLarge
+          : themeWebform.spacing
+      "
       :schema="schema"
       :state="state"
       @error="onError"
