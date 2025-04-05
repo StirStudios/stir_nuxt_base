@@ -106,7 +106,7 @@ export default defineAppConfig({
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: '',
       response: 'space-y-8 px-6 py-3 bg-neutral-100 rounded-lg italic',
-      variant: 'material',
+      variant: 'outline',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
@@ -209,7 +209,7 @@ export default defineAppConfig({
       variants: {
         variant: {
           material:
-            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-black/50 dark:border-b-zinc-500 focus:dark:border-b-white aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
         },
         // size: {
         //   xl: {
@@ -225,7 +225,7 @@ export default defineAppConfig({
       variants: {
         variant: {
           material:
-            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-black/50 dark:border-b-zinc-500 focus:dark:border-b-white aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
         },
         // size: {
         //   xl: {
