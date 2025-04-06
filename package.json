@@ -1,6 +1,5 @@
 {
   "name": "stir_nuxt_base",
-  "type": "module",
   "version": "2.0.61",
   "packageManager": "pnpm@9.12.3",
   "scripts": {
@@ -29,6 +28,8 @@
     "@nuxt/eslint": "^1.3.0",
     "@nuxt/eslint-config": "^1.3.0",
     "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.6",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "release-it": "^18.1.2"
