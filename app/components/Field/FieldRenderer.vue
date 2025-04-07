@@ -75,7 +75,7 @@ watchEffect(() => {
   >
     <div
       v-if="descriptionContent && field['#type'] !== 'checkbox'"
-      class="desc mb-3"
+      :class="webform.description"
       v-html="descriptionContent"
     />
 
@@ -88,10 +88,6 @@ watchEffect(() => {
       :state="state"
     />
 
-    <div
-      v-if="helpContent"
-      class="desc my-3 text-(--ui-text-muted)"
-      v-html="helpContent"
-    />
+    <div v-if="helpContent" :class="webform.help" v-html="helpContent" />
   </UFormField>
 </template>
