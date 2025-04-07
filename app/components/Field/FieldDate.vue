@@ -6,6 +6,9 @@ import {
   getLocalTimeZone,
 } from '@internationalized/date'
 
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
+
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
@@ -53,15 +56,16 @@ watchEffect(() => {
 
 <template>
   <div v-if="multiple" class="space-y-6">
-    <div v-for="(model, i) in models" :key="i" class="flex items-center gap-2">
-      <UFormField :label="`${field['#title']} ${i + 1}`">
-        <UPopover>
+    <template v-for="(model, i) in models" :key="i">
+      <UFormField
+        :label="`${field['#title']} ${i + 1}`"
+        :required="!!field['#required']"
+      >
+        <UPopover :class="{ 'w-full': isMaterial }">
           <UButton
-            class="w-40 text-(--ui-text-muted)"
-            color="neutral"
             icon="i-lucide-calendar"
             size="md"
-            variant="subtle"
+            :variant="webform.variant"
           >
             {{
               model
@@ -74,17 +78,11 @@ watchEffect(() => {
           </template>
         </UPopover>
       </UFormField>
-    </div>
+    </template>
   </div>
 
-  <UPopover v-else>
-    <UButton
-      class="w-40 text-(--ui-text-muted)"
-      color="neutral"
-      icon="i-lucide-calendar"
-      size="md"
-      variant="subtle"
-    >
+  <UPopover v-else :class="{ 'w-full': isMaterial }">
+    <UButton icon="i-lucide-calendar" size="md" :variant="webform.variant">
       {{
         models[0]
           ? df.format(models[0].toDate(getLocalTimeZone()))

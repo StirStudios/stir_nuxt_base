@@ -2,6 +2,8 @@
 import type { WebformFieldProps } from '~/types/formTypes'
 import { transformOptions } from '~/utils/transformOptions'
 
+const { webform } = useAppConfig().stirTheme
+
 const props = defineProps<{
   field?: WebformFieldProps
   fieldName: string
@@ -32,5 +34,6 @@ const selectItems = computed(() => {
     class="w-full"
     :items="selectItems"
     :placeholder="placeholder || 'Select'"
+    :variant="webform.variant"
   />
 </template>

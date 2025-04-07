@@ -170,19 +170,23 @@ export default defineAppConfig({
       slots: {
         base: 'transition-all duration-300',
       },
-      // variants: {
-      //   size: {
-      //     lg: {
-      //       leadingIcon: 'size-6',
-      //       trailingIcon: 'size-6',
-      //     },
-      //     xl: {
-      //       base: 'px-6 py-3 text-md gap-2',
-      //       leadingIcon: 'size-8',
-      //       trailingIcon: 'size-8',
-      //     },
-      //   },
-      // },
+      variants: {
+        size: {
+          // lg: {
+          //   leadingIcon: 'size-6',
+          //   trailingIcon: 'size-6',
+          // },
+          md: {
+            // base: 'px-6 py-3 text-md gap-2',
+            // leadingIcon: 'size-8',
+            // trailingIcon: 'size-8',
+          },
+        },
+        variant: {
+          material:
+            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] py-3 text-md gap-2',
+        },
+      },
       defaultVariants: {
         // color: 'primary',
         // variant: 'solid',
@@ -210,6 +214,38 @@ export default defineAppConfig({
         variant: {
           material:
             'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
+      defaultVariants: {
+        size: 'xl',
+      },
+    },
+    select: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
+      defaultVariants: {
+        size: 'xl',
+      },
+    },
+    selectMenu: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
         },
         // size: {
         //   xl: {

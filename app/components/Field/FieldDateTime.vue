@@ -6,6 +6,15 @@ import {
   getLocalTimeZone,
 } from '@internationalized/date'
 
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
+
+const props = defineProps<{
+  field: WebformFieldProps
+  fieldName: string
+  state: WebformState
+}>()
+
 // Drupal offset: e.g., -0700
 function getOffsetString() {
   const offsetMinutes = new Date().getTimezoneOffset() * -1
@@ -40,12 +49,6 @@ function generateTimeOptions(min: string, max: string, step: number) {
 
   return times
 }
-
-const props = defineProps<{
-  field: WebformFieldProps
-  fieldName: string
-  state: WebformState
-}>()
 
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 const multiple = Number(props.field['#multiple']) || 1
@@ -108,17 +111,19 @@ watchEffect(() => {
 
 <template>
   <div class="space-y-6">
-    <template v-for="(block, i) in blocks" :key="i">
-      <div class="flex items-center gap-4">
-        <UFormField v-if="multiple > 1" :label="`${field['#title']} ${i + 1}`">
-          <UPopover>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <template v-for="(block, i) in blocks" :key="i">
+        <UFormField
+          v-if="multiple > 1"
+          :label="`${field['#title']} ${i + 1}`"
+          :required="!!field['#required']"
+        >
+          <UPopover :class="{ 'w-full': isMaterial }">
             <UButton
               :aria-label="block.date ? 'Change date' : 'Select date'"
-              class="w-full text-(--ui-text-muted)"
-              color="neutral"
               icon="i-lucide-calendar"
               size="md"
-              variant="subtle"
+              :variant="webform.variant"
             >
               {{
                 block.date
@@ -132,14 +137,12 @@ watchEffect(() => {
           </UPopover>
         </UFormField>
 
-        <UPopover v-else>
+        <UPopover v-else :class="{ 'w-full': isMaterial }">
           <UButton
             :aria-label="block.date ? 'Change date' : 'Select date'"
-            class="w-full text-(--ui-text-muted)"
-            color="neutral"
             icon="i-lucide-calendar"
             size="md"
-            variant="subtle"
+            :variant="webform.variant"
           >
             {{
               block.date
@@ -152,7 +155,7 @@ watchEffect(() => {
           </template>
         </UPopover>
 
-        <UFormField label="Time">
+        <UFormField label="Time" :required="!!field['#required']">
           <FieldSelect
             v-model="block.start"
             :field-name="`${fieldName}-${i}-start`"
@@ -161,7 +164,7 @@ watchEffect(() => {
             :state="state"
           />
         </UFormField>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
 </template>
