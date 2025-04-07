@@ -27,6 +27,8 @@ export interface WebformFieldProps {
     | 'select'
     | 'radio'
     | 'processed_text'
+    | 'date'
+    | 'datetime'
   '#title': string
   '#description'?: string
   '#placeholder'?: string
@@ -35,12 +37,14 @@ export interface WebformFieldProps {
   '#requiredError'?: string
   '#options'?: Record<string, string>
   '#text'?: string
+  '#multiple'?: number | boolean
   '#states'?: {
     visible?:
       | Record<string, { value: string }>
       | Array<Record<string, { value: string }> | 'or'>
   }
   floatingLabel?: boolean
+  '#composite'?: Record<string, WebformFieldProps>
 }
 
 export interface WebformActionProps {

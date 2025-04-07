@@ -1,4 +1,4 @@
-import { object, string, type ObjectSchema, type AnySchema } from 'yup'
+import { object, string, array, type ObjectSchema, type AnySchema } from 'yup'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import type { WebformFieldProps } from '~/types/FormTypes'
 
@@ -18,6 +18,7 @@ export function buildYupSchema(
 
     const requiredError = field['#requiredError'] || 'This field is required'
 
+    // Handle composite fields
     if ('#composite' in field && typeof field['#composite'] === 'object') {
       const subShape: Record<string, AnySchema> = {}
 
@@ -34,15 +35,32 @@ export function buildYupSchema(
 
       shape[key] = object().shape(subShape)
     } else {
-      shape[key] = string()
-        .nullable()
-        .when([], {
-          is: () => field['#required'],
-          then: (schema) =>
-            field['#type'] === 'email'
-              ? schema.email('Invalid email').required(requiredError)
-              : schema.required(requiredError),
+      const isRequired = field['#required'] === true
+      const isEmail = field['#type'] === 'email'
+      const isMultiple = '#multiple' in field && !!field['#multiple']
+
+      if (isMultiple) {
+        shape[key] = array()
+          .of(
+            string().when([], {
+              is: () => isRequired,
+              then: (schema) => schema.required(requiredError),
+              otherwise: (schema) => schema,
+            }),
+          )
+          .min(isRequired ? 1 : 0, requiredError)
+      } else {
+        let base = string().nullable()
+
+        if (isEmail) {
+          base = base.email('Invalid email')
+        }
+
+        shape[key] = base.when([], {
+          is: () => isRequired,
+          then: (schema) => schema.required(requiredError),
         })
+      }
     }
   }
 

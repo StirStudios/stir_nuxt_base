@@ -189,7 +189,9 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       </template>
 
       <div v-if="!config.public.turnstileDisable">
-        <p class="mb-2 text-sm font-medium">Let us know you’re human</p>
+        <p class="mb-2 text-sm text-(--ui-text-muted)">
+          Let us know you’re human
+        </p>
         <NuxtTurnstile v-model="turnstileToken" />
       </div>
 
