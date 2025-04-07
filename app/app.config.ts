@@ -106,7 +106,7 @@ export default defineAppConfig({
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: 'space-y-10',
       response: 'space-y-8 px-6 py-3 bg-neutral-100 rounded-lg italic',
-      submitAlign: 'flex justify-center',
+      submitAlign: '',
       variant: 'outline',
     },
     scrollButton: {

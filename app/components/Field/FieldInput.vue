@@ -17,7 +17,11 @@ defineProps<{
     :id="fieldName"
     v-model="state[fieldName]"
     class="w-full"
+    :max="field['#type'] === 'number' ? field['#max'] : undefined"
+    :min="field['#type'] === 'number' ? field['#min'] : undefined"
     :placeholder="floatingLabel ? ' ' : ''"
+    :step="field['#type'] === 'number' ? field['#step'] || 1 : undefined"
+    :type="field['#type'] || 'text'"
     :ui="floatingLabel ? { base: 'peer' } : {}"
     :variant="webform.variant"
   >

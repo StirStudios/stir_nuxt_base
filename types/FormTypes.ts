@@ -23,6 +23,7 @@ export interface WebformFieldProps {
   '#type':
     | 'textfield'
     | 'email'
+    | 'number'
     | 'textarea'
     | 'select'
     | 'radio'
@@ -37,6 +38,9 @@ export interface WebformFieldProps {
   '#requiredError'?: string
   '#options'?: Record<string, string>
   '#text'?: string
+  '#min'?: number
+  '#max'?: number
+  '#step'?: number
   '#multiple'?: number | boolean
   '#states'?: {
     visible?:

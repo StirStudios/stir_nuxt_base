@@ -27,6 +27,7 @@ const props = defineProps<{
 const componentMap = {
   textfield: FieldInput,
   email: FieldInput,
+  number: FieldInput,
   textarea: FieldTextarea,
   select: FieldSelect,
   radio: FieldRadio,

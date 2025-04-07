@@ -1,4 +1,12 @@
-import { object, string, array, type ObjectSchema, type AnySchema } from 'yup'
+import {
+  object,
+  string,
+  number,
+  array,
+  type ObjectSchema,
+  type AnySchema,
+  type NumberSchema,
+} from 'yup'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import type { WebformFieldProps } from '~/types/FormTypes'
 
@@ -37,6 +45,7 @@ export function buildYupSchema(
     } else {
       const isRequired = field['#required'] === true
       const isEmail = field['#type'] === 'email'
+      const isNumber = field['#type'] === 'number'
       const isMultiple = '#multiple' in field && !!field['#multiple']
 
       if (isMultiple) {
@@ -50,10 +59,30 @@ export function buildYupSchema(
           )
           .min(isRequired ? 1 : 0, requiredError)
       } else {
-        let base = string().nullable()
+        let base: AnySchema = string().nullable()
 
-        if (isEmail) {
-          base = base.email('Invalid email')
+        if (isNumber) {
+          let numSchema = number()
+            .typeError('Must be a number')
+            .nullable() as NumberSchema<number | undefined>
+
+          if (field['#min'] !== undefined) {
+            numSchema = numSchema.min(
+              field['#min'],
+              `Minimum value is ${field['#min']}`,
+            )
+          }
+
+          if (field['#max'] !== undefined) {
+            numSchema = numSchema.max(
+              field['#max'],
+              `Maximum value is ${field['#max']}`,
+            )
+          }
+
+          base = numSchema
+        } else if (isEmail) {
+          base = string().nullable().email('Invalid email')
         }
 
         shape[key] = base.when([], {
