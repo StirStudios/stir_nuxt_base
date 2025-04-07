@@ -43,6 +43,9 @@ watchEffect(() => {
   })
 
   if (multiple) {
+    if (!Array.isArray(props.state[props.fieldName])) {
+      props.state[props.fieldName] = []
+    }
     props.state[props.fieldName] = formatted
   }
 })

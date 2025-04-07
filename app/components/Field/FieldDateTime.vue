@@ -98,6 +98,10 @@ watchEffect(() => {
     if (value) values.push(value)
   })
 
+  if (!Array.isArray(props.state[props.fieldName])) {
+    props.state[props.fieldName] = []
+  }
+
   props.state[props.fieldName] = values
 })
 </script>
