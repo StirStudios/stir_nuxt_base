@@ -24,10 +24,11 @@ const props = defineProps<{
 }>()
 
 // Map the field types to components
-const componentMap = {
+const componentMap: Record<string, Component> = {
   textfield: FieldInput,
   email: FieldInput,
   number: FieldInput,
+  tel: FieldInput,
   textarea: FieldTextarea,
   select: FieldSelect,
   radio: FieldRadio,

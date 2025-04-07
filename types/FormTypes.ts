@@ -1,3 +1,24 @@
+export type InputType =
+  | 'text'
+  | 'email'
+  | 'number'
+  | 'tel'
+  | 'url'
+  | 'search'
+  | 'password'
+  | 'date'
+  | 'datetime-local'
+  | 'month'
+  | 'time'
+  | 'week'
+  | 'color'
+  | 'textarea'
+  | 'select'
+  | 'radio'
+  | 'checkbox'
+  | 'processed_text'
+  | 'datetime'
+
 export interface DrupalFormProps {
   formId: string
   attributes: Record<string, unknown>
@@ -20,16 +41,7 @@ export interface WebformDefinition {
 }
 
 export interface WebformFieldProps {
-  '#type':
-    | 'textfield'
-    | 'email'
-    | 'number'
-    | 'textarea'
-    | 'select'
-    | 'radio'
-    | 'processed_text'
-    | 'date'
-    | 'datetime'
+  '#type': InputType
   '#title': string
   '#description'?: string
   '#placeholder'?: string

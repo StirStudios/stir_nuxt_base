@@ -83,6 +83,10 @@ export function buildYupSchema(
           base = numSchema
         } else if (isEmail) {
           base = string().nullable().email('Invalid email')
+        } else if (field['#type'] === 'tel') {
+          base = string()
+            .nullable()
+            .matches(/^\+?[0-9\s\-().]{7,20}$/, 'Invalid phone number')
         }
 
         shape[key] = base.when([], {
