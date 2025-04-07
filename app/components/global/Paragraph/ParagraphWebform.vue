@@ -194,8 +194,13 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         </p>
         <NuxtTurnstile v-model="turnstileToken" />
       </div>
-
-      <UButton :label="submitButtonLabel" :loading="isLoading" type="submit" />
+      <WrapAlign :align="themeWebform.submitAlign">
+        <UButton
+          :label="submitButtonLabel"
+          :loading="isLoading"
+          type="submit"
+        />
+      </WrapAlign>
     </UForm>
 
     <div
