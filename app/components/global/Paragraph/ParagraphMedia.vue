@@ -31,9 +31,15 @@ defineProps<{
           >
             <MediaPopup :media="[media]" />
           </template>
+
           <template v-else-if="media.type === 'audio'">
             <div v-html="media.mediaEmbed" />
           </template>
+
+          <template v-else-if="media.type === 'document'">
+            <PdfViewer :src="media.url" />
+          </template>
+
           <template v-else>
             <MediaSimple :media="[media]" />
           </template>
