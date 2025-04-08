@@ -96,4 +96,10 @@ export default defineNuxtConfig({
       turnstileDisable: process.env.NUXT_ENVIRONMENT === 'local',
     },
   },
+  build: {
+    transpile: [
+      (ctx) => (ctx.isServer ? 'pdfjs-dist' : false),
+      (ctx) => (ctx.isServer ? '@vue-pdf-viewer/viewer' : false),
+    ],
+  },
 })
