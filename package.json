@@ -37,7 +37,6 @@
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
-    "increment": "patch",
     "github": {
       "release": true
     },
