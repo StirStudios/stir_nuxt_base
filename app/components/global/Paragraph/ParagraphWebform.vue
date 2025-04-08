@@ -13,10 +13,8 @@ const props = withDefaults(defineProps<{ webform?: WebformDefinition }>(), {
 const { onError } = useValidation()
 const { y } = useWindowScroll()
 const toast = useToast()
-const config = useRuntimeConfig()
 
-const { webform: themeWebform, turnstile: themeTurnstile = {} } =
-  useAppConfig().stirTheme
+const { webform: themeWebform } = useAppConfig().stirTheme
 
 // Destructure webform props
 const {
@@ -189,18 +187,8 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         </template>
       </template>
 
-      <div v-if="!config.public.turnstileDisable">
-        <p
-          v-if="themeTurnstile.appearance !== 'execute'"
-          class="mb-2 text-sm text-(--ui-text-muted)"
-        >
-          {{ themeTurnstile.label }}
-        </p>
-        <NuxtTurnstile
-          v-model="turnstileToken"
-          :options="{ appearance: themeTurnstile.appearance }"
-        />
-      </div>
+      <FieldTurnstile v-model="turnstileToken" />
+
       <WrapAlign :align="themeWebform.submitAlign">
         <UButton
           :label="submitButtonLabel"
