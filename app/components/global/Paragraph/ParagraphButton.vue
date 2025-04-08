@@ -29,14 +29,15 @@ const buttonLabel = computed(
         class="mt-4"
         icon="i-lucide-file-text"
         :label="buttonLabel"
+        :title="buttonLabel"
         @click="open = true"
       />
 
       <UButton
         v-else-if="link?.uri"
         class="mt-4"
-        icon="i-lucide-file-text"
         :label="buttonLabel"
+        :title="buttonLabel"
         target="_blank"
         :to="link.uri"
       />
