@@ -37,11 +37,17 @@
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "increment": "patch",
     "github": {
       "release": true
     },
     "npm": {
       "publish": false
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "pdfjs-dist": "4.10.38"
     }
   }
 }
