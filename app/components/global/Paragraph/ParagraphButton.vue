@@ -5,19 +5,38 @@ const props = defineProps<{
   item: RegionItemProps
 }>()
 
-const button = props.item.link?.[0] || null
+const open = ref(false)
+
+const pdf = computed(
+  () => props.item.media?.find((m) => m.type === 'document') || null,
+)
+
+const buttonLabel = computed(
+  () => pdf.value?.title || props.item.title || 'View PDF',
+)
 </script>
 
 <template>
   <EditLink :link="item.editLink">
     <div :class="['flex w-full', item.align, item.spacing, item.width]">
       <UButton
-        v-if="button?.uri"
+        v-if="pdf?.url"
         class="mt-4"
-        :label="button.title || 'Learn More'"
-        target="_blank"
-        :to="button.uri"
+        icon="i-lucide-file-text"
+        :label="buttonLabel"
+        @click="open = true"
       />
     </div>
   </EditLink>
+
+  <UModal
+    v-model:open="open"
+    :description="pdf?.title"
+    fullscreen
+    :title="pdf.title"
+  >
+    <template #body>
+      <PdfViewer class="max-w-2xl" :src="pdf.url" />
+    </template>
+  </UModal>
 </template>
