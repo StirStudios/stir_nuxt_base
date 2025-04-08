@@ -4,21 +4,25 @@ const { bodyClasses, isFront } = usePageContext()
 const theme = useAppConfig().stirTheme
 
 const route = useRoute()
-const page = await fetchPage(route.path, { query: route.query })
-const layout = getPageLayout(page)
+const { data: page } = await useAsyncData(() =>
+  fetchPage(route.path, { query: route.query }),
+)
+const layout = getPageLayout(page.value)
 
-// Ensure metadata is structured safely
-const metaTags = page.value.metatags?.meta || []
-const linkTags = page.value.metatags?.link || []
 const jsonLd = JSON.stringify(page.value.metatags?.jsonld || [])
 
 useHead({
   htmlAttrs: { lang: 'en' },
   bodyAttrs: { class: bodyClasses },
-  title: page.value.title,
-  meta: metaTags,
-  link: linkTags,
-  script: [{ type: 'application/ld+json', children: jsonLd }],
+  title: page.value?.title,
+  meta: page.value?.metatags?.meta || [],
+  link: page.value?.metatags?.link || [],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify(page.value?.metatags?.jsonld || []),
+    },
+  ],
 })
 </script>
 
