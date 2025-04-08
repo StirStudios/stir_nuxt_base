@@ -5,7 +5,7 @@ const props = defineProps({ ...VPVBaseProps })
 </script>
 
 <template>
-  <div class="mx-auto h-[700px] w-full max-w-[1028px]">
+  <div class="mx-auto h-[700px] w-full">
     <ClientOnly>
       <VPdfViewer v-bind="props" />
     </ClientOnly>
