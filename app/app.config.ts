@@ -111,6 +111,10 @@ export default defineAppConfig({
       submitAlign: '',
       variant: 'outline',
     },
+    turnstile: {
+      appearance: 'execute', // or 'always' or 'interaction-only'
+      label: 'Let us know you’re human',
+    },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
       icon: 'i-heroicons:arrow-up',

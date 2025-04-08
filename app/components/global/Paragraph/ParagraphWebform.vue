@@ -15,7 +15,8 @@ const { y } = useWindowScroll()
 const toast = useToast()
 const config = useRuntimeConfig()
 
-const { webform: themeWebform } = useAppConfig().stirTheme
+const { webform: themeWebform, turnstile: themeTurnstile = {} } =
+  useAppConfig().stirTheme
 
 // Destructure webform props
 const {
@@ -189,10 +190,16 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       </template>
 
       <div v-if="!config.public.turnstileDisable">
-        <p class="mb-2 text-sm text-(--ui-text-muted)">
-          Let us know you’re human
+        <p
+          v-if="themeTurnstile.appearance !== 'execute'"
+          class="mb-2 text-sm text-(--ui-text-muted)"
+        >
+          {{ themeTurnstile.label }}
         </p>
-        <NuxtTurnstile v-model="turnstileToken" />
+        <NuxtTurnstile
+          v-model="turnstileToken"
+          :options="{ appearance: themeTurnstile.appearance }"
+        />
       </div>
       <WrapAlign :align="themeWebform.submitAlign">
         <UButton
