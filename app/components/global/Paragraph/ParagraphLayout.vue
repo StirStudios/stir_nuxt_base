@@ -34,7 +34,7 @@ const sectionId = (layout: SectionProps) => {
         .toLowerCase()
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '')
-    : null
+    : `section-${layout.id}`
 }
 
 const getNodeProps = (item) => {
@@ -90,7 +90,7 @@ const getNodeProps = (item) => {
       </template>
 
       <div
-        :id="sectionId(layout)"
+        :id="sectionId(layout) || undefined"
         :class="[
           layout.width,
           classLayout(layout),

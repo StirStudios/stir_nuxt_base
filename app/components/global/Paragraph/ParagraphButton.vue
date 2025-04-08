@@ -7,12 +7,17 @@ const props = defineProps<{
 
 const open = ref(false)
 
+// Prefer PDF media if available, otherwise fallback to first link
 const pdf = computed(
   () => props.item.media?.find((m) => m.type === 'document') || null,
 )
 
+const link = computed(() =>
+  pdf.value?.url ? null : props.item.link?.[0] || null,
+)
+
 const buttonLabel = computed(
-  () => pdf.value?.title || props.item.title || 'View PDF',
+  () => pdf.value?.title || link.value?.title || props.item.title || 'View PDF',
 )
 </script>
 
@@ -26,14 +31,24 @@ const buttonLabel = computed(
         :label="buttonLabel"
         @click="open = true"
       />
+
+      <UButton
+        v-else-if="link?.uri"
+        class="mt-4"
+        icon="i-lucide-file-text"
+        :label="buttonLabel"
+        target="_blank"
+        :to="link.uri"
+      />
     </div>
   </EditLink>
 
   <UModal
+    v-if="pdf?.url"
     v-model:open="open"
-    :description="pdf?.alt"
+    :description="pdf.alt"
     fullscreen
-    :title="pdf.title"
+    :title="pdf.title || props.item.title"
   >
     <template #body>
       <PdfViewer class="max-w-4xl" :src="pdf.url" />
