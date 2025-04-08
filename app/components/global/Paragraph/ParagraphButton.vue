@@ -31,7 +31,7 @@ const buttonLabel = computed(
 
   <UModal
     v-model:open="open"
-    :description="pdf?.title"
+    :description="pdf?.alt"
     fullscreen
     :title="pdf.title"
   >
