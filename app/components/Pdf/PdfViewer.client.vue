@@ -5,11 +5,9 @@ const props = defineProps({ ...VPVBaseProps })
 </script>
 
 <template>
-  <div class="mx-auto h-full w-full pb-20">
-    <ClientOnly>
-      <VPdfViewer v-bind="props" />
-    </ClientOnly>
-  </div>
+  <ClientOnly>
+    <VPdfViewer v-bind="props" />
+  </ClientOnly>
 </template>
 
 <style scoped>

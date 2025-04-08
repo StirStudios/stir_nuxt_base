@@ -37,7 +37,9 @@ defineProps<{
           </template>
 
           <template v-else-if="media.type === 'document'">
-            <PdfViewer :src="media.url" />
+            <div class="mx-auto h-[700px] w-full">
+              <PdfViewer :src="media.url" />
+            </div>
           </template>
 
           <template v-else>

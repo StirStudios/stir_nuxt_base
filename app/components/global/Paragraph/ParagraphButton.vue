@@ -37,8 +37,8 @@ const buttonLabel = computed(
         v-else-if="link?.uri"
         class="mt-4"
         :label="buttonLabel"
-        :title="buttonLabel"
         target="_blank"
+        :title="buttonLabel"
         :to="link.uri"
       />
     </div>
@@ -52,7 +52,9 @@ const buttonLabel = computed(
     :title="pdf.title || props.item.title"
   >
     <template #body>
-      <PdfViewer class="max-w-4xl" :src="pdf.url" />
+      <div class="mx-auto h-full w-full">
+        <PdfViewer class="max-w-4xl" :src="pdf.url" />
+      </div>
     </template>
   </UModal>
 </template>
