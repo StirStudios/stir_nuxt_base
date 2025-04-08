@@ -4,12 +4,9 @@ const { bodyClasses, isFront } = usePageContext()
 const theme = useAppConfig().stirTheme
 
 const route = useRoute()
-const { data: page } = await useAsyncData(() =>
-  fetchPage(route.path, { query: route.query }),
-)
-const layout = getPageLayout(page.value)
+const page = await fetchPage(route.path, { query: route.query })
 
-const jsonLd = JSON.stringify(page.value.metatags?.jsonld || [])
+const layout = getPageLayout(page.value)
 
 useHead({
   htmlAttrs: { lang: 'en' },
