@@ -36,7 +36,7 @@ const buttonLabel = computed(
     :title="pdf.title"
   >
     <template #body>
-      <PdfViewer class="max-w-2xl" :src="pdf.url" />
+      <PdfViewer class="max-w-4xl" :src="pdf.url" />
     </template>
   </UModal>
 </template>
