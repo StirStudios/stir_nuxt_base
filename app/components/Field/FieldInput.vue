@@ -17,7 +17,6 @@ const isTel = computed(() => props.field['#type'] === 'tel')
 
 <template>
   <UInput
-    :type="props.field['#type'] || 'text'"
     :id="props.fieldName"
     v-model="props.state[props.fieldName]"
     class="w-full"
@@ -26,6 +25,7 @@ const isTel = computed(() => props.field['#type'] === 'tel')
     :min="isNumber ? props.field['#min'] : undefined"
     :placeholder="props.floatingLabel ? ' ' : ''"
     :step="isNumber ? props.field['#step'] || 1 : undefined"
+    :type="props.field['#type'] || 'text'"
     :ui="props.floatingLabel ? { base: 'peer' } : {}"
     :variant="webform.variant"
   >

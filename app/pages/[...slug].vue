@@ -36,6 +36,6 @@ useHead({
     </h1>
 
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
-    <component v-if="page?.content" :is="renderCustomElements(page.content)" />
+    <component :is="renderCustomElements(page.content)" v-if="page?.content" />
   </NuxtLayout>
 </template>
