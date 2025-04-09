@@ -1,5 +1,3 @@
-import { visualizer } from 'rollup-plugin-visualizer'
-
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
@@ -8,23 +6,11 @@ export default defineNuxtConfig({
     server: {
       allowedHosts:
         process.env.NODE_ENV === 'development'
-          ? ([process.env.SERVER_DOMAIN_CLIENT].filter(Boolean) as string[])
+          ? [process.env.SERVER_DOMAIN_CLIENT || 'localhost']
           : [],
     },
-    build: {
-      rollupOptions: {
-        plugins: [
-          visualizer({
-            open: true,
-            filename: 'dist/stats.html',
-            gzipSize: true,
-            brotliSize: true,
-          }),
-        ],
-      },
-    },
   },
-  compatibilityDate: '2025-03-04',
+  compatibilityDate: '2025-04-09',
   nitro: {
     compressPublicAssets: true,
   },
