@@ -16,7 +16,8 @@ export function useVideoPlayers() {
     ],
   })
 
-  watch(isScriptLoaded, (loaded: boolean) => {
+  // Only initialize players after script is loaded
+  watchOnce(isScriptLoaded, (loaded) => {
     if (loaded) {
       initializePlayers()
     }
@@ -24,6 +25,15 @@ export function useVideoPlayers() {
 
   async function initializePlayers() {
     await nextTick()
+
+    if (
+      typeof window === 'undefined' ||
+      !window.playerjs ||
+      typeof window.playerjs.Player !== 'function'
+    ) {
+      console.warn('PlayerJS not available. Skipping player init.')
+      return
+    }
 
     const iframes = document.querySelectorAll('iframe[data-mid]')
     iframes.forEach((iframe) => {
