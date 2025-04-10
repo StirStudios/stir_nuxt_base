@@ -1,23 +1,32 @@
 <script setup lang="ts">
 import type { RegionItemProps } from '~/types/ContentTypes'
 
-const appConfig = useAppConfig()
-
 const props = defineProps<{
   item: RegionItemProps
 }>()
 
 const open = ref(false)
+const appConfig = useAppConfig()
+
+const PdfViewer = computed(() => {
+  if (!appConfig.stirTheme?.pdf) return null
+
+  try {
+    const comp = resolveComponent('PdfViewer')
+    return markRaw(comp)
+  } catch (err) {
+    console.warn('PdfViewer not available:', err)
+    return null
+  }
+})
 
 // Prefer PDF media if available, otherwise fallback to first link
 const pdf = computed(
   () => props.item.media?.find((m) => m.type === 'document') || null,
 )
-
 const link = computed(() =>
   pdf.value?.url ? null : props.item.link?.[0] || null,
 )
-
 const buttonLabel = computed(
   () => pdf.value?.title || link.value?.title || props.item.title || 'View PDF',
 )
@@ -47,7 +56,7 @@ const buttonLabel = computed(
   </EditLink>
 
   <UModal
-    v-if="appConfig.stirTheme.pdf && pdf?.url"
+    v-if="PdfViewer && pdf?.url"
     v-model:open="open"
     :description="pdf.alt"
     fullscreen
@@ -55,7 +64,7 @@ const buttonLabel = computed(
   >
     <template #body>
       <div class="mx-auto h-full w-full">
-        <PdfViewer class="max-w-4xl" :src="pdf.url" />
+        <component :is="PdfViewer" class="max-w-4xl" :src="pdf.url" />
       </div>
     </template>
   </UModal>

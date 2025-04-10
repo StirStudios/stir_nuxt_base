@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
 
-const appConfig = useAppConfig()
-
 defineProps<{
   item: {
     settings: MediaSettings
     media: MediaProps[]
   }
 }>()
+
+const appConfig = useAppConfig()
+
+const PdfViewer = computed(() => {
+  if (!appConfig.stirTheme?.pdf) return null
+
+  try {
+    // Dynamically resolve the component name at runtime
+    const comp = resolveComponent('PdfViewer')
+    return markRaw(comp)
+  } catch (err) {
+    console.warn('PdfViewer not available:', err)
+    return null
+  }
+})
 </script>
 
 <template>
@@ -38,11 +51,9 @@ defineProps<{
             <div v-html="media.mediaEmbed" />
           </template>
 
-          <template
-            v-else-if="appConfig.stirTheme.pdf && media.type === 'document'"
-          >
+          <template v-else-if="PdfViewer && media.type === 'document'">
             <div class="mx-auto h-[700px] w-full">
-              <PdfViewer :src="media.url" />
+              <component :is="PdfViewer" :src="media.url" />
             </div>
           </template>
 
