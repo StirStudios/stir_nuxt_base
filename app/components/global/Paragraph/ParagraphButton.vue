@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { RegionItemProps } from '~/types/ContentTypes'
 
+const appConfig = useAppConfig()
+
 const props = defineProps<{
   item: RegionItemProps
 }>()
@@ -45,7 +47,7 @@ const buttonLabel = computed(
   </EditLink>
 
   <UModal
-    v-if="pdf?.url"
+    v-if="appConfig.stirTheme.pdf && pdf?.url"
     v-model:open="open"
     :description="pdf.alt"
     fullscreen

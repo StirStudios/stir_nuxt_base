@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
 
+const appConfig = useAppConfig()
+
 defineProps<{
   item: {
     settings: MediaSettings
@@ -36,7 +38,9 @@ defineProps<{
             <div v-html="media.mediaEmbed" />
           </template>
 
-          <template v-else-if="media.type === 'document'">
+          <template
+            v-else-if="appConfig.stirTheme.pdf && media.type === 'document'"
+          >
             <div class="mx-auto h-[700px] w-full">
               <PdfViewer :src="media.url" />
             </div>

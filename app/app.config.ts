@@ -4,6 +4,7 @@ export default defineAppConfig({
     preference: 'dark',
   },
   stirTheme: {
+    pdf: false,
     // loadingIndicator:
     // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
     crumbs: false,
