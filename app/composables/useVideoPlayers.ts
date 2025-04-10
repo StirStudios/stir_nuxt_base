@@ -27,28 +27,19 @@ export function useVideoPlayers() {
   async function initializePlayers() {
     await nextTick()
 
-    if (
-      typeof window === 'undefined' ||
-      !window.playerjs ||
-      typeof window.playerjs.Player !== 'function'
-    ) {
-      console.warn('PlayerJS not available. Skipping player init.')
-      return
-    }
-
     const iframes = document.querySelectorAll('iframe[data-mid]')
     iframes.forEach((iframe) => {
       const iframeKey = iframe.getAttribute('data-mid')
       if (!iframeKey || videoPlayers.value.has(iframeKey)) return
 
-      try {
-        const player: VideoPlayer = new window.playerjs.Player(
-          iframe as HTMLIFrameElement,
-        )
-        playersReady(iframeKey, player) // Check readiness for the specific player
-      } catch (error) {
-        console.error(`Error initializing player for ${iframeKey}:`, error)
-      }
+      iframe.addEventListener('load', () => {
+        try {
+          const player = new window.playerjs.Player(iframe as HTMLIFrameElement)
+          playersReady(iframeKey, player)
+        } catch (err) {
+          console.error(`PlayerJS init failed for ${iframeKey}:`, err)
+        }
+      })
     })
   }
 
