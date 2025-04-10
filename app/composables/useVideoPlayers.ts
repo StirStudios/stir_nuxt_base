@@ -1,4 +1,5 @@
 import type { VideoPlayer } from '~/types/MediaTypes'
+import { watchOnce } from '@vueuse/core'
 
 export function useVideoPlayers() {
   const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
