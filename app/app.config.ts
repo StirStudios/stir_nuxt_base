@@ -3,6 +3,14 @@ export default defineAppConfig({
     forced: false,
     preference: 'dark',
   },
+  cookieConsent: {
+    enabled: false,
+    // title: 'We use cookies 🍪',
+    // message: 'By using this site, you agree to our',
+    // termsUrl: '/terms',
+    // privacyUrl: '/privacy',
+    // buttonText: 'Accept',
+  },
   stirTheme: {
     pdf: false,
     // loadingIndicator:
