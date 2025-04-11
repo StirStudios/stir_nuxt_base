@@ -52,9 +52,7 @@ const PdfViewer = computed(() => {
           </template>
 
           <template v-else-if="PdfViewer && media.type === 'document'">
-            <div class="mx-auto h-[700px] w-full">
-              <component :is="PdfViewer" :src="media.url" />
-            </div>
+            <component :is="PdfViewer" :src="media.url" />
           </template>
 
           <template v-else>

@@ -63,9 +63,7 @@ const buttonLabel = computed(
     :title="pdf.title || props.item.title"
   >
     <template #body>
-      <div class="mx-auto h-full w-full">
-        <component :is="PdfViewer" class="max-w-4xl" :src="pdf.url" />
-      </div>
+      <component :is="PdfViewer" :src="pdf.url" />
     </template>
   </UModal>
 </template>
