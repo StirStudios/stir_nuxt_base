@@ -5,11 +5,13 @@ export default defineAppConfig({
   },
   cookieConsent: {
     enabled: false,
-    // title: 'We use cookies 🍪',
-    // message: 'By using this site, you agree to our',
+    // title: 'We value your privacy',
+    // message:
+    //   'We use cookies to enhance your experience and collect the information you provide through our booking forms to help plan your wedding. We do not sell your data.',
+    // messageLinks: 'For more information please review our',
     // termsUrl: '/terms',
     // privacyUrl: '/privacy',
-    // buttonText: 'Accept',
+    // buttonLabel: 'Accept',
   },
   stirTheme: {
     pdf: false,

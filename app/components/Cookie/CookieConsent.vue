@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const appConfig = useAppConfig().cookieConsent
+const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
 const visible = ref(false)
 
@@ -11,8 +11,8 @@ const consent = useCookie<boolean>('cookie_consent', {
 onMounted(() => {
   if (
     !consent.value &&
-    appConfig?.enabled &&
-    !['/terms', '/privacy'].includes(route.path)
+    config?.enabled &&
+    ![config.termsUrl, config.privacyUrl].includes(route.path)
   ) {
     visible.value = true
   }
@@ -28,7 +28,7 @@ function accept() {
   <UModal
     v-model:open="visible"
     :dismissible="false"
-    :title="appConfig.title"
+    :title="config.title"
     :ui="{
       footer: 'justify-end pb-8',
       title: 'text-base',
@@ -36,16 +36,31 @@ function accept() {
     }"
   >
     <template #description>
-      <p>
-        {{ appConfig.message }}
-        <ULink target="_blank" :to="appConfig.termsUrl">Terms of Service</ULink>
+      <p>{{ config.message }}</p>
+
+      <p v-if="config.termsUrl || config.privacyUrl" class="mt-5">
+        {{ config.messageLinks }}
+        <ULink
+          v-if="config.termsUrl"
+          class="underline"
+          target="_blank"
+          :to="config.termsUrl"
+        >
+          Terms of Service</ULink
+        >
         and
-        <ULink target="_blank" :to="appConfig.privacyUrl">Privacy Policy</ULink
+        <ULink
+          v-if="config.privacyUrl"
+          class="underline"
+          target="_blank"
+          :to="config.privacyUrl"
+        >
+          Privacy Policy</ULink
         >.
       </p>
     </template>
     <template #footer>
-      <UButton :label="appConfig.buttonText" size="sm" @click="accept" />
+      <UButton :label="config.buttonLabel" size="sm" @click="accept" />
     </template>
   </UModal>
 </template>
