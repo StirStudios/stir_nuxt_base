@@ -27,9 +27,7 @@ const media = computed(() => hero.media?.[0] || {})
     <section
       :class="[heroTheme.overlay, isFront ? heroTheme.isFront : heroTheme.base]"
     >
-      <div
-        :class="[heroTheme.text.base, isFront ? heroTheme.text.isFront : '']"
-      >
+      <div :class="isFront ? heroTheme.text.isFront : heroTheme.text.base">
         <WrapAnimate :effect="hero?.direction">
           <HeroContent
             :hero-text="hero?.text"

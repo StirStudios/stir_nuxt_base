@@ -31,7 +31,10 @@ const iconsSocialConfig = [
       ]"
     >
       <div class="rights lg:text-left">
-        <ul v-if="page.footer_menu.length" class="mb-3">
+        <ul
+          v-if="page.footer_menu.length"
+          class="mb-3 flex flex-wrap gap-x-4 gap-y-2 text-sm"
+        >
           <li v-for="menuItem in page.footer_menu" :key="menuItem.title">
             <ULink class="item" :to="menuItem.url">{{ menuItem.title }}</ULink>
           </li>

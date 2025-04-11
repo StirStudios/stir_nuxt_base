@@ -3,56 +3,46 @@ import { defineEventHandler, readFormData, createError } from 'h3'
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const drupalApiUrl = config.public.api
+  const url = event.node.req.url || ''
+  const method = event.node.req.method || 'GET'
+  const contentType = event.req.headers['content-type'] || ''
 
-  // Selectively bypass for specific routes
-  if (event.node.req.url?.startsWith('/api/webform/submit')) {
-    event.context.drupalCeCustomPageResponse = { bypass: true }
-    return
+  // Only handle form submissions (not JSON)
+  const isFormContentType =
+    contentType.includes('multipart/form-data') ||
+    contentType.includes('application/x-www-form-urlencoded')
+
+  // Skip handling if it's not a form POST
+  if (method !== 'POST' || !isFormContentType) return
+
+  // Only proxy specific forms to Drupal (optional)
+  if (!url.startsWith('/api/webform/submit')) return
+
+  const formData = await readFormData(event)
+  if (!formData) {
+    throw createError({
+      statusCode: 400,
+      message: 'Form data expected but not found.',
+    })
   }
 
-  // Apply the default Drupal form handler logic for other forms
-  if (event.node.req.method === 'POST') {
-    if (event.req.headers['x-form-processed']) {
-      return
-    }
-
-    const formData = await readFormData(event)
-
-    if (formData) {
-      const targetUrl = event.node.req.url
-      const response = await $fetch
-        .raw(`${drupalApiUrl}${targetUrl}`, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'x-form-processed': 'true',
-          },
-        })
-        .catch((error) => {
-          event.context.drupalCeCustomPageResponse = {
-            error: {
-              data: error,
-              statusCode: error.statusCode || 400,
-              message:
-                error.message ||
-                'Error when POSTing form data (customFormHandler).',
-            },
-          }
-        })
-
-      if (response) {
-        event.context.drupalCeCustomPageResponse = {
-          _data: response._data,
-          headers: Object.fromEntries(response.headers.entries()),
-        }
-      }
-    } else {
+  const response = await $fetch
+    .raw(`${drupalApiUrl}${url}`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'x-form-processed': 'true',
+      },
+    })
+    .catch((error) => {
       throw createError({
-        statusCode: 400,
-        statusMessage: 'Bad Request',
-        message:
-          'POST requests without form data are not supported (customFormHandler).',
+        statusCode: error.statusCode || 500,
+        message: error.message || 'Error submitting to Drupal.',
       })
-    }
+    })
+
+  event.context.drupalCeCustomPageResponse = {
+    _data: response._data,
+    headers: Object.fromEntries(response.headers.entries()),
   }
 })

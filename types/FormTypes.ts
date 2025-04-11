@@ -1,3 +1,24 @@
+export type InputType =
+  | 'text'
+  | 'email'
+  | 'number'
+  | 'tel'
+  | 'url'
+  | 'search'
+  | 'password'
+  | 'date'
+  | 'datetime-local'
+  | 'month'
+  | 'time'
+  | 'week'
+  | 'color'
+  | 'textarea'
+  | 'select'
+  | 'radio'
+  | 'checkbox'
+  | 'processed_text'
+  | 'datetime'
+
 export interface DrupalFormProps {
   formId: string
   attributes: Record<string, unknown>
@@ -20,13 +41,7 @@ export interface WebformDefinition {
 }
 
 export interface WebformFieldProps {
-  '#type':
-    | 'textfield'
-    | 'email'
-    | 'textarea'
-    | 'select'
-    | 'radio'
-    | 'processed_text'
+  '#type': InputType
   '#title': string
   '#description'?: string
   '#placeholder'?: string
@@ -35,12 +50,17 @@ export interface WebformFieldProps {
   '#requiredError'?: string
   '#options'?: Record<string, string>
   '#text'?: string
+  '#min'?: number
+  '#max'?: number
+  '#step'?: number
+  '#multiple'?: number | boolean
   '#states'?: {
     visible?:
       | Record<string, { value: string }>
       | Array<Record<string, { value: string }> | 'or'>
   }
   floatingLabel?: boolean
+  '#composite'?: Record<string, WebformFieldProps>
 }
 
 export interface WebformActionProps {

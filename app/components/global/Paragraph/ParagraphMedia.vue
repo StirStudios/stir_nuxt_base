@@ -7,6 +7,21 @@ defineProps<{
     media: MediaProps[]
   }
 }>()
+
+const appConfig = useAppConfig()
+
+const PdfViewer = computed(() => {
+  if (!appConfig.stirTheme?.pdf) return null
+
+  try {
+    // Dynamically resolve the component name at runtime
+    const comp = resolveComponent('PdfViewer')
+    return markRaw(comp)
+  } catch (err) {
+    console.warn('PdfViewer not available:', err)
+    return null
+  }
+})
 </script>
 
 <template>
@@ -31,9 +46,15 @@ defineProps<{
           >
             <MediaPopup :media="[media]" />
           </template>
+
           <template v-else-if="media.type === 'audio'">
             <div v-html="media.mediaEmbed" />
           </template>
+
+          <template v-else-if="PdfViewer && media.type === 'document'">
+            <component :is="PdfViewer" :src="media.url" />
+          </template>
+
           <template v-else>
             <MediaSimple :media="[media]" />
           </template>

@@ -13,7 +13,7 @@ const columns = Array.from({ length: 5 }, (_, i) => `grid-cols-${i + 1}`)
 const spans = Array.from({ length: 3 }, (_, i) => `col-span-${i + 1}`)
 
 // ✅ Limit gaps to a max of 10
-const gaps = Array.from({ length: 10 }, (_, i) => `gap-${i + 1}`)
+const gaps = [...Array.from({ length: 10 }, (_, i) => `gap-${i + 1}`), 'gap-20']
 
 // ✅ Limit basis to only 1/2, 1/3, 1/4, and 1/5
 const basisValues = [
@@ -71,11 +71,13 @@ const additionalClasses = [
   'm-auto',
   'lg:flex',
   'sm:w-lg',
+  'sm:max-w-lg',
   'lg:max-w-2xl',
   'lg:max-w-3xl',
   'lg:max-w-4xl',
   'lg:grid-cols-[8fr_4fr]',
   'lg:grid-cols-[4fr_8fr]',
+  'text-muted',
 ]
 
 additionalClasses.forEach((cls) => safelist.add(cls))
