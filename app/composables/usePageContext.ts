@@ -7,7 +7,10 @@ export function usePageContext() {
   const slug = route.params.slug?.[0]
 
   // Determine if this is the front page
-  const isFront = computed(() => route.fullPath === '/' || slug === 'front')
+  const isFront = computed(
+    () =>
+      route.path === '/' || route.fullPath.startsWith('/#') || slug === 'front',
+  )
 
   // Ensure we access the reactive value inside `page`
   const isAdministrator = computed(
