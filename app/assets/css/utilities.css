@@ -8,3 +8,7 @@
     @apply mb-5 lg:mb-10 xl:mb-16;
   }
 }
+
+@utility text-dimmed {
+  @apply text-(--ui-text-muted)/60;
+}

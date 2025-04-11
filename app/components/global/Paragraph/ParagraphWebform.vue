@@ -13,7 +13,6 @@ const props = withDefaults(defineProps<{ webform?: WebformDefinition }>(), {
 const { onError } = useValidation()
 const { y } = useWindowScroll()
 const toast = useToast()
-const config = useRuntimeConfig()
 
 const { webform: themeWebform } = useAppConfig().stirTheme
 
@@ -143,7 +142,11 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   <EditLink :link="webformSubmissions">
     <UForm
       v-if="!isFormSubmitted"
-      :class="themeWebform.form"
+      :class="
+        themeWebform.variant === 'material'
+          ? themeWebform.spacingLarge
+          : themeWebform.spacing
+      "
       :schema="schema"
       :state="state"
       @error="onError"
@@ -184,12 +187,15 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         </template>
       </template>
 
-      <div v-if="!config.public.turnstileDisable">
-        <p class="mb-2 text-sm font-medium">Let us know you’re human</p>
-        <NuxtTurnstile v-model="turnstileToken" />
-      </div>
+      <FieldTurnstile v-model="turnstileToken" />
 
-      <UButton :label="submitButtonLabel" :loading="isLoading" type="submit" />
+      <WrapAlign :align="themeWebform.submitAlign">
+        <UButton
+          :label="submitButtonLabel"
+          :loading="isLoading"
+          type="submit"
+        />
+      </WrapAlign>
     </UForm>
 
     <div

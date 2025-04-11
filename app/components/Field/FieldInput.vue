@@ -1,29 +1,41 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types/formTypes'
 
-defineProps<{
+const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: Record<string, string | number>
   floatingLabel?: boolean
 }>()
+
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
+
+const isNumber = computed(() => props.field['#type'] === 'number')
+const isTel = computed(() => props.field['#type'] === 'tel')
 </script>
 
 <template>
   <UInput
-    :id="fieldName"
-    v-model="state[fieldName]"
+    :id="props.fieldName"
+    v-model="props.state[props.fieldName]"
     class="w-full"
-    placeholder=""
-    :ui="floatingLabel ? { base: 'peer' } : {}"
+    :inputmode="isTel ? 'tel' : undefined"
+    :max="isNumber ? props.field['#max'] : undefined"
+    :min="isNumber ? props.field['#min'] : undefined"
+    :placeholder="props.floatingLabel ? ' ' : ''"
+    :step="isNumber ? props.field['#step'] || 1 : undefined"
+    :type="props.field['#type'] || 'text'"
+    :ui="props.floatingLabel ? { base: 'peer' } : {}"
+    :variant="webform.variant"
   >
     <label
-      v-if="floatingLabel"
-      class="pointer-events-none absolute -top-1.5 left-0 px-1.5 text-xs font-medium text-(--ui-text-highlighted) transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-(--ui-text-dimmed) peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-(--ui-text-highlighted)"
-      :for="fieldName"
+      v-if="props.floatingLabel"
+      :class="[isMaterial ? '' : 'px-1.5', webform.labels.base]"
+      :for="props.fieldName"
     >
-      <span class="inline-flex bg-(--ui-bg) px-1">
-        {{ field['#title'] }}
+      <span :class="[isMaterial ? '' : 'px-1', 'inline-flex bg-(--ui-bg)']">
+        {{ props.field['#title'] }}
       </span>
     </label>
   </UInput>

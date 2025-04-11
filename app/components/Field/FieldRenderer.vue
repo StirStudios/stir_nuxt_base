@@ -10,10 +10,11 @@ import FieldSelect from '@/components/Field/FieldSelect'
 import FieldRadio from '@/components/Field/FieldRadio'
 import FieldCheckbox from '@/components/Field/FieldCheckbox'
 import FieldDate from '@/components/Field/FieldDate'
+import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
-const appConfig = useAppConfig()
+const { webform } = useAppConfig().stirTheme
 
 // Props from parent
 const props = defineProps<{
@@ -23,13 +24,16 @@ const props = defineProps<{
 }>()
 
 // Map the field types to components
-const componentMap = {
+const componentMap: Record<string, Component> = {
   textfield: FieldInput,
   email: FieldInput,
+  number: FieldInput,
+  tel: FieldInput,
   textarea: FieldTextarea,
   select: FieldSelect,
   radio: FieldRadio,
   checkbox: FieldCheckbox,
+  datetime: FieldDateTime,
   date: FieldDate,
   address: FieldAddress,
   processed_text: FieldProcessedText,
@@ -40,7 +44,7 @@ const useFloatingLabels = computed(
   () =>
     props.field['#floating_label'] !== undefined
       ? props.field['#floating_label'] // Per-field setting
-      : appConfig.stirTheme.webform.labelsFloating, // Global default
+      : webform.labels.floating, // Global default
 )
 
 // Dynamically resolve the component
@@ -72,7 +76,7 @@ watchEffect(() => {
   >
     <div
       v-if="descriptionContent && field['#type'] !== 'checkbox'"
-      class="desc mb-3"
+      :class="webform.description"
       v-html="descriptionContent"
     />
 
@@ -85,10 +89,6 @@ watchEffect(() => {
       :state="state"
     />
 
-    <div
-      v-if="helpContent"
-      class="desc my-3 text-(--ui-text-muted)"
-      v-html="helpContent"
-    />
+    <div v-if="helpContent" :class="webform.help" v-html="helpContent" />
   </UFormField>
 </template>

@@ -1,4 +1,5 @@
 import type { VideoPlayer } from '~/types/MediaTypes'
+import { watchOnce } from '@vueuse/core'
 
 export function useVideoPlayers() {
   const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
@@ -16,7 +17,8 @@ export function useVideoPlayers() {
     ],
   })
 
-  watch(isScriptLoaded, (loaded: boolean) => {
+  // Only initialize players after script is loaded
+  watchOnce(isScriptLoaded, (loaded) => {
     if (loaded) {
       initializePlayers()
     }
@@ -30,14 +32,14 @@ export function useVideoPlayers() {
       const iframeKey = iframe.getAttribute('data-mid')
       if (!iframeKey || videoPlayers.value.has(iframeKey)) return
 
-      try {
-        const player: VideoPlayer = new window.playerjs.Player(
-          iframe as HTMLIFrameElement,
-        )
-        playersReady(iframeKey, player) // Check readiness for the specific player
-      } catch (error) {
-        console.error(`Error initializing player for ${iframeKey}:`, error)
-      }
+      iframe.addEventListener('load', () => {
+        try {
+          const player = new window.playerjs.Player(iframe as HTMLIFrameElement)
+          playersReady(iframeKey, player)
+        } catch (err) {
+          console.error(`PlayerJS init failed for ${iframeKey}:`, err)
+        }
+      })
     })
   }
 

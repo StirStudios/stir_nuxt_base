@@ -3,7 +3,16 @@ export default defineAppConfig({
     forced: false,
     preference: 'dark',
   },
+  cookieConsent: {
+    enabled: false,
+    // title: 'We use cookies 🍪',
+    // message: 'By using this site, you agree to our',
+    // termsUrl: '/terms',
+    // privacyUrl: '/privacy',
+    // buttonText: 'Accept',
+  },
   stirTheme: {
+    pdf: false,
     // loadingIndicator:
     // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
     crumbs: false,
@@ -93,11 +102,27 @@ export default defineAppConfig({
       header: true,
     },
     webform: {
-      form: 'space-y-5',
-      labelsFloating: false,
+      spacing: 'space-y-5',
+      spacingLarge: 'space-y-10',
+      labels: {
+        floating: false,
+        base: [
+          'pointer-events-none absolute -top-1.5 left-0 text-xs font-medium text-(--ui-text-dimmed) transition-all',
+          'peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-(--ui-text-dimmed)',
+          'peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-(--ui-text-highlighted)',
+        ],
+      },
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
-      fieldGroup: '',
-      response: 'space-y-8 px-6 py-3 bg-neutral-100 rounded-lg italic',
+      fieldGroup: 'space-y-10',
+      response: 'space-y-8 px-6 py-3 bg-(--ui-bg-muted) rounded-lg italic',
+      description: 'desc mb-3',
+      help: 'desc my-3 text-(--ui-text-muted)',
+      submitAlign: '',
+      variant: 'outline',
+    },
+    turnstile: {
+      appearance: 'always', // 'always' or 'execute' or 'interaction-only'
+      label: 'Let us know you’re human',
     },
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 text-white shadow-md transition-opacity duration-300',
@@ -161,19 +186,23 @@ export default defineAppConfig({
       slots: {
         base: 'transition-all duration-300',
       },
-      // variants: {
-      //   size: {
-      //     lg: {
-      //       leadingIcon: 'size-6',
-      //       trailingIcon: 'size-6',
-      //     },
-      //     xl: {
-      //       base: 'px-6 py-3 text-md gap-2',
-      //       leadingIcon: 'size-8',
-      //       trailingIcon: 'size-8',
-      //     },
-      //   },
-      // },
+      variants: {
+        size: {
+          // lg: {
+          //   leadingIcon: 'size-6',
+          //   trailingIcon: 'size-6',
+          // },
+          md: {
+            // base: 'px-6 py-3 text-md gap-2',
+            // leadingIcon: 'size-8',
+            // trailingIcon: 'size-8',
+          },
+        },
+        variant: {
+          material:
+            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] py-3 text-md gap-2',
+        },
+      },
       defaultVariants: {
         // color: 'primary',
         // variant: 'solid',
@@ -191,19 +220,74 @@ export default defineAppConfig({
     // },
     formField: {
       slots: {
-        labelWrapper: 'block text-sm/6 font-medium',
+        label: 'block font-medium text-(--ui-text-dimmed)',
         container: 'mt-1',
         error: 'mt-1 text-[var(--ui-error)]',
       },
     },
     input: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
+      defaultVariants: {
+        size: 'xl',
+      },
+    },
+    select: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
+      defaultVariants: {
+        size: 'xl',
+      },
+    },
+    selectMenu: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
       defaultVariants: {
         size: 'xl',
       },
     },
     textarea: {
+      variants: {
+        variant: {
+          material:
+            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+        },
+        // size: {
+        //   xl: {
+        //     base: 'pt-4',
+        //   },
+        // },
+      },
       defaultVariants: {
         size: 'xl',
+        variant: 'material',
       },
     },
     // carousel: {

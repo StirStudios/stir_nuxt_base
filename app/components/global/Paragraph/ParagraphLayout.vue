@@ -28,6 +28,15 @@ const classLayout = computed(() => {
   }
 })
 
+const sectionId = (layout: SectionProps) => {
+  return layout.label
+    ? layout.label
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '')
+    : `section-${layout.id}`
+}
+
 const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
@@ -81,7 +90,7 @@ const getNodeProps = (item) => {
       </template>
 
       <div
-        :id="layout.label ?? null"
+        :id="sectionId(layout) || undefined"
         :class="[
           layout.width,
           classLayout(layout),

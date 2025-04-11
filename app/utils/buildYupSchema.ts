@@ -1,4 +1,12 @@
-import { object, string, type ObjectSchema, type AnySchema } from 'yup'
+import {
+  object,
+  string,
+  number,
+  array,
+  type ObjectSchema,
+  type AnySchema,
+  type NumberSchema,
+} from 'yup'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import type { WebformFieldProps } from '~/types/FormTypes'
 
@@ -18,6 +26,7 @@ export function buildYupSchema(
 
     const requiredError = field['#requiredError'] || 'This field is required'
 
+    // Handle composite fields
     if ('#composite' in field && typeof field['#composite'] === 'object') {
       const subShape: Record<string, AnySchema> = {}
 
@@ -34,15 +43,57 @@ export function buildYupSchema(
 
       shape[key] = object().shape(subShape)
     } else {
-      shape[key] = string()
-        .nullable()
-        .when([], {
-          is: () => field['#required'],
-          then: (schema) =>
-            field['#type'] === 'email'
-              ? schema.email('Invalid email').required(requiredError)
-              : schema.required(requiredError),
+      const isRequired = field['#required'] === true
+      const isEmail = field['#type'] === 'email'
+      const isNumber = field['#type'] === 'number'
+      const isMultiple = '#multiple' in field && !!field['#multiple']
+
+      if (isMultiple) {
+        shape[key] = array()
+          .of(
+            string().when([], {
+              is: () => isRequired,
+              then: (schema) => schema.required(requiredError),
+              otherwise: (schema) => schema,
+            }),
+          )
+          .min(isRequired ? 1 : 0, requiredError)
+      } else {
+        let base: AnySchema = string().nullable()
+
+        if (isNumber) {
+          let numSchema = number()
+            .typeError('Must be a number')
+            .nullable() as NumberSchema<number | undefined>
+
+          if (field['#min'] !== undefined) {
+            numSchema = numSchema.min(
+              field['#min'],
+              `Minimum value is ${field['#min']}`,
+            )
+          }
+
+          if (field['#max'] !== undefined) {
+            numSchema = numSchema.max(
+              field['#max'],
+              `Maximum value is ${field['#max']}`,
+            )
+          }
+
+          base = numSchema
+        } else if (isEmail) {
+          base = string().nullable().email('Invalid email')
+        } else if (field['#type'] === 'tel') {
+          base = string()
+            .nullable()
+            .matches(/^\+?[0-9\s\-().]{7,20}$/, 'Invalid phone number')
+        }
+
+        shape[key] = base.when([], {
+          is: () => isRequired,
+          then: (schema) => schema.required(requiredError),
         })
+      }
     }
   }
 
