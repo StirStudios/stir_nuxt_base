@@ -1,53 +1,49 @@
 <script setup lang="ts">
-import type { CarouselProps } from '~/types/MediaTypes'
+import type { ViewItemProps } from '~/types/ViewTypes'
 import { componentExists } from '~/utils/componentExists'
 
-const props = defineProps<CarouselProps>()
+const props = defineProps<{ item: ViewItemProps }>()
 
-const appConfig = useAppConfig()
-const showIndicators = computed(() => props.indicators || false)
-const showArrows = computed(() => props.arrows || false)
-const transitionFade = computed(() => props.fade || false)
-const autoscroll = computed(() => props.autoscroll || false)
-const interval = computed(() => props.interval || 5000)
-const itemElement = computed(() => props.itemElement || false)
+const {
+  carouselArrows,
+  carouselAutoscroll,
+  carouselFade,
+  carouselIndicators,
+  carouselInterval,
+  gridItems,
+  content,
+} = props.item
+
+const items = computed(() => content?.rows || [])
+
+const config = useAppConfig().stirTheme.carousel
 </script>
 
 <template>
-  <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
-    <h2 v-if="header" class="mb-5">{{ header }}</h2>
+  <div :class="[config.padding, 'relative z-10']">
     <UCarousel
-      v-slot="{ item }"
-      :arrows="showArrows"
-      :auto-scroll="autoscroll"
-      :autoplay="{ delay: interval }"
-      :dots="showIndicators"
-      :fade="transitionFade"
+      v-slot="{ item: row }"
+      :arrows="carouselArrows"
+      :auto-scroll="carouselAutoscroll"
+      :autoplay="{ delay: carouselInterval || 5000 }"
+      :dots="carouselIndicators"
+      :fade="carouselFade"
       :items="items"
       loop
-      :next="appConfig.stirTheme.carousel.arrows.next"
-      :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
-      :prev="appConfig.stirTheme.carousel.arrows.prev"
-      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
-      :ui="{
-        root: `${appConfig.stirTheme.carousel.root}`,
-        item: amount,
-      }"
+      :next="config.arrows.next"
+      :next-icon="config.arrows.nextIcon"
+      :prev="config.arrows.prev"
+      :prev-icon="config.arrows.prevIcon"
+      :ui="{ root: config.root, item: gridItems }"
     >
-      <template v-if="itemElement">
-        <component
-          :is="
-            componentExists(itemElement)
-              ? resolveComponent(itemElement)
-              : 'ParagraphDefault'
-          "
-          :item="item"
-        />
-      </template>
-      <template v-else>
-        <MediaSimple v-if="item.type === 'image'" :media="[item]" />
-        <MediaPopup v-else-if="item.type === 'video'" :media="[item]" />
-      </template>
+      <component
+        :is="
+          componentExists(row.element)
+            ? resolveComponent(row.element)
+            : 'ParagraphDefault'
+        "
+        :item="row"
+      />
     </UCarousel>
   </div>
 </template>
