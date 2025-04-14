@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   site: {
     name: process.env.NUXT_NAME,
     url: process.env.NUXT_URL,
-    indexable: process.env.NUXT_ENVIRONMENT === 'production' ? true : false,
+    indexable: process.env.NUXT_ENV === 'production' ? true : false,
   },
   devtools: { enabled: true },
   routeRules: {
@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     },
     public: {
       api: process.env.DRUPAL_URL,
-      turnstileDisable: process.env.NUXT_ENVIRONMENT === 'local',
+      turnstileDisable: process.env.NUXT_ENV === 'local',
     },
   },
 })
