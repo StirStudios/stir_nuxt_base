@@ -42,6 +42,9 @@ export default defineNuxtConfig({
     '/admincontrol/password': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/password`,
     },
+    '/front': {
+      redirect: `${process.env.DRUPAL_URL}/`,
+    },
   },
   modules: [
     '@nuxt/eslint',
