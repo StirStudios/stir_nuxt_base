@@ -8,26 +8,45 @@ const props = defineProps<{
 
 const { grid } = useAppConfig().stirTheme
 
-const rows = computed(() => props.item.rows || [])
+// Filters out 'paragraph-layout' sections
+const filteredRows = computed(() =>
+  (props.item.rows || []).map((row) => ({
+    ...row,
+    section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
+  })),
+)
 </script>
 
 <template>
-  <div :class="[item.width, item.spacing]">
+  <h3 v-if="item.title">{{ item.title }}</h3>
+
+  <div :class="[!item.carousel ? item.width : '', item.spacing]">
     <template v-if="item.carousel">
-      <ParagraphCarousel :item="item" :items="rows" />
+      <ParagraphCarousel
+        :amount="item.gridItems"
+        :arrows="item.carouselArrows"
+        :autoscroll="item.carouselAutoscroll"
+        :fade="item.carouselFade"
+        :indicators="item.carouselIndicators"
+        :interval="item.carouselInterval"
+        :item-element="item.element"
+        :items="filteredRows"
+        :vid="item.viewId"
+      />
     </template>
 
     <div v-else :class="item.gridItems">
-      <div v-for="row in rows" :key="row.created" class="item">
+      <div v-for="row in filteredRows" :key="row.created" class="item">
         <WrapAnimate :effect="item?.direction">
           <component
             :is="
-              componentExists(row.element)
-                ? resolveComponent(row.element)
+              componentExists(item.element)
+                ? resolveComponent(item.element)
                 : 'ParagraphDefault'
             "
             v-bind="{ item: row }"
           />
+
           <USeparator
             v-if="grid.separator?.condition?.includes(row.element)"
             :class="grid.separator?.base"
