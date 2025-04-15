@@ -48,12 +48,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxt/eslint',
-    [
-      '@nuxt/ui',
-      {
-        fonts: false,
-      },
-    ],
+    '@nuxt/ui',
     'motion-v/nuxt',
     [
       '@nuxtjs/turnstile',
