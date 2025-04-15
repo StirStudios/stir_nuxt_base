@@ -8,7 +8,7 @@ const loaded = ref(false)
 </script>
 
 <template>
-  <div class="relative">
+  <div class="media relative">
     <USkeleton v-if="!loaded" class="absolute inset-0" />
 
     <ClientOnly>

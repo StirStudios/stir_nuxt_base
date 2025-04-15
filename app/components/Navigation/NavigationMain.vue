@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useWindowScroll, useThrottleFn } from '@vueuse/core'
+import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
-
-const { page, isAdministrator } = usePageContext()
+const { isScrolled, showNavbar } = useScrollNav()
+const { page } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const appConfig = useAppConfig()
 const theme = appConfig.stirTheme
@@ -17,26 +17,10 @@ const navLinks = mainMenu.value.map((menuItem) => ({
     : `/${menuItem.alias}${menuItem.options?.fragment ? `#${menuItem.options.fragment}` : ''}`,
 }))
 
-// Scroll behavior state
-const { y } = useWindowScroll()
-const lastScrollPosition = ref(0)
-const showNavbar = ref(true)
-const navbarOpen = ref(false)
-const isScrolled = computed(() => y.value > 50)
-const isOpen = ref(false) // Controls mobile menu slideover
+// Mobile nav toggle
+const isOpen = ref(false)
 
-// Scroll behavior logic
-const handleScroll = useThrottleFn(() => {
-  if (y.value < 0 || Math.abs(y.value - lastScrollPosition.value) < 40) return
-  showNavbar.value = y.value < lastScrollPosition.value
-  lastScrollPosition.value = y.value
-  navbarOpen.value = false
-}, 100)
-
-// Watch scroll position
-watch(y, handleScroll)
-
-// On mount, check if there's a hash in the URL
+// Force scrolled style if URL contains a hash on load
 onMounted(() => {
   if (route.hash) isScrolled.value = true
 })
@@ -47,7 +31,7 @@ onMounted(() => {
     aria-label="Site navigation"
     :class="[
       theme.navigation.base,
-      theme.navigation.transparentTop && !isScrolled && !isAdministrator
+      theme.navigation.transparentTop && !isScrolled
         ? ''
         : theme.navigation.background,
       {
