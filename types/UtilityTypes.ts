@@ -24,3 +24,8 @@ export interface LayoutProps {
   animate?: boolean
   direction?: string
 }
+
+// Calendly
+export interface CalendlyClient {
+  initInlineWidget(options: { url: string; parentElement: HTMLElement }): void
+}
