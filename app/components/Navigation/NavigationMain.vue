@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
-const { isScrolled, showNavbar } = useScrollNav()
+const { scrollDirection, atBottom, isScrolled } = useScrollNav()
+
 const { page } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const appConfig = useAppConfig()
@@ -20,10 +21,12 @@ const navLinks = mainMenu.value.map((menuItem) => ({
 // Mobile nav toggle
 const isOpen = ref(false)
 
-// Force scrolled style if URL contains a hash on load
+// Optional: Override isScrolled on hash load
+const forceScrolled = ref(false)
 onMounted(() => {
-  if (route.hash) isScrolled.value = true
+  if (route.hash) forceScrolled.value = true
 })
+const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
 </script>
 
 <template>
@@ -31,12 +34,12 @@ onMounted(() => {
     aria-label="Site navigation"
     :class="[
       theme.navigation.base,
-      theme.navigation.transparentTop && !isScrolled
+      theme.navigation.transparentTop && !finalIsScrolled
         ? ''
         : theme.navigation.background,
       {
         '-translate-y-full':
-          !showNavbar || (theme.navigation.isHidden && !isScrolled),
+          finalIsScrolled && scrollDirection === 'down' && !atBottom,
       },
     ]"
     role="navigation"
