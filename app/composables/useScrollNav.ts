@@ -1,14 +1,19 @@
 import { useWindowScroll, useThrottleFn } from '@vueuse/core'
+import { usePageContext } from '~/composables/usePageContext'
 
-export function useScrollNav(scrollThreshold = 10, directionDelta = 10) {
+export function useScrollNav(baseScrollThreshold = 10, directionDelta = 10) {
   const { y, directions, arrivedState } = useWindowScroll({
     behavior: 'smooth',
   })
 
+  const { isAdministrator } = usePageContext()
+  const adjustedScrollThreshold = computed(() =>
+    isAdministrator.value ? baseScrollThreshold + 40 : baseScrollThreshold,
+  )
+
   const lastScrollPosition = ref(0)
   const showNavbar = ref(true)
   const isScrolled = computed(() => y.value > 50)
-
   const scrollDirection = ref<'up' | 'down' | null>(null)
   const atBottom = computed(() => arrivedState.bottom)
 
@@ -23,8 +28,8 @@ export function useScrollNav(scrollThreshold = 10, directionDelta = 10) {
       scrollDirection.value = 'up'
     }
 
-    // Always show navbar at top
-    if (current <= scrollThreshold) {
+    // Always show navbar at or near top
+    if (current <= adjustedScrollThreshold.value) {
       showNavbar.value = true
     } else if (delta > directionDelta) {
       showNavbar.value = false
