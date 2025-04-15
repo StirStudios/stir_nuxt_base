@@ -67,6 +67,12 @@ const getNodeProps = (item) => {
         direction: item.direction,
       },
     }
+  } else if (item.element === 'paragraph-calendly') {
+    return {
+      calendlyUrl: item.calendlyUrl,
+      calendlyScheme: item.calendlyScheme,
+      title: item.title,
+    }
   } else if (item.element === 'paragraph-webform') {
     return {
       webform: item.webform,
