@@ -7,17 +7,24 @@ export function usePdfViewer() {
     if (!appConfig.stirTheme?.pdf) return
 
     try {
-      const [{ default: Viewer }, { licenseKey: key }] = await Promise.all([
-        import('~/components/PdfViewer.client.vue'),
-        $fetch<{ licenseKey: string }>('/api/vpv/license-key'),
-      ])
+      // Dynamically load from root app context by name
+      const component = (await import('vue')).getCurrentInstance?.()?.appContext
+        .components?.PdfViewer
 
-      licenseKey.value = key
-      PdfViewer.value = markRaw(Viewer)
-    } catch (err) {
-      if (import.meta.dev) {
-        console.warn('[PDF Viewer] Failed to load:', err)
+      if (component) {
+        PdfViewer.value = markRaw(component)
+      } else {
+        console.warn(
+          '[PDF Viewer] Component "PdfViewer" not found in app context',
+        )
       }
+
+      const { licenseKey: key } = await $fetch<{ licenseKey: string }>(
+        '/api/vpv/license-key',
+      )
+      licenseKey.value = key
+    } catch (err) {
+      if (import.meta.dev) console.warn('[PDF Viewer] Failed to load:', err)
     }
   })
 
