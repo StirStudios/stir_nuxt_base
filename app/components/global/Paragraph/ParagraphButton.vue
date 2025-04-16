@@ -1,24 +1,13 @@
 <script setup lang="ts">
 import type { RegionItemProps } from '~/types/ContentTypes'
+import { usePdfViewer } from '~/composables/usePdfViewer'
 
 const props = defineProps<{
   item: RegionItemProps
 }>()
 
 const open = ref(false)
-const appConfig = useAppConfig()
-
-const PdfViewer = computed(() => {
-  if (!appConfig.stirTheme?.pdf) return null
-
-  try {
-    const comp = resolveComponent('PdfViewer')
-    return markRaw(comp)
-  } catch (err) {
-    console.warn('PdfViewer not available:', err)
-    return null
-  }
-})
+const { PdfViewer, licenseKey } = usePdfViewer()
 
 // Prefer PDF media if available, otherwise fallback to first link
 const pdf = computed(
@@ -63,7 +52,9 @@ const buttonLabel = computed(
     :title="pdf.title || props.item.title"
   >
     <template #body>
-      <component :is="PdfViewer" :src="pdf.url" />
+      <ClientOnly>
+        <component :is="PdfViewer" :license-key="licenseKey" :src="pdf.url" />
+      </ClientOnly>
     </template>
   </UModal>
 </template>

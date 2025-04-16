@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
+import { usePdfViewer } from '~/composables/usePdfViewer'
 
 defineProps<{
   item: {
@@ -8,20 +9,7 @@ defineProps<{
   }
 }>()
 
-const appConfig = useAppConfig()
-
-const PdfViewer = computed(() => {
-  if (!appConfig.stirTheme?.pdf) return null
-
-  try {
-    // Dynamically resolve the component name at runtime
-    const comp = resolveComponent('PdfViewer')
-    return markRaw(comp)
-  } catch (err) {
-    console.warn('PdfViewer not available:', err)
-    return null
-  }
-})
+const { PdfViewer, licenseKey } = usePdfViewer()
 </script>
 
 <template>
@@ -52,7 +40,13 @@ const PdfViewer = computed(() => {
           </template>
 
           <template v-else-if="PdfViewer && media.type === 'document'">
-            <component :is="PdfViewer" :src="media.url" />
+            <ClientOnly>
+              <component
+                :is="PdfViewer"
+                :license-key="licenseKey"
+                :src="media.url"
+              />
+            </ClientOnly>
           </template>
 
           <template v-else>
