@@ -49,7 +49,9 @@ const PdfViewer = computed(() => {
             <div v-html="media.mediaEmbed" />
           </template>
 
-          <template v-else-if="PdfViewer && media.type === 'document'">
+          <template
+            v-else-if="PdfViewer && media.type === 'document' && licenseKey"
+          >
             <ClientOnly>
               <component
                 :is="PdfViewer"
