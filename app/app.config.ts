@@ -1,4 +1,4 @@
-import { materialVariant, materialVariantWithPB } from '~/utils/uiVariants'
+import { materialVariant, materialVariantWithPB } from './utils/uiVariants'
 
 export default defineAppConfig({
   colorMode: {
