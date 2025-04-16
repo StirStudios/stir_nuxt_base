@@ -8,7 +8,7 @@ const { observeVideos } = useIntersectionObserver()
 const { isFront } = usePageContext()
 
 const { hero, pageTitle, siteSlogan } = defineProps<{
-  hero: HeroProps
+  hero?: HeroProps
   pageTitle: string
   siteSlogan: string
 }>()
@@ -16,25 +16,40 @@ const { hero, pageTitle, siteSlogan } = defineProps<{
 const { hero: heroTheme } = useAppConfig().stirTheme
 
 onMounted(() => {
-  observeVideos(0.1) // Trigger when 10% of the element is visible
+  observeVideos(0.1)
 })
 
-const media = computed(() => hero.media?.[0] || {})
+const sectionClasses = computed(() => [
+  media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
+  media.value?.type && heroTheme.overlay,
+  isFront.value ? heroTheme.isFront : heroTheme.base,
+])
+
+const media = computed(() => hero?.media?.[0] || {})
+const hasHero = computed(() => !!hero?.text || !!media.value?.type)
 </script>
 
 <template>
   <EditLink :link="hero?.editLink">
-    <section
-      :class="[heroTheme.overlay, isFront ? heroTheme.isFront : heroTheme.base]"
-    >
+    <section :class="sectionClasses">
       <div :class="isFront ? heroTheme.text.isFront : heroTheme.text.base">
         <WrapAnimate :effect="hero?.direction">
           <HeroContent
+            v-if="hasHero"
             :hero-text="hero?.text"
             :is-front="isFront"
             :page-title="pageTitle"
             :site-slogan="siteSlogan"
           />
+          <h1
+            v-else
+            :class="[
+              isFront ? heroTheme.text?.isFront : heroTheme.text?.h1,
+              heroTheme.text?.container,
+            ]"
+          >
+            {{ pageTitle }}
+          </h1>
         </WrapAnimate>
       </div>
 
@@ -61,6 +76,7 @@ const media = computed(() => hero.media?.[0] || {})
         muted
         playsinline
         preload="metadata"
+        type="video/mp4"
         width="360"
       >
         <source :src="media.mediaEmbed" type="video/mp4" />

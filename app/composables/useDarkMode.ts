@@ -3,10 +3,10 @@ export default function useDarkMode() {
 
   const isDark = computed({
     get() {
-      return colorMode.preference === 'dark'
+      return colorMode.value === 'dark'
     },
     set() {
-      colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'
+      colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
     },
   })
 
