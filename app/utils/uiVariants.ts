@@ -3,4 +3,4 @@ const materialBase =
 
 export const materialVariant = `text-(--ui-text-highlighted) ${materialBase}`
 export const materialVariantWithPB = `${materialVariant} !pb-3`
-export const materialVariantMuted = `text-(--ui-text-muted) ${materialBase} py-3 text-md gap-2`
+export const materialVariantMuted = `text-(--ui-text-muted) ${materialBase} py-3 font-normal text-md gap-2`
