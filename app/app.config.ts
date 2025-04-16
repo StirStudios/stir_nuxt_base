@@ -1,3 +1,5 @@
+import { materialVariant, materialVariantWithPB } from '~/utils/uiVariants'
+
 export default defineAppConfig({
   colorMode: {
     forced: false,
@@ -200,10 +202,10 @@ export default defineAppConfig({
             // trailingIcon: 'size-8',
           },
         },
-        variant: {
-          material:
-            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] py-3 text-md gap-2',
-        },
+        // variant: {
+        //   material:
+        //     'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-[var(--ui-border-accented)] !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] py-3 text-md gap-2',
+        // },
       },
       defaultVariants: {
         // color: 'primary',
@@ -230,8 +232,7 @@ export default defineAppConfig({
     input: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+          material: materialVariant,
         },
         // size: {
         //   xl: {
@@ -246,8 +247,7 @@ export default defineAppConfig({
     select: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+          material: materialVariantWithPB,
         },
         // size: {
         //   xl: {
@@ -262,8 +262,7 @@ export default defineAppConfig({
     selectMenu: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+          material: materialVariantWithPB,
         },
         // size: {
         //   xl: {
@@ -278,8 +277,7 @@ export default defineAppConfig({
     textarea: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+          material: materialVariant,
         },
         // size: {
         //   xl: {
