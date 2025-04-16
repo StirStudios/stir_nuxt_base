@@ -7,7 +7,17 @@ const props = defineProps<{
 }>()
 
 const open = ref(false)
-const { PdfViewer, licenseKey } = usePdfViewer()
+const { licenseKey } = usePdfViewer()
+
+const PdfViewer = computed(() => {
+  try {
+    const comp = resolveComponent('PdfViewer')
+    return markRaw(comp)
+  } catch (err) {
+    console.warn('[PDF Viewer] Component not available:', err)
+    return null
+  }
+})
 
 // Prefer PDF media if available, otherwise fallback to first link
 const pdf = computed(
