@@ -1,27 +1,22 @@
 export function usePdfViewer() {
   const appConfig = useAppConfig()
   const licenseKey = ref('')
-
-  const PdfViewer = computed(() => {
-    if (!appConfig.stirTheme?.pdf) return null
-    try {
-      return markRaw(resolveComponent('PdfViewer'))
-    } catch (err) {
-      console.warn('[PDF Viewer] Component not available:', err)
-      return null
-    }
-  })
+  const PdfViewer = shallowRef()
 
   onMounted(async () => {
     if (!appConfig.stirTheme?.pdf) return
+
     try {
-      const { licenseKey: key } = await $fetch<{ licenseKey: string }>(
-        '/api/vpv/license-key',
-      )
+      const [{ default: Viewer }, { licenseKey: key }] = await Promise.all([
+        import('~/components/PdfViewer.client.vue'),
+        $fetch<{ licenseKey: string }>('/api/vpv/license-key'),
+      ])
+
       licenseKey.value = key
+      PdfViewer.value = markRaw(Viewer)
     } catch (err) {
       if (import.meta.dev) {
-        console.warn('[PDF Viewer] Failed to fetch license key:', err)
+        console.warn('[PDF Viewer] Failed to load:', err)
       }
     }
   })
