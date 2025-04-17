@@ -60,9 +60,11 @@ export default defineAppConfig({
       fourThree: 'aspect-[4/3]',
     },
     hero: {
-      base: 'min-h-[15rem] lg:min-h-[30rem]',
+      base: 'flex items-center justify-center overflow-hidden',
+      mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem]',
+      noMediaSpacing: 'py-24 lg:pt-54',
       overlay:
-        'after:to-bg-black-10 relative flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50',
+        'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50 mb-20',
       isFront: 'h-screen',
       image: {
         base: 'absolute min-h-full w-auto max-w-none min-w-full',
