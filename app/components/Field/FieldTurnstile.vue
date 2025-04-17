@@ -4,16 +4,12 @@ const turnstileToken = defineModel<string>()
 const config = useRuntimeConfig()
 const { turnstile: themeTurnstile = {} } = useAppConfig().stirTheme
 
-const showContainer = computed(
-  () =>
-    !config.public.turnstileDisable &&
-    themeTurnstile.appearance !== 'interaction-only',
-)
+const showContainer = computed(() => !config.public.turnstileDisable)
 </script>
 
 <template>
   <div v-if="showContainer">
-    <p class="mb-2 text-sm text-(--ui-text-muted)">
+    <p v-if="themeTurnstile.label" class="mb-2 text-sm text-(--ui-text-muted)">
       {{ themeTurnstile.label }}
     </p>
     <NuxtTurnstile
