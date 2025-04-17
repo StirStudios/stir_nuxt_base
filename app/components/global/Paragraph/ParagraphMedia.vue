@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
-// import { usePdfViewer } from '~/composables/usePdfViewer'
 
 defineProps<{
   item: {
@@ -10,18 +9,6 @@ defineProps<{
 }>()
 
 const theme = useAppConfig().stirTheme
-
-// const { licenseKey } = usePdfViewer()
-//
-// const PdfViewer = computed(() => {
-//   try {
-//     const comp = resolveComponent('PdfViewer')
-//     return markRaw(comp)
-//   } catch (err) {
-//     console.warn('[PDF Viewer] Component not available:', err)
-//     return null
-//   }
-// })
 </script>
 
 <template>
