@@ -25,36 +25,34 @@
   }
 
   /* Section Prose Styling */
-  section {
-    .prose {
-      p,
-      ul,
-      ol {
-        @apply py-3 leading-7;
-      }
-
-      p,
-      ul > li,
-      ol > li {
-        @apply leading-7;
-      }
-
-      ul > li,
-      ol > li {
-        @apply ms-4 list-disc;
-      }
-
-      a {
-        @apply text-primary-500;
-      }
+  .prose {
+    p,
+    ul,
+    ol {
+      @apply py-3 leading-7;
     }
-  }
 
-  /* Blockquotes */
-  blockquote {
-    @apply text-lg;
-    em {
-      @apply text-sm;
+    p,
+    ul > li,
+    ol > li {
+      @apply leading-7;
+    }
+
+    ul > li,
+    ol > li {
+      @apply ms-4 list-disc;
+    }
+
+    a {
+      @apply text-primary-500;
+    }
+
+    /* Blockquotes */
+    blockquote {
+      @apply text-lg;
+      em {
+        @apply text-sm;
+      }
     }
   }
 }

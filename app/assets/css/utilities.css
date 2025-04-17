@@ -12,3 +12,9 @@
 @utility text-dimmed {
   @apply text-(--ui-text-muted)/60;
 }
+
+@utility form-input {
+  a {
+    @apply underline;
+  }
+}
