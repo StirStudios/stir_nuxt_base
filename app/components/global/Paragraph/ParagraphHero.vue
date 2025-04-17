@@ -20,9 +20,10 @@ onMounted(() => {
 })
 
 const sectionClasses = computed(() => [
+  heroTheme.base,
   media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
   media.value?.type && heroTheme.overlay,
-  isFront.value ? heroTheme.isFront : heroTheme.base,
+  isFront.value && heroTheme.isFront,
 ])
 
 const media = computed(() => hero?.media?.[0] || {})
