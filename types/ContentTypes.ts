@@ -10,7 +10,6 @@ export interface SectionProps extends LayoutProps {
   gridClass?: string
   regions: Record<string, RegionItemProps[]>
   align?: string
-  body?: string[]
 }
 
 export interface RegionItemProps extends LayoutProps {
