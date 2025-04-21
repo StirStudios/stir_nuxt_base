@@ -7,14 +7,15 @@ const appConfig = useAppConfig()
     <NuxtLoadingIndicator
       :color="appConfig.stirTheme.loadingIndicator || undefined"
     />
-    <a
+    <UButton
       aria-label="Skip to main content"
-      class="bg-primary absolute top-0 left-0 z-50 m-3 -translate-y-96 p-3 text-black transition focus:translate-y-0"
-      href="#main-content"
+      class="absolute top-0 left-0 z-50 m-3 -translate-y-96 p-3 transition focus:translate-y-0"
+      color="primary"
+      label="Skip to main content"
       tabindex="0"
-    >
-      Skip to main content
-    </a>
+      to="#main-content"
+      variant="solid"
+    />
     <NuxtPage />
     <LazyAppScrollToTop />
     <CookieConsent />

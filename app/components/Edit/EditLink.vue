@@ -13,7 +13,9 @@ defineProps<EditLinkProps>()
       size="xs"
       title="Edit content"
       :to="link"
-    />
+    >
+      <span class="sr-only">Edit content</span>
+    </UButton>
     <slot />
   </div>
   <slot v-else />
