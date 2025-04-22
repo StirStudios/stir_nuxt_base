@@ -17,25 +17,25 @@ const isTel = computed(() => props.field['#type'] === 'tel')
 
 <template>
   <UInput
-    :id="props.fieldName"
-    v-model="props.state[props.fieldName]"
+    :id="fieldName"
+    v-model="state[fieldName]"
     class="w-full"
     :inputmode="isTel ? 'tel' : undefined"
-    :max="isNumber ? props.field['#max'] : undefined"
-    :min="isNumber ? props.field['#min'] : undefined"
-    :placeholder="props.floatingLabel ? ' ' : ''"
-    :step="isNumber ? props.field['#step'] || 1 : undefined"
-    :type="props.field['#type'] || 'text'"
-    :ui="props.floatingLabel ? { base: 'peer' } : {}"
+    :max="isNumber ? field['#max'] : undefined"
+    :min="isNumber ? field['#min'] : undefined"
+    :placeholder="floatingLabel ? ' ' : ''"
+    :step="isNumber ? field['#step'] || 1 : undefined"
+    :type="field['#type'] || 'text'"
+    :ui="floatingLabel ? { base: 'peer' } : {}"
     :variant="webform.variant"
   >
     <label
-      v-if="props.floatingLabel"
+      v-if="floatingLabel"
       :class="[isMaterial ? '' : 'px-1.5', webform.labels.base]"
-      :for="props.fieldName"
+      :for="fieldName"
     >
       <span :class="[isMaterial ? '' : 'px-1', 'inline-flex bg-(--ui-bg)']">
-        {{ props.field['#title'] }}
+        {{ field['#title'] }}
       </span>
     </label>
   </UInput>

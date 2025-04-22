@@ -155,7 +155,7 @@ watchEffect(() => {
           </template>
         </UPopover>
 
-        <UFormField label="Time" :required="!!field['#required']">
+        <UFormField :label="`Time ${i + 1}`" :required="!!field['#required']">
           <FieldSelect
             v-model="block.start"
             :field-name="`${fieldName}-${i}-start`"
