@@ -25,6 +25,10 @@ onMounted(() => {
   <UCheckbox
     v-model="checkboxValue"
     class="form-input w-full"
+    :label="fieldName"
+    :ui="{
+      label: 'sr-only',
+    }"
     @update:model-value="state[fieldName] = $event"
   >
     <template #description>
