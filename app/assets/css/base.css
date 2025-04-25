@@ -44,7 +44,7 @@
     }
 
     a {
-      @apply text-primary-500;
+      @apply text-primary;
     }
 
     /* Blockquotes */

@@ -14,7 +14,7 @@ const showLabel = computed(
 
 <template>
   <div v-if="showContainer">
-    <p v-if="showLabel" class="mb-2 text-sm text-(--ui-text-muted)">
+    <p v-if="showLabel" class="text-muted mb-2 text-sm">
       {{ themeTurnstile.label }}
     </p>
     <NuxtTurnstile

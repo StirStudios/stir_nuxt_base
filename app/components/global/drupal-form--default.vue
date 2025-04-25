@@ -27,20 +27,20 @@ defineProps<DrupalFormProps>()
   .form-item {
     @apply mb-5;
     label {
-      @apply mb-2 block text-sm font-medium text-(--ui-text);
+      @apply text-default mb-2 block text-sm font-medium;
     }
     input,
     textarea {
-      @apply w-full gap-1.5 rounded-[calc(var(--ui-radius)*1.5)] border-0 bg-(--ui-bg) px-2.5 py-2.5 text-sm text-(--ui-text-highlighted) ring ring-(--ui-border-accented) transition-colors ring-inset placeholder:text-(--ui-text-dimmed) focus:outline-none focus-visible:ring-2 focus-visible:ring-(--ui-primary) focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
+      @apply bg-base text-highlighted ring-accented placeholder:text-dimmed focus-visible:ring-primary w-full gap-1.5 rounded-md border-0 px-2.5 py-2.5 text-sm ring transition-colors ring-inset focus:outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
     }
   }
   .form-actions {
     input {
-      @apply flex w-full justify-center gap-1.5 rounded-[calc(var(--ui-radius)*1.5)] bg-(--ui-primary) px-3.5 py-2.5 text-sm font-medium text-(--ui-bg) transition-colors hover:bg-(--ui-primary)/75 focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-primary) disabled:cursor-not-allowed disabled:bg-(--ui-primary) disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:bg-(--ui-primary) aria-disabled:opacity-75;
+      @apply bg-primary hover:bg-primary/75 focus-visible:outline-primary disabled:bg-primary aria-disabled:bg-primary flex w-full justify-center gap-1.5 rounded-md px-3.5 py-2.5 text-base text-sm font-medium transition-colors focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:opacity-75;
     }
   }
   .more-links {
-    @apply mt-3 block text-sm font-medium text-(--ui-text);
+    @apply text-default mt-3 block text-sm font-medium;
   }
 }
 </style>

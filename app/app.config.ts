@@ -116,16 +116,16 @@ export default defineAppConfig({
       labels: {
         floating: false,
         base: [
-          'pointer-events-none absolute -top-1.5 left-0 text-xs font-medium text-(--ui-text-dimmed) transition-all',
-          'peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-(--ui-text-dimmed)',
-          'peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-(--ui-text-highlighted)',
+          'pointer-events-none absolute -top-1.5 left-0 text-xs font-medium text-dimmed transition-all',
+          'peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-dimmed',
+          'peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-highlighted',
         ],
       },
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: 'space-y-10',
-      response: 'space-y-8 px-6 py-3 bg-(--ui-bg-muted) rounded-lg italic',
+      response: 'space-y-8 px-6 py-3 bg-muted rounded-lg italic',
       description: 'desc mb-3',
-      help: 'desc my-3 text-(--ui-text-muted)',
+      help: 'desc my-3 text-muted',
       submitAlign: '',
       variant: 'outline',
     },
@@ -152,7 +152,7 @@ export default defineAppConfig({
     //       variants: {
     //         active: {
     //           false: {
-    //             link: 'text-(--ui-text-highlighted)',
+    //             link: 'text-highlighted',
     //           },
     //         },
     //       },
@@ -169,7 +169,7 @@ export default defineAppConfig({
     //           active: false,
     //           variant: 'pill',
     //           class: {
-    //             link: ['hover:text-(--ui-primary) bg-transparent'],
+    //             link: ['hover:text-primary bg-transparent'],
     //           },
     //         },
     //
@@ -178,7 +178,7 @@ export default defineAppConfig({
     //           variant: 'pill',
     //           active: true,
     //           class: {
-    //             link: 'transition-all duration-300 text-(--ui-text-primary)',
+    //             link: 'transition-all duration-300 text-primary',
     //           },
     //         },
     //         {
@@ -228,9 +228,9 @@ export default defineAppConfig({
     // },
     formField: {
       slots: {
-        label: 'block font-medium text-(--ui-text-dimmed)',
+        label: 'block font-medium text-dimmed',
         container: 'mt-1',
-        error: 'mt-1 text-[var(--ui-error)]',
+        error: 'mt-1 text-error',
       },
     },
     input: {

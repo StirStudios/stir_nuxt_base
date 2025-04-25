@@ -28,7 +28,7 @@ defineProps<{
       :class="[isMaterial ? '' : 'px-1.5', webform.labels.base]"
       :for="fieldName"
     >
-      <span :class="[isMaterial ? '' : 'px-1', 'inline-flex bg-(--ui-bg)']">
+      <span :class="[isMaterial ? '' : 'px-1', 'bg-default inline-flex']">
         {{ field['#title'] }}
       </span>
     </label>
