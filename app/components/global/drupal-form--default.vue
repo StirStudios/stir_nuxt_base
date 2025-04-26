@@ -27,7 +27,7 @@ defineProps<DrupalFormProps>()
   .form-item {
     @apply mb-5;
     label {
-      @apply text-default mb-2 block text-sm font-medium;
+      @apply mb-2 block text-sm font-medium;
     }
     input,
     textarea {
@@ -40,7 +40,7 @@ defineProps<DrupalFormProps>()
     }
   }
   .more-links {
-    @apply text-default mt-3 block text-sm font-medium;
+    @apply mt-3 block text-sm font-medium;
   }
 }
 </style>
