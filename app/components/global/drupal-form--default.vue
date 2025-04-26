@@ -19,28 +19,3 @@ defineProps<DrupalFormProps>()
     </div>
   </div>
 </template>
-
-<style lang="css">
-@import '~/assets/css/main.css';
-
-.drupal-form {
-  .form-item {
-    @apply mb-5;
-    label {
-      @apply mb-2 block text-sm font-medium;
-    }
-    input,
-    textarea {
-      @apply text-highlighted ring-accented placeholder:text-dimmed focus-visible:ring-primary w-full gap-1.5 rounded-md border-0 px-2.5 py-2.5 text-sm ring transition-colors ring-inset focus:outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
-    }
-  }
-  .form-actions {
-    input {
-      @apply bg-primary hover:bg-primary/75 focus-visible:outline-primary disabled:bg-primary aria-disabled:bg-primary flex w-full justify-center gap-1.5 rounded-md px-3.5 py-2.5 text-base text-sm font-medium transition-colors focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:opacity-75;
-    }
-  }
-  .more-links {
-    @apply mt-3 block text-sm font-medium;
-  }
-}
-</style>
