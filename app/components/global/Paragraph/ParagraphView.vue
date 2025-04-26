@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ViewItemProps } from '~/types/ViewTypes'
-import { componentExists } from '~/utils/componentExists'
+import { componentExists, resolveComponentName } from '~/utils/componentExists'
 
 const props = defineProps<{
   item: ViewItemProps
@@ -41,7 +41,7 @@ const filteredRows = computed(() =>
           <component
             :is="
               componentExists(item.element)
-                ? resolveComponent(item.element)
+                ? resolveComponentName(item.element)
                 : 'ParagraphDefault'
             "
             v-bind="{ item: row }"
