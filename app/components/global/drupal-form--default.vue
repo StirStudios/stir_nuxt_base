@@ -31,7 +31,7 @@ defineProps<DrupalFormProps>()
     }
     input,
     textarea {
-      @apply bg-default text-highlighted ring-accented placeholder:text-dimmed focus-visible:ring-primary w-full gap-1.5 rounded-md border-0 px-2.5 py-2.5 text-sm ring transition-colors ring-inset focus:outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
+      @apply text-highlighted ring-accented placeholder:text-dimmed focus-visible:ring-primary w-full gap-1.5 rounded-md border-0 px-2.5 py-2.5 text-sm ring transition-colors ring-inset focus:outline-none focus-visible:ring-2 focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-75;
     }
   }
   .form-actions {
