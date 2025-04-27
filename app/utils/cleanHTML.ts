@@ -1,8 +1,18 @@
 export function cleanHTML(html: string): string {
-  const allowedTags =
-    /<(\/?(ul|li|br|strong|b|i|em|p|span|div|a)(\s+[a-zA-Z-]+="[^"]*")*)\s*>/gi
+  if (typeof window === 'undefined') return ''
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
 
-  return html.replace(/<\/?[^>]+(>|$)/g, (tag) =>
-    allowedTags.test(tag) ? tag : '',
-  )
+  doc.querySelectorAll('script, style').forEach((el) => el.remove())
+
+  // Remove event handler attributes like onclick, onerror, etc.
+  doc.querySelectorAll('*').forEach((el) => {
+    for (const attr of Array.from(el.attributes)) {
+      if (attr.name.startsWith('on')) {
+        el.removeAttribute(attr.name)
+      }
+    }
+  })
+
+  return doc.body.innerHTML.trim()
 }

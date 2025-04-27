@@ -6,19 +6,7 @@ const props = defineProps<{
 }>()
 
 const open = ref(false)
-const appConfig = useAppConfig()
-
-const PdfViewer = computed(() => {
-  if (!appConfig.stirTheme?.pdf) return null
-
-  try {
-    const comp = resolveComponent('PdfViewer')
-    return markRaw(comp)
-  } catch (err) {
-    console.warn('PdfViewer not available:', err)
-    return null
-  }
-})
+const theme = useAppConfig().stirTheme
 
 // Prefer PDF media if available, otherwise fallback to first link
 const pdf = computed(
@@ -56,14 +44,16 @@ const buttonLabel = computed(
   </EditLink>
 
   <UModal
-    v-if="PdfViewer && pdf?.url"
+    v-if="pdf?.url && theme.pdf"
     v-model:open="open"
     :description="pdf.alt"
     fullscreen
     :title="pdf.title || props.item.title"
   >
     <template #body>
-      <component :is="PdfViewer" :src="pdf.url" />
+      <ClientOnly>
+        <PdfViewer :src="pdf.url" />
+      </ClientOnly>
     </template>
   </UModal>
 </template>

@@ -45,7 +45,7 @@ const iconsSocialConfig = [
           Website created & powered by
           <ULink
             active-class="text-primary-400"
-            inactive-class="text-primary-500 hover:text-primary-400"
+            inactive-class="text-primary hover:text-primary-400"
             rel="noopener"
             target="_blank"
             to="//www.stirstudiosdesign.com"

@@ -8,20 +8,7 @@ defineProps<{
   }
 }>()
 
-const appConfig = useAppConfig()
-
-const PdfViewer = computed(() => {
-  if (!appConfig.stirTheme?.pdf) return null
-
-  try {
-    // Dynamically resolve the component name at runtime
-    const comp = resolveComponent('PdfViewer')
-    return markRaw(comp)
-  } catch (err) {
-    console.warn('PdfViewer not available:', err)
-    return null
-  }
-})
+const theme = useAppConfig().stirTheme
 </script>
 
 <template>
@@ -51,8 +38,10 @@ const PdfViewer = computed(() => {
             <div v-html="media.mediaEmbed" />
           </template>
 
-          <template v-else-if="PdfViewer && media.type === 'document'">
-            <component :is="PdfViewer" :src="media.url" />
+          <template v-else-if="media.type === 'document' && theme.pdf">
+            <ClientOnly>
+              <PdfViewer :src="media.url" />
+            </ClientOnly>
           </template>
 
           <template v-else>

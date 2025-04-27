@@ -61,7 +61,7 @@ if (!props.state[props.fieldName]) {
           :class="[isMaterial ? '' : 'px-1.5', webform.labels.base]"
           :for="fieldName"
         >
-          <span :class="[isMaterial ? '' : 'px-1', 'inline-flex bg-(--ui-bg)']">
+          <span :class="[isMaterial ? '' : 'px-1', 'bg-default inline-flex']">
             {{ fieldData.label }}
           </span>
         </label>

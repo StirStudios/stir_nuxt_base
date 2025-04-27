@@ -26,14 +26,10 @@ useHead({
 <template>
   <NuxtLayout :name="layout">
     <ParagraphHero
-      v-if="page?.content?.hero?.length"
-      :hero="page.content.hero[0]"
+      :hero="page?.content?.hero?.[0]"
       :page-title="page.title"
       :site-slogan="page.site_info?.slogan || ''"
     />
-    <h1 v-else :class="[isFront ? theme.front?.h1 : theme.h1, theme.container]">
-      {{ page.title }}
-    </h1>
 
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />

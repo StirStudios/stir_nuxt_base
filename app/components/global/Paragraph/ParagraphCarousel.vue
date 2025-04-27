@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
-import { componentExists } from '~/utils/componentExists'
+import { componentExists, resolveComponentName } from '~/utils/componentExists'
 
 const props = defineProps<CarouselProps>()
 
@@ -38,7 +38,7 @@ const itemElement = computed(() => props.itemElement || false)
         <component
           :is="
             componentExists(itemElement)
-              ? resolveComponent(itemElement)
+              ? resolveComponentName(itemElement)
               : 'ParagraphDefault'
           "
           :item="item"

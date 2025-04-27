@@ -69,7 +69,7 @@ const openModal = (item: MediaProps) => {
             ? 'flex items-center justify-center'
             : 'm-auto'
           : '!p-0 bg-transparent',
-        title: 'text-(--ui-text-highlighted) font-semibold text-xl mb-0',
+        title: 'text-highlighted font-semibold text-xl mb-0',
         description: 'sr-only',
       }"
     >

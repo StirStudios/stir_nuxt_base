@@ -24,6 +24,7 @@ export interface PageProps {
   prev_node?: NodeLinkProps | null
   next_node?: NodeLinkProps | null
   path?: PathProps
+  body?: string[]
 }
 
 export interface SiteInfoProps {
