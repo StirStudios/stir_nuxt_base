@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { SectionProps } from '~/types/ContentTypes'
-import { componentExists } from '~/utils/componentExists'
+import { componentExists, resolveComponentName } from '~/utils/componentExists'
 
 defineProps<{
   section?: SectionProps[]
@@ -67,6 +67,12 @@ const getNodeProps = (item) => {
         direction: item.direction,
       },
     }
+  } else if (item.element === 'paragraph-calendly') {
+    return {
+      calendlyUrl: item.calendlyUrl,
+      calendlyScheme: item.calendlyScheme,
+      title: item.title,
+    }
   } else if (item.element === 'paragraph-webform') {
     return {
       webform: item.webform,
@@ -107,7 +113,7 @@ const getNodeProps = (item) => {
               <component
                 :is="
                   componentExists(item.element)
-                    ? resolveComponent(item.element)
+                    ? resolveComponentName(item.element)
                     : 'ParagraphDefault'
                 "
                 v-bind="getNodeProps(item)"
@@ -122,7 +128,11 @@ const getNodeProps = (item) => {
 
     <section v-else :class="container">
       <component
-        :is="resolveComponent(layout.element)"
+        :is="
+          componentExists(layout.element)
+            ? resolveComponentName(layout.element)
+            : 'ParagraphDefault'
+        "
         v-if="getNodeProps(layout) !== null"
         v-bind="getNodeProps(layout)"
       />

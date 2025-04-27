@@ -1,3 +1,9 @@
+import {
+  materialVariant,
+  materialVariantWithPB,
+  materialVariantMuted,
+} from './utils/uiVariants'
+
 export default defineAppConfig({
   colorMode: {
     forced: false,
@@ -41,7 +47,6 @@ export default defineAppConfig({
     //   h1: 'sr-only',
     //   main: 'mt-0',
     // },
-    main: 'pt-[10rem]',
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
     media: {
@@ -55,9 +60,11 @@ export default defineAppConfig({
       fourThree: 'aspect-[4/3]',
     },
     hero: {
-      base: 'min-h-[15rem] lg:min-h-[30rem]',
+      base: 'flex items-center justify-center overflow-hidden',
+      mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem]',
+      noMediaSpacing: 'py-24 lg:pt-54',
       overlay:
-        'after:to-bg-black-10 relative flex items-center justify-center overflow-hidden after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-t after:from-black/80 after:via-black/50',
+        'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50 mb-20',
       isFront: 'h-screen',
       image: {
         base: 'absolute min-h-full w-auto max-w-none min-w-full',
@@ -109,16 +116,16 @@ export default defineAppConfig({
       labels: {
         floating: false,
         base: [
-          'pointer-events-none absolute -top-1.5 left-0 text-xs font-medium text-(--ui-text-dimmed) transition-all',
-          'peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-(--ui-text-dimmed)',
-          'peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-(--ui-text-highlighted)',
+          'pointer-events-none absolute -top-1.5 left-0 text-xs font-medium text-dimmed transition-all',
+          'peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:text-dimmed',
+          'peer-focus:-top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-highlighted',
         ],
       },
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: 'space-y-10',
-      response: 'space-y-8 px-6 py-3 bg-(--ui-bg-muted) rounded-lg italic',
+      response: 'space-y-8 px-6 py-3 bg-muted rounded-lg italic',
       description: 'desc mb-3',
-      help: 'desc my-3 text-(--ui-text-muted)',
+      help: 'desc my-3 text-muted',
       submitAlign: '',
       variant: 'outline',
     },
@@ -145,7 +152,7 @@ export default defineAppConfig({
     //       variants: {
     //         active: {
     //           false: {
-    //             link: 'text-(--ui-text-highlighted)',
+    //             link: 'text-highlighted',
     //           },
     //         },
     //       },
@@ -162,7 +169,7 @@ export default defineAppConfig({
     //           active: false,
     //           variant: 'pill',
     //           class: {
-    //             link: ['hover:text-(--ui-primary) bg-transparent'],
+    //             link: ['hover:text-primary bg-transparent'],
     //           },
     //         },
     //
@@ -171,7 +178,7 @@ export default defineAppConfig({
     //           variant: 'pill',
     //           active: true,
     //           class: {
-    //             link: 'transition-all duration-300 text-(--ui-text-primary)',
+    //             link: 'transition-all duration-300 text-primary',
     //           },
     //         },
     //         {
@@ -201,8 +208,7 @@ export default defineAppConfig({
           },
         },
         variant: {
-          material:
-            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] py-3 text-md gap-2',
+          material: materialVariantMuted,
         },
       },
       defaultVariants: {
@@ -222,16 +228,15 @@ export default defineAppConfig({
     // },
     formField: {
       slots: {
-        label: 'block font-medium text-(--ui-text-dimmed)',
+        label: 'block font-medium text-dimmed',
         container: 'mt-1',
-        error: 'mt-1 text-[var(--ui-error)]',
+        error: 'mt-1 text-error',
       },
     },
     input: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+          material: materialVariant,
         },
         // size: {
         //   xl: {
@@ -246,8 +251,7 @@ export default defineAppConfig({
     select: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+          material: materialVariantWithPB,
         },
         // size: {
         //   xl: {
@@ -262,8 +266,7 @@ export default defineAppConfig({
     selectMenu: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-muted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)] !pb-3',
+          material: materialVariantWithPB,
         },
         // size: {
         //   xl: {
@@ -278,8 +281,7 @@ export default defineAppConfig({
     textarea: {
       variants: {
         variant: {
-          material:
-            'text-(--ui-text-highlighted) bg-transparent rounded-none border-b-2 border-b-black/30 !px-0 transition-all transition-colors focus:border-b-[var(--ui-border)] dark:border-b-[var(--ui-border)] focus:dark:border-b-[var(--ui-border-inverted)] aria-invalid:ring-0 aria-invalid:border-b-[var(--ui-error)] aria-invalid:dark:border-b-[var(--ui-error)]',
+          material: materialVariant,
         },
         // size: {
         //   xl: {

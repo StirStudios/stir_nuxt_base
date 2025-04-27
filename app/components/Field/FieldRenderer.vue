@@ -70,7 +70,11 @@ watchEffect(() => {
 <template>
   <UFormField
     v-if="isVisible"
-    :label="!useFloatingLabels ? field['#title'] : ''"
+    :label="
+      field['#type'] !== 'checkbox' && !useFloatingLabels
+        ? field['#title']
+        : undefined
+    "
     :name="fieldName"
     :required="!!field['#required']"
   >
