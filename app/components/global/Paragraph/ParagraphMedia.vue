@@ -44,7 +44,21 @@ const theme = useAppConfig().stirTheme
             </ClientOnly>
           </template>
 
-          <template v-else>
+          <template v-else-if="media.type === 'image'">
+            <template v-if="item.media.find((m) => m.type === 'link')">
+              <ULink
+                target="_blank"
+                :to="item.media.find((m) => m.type === 'link')?.url"
+              >
+                <MediaSimple :media="[media]" />
+              </ULink>
+            </template>
+            <template v-else>
+              <MediaSimple :media="[media]" />
+            </template>
+          </template>
+
+          <template v-else-if="media.type !== 'link'">
             <MediaSimple :media="[media]" />
           </template>
         </WrapAnimate>
