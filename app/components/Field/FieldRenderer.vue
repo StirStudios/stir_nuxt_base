@@ -3,7 +3,6 @@ import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 import { cleanHTML } from '~/utils/cleanHTML'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 
-// Import field components locally
 import FieldInput from '@/components/Field/FieldInput'
 import FieldTextarea from '@/components/Field/FieldTextarea'
 import FieldSelect from '@/components/Field/FieldSelect'
@@ -39,51 +38,42 @@ const componentMap: Record<string, Component> = {
   processed_text: FieldProcessedText,
 }
 
-// Determine if floating labels should be used (configurable per field)
+// Resolve field-specific behavior
 const useFloatingLabels = computed(
-  () =>
-    props.field['#floating_label'] !== undefined
-      ? props.field['#floating_label'] // Per-field setting
-      : webform.labels.floating, // Global default
+  () => props.field['#floating_label'] ?? webform.labels.floating,
 )
 
-// Dynamically resolve the component
 const resolvedComponent = computed(
   () => componentMap[props.field['#type']] || null,
 )
 
-// Compute description and help content
 const descriptionContent = computed(() =>
   cleanHTML(props.field['#description'] || ''),
 )
+
 const helpContent = computed(() => cleanHTML(props.field['#help'] || ''))
 
-const shouldShowLabelOrDescription = computed(() => {
-  return (
-    props.field['#type'] !== 'checkbox' && props.field['#type'] !== 'checkboxes'
-  )
-})
+const shouldShowLabel = computed(
+  () => props.field['#type'] !== 'checkbox' && !useFloatingLabels.value,
+)
 
-const isVisible = ref(true)
+const shouldShowDescription = computed(
+  () => props.field['#type'] !== 'checkbox' && !!descriptionContent.value,
+)
 
-// Dynamically re-evaluate visibility when form state or field conditions change
-watchEffect(() => {
-  isVisible.value = evaluateVisibility(props.field['#states'], props.state)
-})
+const isVisible = computed(() =>
+  evaluateVisibility(props.field['#states'], props.state),
+)
 </script>
 
 <template>
   <UFormField
     v-if="isVisible"
-    :label="
-      shouldShowLabelOrDescription && !useFloatingLabels
-        ? field['#title']
-        : undefined
-    "
+    :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
     :required="!!field['#required']"
   >
-    <template v-if="shouldShowLabelOrDescription && descriptionContent">
+    <template v-if="shouldShowDescription">
       <div :class="webform.description" v-html="descriptionContent" />
     </template>
 

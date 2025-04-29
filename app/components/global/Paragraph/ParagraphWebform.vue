@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { flattenWebformFields } from '~/utils/flattenWebformFields'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
@@ -18,12 +19,15 @@ const { webform: themeWebform } = useAppConfig().stirTheme
 
 // Destructure webform props
 const {
-  fields = {},
+  fields: rawFields = {},
   webformId = '',
   webformSubmissions = '',
   webformConfirmation = '',
   actions = [],
 } = props.webform
+
+// Flatten the fields once at mount
+const fields = flattenWebformFields(rawFields)
 
 // Reactive state
 const turnstileToken = ref('')
@@ -60,27 +64,33 @@ const groupedFields = computed(() => {
 onMounted(() => {
   for (const [key, field] of Object.entries(fields)) {
     if (field['#composite']) {
-      state[key] = state[key] || {} // Ensure it's an object
+      state[key] = state[key] || {}
       for (const subKey in field['#composite']) {
         state[key][subKey] =
           state[key][subKey] || field['#composite'][subKey]['value'] || ''
       }
+    } else if (field['#type'] === 'checkboxes') {
+      state[key] = Array.isArray(field['#default']) ? field['#default'] : []
     } else {
-      state[key] = field['#default'] || ''
+      state[key] = field['#default'] ?? ''
     }
   }
 })
 
 // Helper functions for field rendering
+const containerTypes = ['section', 'details', 'webform_section']
+
 const shouldRenderGroupContainer = (fieldName: string) =>
   fields[fieldName]?.parent &&
-  groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName
+  groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName &&
+  !containerTypes.includes(fields[fieldName]['#type'])
 
 const getGroupFields = (parentName: string) =>
   groupedFields.value[parentName] || []
 
 const shouldRenderIndividualField = (fieldName: string) =>
-  !fields[fieldName]?.parent
+  !fields[fieldName]?.parent &&
+  !containerTypes.includes(fields[fieldName]['#type'])
 
 const isContainerVisible = (containerName: string) =>
   getGroupFields(containerName).some((fieldName) =>
@@ -160,7 +170,10 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
           "
         >
           <h2 :class="themeWebform.fieldGroupHeader">
-            {{ fields[fieldName]?.parent }}
+            {{
+              fields[fields[fieldName]?.parent]?.['#title'] ||
+              fields[fieldName]?.parent
+            }}
           </h2>
           <div :class="themeWebform.fieldGroup">
             <template

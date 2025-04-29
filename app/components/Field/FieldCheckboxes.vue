@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 import { cleanHTML } from '~/utils/cleanHTML'
 
 const props = defineProps<{
@@ -10,17 +10,16 @@ const props = defineProps<{
 
 const descriptionContent = shallowRef<string>('')
 
-const checkboxGroupValue = ref<string[]>(props.field['#defaultValue'] ?? [])
-
 onMounted(() => {
-  descriptionContent.value = cleanHTML(props.field['#description'] || '')
+  const value = props.state[props.fieldName]
 
-  if (props.state[props.fieldName] === undefined) {
-    props.state[props.fieldName] = checkboxGroupValue.value
+  if (value === undefined || value === '') {
+    props.state[props.fieldName] = []
   }
+
+  descriptionContent.value = cleanHTML(props.field['#description'] || '')
 })
 
-// More generic: load all option props
 const items = computed(() => {
   const options = props.field['#options'] || {}
   const optionProps = props.field['#optionProperties'] || {}
@@ -35,15 +34,9 @@ const items = computed(() => {
 
 <template>
   <UCheckboxGroup
-    v-model="checkboxGroupValue"
+    v-model="state[fieldName]"
     class="form-input w-full"
     :items="items"
-    :legend="field['#title']"
-    :required="field['#required'] || false"
-    :ui="{
-      legend: 'text-dimmed',
-    }"
-    @update:model-value="state[fieldName] = $event"
   >
     <template #label="{ item }">
       {{ item.label }}
@@ -55,10 +48,6 @@ const items = computed(() => {
           {{ value }}
         </span>
       </template>
-    </template>
-
-    <template #description>
-      <span v-html="descriptionContent" />
     </template>
   </UCheckboxGroup>
 </template>
