@@ -40,14 +40,9 @@ const items = computed(() => {
   >
     <template #label="{ item }">
       {{ item.label }}
-      <template v-for="(value, key) in item.props" :key="key">
-        <span v-if="key === 'price'" class="price">
-          ${{ value.toLocaleString() }}
-        </span>
-        <span v-else class="extra">
-          {{ value }}
-        </span>
-      </template>
+      <span v-if="item.props.price" class="extra">
+        ${{ item.props.price.toLocaleString() }}
+      </span>
     </template>
   </UCheckboxGroup>
 </template>
