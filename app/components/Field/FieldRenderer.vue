@@ -38,7 +38,6 @@ const componentMap: Record<string, Component> = {
   processed_text: FieldProcessedText,
 }
 
-// Resolve field-specific behavior
 const useFloatingLabels = computed(
   () => props.field['#floating_label'] ?? webform.labels.floating,
 )
@@ -47,23 +46,22 @@ const resolvedComponent = computed(
   () => componentMap[props.field['#type']] || null,
 )
 
-const descriptionContent = computed(() =>
-  cleanHTML(props.field['#description'] || ''),
-)
-
-const helpContent = computed(() => cleanHTML(props.field['#help'] || ''))
-
 const shouldShowLabel = computed(
   () => props.field['#type'] !== 'checkbox' && !useFloatingLabels.value,
-)
-
-const shouldShowDescription = computed(
-  () => props.field['#type'] !== 'checkbox' && !!descriptionContent.value,
 )
 
 const isVisible = computed(() =>
   evaluateVisibility(props.field['#states'], props.state),
 )
+
+// Defer help/description rendering to client to avoid SSR mismatch
+const descriptionContent = shallowRef('')
+const helpContent = shallowRef('')
+
+onMounted(() => {
+  descriptionContent.value = cleanHTML(props.field['#description'] || '')
+  helpContent.value = cleanHTML(props.field['#help'] || '')
+})
 </script>
 
 <template>
@@ -73,9 +71,11 @@ const isVisible = computed(() =>
     :name="fieldName"
     :required="!!field['#required']"
   >
-    <template v-if="shouldShowDescription">
-      <div :class="webform.description" v-html="descriptionContent" />
-    </template>
+    <div
+      v-if="descriptionContent"
+      :class="webform.description"
+      v-html="descriptionContent"
+    />
 
     <component
       :is="resolvedComponent"
