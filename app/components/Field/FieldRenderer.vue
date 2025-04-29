@@ -17,14 +17,12 @@ import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
 const { webform } = useAppConfig().stirTheme
 
-// Props from parent
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: WebformState
 }>()
 
-// Map the field types to components
 const componentMap: Record<string, Component> = {
   textfield: FieldInput,
   email: FieldInput,
@@ -60,7 +58,12 @@ const descriptionContent = computed(() =>
 )
 const helpContent = computed(() => cleanHTML(props.field['#help'] || ''))
 
-// Reactive visibility state
+const shouldShowLabelOrDescription = computed(() => {
+  return (
+    props.field['#type'] !== 'checkbox' && props.field['#type'] !== 'checkboxes'
+  )
+})
+
 const isVisible = ref(true)
 
 // Dynamically re-evaluate visibility when form state or field conditions change
@@ -73,18 +76,16 @@ watchEffect(() => {
   <UFormField
     v-if="isVisible"
     :label="
-      field['#type'] !== 'checkbox' && !useFloatingLabels
+      shouldShowLabelOrDescription && !useFloatingLabels
         ? field['#title']
         : undefined
     "
     :name="fieldName"
     :required="!!field['#required']"
   >
-    <div
-      v-if="descriptionContent && field['#type'] !== 'checkbox'"
-      :class="webform.description"
-      v-html="descriptionContent"
-    />
+    <template v-if="shouldShowLabelOrDescription && descriptionContent">
+      <div :class="webform.description" v-html="descriptionContent" />
+    </template>
 
     <component
       :is="resolvedComponent"
