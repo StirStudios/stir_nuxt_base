@@ -12,13 +12,13 @@ const descriptionContent = shallowRef<string>('')
 
 onMounted(() => {
   const value = props.state[props.fieldName]
-
   if (value === undefined || value === '') {
     props.state[props.fieldName] = []
   }
-
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
 })
+
+const maxSelected = computed(() => props.field['#maxSelected'] ?? Infinity)
 
 const items = computed(() => {
   const options = props.field['#options'] || {}
@@ -30,6 +30,16 @@ const items = computed(() => {
     props: optionProps?.[key] || {},
   }))
 })
+
+// Watch and auto-enforce the maxSelected AFTER user clicks
+watch(
+  () => props.state[props.fieldName],
+  (val) => {
+    if (Array.isArray(val) && val.length > maxSelected.value) {
+      props.state[props.fieldName] = val.slice(-maxSelected.value)
+    }
+  },
+)
 </script>
 
 <template>
