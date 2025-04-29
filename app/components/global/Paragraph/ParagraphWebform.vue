@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { flattenWebformFields } from '~/utils/flattenWebformFields'
+import { webformState } from '~/composables/useWebformState'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
@@ -29,9 +30,14 @@ const {
 // Flatten the fields once at mount
 const fields = flattenWebformFields(rawFields)
 
+const state = reactive({})
+
+// Then safely assign to shared store
+webformState.fields = fields
+webformState.state = state
+
 // Reactive state
 const turnstileToken = ref('')
-const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
