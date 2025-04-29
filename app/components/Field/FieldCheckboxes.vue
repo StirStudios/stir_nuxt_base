@@ -40,11 +40,13 @@ const items = computed(() => {
     :items="items"
     :legend="field['#title']"
     :required="field['#required'] || false"
+    :ui="{
+      legend: 'text-dimmed',
+    }"
     @update:model-value="state[fieldName] = $event"
   >
     <template #label="{ item }">
       {{ item.label }}
-
       <template v-for="(value, key) in item.props" :key="key">
         <span v-if="key === 'price'" class="price">
           ${{ value.toLocaleString() }}
