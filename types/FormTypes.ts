@@ -16,6 +16,7 @@ export type InputType =
   | 'select'
   | 'radio'
   | 'checkbox'
+  | 'checkboxes'
   | 'processed_text'
   | 'datetime'
 

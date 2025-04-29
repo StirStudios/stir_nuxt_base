@@ -46,9 +46,11 @@ export function buildYupSchema(
       const isRequired = field['#required'] === true
       const isEmail = field['#type'] === 'email'
       const isNumber = field['#type'] === 'number'
+      const isCheckboxes = field['#type'] === 'checkboxes'
       const isMultiple = '#multiple' in field && !!field['#multiple']
 
-      if (isMultiple) {
+      if (isMultiple || isCheckboxes) {
+        // If it's a multiple value field OR checkboxes group, treat it as an array
         shape[key] = array()
           .of(
             string().when([], {

@@ -9,6 +9,7 @@ import FieldTextarea from '@/components/Field/FieldTextarea'
 import FieldSelect from '@/components/Field/FieldSelect'
 import FieldRadio from '@/components/Field/FieldRadio'
 import FieldCheckbox from '@/components/Field/FieldCheckbox'
+import FieldCheckboxes from '@/components/Field/FieldCheckboxes'
 import FieldDate from '@/components/Field/FieldDate'
 import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
@@ -33,6 +34,7 @@ const componentMap: Record<string, Component> = {
   select: FieldSelect,
   radio: FieldRadio,
   checkbox: FieldCheckbox,
+  checkboxes: FieldCheckboxes,
   datetime: FieldDateTime,
   date: FieldDate,
   address: FieldAddress,
