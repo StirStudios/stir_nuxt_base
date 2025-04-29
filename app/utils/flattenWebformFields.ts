@@ -1,43 +1,27 @@
 import type { WebformFieldProps } from '~/types/formTypes'
 
 export function flattenWebformFields(
-  fields: Record<string, unknown>,
-  parent: string | null = null,
-): Record<string, WebformFieldProps> {
-  const flatFields: Record<string, WebformFieldProps> = {}
+  fields: Record<string, any>,
+  parentKey: string | null = null,
+): Record<string, any> {
+  const result: Record<string, any> = {}
 
   for (const [key, field] of Object.entries(fields)) {
-    if (!field || typeof field !== 'object' || Array.isArray(field)) {
-      continue
-    }
+    const fieldKey = field['#name'] || key
+    const parentTitle = field['#title'] || parentKey || null
 
-    const typedField = field as Partial<WebformFieldProps>
-
-    if (typedField['#type']) {
-      flatFields[key] = {
-        ...typedField,
-        parent,
-      } as WebformFieldProps & { parent: string | null }
-    }
-
-    for (const [childKey, childField] of Object.entries(field)) {
-      if (
-        !childField ||
-        typeof childField !== 'object' ||
-        Array.isArray(childField) ||
-        childKey.startsWith('#')
-      ) {
-        continue
-      }
-
-      if ((childField as Partial<WebformFieldProps>)['#type']) {
-        Object.assign(
-          flatFields,
-          flattenWebformFields({ [childKey]: childField }, key),
-        )
+    // Preserve the section wrapper key
+    if (field['#type'] === 'section' && field.children) {
+      // Recursively flatten children
+      const flatChildren = flattenWebformFields(field.children, parentTitle)
+      Object.assign(result, flatChildren)
+    } else {
+      result[fieldKey] = {
+        ...field,
+        parent: parentKey,
       }
     }
   }
 
-  return flatFields
+  return result
 }
