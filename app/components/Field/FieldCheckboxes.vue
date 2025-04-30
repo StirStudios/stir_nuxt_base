@@ -31,12 +31,34 @@ const items = computed(() => {
   }))
 })
 
-// Watch and auto-enforce the maxSelected AFTER user clicks
+function enforceParentGroupLimit(val: string[]): string[] {
+  const { parent, parentMaxSelected } = props.field
+  if (parent && parentMaxSelected === 1) {
+    for (const [key, _val] of Object.entries(props.state)) {
+      const otherField = (
+        webformState.fields as Record<string, WebformFieldProps>
+      )[key]
+      if (
+        key !== props.fieldName &&
+        otherField?.parent === parent &&
+        Array.isArray(props.state[key]) &&
+        props.state[key].length > 0
+      ) {
+        props.state[key] = []
+      }
+    }
+  }
+  return val
+}
+
+// Watch local field and enforce local max
 watch(
   () => props.state[props.fieldName],
   (val) => {
-    if (Array.isArray(val) && val.length > maxSelected.value) {
-      props.state[props.fieldName] = val.slice(-maxSelected.value)
+    if (Array.isArray(val)) {
+      if (val.length > maxSelected.value) {
+        props.state[props.fieldName] = val.slice(-maxSelected.value)
+      }
     }
   },
 )
@@ -44,9 +66,14 @@ watch(
 
 <template>
   <UCheckboxGroup
-    v-model="state[fieldName]"
     class="form-input w-full"
     :items="items"
+    :model-value="state[fieldName]"
+    @update:model-value="
+      (val) => {
+        state[fieldName] = enforceParentGroupLimit(val)
+      }
+    "
   >
     <template #label="{ item }">
       <span>{{ item.label }}</span>
