@@ -25,7 +25,7 @@ const items = computed(() => {
   const optionProps = props.field['#optionProperties'] || {}
 
   return Object.entries(options).map(([key, label]) => ({
-    label,
+    label: cleanHTML(label),
     value: key,
     props: optionProps?.[key] || {},
   }))
@@ -49,7 +49,7 @@ watch(
     :items="items"
   >
     <template #label="{ item }">
-      {{ item.label }}
+      <span v-html="item.label" />
       <span v-if="item.props.price" class="extra">
         ${{ item.props.price.toLocaleString() }}
       </span>
