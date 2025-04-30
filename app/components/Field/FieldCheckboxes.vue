@@ -49,10 +49,15 @@ watch(
     :items="items"
   >
     <template #label="{ item }">
-      <span v-html="item.label" />
-      <span v-if="item.props.price" class="extra">
-        ${{ item.props.price.toLocaleString() }}
-      </span>
+      <template v-if="item.props.price">
+        <div class="inline-block">
+          <span v-html="item.label" />
+          <span class="extra"> ${{ item.props.price.toLocaleString() }} </span>
+        </div>
+      </template>
+      <template v-else>
+        {{ item.label }}
+      </template>
     </template>
   </UCheckboxGroup>
 </template>
