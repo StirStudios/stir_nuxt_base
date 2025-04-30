@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import type { WebformFieldProps, WebformState } from '~/types/formTypes'
+import type { ObjectSchema } from 'yup'
+
 defineProps<{
-  fields: Record<string, any>
-  state: Record<string, any>
-  schema: any
+  fields: Record<string, WebformFieldProps>
+  state: WebformState
+  schema: ObjectSchema<Record<string, unknown>>
   isFormSubmitted: boolean
   isLoading: boolean
   orderedFieldNames: string[]
-  themeWebform: any
+  themeWebform: Record<string, string>
   groupedFields: Record<string, string[]>
   shouldRenderGroupContainer: (fieldName: string) => boolean
   shouldRenderIndividualField: (fieldName: string) => boolean
@@ -41,7 +44,7 @@ const emit = defineEmits<{
       <template
         v-if="
           shouldRenderGroupContainer(fieldName) &&
-          isContainerVisible(fields[fieldName]?.parent)
+          isContainerVisible(fields[fieldName]?.parent || '')
         "
       >
         <h2 :class="themeWebform.fieldGroupHeader">
@@ -55,7 +58,7 @@ const emit = defineEmits<{
         <div :class="themeWebform.fieldGroup">
           <template
             v-for="groupedFieldName in getGroupFields(
-              fields[fieldName]?.parent,
+              fields[fieldName]?.parent || '',
             )"
             :key="groupedFieldName"
           >
