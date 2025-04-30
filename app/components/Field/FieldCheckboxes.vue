@@ -25,7 +25,7 @@ const items = computed(() => {
   const optionProps = props.field['#optionProperties'] || {}
 
   return Object.entries(options).map(([key, label]) => ({
-    label: cleanHTML(label),
+    label,
     value: key,
     props: optionProps?.[key] || {},
   }))
@@ -49,15 +49,11 @@ watch(
     :items="items"
   >
     <template #label="{ item }">
-      <template v-if="item.props.price">
-        <div class="inline-block">
-          <span v-html="item.label" />
-          <span class="extra">${{ item.props.price.toLocaleString() }}</span>
-        </div>
-      </template>
-      <template v-else>
-        {{ item.label }}
-      </template>
+      <span>{{ item.label }}</span>
+      <span v-if="item.props.description">{{ item.props.description }}</span>
+      <span v-if="item.props.price" class="extra">
+        ${{ item.props.price.toLocaleString() }}
+      </span>
     </template>
   </UCheckboxGroup>
 </template>
