@@ -178,6 +178,11 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
           <h2 :class="themeWebform.fieldGroupHeader">
             {{ fields[fieldName]?.parentTitle }}
           </h2>
+          <div
+            v-if="fields[fieldName]?.parentDescription"
+            class="section-desc"
+            v-html="fields[fieldName]?.parentDescription"
+          />
           <div :class="themeWebform.fieldGroup">
             <template
               v-for="groupedFieldName in getGroupFields(

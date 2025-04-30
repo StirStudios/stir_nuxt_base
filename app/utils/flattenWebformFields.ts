@@ -3,20 +3,30 @@ import type { WebformFieldProps } from '~/types/formTypes'
 interface SectionField extends WebformFieldProps {
   '#type': 'section'
   '#title': string
+  '#description'?: string
   children: Record<string, unknown>
 }
 
 export function flattenWebformFields(
   fields: Record<string, unknown>,
   parentKey: string | null = null,
-  parentTitle: string | null = null, // <-- ADD THIS
+  parentTitle: string | null = null,
+  parentDescription: string | null = null,
 ): Record<
   string,
-  WebformFieldProps & { parent: string | null; parentTitle?: string }
+  WebformFieldProps & {
+    parent: string | null
+    parentTitle?: string
+    parentDescription?: string
+  }
 > {
   const result: Record<
     string,
-    WebformFieldProps & { parent: string | null; parentTitle?: string }
+    WebformFieldProps & {
+      parent: string | null
+      parentTitle?: string
+      parentDescription?: string
+    }
   > = {}
 
   for (const [key, field] of Object.entries(fields)) {
@@ -35,6 +45,7 @@ export function flattenWebformFields(
         section.children,
         key,
         section['#title'] || key,
+        section['#description'] || '',
       )
       Object.assign(result, flatChildren)
     } else {
@@ -42,6 +53,7 @@ export function flattenWebformFields(
         ...typedField,
         parent: parentKey,
         parentTitle: parentTitle || undefined,
+        parentDescription: parentDescription || undefined,
       }
     }
   }

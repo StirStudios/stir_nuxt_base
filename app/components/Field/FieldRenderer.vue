@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
-import { cleanHTML } from '~/utils/cleanHTML'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 
 import FieldInput from '@/components/Field/FieldInput'
@@ -54,14 +53,8 @@ const isVisible = computed(() =>
   evaluateVisibility(props.field['#states'], props.state),
 )
 
-// Defer help/description rendering to client to avoid SSR mismatch
-const descriptionContent = shallowRef('')
-const helpContent = shallowRef('')
-
-onMounted(() => {
-  descriptionContent.value = cleanHTML(props.field['#description'] || '')
-  helpContent.value = cleanHTML(props.field['#help'] || '')
-})
+const descriptionContent = props.field['#description'] || ''
+const helpContent = props.field['#help'] || ''
 </script>
 
 <template>
