@@ -4,7 +4,15 @@ interface SectionField extends WebformFieldProps {
   '#type': 'section'
   '#title': string
   '#description'?: string
+  '#maxSelected'?: number
   children: Record<string, unknown>
+}
+
+interface FlattenedField extends WebformFieldProps {
+  parent: string | null
+  parentTitle?: string
+  parentDescription?: string
+  parentMaxSelected?: number
 }
 
 export function flattenWebformFields(
@@ -12,22 +20,9 @@ export function flattenWebformFields(
   parentKey: string | null = null,
   parentTitle: string | null = null,
   parentDescription: string | null = null,
-): Record<
-  string,
-  WebformFieldProps & {
-    parent: string | null
-    parentTitle?: string
-    parentDescription?: string
-  }
-> {
-  const result: Record<
-    string,
-    WebformFieldProps & {
-      parent: string | null
-      parentTitle?: string
-      parentDescription?: string
-    }
-  > = {}
+  parentMaxSelected: number | null = null,
+): Record<string, FlattenedField> {
+  const result: Record<string, FlattenedField> = {}
 
   for (const [key, field] of Object.entries(fields)) {
     if (!field || typeof field !== 'object' || Array.isArray(field)) continue
@@ -46,6 +41,7 @@ export function flattenWebformFields(
         key,
         section['#title'] || key,
         section['#description'] || '',
+        section['#maxSelected'] ?? null,
       )
       Object.assign(result, flatChildren)
     } else {
@@ -54,6 +50,7 @@ export function flattenWebformFields(
         parent: parentKey,
         parentTitle: parentTitle || undefined,
         parentDescription: parentDescription || undefined,
+        parentMaxSelected: parentMaxSelected ?? undefined,
       }
     }
   }
