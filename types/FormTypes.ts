@@ -19,6 +19,7 @@ export type InputType =
   | 'checkboxes'
   | 'processed_text'
   | 'datetime'
+  | 'section'
 
 export interface DrupalFormProps {
   formId: string

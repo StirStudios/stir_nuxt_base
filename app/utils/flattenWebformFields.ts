@@ -1,23 +1,34 @@
 import type { WebformFieldProps } from '~/types/formTypes'
 
+interface SectionField extends WebformFieldProps {
+  '#type': 'section'
+  children: Record<string, unknown>
+}
+
 export function flattenWebformFields(
-  fields: Record<string, any>,
+  fields: Record<string, unknown>,
   parentKey: string | null = null,
-): Record<string, any> {
-  const result: Record<string, any> = {}
+): Record<string, WebformFieldProps & { parent: string | null }> {
+  const result: Record<string, WebformFieldProps & { parent: string | null }> =
+    {}
 
   for (const [key, field] of Object.entries(fields)) {
-    const fieldKey = field['#name'] || key
-    const parentTitle = field['#title'] || parentKey || null
+    if (!field || typeof field !== 'object' || Array.isArray(field)) continue
 
-    // Preserve the section wrapper key
-    if (field['#type'] === 'section' && field.children) {
-      // Recursively flatten children
-      const flatChildren = flattenWebformFields(field.children, parentTitle)
+    const typedField = field as WebformFieldProps
+    const fieldKey = typedField['#name'] || key
+
+    if (
+      typedField['#type'] === 'section' &&
+      'children' in typedField &&
+      typeof (typedField as SectionField).children === 'object'
+    ) {
+      const section = typedField as SectionField
+      const flatChildren = flattenWebformFields(section.children, key)
       Object.assign(result, flatChildren)
     } else {
       result[fieldKey] = {
-        ...field,
+        ...typedField,
         parent: parentKey,
       }
     }
