@@ -176,10 +176,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
           "
         >
           <h2 :class="themeWebform.fieldGroupHeader">
-            {{
-              fields[fields[fieldName]?.parent]?.['#title'] ||
-              fields[fieldName]?.parent
-            }}
+            {{ fields[fieldName]?.parentTitle }}
           </h2>
           <div :class="themeWebform.fieldGroup">
             <template
