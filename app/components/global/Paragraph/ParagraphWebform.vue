@@ -156,73 +156,24 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
 
 <template>
   <EditLink :link="webformSubmissions">
-    <UForm
-      v-if="!isFormSubmitted"
-      :class="
-        themeWebform.variant === 'material'
-          ? themeWebform.spacingLarge
-          : themeWebform.spacing
-      "
+    <WebformContent
+      v-model:turnstile-token="turnstileToken"
+      :fields="fields"
+      :get-group-fields="getGroupFields"
+      :grouped-fields="groupedFields"
+      :is-container-visible="isContainerVisible"
+      :is-form-submitted="isFormSubmitted"
+      :is-loading="isLoading"
+      :ordered-field-names="orderedFieldNames"
       :schema="schema"
+      :should-render-group-container="shouldRenderGroupContainer"
+      :should-render-individual-field="shouldRenderIndividualField"
       :state="state"
+      :submit-button-label="submitButtonLabel"
+      :theme-webform="themeWebform"
+      :webform-confirmation="webformConfirmation"
       @error="onError"
       @submit="onSubmit"
-    >
-      <template v-for="fieldName in orderedFieldNames" :key="fieldName">
-        <template
-          v-if="
-            shouldRenderGroupContainer(fieldName) &&
-            isContainerVisible(fields[fieldName]?.parent)
-          "
-        >
-          <h2 :class="themeWebform.fieldGroupHeader">
-            {{ fields[fieldName]?.parentTitle }}
-          </h2>
-          <div
-            v-if="fields[fieldName]?.parentDescription"
-            class="section-desc"
-            v-html="fields[fieldName]?.parentDescription"
-          />
-          <div :class="themeWebform.fieldGroup">
-            <template
-              v-for="groupedFieldName in getGroupFields(
-                fields[fieldName]?.parent,
-              )"
-              :key="groupedFieldName"
-            >
-              <FieldRenderer
-                :field="fields[groupedFieldName]"
-                :field-name="groupedFieldName"
-                :state="state"
-              />
-            </template>
-          </div>
-        </template>
-
-        <template v-else-if="shouldRenderIndividualField(fieldName)">
-          <FieldRenderer
-            :field="fields[fieldName]"
-            :field-name="fieldName"
-            :state="state"
-          />
-        </template>
-      </template>
-
-      <FieldTurnstile v-model="turnstileToken" />
-
-      <WrapAlign :align="themeWebform.submitAlign">
-        <UButton
-          :label="submitButtonLabel"
-          :loading="isLoading"
-          type="submit"
-        />
-      </WrapAlign>
-    </UForm>
-
-    <div
-      v-else
-      :class="`${themeWebform.response} prose`"
-      v-html="webformConfirmation"
     />
   </EditLink>
 </template>
