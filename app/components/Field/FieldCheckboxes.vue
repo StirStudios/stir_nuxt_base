@@ -52,7 +52,7 @@ watch(
       <template v-if="item.props.price">
         <div class="inline-block">
           <span v-html="item.label" />
-          <span class="extra"> ${{ item.props.price.toLocaleString() }} </span>
+          <span class="extra">${{ item.props.price.toLocaleString() }}</span>
         </div>
       </template>
       <template v-else>
