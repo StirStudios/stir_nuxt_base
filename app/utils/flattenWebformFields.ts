@@ -44,7 +44,6 @@ export function flattenWebformFields(
 
     if (isGroup && hasChildren) {
       const group = field as GroupField
-
       const groupChildren =
         group.children ??
         (Object.fromEntries(
@@ -67,7 +66,11 @@ export function flattenWebformFields(
       const newParentKey = type === 'section' ? key : parentKey
       const newTitle = type === 'section' ? group['#title'] : parentTitle
       const newDesc =
-        type === 'section' ? group['#description'] : parentDescription
+        type === 'section'
+          ? group['#description']
+          : type === 'fieldset'
+            ? group['#description'] || parentDescription
+            : parentDescription
       const newMax =
         type === 'section' ? group['#maxSelected'] : parentMaxSelected
 
