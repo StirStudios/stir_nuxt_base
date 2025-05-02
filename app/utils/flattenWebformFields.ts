@@ -56,7 +56,7 @@ export function flattenWebformFields(
           ),
         ) as Record<string, WebformFieldProps>)
 
-      if (type === 'section') {
+      if (type === 'section' || type === 'fieldset') {
         flat[key] = {
           ...group,
           parent: parentKey,
