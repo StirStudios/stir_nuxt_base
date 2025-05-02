@@ -20,6 +20,7 @@ export type InputType =
   | 'processed_text'
   | 'datetime'
   | 'section'
+  | 'fieldset'
 
 export interface DrupalFormProps {
   formId: string

@@ -84,7 +84,7 @@ onMounted(() => {
 })
 
 // Helper functions for field rendering
-const containerTypes = ['section', 'details', 'webform_section']
+const containerTypes = ['section', 'fieldset', 'details', 'webform_section']
 
 const shouldRenderGroupContainer = (fieldName: string) =>
   fields[fieldName]?.parent &&
