@@ -21,6 +21,8 @@ export type InputType =
   | 'datetime'
   | 'section'
   | 'fieldset'
+  | 'details'
+  | 'webform_section'
 
 export interface DrupalFormProps {
   formId: string

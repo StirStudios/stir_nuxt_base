@@ -1,80 +1,87 @@
 import type { WebformFieldProps } from '~/types/formTypes'
 
 interface GroupField extends WebformFieldProps {
-  '#type': 'section' | 'fieldset'
+  '#type': 'section' | 'fieldset' | 'details' | 'webform_section'
   '#title': string
   '#description'?: string
   '#maxSelected'?: number
-  children?: Record<string, unknown>
+  children?: Record<string, WebformFieldProps>
 }
 
 interface FlattenedField extends WebformFieldProps {
   parent: string | null
-  parentTitle?: string
-  parentDescription?: string
-  parentMaxSelected?: number
+  parentTitle?: string | null
+  parentDescription?: string | null
+  parentMaxSelected?: number | null
 }
 
 export function flattenWebformFields(
-  fields: Record<string, unknown>,
+  fields: Record<string, WebformFieldProps>,
   parentKey: string | null = null,
-  parentTitle: string | undefined = undefined,
-  parentDescription: string | undefined = undefined,
-  parentMaxSelected: number | undefined = undefined,
+  parentTitle: string | null = null,
+  parentDescription: string | null = null,
+  parentMaxSelected: number | null = null,
 ): Record<string, FlattenedField> {
-  const result: Record<string, FlattenedField> = {}
+  const flat: Record<string, FlattenedField> = {}
 
-  for (const [key, rawField] of Object.entries(fields)) {
-    if (!rawField || typeof rawField !== 'object' || Array.isArray(rawField))
-      continue
+  for (const [key, field] of Object.entries(fields)) {
+    if (!field || typeof field !== 'object') continue
 
-    const typedField = rawField as WebformFieldProps
-    const fieldKey = typedField['#name'] || key
-    const type = typedField['#type']
+    const type = field['#type']
+    const isGroup = [
+      'section',
+      'fieldset',
+      'details',
+      'webform_section',
+    ].includes(type)
 
-    const isGroup = type === 'section' || type === 'fieldset'
     const hasChildren =
-      'children' in typedField ||
-      Object.values(typedField).some(
+      'children' in field ||
+      Object.values(field).some(
         (v): v is WebformFieldProps =>
           typeof v === 'object' && v !== null && '#type' in v,
       )
 
     if (isGroup && hasChildren) {
-      const group = typedField as GroupField
+      const group = field as GroupField
 
-      // Add the group itself to flattened output
-      result[fieldKey] = {
-        ...typedField,
-        parent: parentKey,
-        parentTitle:
-          group['#type'] === 'fieldset' ? group['#title'] : undefined,
-        parentDescription:
-          group['#type'] === 'fieldset' ? group['#description'] : undefined,
-        parentMaxSelected: group['#maxSelected'],
+      const groupChildren =
+        group.children ??
+        (Object.fromEntries(
+          Object.entries(group).filter(
+            ([k, v]) =>
+              typeof v === 'object' &&
+              v !== null &&
+              '#type' in v &&
+              !k.startsWith('#'),
+          ),
+        ) as Record<string, WebformFieldProps>)
+
+      if (type === 'section') {
+        flat[key] = {
+          ...group,
+          parent: parentKey,
+        }
       }
 
-      // Support both `children` and implicit field-like keys
-      const childEntries: Record<string, unknown> =
-        group.children ??
-        Object.fromEntries(
-          Object.entries(group).filter(
-            ([_k, v]) => typeof v === 'object' && v !== null && '#type' in v,
-          ),
-        )
+      const newParentKey = type === 'section' ? key : parentKey
+      const newTitle = type === 'section' ? group['#title'] : parentTitle
+      const newDesc =
+        type === 'section' ? group['#description'] : parentDescription
+      const newMax =
+        type === 'section' ? group['#maxSelected'] : parentMaxSelected
 
-      const flatChildren = flattenWebformFields(
-        childEntries,
-        fieldKey,
-        group['#title'],
-        group['#description'],
-        group['#maxSelected'],
+      const nested = flattenWebformFields(
+        groupChildren,
+        newParentKey,
+        newTitle,
+        newDesc,
+        newMax,
       )
-
-      Object.assign(result, flatChildren)
+      Object.assign(flat, nested)
     } else {
-      result[fieldKey] = {
-        ...typedField,
+      flat[key] = {
+        ...field,
         parent: parentKey,
         parentTitle,
         parentDescription,
@@ -83,5 +90,5 @@ export function flattenWebformFields(
     }
   }
 
-  return result
+  return flat
 }
