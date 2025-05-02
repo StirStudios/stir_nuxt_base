@@ -31,23 +31,26 @@ const items = computed(() => {
   }))
 })
 
-function enforceParentGroupLimit(val: string[]): string[] {
-  const { parent, parentMaxSelected } = props.field
-  if (parent && parentMaxSelected === 1) {
-    for (const [key, _val] of Object.entries(props.state)) {
-      const otherField = (
-        webformState.fields as Record<string, WebformFieldProps>
-      )[key]
-      if (
-        key !== props.fieldName &&
-        otherField?.parent === parent &&
-        Array.isArray(props.state[key]) &&
-        props.state[key].length > 0
-      ) {
-        props.state[key] = []
-      }
+function enforceGroupLimit(val: string[]): string[] {
+  const group = props.field['#group']
+  const groupLimit = props.field['#groupMaxSelected']
+
+  if (!group || groupLimit !== 1) return val
+
+  for (const [key, _val] of Object.entries(props.state)) {
+    const otherField = (
+      webformState.fields as Record<string, WebformFieldProps>
+    )[key]
+    if (
+      key !== props.fieldName &&
+      otherField?.['#group'] === group &&
+      Array.isArray(props.state[key]) &&
+      props.state[key].length > 0
+    ) {
+      props.state[key] = []
     }
   }
+
   return val
 }
 
@@ -71,7 +74,7 @@ watch(
     :model-value="state[fieldName]"
     @update:model-value="
       (val) => {
-        state[fieldName] = enforceParentGroupLimit(val)
+        state[fieldName] = enforceGroupLimit(val)
       }
     "
   >

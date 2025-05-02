@@ -20,9 +20,6 @@ export type InputType =
   | 'processed_text'
   | 'datetime'
   | 'section'
-  | 'fieldset'
-  | 'details'
-  | 'webform_section'
 
 export interface DrupalFormProps {
   formId: string
@@ -48,12 +45,14 @@ export interface WebformDefinition {
 export interface WebformFieldProps {
   '#type': InputType
   '#title': string
+  '#value'?: number | string
+  '#name': string
   '#description'?: string
   '#placeholder'?: string
   '#required'?: boolean
-  '#name': string
   '#requiredError'?: string
   '#options'?: Record<string, string>
+  '#optionProperties'?: Record<string, { price?: number; description?: string }>
   '#text'?: string
   '#min'?: number
   '#max'?: number
@@ -64,14 +63,24 @@ export interface WebformFieldProps {
       | Record<string, { value: string }>
       | Array<Record<string, { value: string }> | 'or'>
   }
+  '#group'?: string
+  '#groupMaxSelected'?: number
+  '#perGuest'?: boolean
+  '#isTaxable'?: boolean
+  '#serviceFeeApplicable'?: boolean
+  '#maxSelected'?: number
   floatingLabel?: boolean
   '#composite'?: Record<string, WebformFieldProps>
+}
+
+export interface GroupField extends WebformFieldProps {
+  children?: Record<string, WebformFieldProps>
 }
 
 export interface WebformActionProps {
   '#type': string
   '#title': string
-  '#submit_Label': string
+  '#submit_label': string
 }
 
 export type WebformState = Record<
