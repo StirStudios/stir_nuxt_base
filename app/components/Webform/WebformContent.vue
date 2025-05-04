@@ -63,6 +63,14 @@ const emit = defineEmits<{
             :key="groupedFieldName"
           >
             <FieldRenderer
+              v-if="
+                !fields[groupedFieldName]?.['#tabGroup'] ||
+                groupedFields[fields[fieldName]?.parent || '']?.find(
+                  (name) =>
+                    fields[name]?.['#tabGroup'] ===
+                    fields[groupedFieldName]?.['#tabGroup'],
+                ) === groupedFieldName
+              "
               :field="fields[groupedFieldName]"
               :field-name="groupedFieldName"
               :fields="fields"
@@ -75,6 +83,7 @@ const emit = defineEmits<{
 
       <template v-else-if="shouldRenderIndividualField(fieldName)">
         <FieldRenderer
+          v-if="!fields[fieldName]?.['#tabGroup']"
           :field="fields[fieldName]"
           :field-name="fieldName"
           :fields="fields"

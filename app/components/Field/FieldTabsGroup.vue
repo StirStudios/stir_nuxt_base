@@ -43,6 +43,17 @@ const { shouldRenderTabs, tabItems, active } = useTabGroup(
   props.fields,
   props.orderedFieldNames,
 )
+
+watch(
+  () => props.state[active.value],
+  () => {
+    tabItems.value.forEach((item) => {
+      if (item.value !== active.value) {
+        props.state[item.value] = undefined
+      }
+    })
+  },
+)
 </script>
 
 <template>
