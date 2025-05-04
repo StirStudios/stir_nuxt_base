@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
-import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { useTabGroup } from '~/composables/useTabGroup'
 
 import FieldInput from '@/components/Field/FieldInput'
@@ -14,12 +12,6 @@ import FieldDate from '@/components/Field/FieldDate'
 import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
-
-const FieldTabsGroup = defineAsyncComponent(
-  () => import('@/components/Field/FieldTabsGroup.vue'),
-)
-
-const { webform } = useAppConfig().stirTheme
 
 const props = defineProps<{
   field: WebformFieldProps
@@ -51,58 +43,37 @@ const { shouldRenderTabs, tabItems, active } = useTabGroup(
   props.fields,
   props.orderedFieldNames,
 )
-
-const useFloatingLabels = computed(
-  () => props.field['#floating_label'] ?? webform.labels.floating,
-)
-
-const resolvedComponent = computed(
-  () => componentMap[props.field['#type']] || null,
-)
-
-const shouldShowLabel = computed(
-  () => props.field['#type'] !== 'checkbox' && !useFloatingLabels.value,
-)
-
-const isVisible = computed(() =>
-  evaluateVisibility(props.field['#states'], props.state),
-)
-
-const descriptionContent = props.field['#description'] || ''
-const helpContent = props.field['#help'] || ''
 </script>
 
 <template>
-  <FieldTabsGroup
+  <UTabs
     v-if="shouldRenderTabs && tabItems.length"
-    :field="field"
-    :field-name="fieldName"
-    :fields="fields"
-    :ordered-field-names="orderedFieldNames"
-    :state="state"
-  />
-
-  <UFormField
-    v-else-if="isVisible"
-    :label="shouldShowLabel ? field['#title'] : undefined"
-    :name="fieldName"
-    :required="!!field['#required']"
+    v-model="active"
+    class="w-full"
+    :content="true"
+    :items="tabItems"
+    :unmount-on-hide="true"
   >
-    <div
-      v-if="descriptionContent"
-      :class="webform.description"
-      v-html="descriptionContent"
-    />
-
-    <component
-      :is="resolvedComponent"
-      v-if="resolvedComponent"
-      :field="field"
-      :field-name="fieldName"
-      :floating-label="useFloatingLabels"
-      :state="state"
-    />
-
-    <div v-if="helpContent" :class="webform.help" v-html="helpContent" />
-  </UFormField>
+    <template #content="{ item }">
+      <div
+        v-if="fields[item.value]?.['#description']"
+        class="text-sm text-gray-600"
+        v-html="fields[item.value]['#description']"
+      />
+      <component
+        :is="componentMap[fields[item.value]?.['#type']]"
+        v-if="componentMap[fields[item.value]?.['#type']]"
+        :field="fields[item.value]"
+        :field-name="item.value"
+        :fields="fields"
+        :ordered-field-names="orderedFieldNames"
+        :state="state"
+      />
+      <div
+        v-if="fields[item.value]?.['#help']"
+        class="text-muted text-xs"
+        v-html="fields[item.value]['#help']"
+      />
+    </template>
+  </UTabs>
 </template>

@@ -65,6 +65,8 @@ const emit = defineEmits<{
             <FieldRenderer
               :field="fields[groupedFieldName]"
               :field-name="groupedFieldName"
+              :fields="fields"
+              :ordered-field-names="orderedFieldNames"
               :state="state"
             />
           </template>
@@ -75,6 +77,8 @@ const emit = defineEmits<{
         <FieldRenderer
           :field="fields[fieldName]"
           :field-name="fieldName"
+          :fields="fields"
+          :ordered-field-names="orderedFieldNames"
           :state="state"
         />
       </template>

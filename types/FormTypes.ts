@@ -69,6 +69,7 @@ export interface WebformFieldProps {
   '#isTaxable'?: boolean
   '#serviceFeeApplicable'?: boolean
   '#maxSelected'?: number
+  '#tabGroup'?: string
   floatingLabel?: boolean
   '#composite'?: Record<string, WebformFieldProps>
 }
