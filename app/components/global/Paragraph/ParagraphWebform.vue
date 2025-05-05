@@ -4,6 +4,7 @@ import { webformState } from '~/composables/useWebformState'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
+import { generateSummaryHTML } from '~/utils/generateSummaryHTML'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
@@ -109,7 +110,15 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   errors.value = {}
 
   try {
-    // Prepare Payload
+    if ('submission_summary' in fields) {
+      const summaryHtml = generateSummaryHTML({
+        fields,
+        state,
+        guestCount: Number(state.venue_guest_count || 0),
+      })
+      state.submission_summary = summaryHtml
+    }
+
     const payload = {
       webform_id: webformId,
       ...transformPayloadToSnakeCase(state),
@@ -130,14 +139,12 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       color: 'success',
     })
 
-    // Reset Form
     Object.keys(state).forEach((key) => (state[key] = ''))
     turnstileToken.value = ''
     isFormSubmitted.value = true
   } catch (error) {
     console.error('Submission Error:', error)
 
-    // Handle Errors from Backend
     const errorMessage =
       error?.response?._data?.error?.message ||
       error?.response?._data?.message ||
