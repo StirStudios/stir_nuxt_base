@@ -104,21 +104,44 @@ const isContainerVisible = (containerName: string) =>
     evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
   )
 
+onMounted(() => {
+  for (const [key, field] of Object.entries(fields)) {
+    if (field['#composite']) {
+      state[key] = state[key] || {}
+      for (const subKey in field['#composite']) {
+        state[key][subKey] =
+          state[key][subKey] || field['#composite'][subKey]['value'] || ''
+      }
+    } else if (field['#type'] === 'checkboxes') {
+      state[key] = Array.isArray(field['#default']) ? field['#default'] : []
+    } else {
+      state[key] = field['#default'] ?? ''
+    }
+  }
+
+  // ✅ Ensure hidden field exists in state (even if not rendered)
+  if ('submission_summary' in fields && !state.submission_summary) {
+    state.submission_summary = ''
+  }
+})
+
 // Form submission handler
 async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   isLoading.value = true
   errors.value = {}
 
   try {
+    // 1. Calculate totals and generate HTML summary
     if ('submission_summary' in fields) {
-      const summaryHtml = generateSummaryHTML({
-        fields,
-        state,
-        guestCount: Number(state.venue_guest_count || 0),
-      })
+      const summaryHtml = await import('~/utils/generateSummary').then((mod) =>
+        mod.generateSummaryHTML(fields, state),
+      )
       state.submission_summary = summaryHtml
     }
 
+    console.log('[✔] Injected summary:', state.submission_summary)
+
+    // 3. Transform payload
     const payload = {
       webform_id: webformId,
       ...transformPayloadToSnakeCase(state),
