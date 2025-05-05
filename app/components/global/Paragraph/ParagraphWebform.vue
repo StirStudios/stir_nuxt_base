@@ -4,7 +4,7 @@ import { webformState } from '~/composables/useWebformState'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
-import { generateSummaryHTML } from '~/utils/generateSummaryHTML'
+import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
@@ -104,47 +104,19 @@ const isContainerVisible = (containerName: string) =>
     evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
   )
 
-onMounted(() => {
-  for (const [key, field] of Object.entries(fields)) {
-    if (field['#composite']) {
-      state[key] = state[key] || {}
-      for (const subKey in field['#composite']) {
-        state[key][subKey] =
-          state[key][subKey] || field['#composite'][subKey]['value'] || ''
-      }
-    } else if (field['#type'] === 'checkboxes') {
-      state[key] = Array.isArray(field['#default']) ? field['#default'] : []
-    } else {
-      state[key] = field['#default'] ?? ''
-    }
-  }
-
-  // ✅ Ensure hidden field exists in state (even if not rendered)
-  if ('submission_summary' in fields && !state.submission_summary) {
-    state.submission_summary = ''
-  }
-})
-
 // Form submission handler
 async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   isLoading.value = true
   errors.value = {}
 
   try {
-    // 1. Calculate totals and generate HTML summary
-    if ('submission_summary' in fields) {
-      const summaryHtml = await import('~/utils/generateSummary').then((mod) =>
-        mod.generateSummaryHTML(fields, state),
-      )
-      state.submission_summary = summaryHtml
-    }
+    const hiddenDefaults = getHiddenDefaults(fields)
 
-    console.log('[✔] Injected summary:', state.submission_summary)
-
-    // 3. Transform payload
+    // Prepare Payload
     const payload = {
       webform_id: webformId,
       ...transformPayloadToSnakeCase(state),
+      ...transformPayloadToSnakeCase(hiddenDefaults),
       turnstile_response: turnstileToken.value,
     }
 
@@ -162,12 +134,14 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       color: 'success',
     })
 
+    // Reset Form
     Object.keys(state).forEach((key) => (state[key] = ''))
     turnstileToken.value = ''
     isFormSubmitted.value = true
   } catch (error) {
     console.error('Submission Error:', error)
 
+    // Handle Errors from Backend
     const errorMessage =
       error?.response?._data?.error?.message ||
       error?.response?._data?.message ||
