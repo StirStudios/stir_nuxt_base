@@ -16,7 +16,7 @@ defineProps<{
   <UTextarea
     :id="fieldName"
     v-model="state[fieldName]"
-    :autoresize="isMaterial"
+    autoresize
     class="w-full"
     placeholder=" "
     :rows="1"
