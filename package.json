@@ -42,10 +42,5 @@
     "npm": {
       "publish": false
     }
-  },
-  "pnpm": {
-    "overrides": {
-      "pdfjs-dist": "4.10.38"
-    }
   }
 }
