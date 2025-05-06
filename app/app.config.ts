@@ -123,7 +123,7 @@ export default defineAppConfig({
       },
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: 'space-y-10',
-      response: 'space-y-8 px-6 py-3 bg-muted rounded-lg italic',
+      response: 'px-6 py-3 bg-muted rounded-lg italic',
       description: 'desc mb-3 text-muted',
       help: 'desc my-3 text-muted',
       submitAlign: '',
