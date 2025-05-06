@@ -63,7 +63,7 @@ export function transformPayloadToSnakeCase<T extends Record<string, unknown>>(
 
     // Normalize strings (radio/select)
     if (typeof value === 'string') {
-      result[snakeKey] = value.replace(/([A-Z])/g, '_$1').toLowerCase()
+      result[snakeKey] = value
       continue
     }
 
