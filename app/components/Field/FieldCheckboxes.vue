@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 import { cleanHTML } from '~/utils/cleanHTML'
+import { useEventBus } from '@vueuse/core'
 
 const props = defineProps<{
   field: WebformFieldProps
@@ -9,29 +10,48 @@ const props = defineProps<{
 }>()
 
 const descriptionContent = shallowRef<string>('')
+const tabBus = useEventBus<string>('tab-changed')
 
 onMounted(() => {
-  const value = props.state[props.fieldName]
-  if (value === undefined || value === '') {
+  if (!Array.isArray(props.state[props.fieldName])) {
     props.state[props.fieldName] = []
   }
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
+
+  // Listen for tab change and clear checkboxes if visibility condition fails
+  tabBus.on(handleTabChange)
 })
+
+// Determines if the field should be visible for the selected tab
+const isVisibleForTab = (tabValue: string): boolean => {
+  const visibility = props.field['#states']?.visible ?? []
+  return visibility.some(
+    (condition: VisibilityCondition | 'or') =>
+      typeof condition === 'object' &&
+      condition[':input[name="tabs"]']?.value === tabValue,
+  )
+}
+
+// Clears checkboxes if the field is not visible for the selected tab
+const handleTabChange = (tabValue: string) => {
+  if (!isVisibleForTab(tabValue)) {
+    props.state[props.fieldName] = []
+  }
+}
 
 const maxSelected = computed(() => props.field['#maxSelected'] ?? Infinity)
 
-const items = computed(() => {
-  const options = props.field['#options'] || {}
-  const optionProps = props.field['#optionProperties'] || {}
-
-  return Object.entries(options).map(([key, label]) => ({
+// Computed Property to Transform Options
+const items = computed(() =>
+  Object.entries(props.field['#options'] || {}).map(([key, label]) => ({
     label,
     value: key,
-    props: optionProps?.[key] || {},
-  }))
-})
+    props: props.field['#optionProperties']?.[key] || {},
+  })),
+)
 
-function enforceGroupLimit(val: string[]): string[] {
+// Enforces the group limit for checkboxes within the same group
+const enforceGroupLimit = (val: string[]): string[] => {
   const group = props.field['#group']
   const groupLimit = props.field['#groupMaxSelected']
 
@@ -54,14 +74,11 @@ function enforceGroupLimit(val: string[]): string[] {
   return val
 }
 
-// Watch local field and enforce local max
 watch(
   () => props.state[props.fieldName],
   (val) => {
-    if (Array.isArray(val)) {
-      if (val.length > maxSelected.value) {
-        props.state[props.fieldName] = val.slice(-maxSelected.value)
-      }
+    if (Array.isArray(val) && val.length > maxSelected.value) {
+      props.state[props.fieldName] = val.slice(-maxSelected.value)
     }
   },
 )

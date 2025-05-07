@@ -69,10 +69,14 @@ export interface WebformFieldProps {
   '#isTaxable'?: boolean
   '#serviceFeeApplicable'?: boolean
   '#maxSelected'?: number
-  '#tabGroup'?: string
   floatingLabel?: boolean
   '#composite'?: Record<string, WebformFieldProps>
 }
+
+export type VisibilityCondition = Record<
+  ':input[name="tabs"]',
+  { value: string }
+>
 
 export interface GroupField extends WebformFieldProps {
   children?: Record<string, WebformFieldProps>
