@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 import { evaluateVisibility } from '~/utils/evaluateVisibility'
-import { useTabGroup } from '~/composables/useTabGroup'
 
 import FieldInput from '@/components/Field/FieldInput'
 import FieldTextarea from '@/components/Field/FieldTextarea'
@@ -14,10 +12,6 @@ import FieldDate from '@/components/Field/FieldDate'
 import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
-
-const FieldTabsGroup = defineAsyncComponent(
-  () => import('@/components/Field/FieldTabsGroup.vue'),
-)
 
 const { webform } = useAppConfig().stirTheme
 
@@ -45,13 +39,6 @@ const componentMap: Record<string, Component> = {
   processed_text: FieldProcessedText,
 }
 
-const { shouldRenderTabs, tabItems, active } = useTabGroup(
-  props.field,
-  props.fieldName,
-  props.fields,
-  props.orderedFieldNames,
-)
-
 const useFloatingLabels = computed(
   () => props.field['#floating_label'] ?? webform.labels.floating,
 )
@@ -73,17 +60,8 @@ const helpContent = props.field['#help'] || ''
 </script>
 
 <template>
-  <FieldTabsGroup
-    v-if="shouldRenderTabs && tabItems.length"
-    :field="field"
-    :field-name="fieldName"
-    :fields="fields"
-    :ordered-field-names="orderedFieldNames"
-    :state="state"
-  />
-
   <UFormField
-    v-else-if="isVisible"
+    v-if="isVisible"
     :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
     :required="!!field['#required']"
