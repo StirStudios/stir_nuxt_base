@@ -22,7 +22,7 @@ onMounted(() => {
   tabBus.on(handleTabChange)
 })
 
-// Determines if the field should be visible for the selected tab
+// Determines if the field should be visible for the selected tab.
 const isVisibleForTab = (tabValue: string): boolean => {
   const visibility = props.field['#states']?.visible ?? []
   return visibility.some(
@@ -32,8 +32,15 @@ const isVisibleForTab = (tabValue: string): boolean => {
   )
 }
 
-// Clears checkboxes if the field is not visible for the selected tab
+/**
+ * Clears checkboxes if the field is not visible for the selected tab
+ * - Ignores checkboxes that are not tied to tab visibility (e.g., Staffing)
+ */
 const handleTabChange = (tabValue: string) => {
+  // If the field has no `#states` or it's not tied to `tabs`, skip clearing
+  if (!props.field['#states']?.visible) return
+
+  // If it's not visible for the selected tab, clear it
   if (!isVisibleForTab(tabValue)) {
     props.state[props.fieldName] = []
   }
