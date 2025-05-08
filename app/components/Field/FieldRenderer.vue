@@ -51,6 +51,10 @@ const shouldShowLabel = computed(
   () => props.field['#type'] !== 'checkbox' && !useFloatingLabels.value,
 )
 
+const shouldShowDescription = computed(
+  () => props.field['#type'] !== 'checkbox',
+)
+
 const isVisible = computed(() =>
   evaluateVisibility(props.field['#states'], props.state),
 )
@@ -67,7 +71,7 @@ const helpContent = props.field['#help'] || ''
     :required="!!field['#required']"
   >
     <div
-      v-if="descriptionContent"
+      v-if="descriptionContent && shouldShowDescription"
       :class="webform.description"
       v-html="descriptionContent"
     />
