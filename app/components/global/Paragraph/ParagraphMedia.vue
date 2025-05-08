@@ -39,9 +39,7 @@ const theme = useAppConfig().stirTheme
           </template>
 
           <template v-else-if="media.type === 'document' && theme.pdf">
-            <ClientOnly>
-              <PdfViewer :src="media.url" />
-            </ClientOnly>
+            <PdfViewer :src="media.url" />
           </template>
 
           <template v-else-if="media.type === 'image'">
