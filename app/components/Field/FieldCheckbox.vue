@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const descriptionContent = shallowRef<string>('')
 const checkboxValue = ref<boolean>(props.field['#defaultValue'] ?? false)
+const optionProps = props.field['#optionProperties'] || {}
 
 onMounted(() => {
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
@@ -25,12 +26,20 @@ onMounted(() => {
   <UCheckbox
     v-model="checkboxValue"
     class="form-input w-full"
-    :label="fieldName"
+    :label="field['#title']"
     :ui="{
-      label: 'sr-only',
+      label: descriptionContent ? 'sr-only' : '',
     }"
     @update:model-value="state[fieldName] = $event"
   >
+    <template #label>
+      <span>{{ field['#title'] }}</span>
+      <span v-if="optionProps.description">{{ optionProps.description }}</span>
+      <span v-if="optionProps.price" class="extra">
+        ${{ optionProps.price.toLocaleString() }}
+      </span>
+    </template>
+
     <template #description>
       <span v-html="descriptionContent" />
     </template>
