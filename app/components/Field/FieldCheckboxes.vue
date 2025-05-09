@@ -110,9 +110,13 @@ const enforceGroupLimit = (val: string[]): string[] => {
  */
 const enforceMaxSelected = (val: string[]): string[] => {
   const max = props.field['#maxSelected'] ?? Infinity
+
   if (val.length > max) {
-    return val.slice(0, max)
+    // Drop the first ones in the array and keep the newest
+    const itemsToKeep = val.slice(-max)
+    return itemsToKeep
   }
+
   return val
 }
 
