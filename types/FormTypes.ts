@@ -42,6 +42,18 @@ export interface WebformDefinition {
   actions: WebformActionProps[]
 }
 
+/**
+ * Types for State Conditions (Visible, Disabled, Checked)
+ */
+export type ConditionEntry = Record<string, { value: string }> | 'or'
+export type ConditionType = ConditionEntry[] | Record<string, { value: string }>
+
+export interface States {
+  visible?: ConditionType
+  disabled?: ConditionType
+  checked?: ConditionType
+}
+
 export interface WebformFieldProps {
   '#type': InputType
   '#title': string
@@ -58,11 +70,7 @@ export interface WebformFieldProps {
   '#max'?: number
   '#step'?: number
   '#multiple'?: number | boolean
-  '#states'?: {
-    visible?:
-      | Record<string, { value: string }>
-      | Array<Record<string, { value: string }> | 'or'>
-  }
+  '#states'?: States
   '#group'?: string
   '#groupMaxSelected'?: number
   '#perGuest'?: boolean
@@ -72,11 +80,6 @@ export interface WebformFieldProps {
   floatingLabel?: boolean
   '#composite'?: Record<string, WebformFieldProps>
 }
-
-export type VisibilityCondition = Record<
-  ':input[name="tabs"]',
-  { value: string }
->
 
 export interface GroupField extends WebformFieldProps {
   children?: Record<string, WebformFieldProps>

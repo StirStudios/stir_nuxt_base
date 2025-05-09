@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 import type { ObjectSchema } from 'yup'
 
 defineProps<{
@@ -30,77 +29,115 @@ const emit = defineEmits<{
 <template>
   <UForm
     v-if="!isFormSubmitted"
+    :schema="schema"
+    :state="state"
+    @submit="emit('submit', $event)"
+    @error="emit('error', $event)"
     :class="
       themeWebform.variant === 'material'
         ? themeWebform.spacingLarge
         : themeWebform.spacing
     "
-    :schema="schema"
-    :state="state"
-    @error="emit('error', $event)"
-    @submit="emit('submit', $event)"
   >
-    <template v-for="fieldName in orderedFieldNames" :key="fieldName">
-      <template
-        v-if="
-          shouldRenderGroupContainer(fieldName) &&
-          isContainerVisible(fields[fieldName]?.parent || '')
-        "
-      >
-        <h2 :class="themeWebform.fieldGroupHeader">
-          {{ fields[fieldName]?.parentTitle }}
-        </h2>
-        <div
-          v-if="fields[fieldName]?.parentDescription"
-          class="section-desc"
-          v-html="fields[fieldName]?.parentDescription"
-        />
-        <div :class="themeWebform.fieldGroup">
-          <template
-            v-for="groupedFieldName in getGroupFields(
-              fields[fieldName]?.parent || '',
-            )"
-            :key="groupedFieldName"
-          >
+    <div
+      class="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-12 lg:grid-cols-12"
+    >
+      <div class="lg:col-span-8">
+        <template
+          v-for="(parent, i) in Object.keys(groupedFields)"
+          :key="parent"
+        >
+          <div class="relative py-20">
+            <div
+              class="absolute inset-y-0 -left-[100vw] -z-10 w-[300vw]"
+              :class="i % 2 === 0 ? 'bg-zinc-100' : 'bg-white'"
+            />
+
+            <h2 :class="themeWebform.fieldGroupHeader">
+              {{ fields[groupedFields[parent][0]]?.parentTitle }}
+            </h2>
+
+            <div
+              v-if="fields[groupedFields[parent][0]]?.parentDescription"
+              class="section-desc"
+              v-html="fields[groupedFields[parent][0]]?.parentDescription"
+            />
+
+            <div :class="themeWebform.fieldGroup">
+              <template
+                v-for="fieldName in groupedFields[parent]"
+                :key="fieldName"
+              >
+                <FieldRenderer
+                  v-if="
+                    !fields[fieldName]?.['#tabGroup'] ||
+                    groupedFields[parent]?.find(
+                      (f) =>
+                        fields[f]?.['#tabGroup'] ===
+                        fields[fieldName]?.['#tabGroup'],
+                    ) === fieldName
+                  "
+                  :field="fields[fieldName]"
+                  :field-name="fieldName"
+                  :fields="fields"
+                  :ordered-field-names="orderedFieldNames"
+                  :state="state"
+                />
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template v-for="fieldName in orderedFieldNames" :key="fieldName">
+          <template v-if="shouldRenderIndividualField(fieldName)">
             <FieldRenderer
-              v-if="
-                !fields[groupedFieldName]?.['#tabGroup'] ||
-                groupedFields[fields[fieldName]?.parent || '']?.find(
-                  (name) =>
-                    fields[name]?.['#tabGroup'] ===
-                    fields[groupedFieldName]?.['#tabGroup'],
-                ) === groupedFieldName
-              "
-              :field="fields[groupedFieldName]"
-              :field-name="groupedFieldName"
+              :field="fields[fieldName]"
+              :field-name="fieldName"
               :fields="fields"
               :ordered-field-names="orderedFieldNames"
               :state="state"
             />
           </template>
-        </div>
-      </template>
+        </template>
 
-      <template v-else-if="shouldRenderIndividualField(fieldName)">
-        <FieldRenderer
-          v-if="!fields[fieldName]?.['#tabGroup']"
-          :field="fields[fieldName]"
-          :field-name="fieldName"
-          :fields="fields"
-          :ordered-field-names="orderedFieldNames"
-          :state="state"
+        <FieldTurnstile
+          :model-value="turnstileToken"
+          @update:model-value="emit('update:turnstileToken', $event)"
         />
-      </template>
-    </template>
+      </div>
 
-    <FieldTurnstile
-      :model-value="turnstileToken"
-      @update:model-value="emit('update:turnstileToken', $event)"
-    />
+      <div class="relative lg:col-span-4">
+        <div
+          class="fixed inset-x-0 top-auto bottom-0 m-auto max-w-xs pt-20 lg:sticky lg:top-0 lg:bottom-auto lg:max-w-sm"
+        >
+          <ClientOnly>
+            <div
+              class="rounded-xl border border-zinc-200 bg-white pb-4 text-sm shadow-sm"
+            >
+              <WebformCalculator />
+              <WrapAlign :align="themeWebform.submitAlign">
+                <UButton
+                  :label="submitButtonLabel"
+                  :loading="isLoading"
+                  type="submit"
+                />
+              </WrapAlign>
+            </div>
 
-    <WrapAlign :align="themeWebform.submitAlign">
-      <UButton :label="submitButtonLabel" :loading="isLoading" type="submit" />
-    </WrapAlign>
+            <template #fallback>
+              <div
+                class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm"
+              >
+                <USkeleton class="mb-2 h-5 w-1/2" />
+                <USkeleton class="mb-2 h-5 w-full" />
+                <USkeleton class="mb-4 h-5 w-3/4" />
+                <USkeleton class="mx-auto h-10 w-24" />
+              </div>
+            </template>
+          </ClientOnly>
+        </div>
+      </div>
+    </div>
   </UForm>
 
   <div

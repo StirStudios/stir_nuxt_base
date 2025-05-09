@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { flattenWebformFields } from '~/utils/flattenWebformFields'
 import { webformState } from '~/composables/useWebformState'
-import { evaluateContainerVisibility } from '~/composables/useEvaluateState'
-import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
+import { evaluateContainerVisibility } from '~/composables/useContainerVisibility'
+import { transformPayloadToSnakeCase } from '~/utils/transformUtils'
 import { buildYupSchema } from '~/utils/buildYupSchema'
 import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'

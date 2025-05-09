@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types/formTypes'
-import { transformOptions } from '~/utils/transformOptions'
+import { transformOptions } from '~/utils/transformUtils'
 
 const props = defineProps<{
   field: WebformFieldProps
