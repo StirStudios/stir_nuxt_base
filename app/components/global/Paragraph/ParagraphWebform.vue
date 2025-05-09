@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { flattenWebformFields } from '~/utils/flattenWebformFields'
 import { webformState } from '~/composables/useWebformState'
-import { evaluateVisibility } from '~/utils/evaluateVisibility'
+import { evaluateContainerVisibility } from '~/composables/useEvaluateState'
 import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
 import { buildYupSchema } from '~/utils/buildYupSchema'
 import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
@@ -56,15 +56,17 @@ const submitButtonLabel = computed(
 
 // Group fields dynamically for better rendering
 const groupedFields = computed(() => {
-  const grouped: Record<string, string[]> = {}
-  orderedFieldNames.value.forEach((fieldName) => {
-    const parent = fields[fieldName]?.parent
-    if (parent) {
-      if (!grouped[parent]) grouped[parent] = []
-      grouped[parent].push(fieldName)
-    }
-  })
-  return grouped
+  return orderedFieldNames.value.reduce(
+    (acc, fieldName) => {
+      const parent = fields[fieldName]?.parent
+      if (parent) {
+        if (!acc[parent]) acc[parent] = []
+        acc[parent].push(fieldName)
+      }
+      return acc
+    },
+    {} as Record<string, string[]>,
+  )
 })
 
 // Initialize state with form defaults
@@ -100,9 +102,7 @@ const shouldRenderIndividualField = (fieldName: string) =>
   !containerTypes.includes(fields[fieldName]['#type'])
 
 const isContainerVisible = (containerName: string) =>
-  getGroupFields(containerName).some((fieldName) =>
-    evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
-  )
+  evaluateContainerVisibility(containerName, state, fields, getGroupFields)
 
 // Form submission handler
 async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {

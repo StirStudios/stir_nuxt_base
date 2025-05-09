@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
-import { evaluateVisibility } from '~/utils/evaluateVisibility'
+import { useEvaluateState } from '~/composables/useEvaluateState'
 
 import FieldInput from '@/components/Field/FieldInput'
 import FieldTextarea from '@/components/Field/FieldTextarea'
@@ -55,8 +55,12 @@ const shouldShowDescription = computed(
   () => props.field['#type'] !== 'checkbox',
 )
 
-const isVisible = computed(() =>
-  evaluateVisibility(props.field['#states'], props.state),
+/**
+ * Reactive evaluation using composable
+ */
+const { visible, checked } = useEvaluateState(
+  props.field['#states'] ?? {},
+  props.state,
 )
 
 const descriptionContent = props.field['#description'] || ''
@@ -65,7 +69,8 @@ const helpContent = props.field['#help'] || ''
 
 <template>
   <UFormField
-    v-if="isVisible"
+    v-if="visible"
+    :disabled="!checked"
     :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
     :required="!!field['#required']"
