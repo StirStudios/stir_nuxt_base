@@ -3,9 +3,10 @@ import type { WebformFieldProps } from '~/types/formTypes'
 
 defineProps<{
   field: WebformFieldProps
+  fieldName: string
 }>()
 </script>
 
 <template>
-  <div class="prose" v-html="field['#text']" />
+  <div :class="['prose', fieldName]" v-html="field['#text']" />
 </template>
