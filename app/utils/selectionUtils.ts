@@ -7,7 +7,11 @@ export const enforceMaxSelected = (
   val: string[],
   max: number = Infinity,
 ): string[] => {
-  return val.length > max ? val.slice(0, max) : val
+  if (val.length > max) {
+    // Roll the selection window: Remove the oldest, keep the latest
+    return val.slice(val.length - max)
+  }
+  return val
 }
 
 /**
