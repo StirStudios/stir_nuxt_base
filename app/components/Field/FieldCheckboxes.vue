@@ -85,14 +85,18 @@ const handleModelUpdate = (val: string[]) => {
     @update:model-value="handleModelUpdate"
   >
     <template #label="{ item }">
-      <span :class="{ 'text-gray-400': item.props.disabled }">{{
+      <span :class="{ 'text-muted': item.props.disabled }">{{
         item.label
       }}</span>
-      <span v-if="item.props.description">{{ item.props.description }}</span>
+      <span
+        v-if="item.props.description"
+        :class="{ 'text-muted': item.props.disabled }"
+        >{{ item.props.description }}</span
+      >
       <span
         v-if="item.props.price"
         class="extra"
-        :class="{ 'text-gray-400': item.props.disabled }"
+        :class="{ 'text-muted': item.props.disabled }"
       >
         ${{ item.props.price.toLocaleString() }}
       </span>

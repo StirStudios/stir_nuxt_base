@@ -53,9 +53,19 @@ const handleModelUpdate = (val: boolean) => {
     @update:model-value="handleModelUpdate"
   >
     <template #label>
-      <span>{{ field['#title'] }}</span>
-      <span v-if="optionProps.description">{{ optionProps.description }}</span>
-      <span v-if="optionProps.price" class="extra">
+      <span :class="{ 'text-muted': optionProps.disabled }">{{
+        field['#title']
+      }}</span>
+      <span
+        v-if="optionProps.description"
+        :class="{ 'text-muted': item.props.disabled }"
+        >{{ optionProps.description }}</span
+      >
+      <span
+        v-if="optionProps.price"
+        class="extra"
+        :class="{ 'text-muted': optionProps.disabled }"
+      >
         ${{ optionProps.price.toLocaleString() }}
       </span>
     </template>
