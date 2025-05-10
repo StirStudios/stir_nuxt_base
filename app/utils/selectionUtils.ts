@@ -1,6 +1,16 @@
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
 
 /**
+ * Enforces the maximum selections within the same vendor (local limit).
+ */
+export const enforceMaxSelected = (
+  val: string[],
+  max: number = Infinity,
+): string[] => {
+  return val.length > max ? val.slice(0, max) : val
+}
+
+/**
  * Enforces the group limit for checkboxes within the same group.
  */
 export const enforceGroupLimit = (
@@ -11,36 +21,24 @@ export const enforceGroupLimit = (
   state: WebformState,
   webformState: { fields: Record<string, WebformFieldProps> },
 ): string[] => {
-  if (!group || groupLimit !== 1) return val
+  if (!group || !groupLimit) return val
 
-  for (const [key] of Object.entries(state)) {
-    const otherField = webformState.fields[key]
-    if (
-      key !== fieldName &&
-      otherField?.['#group'] === group &&
-      Array.isArray(state[key]) &&
-      state[key].length > 0
-    ) {
+  // Collect all field names that belong to the same group
+  const groupFields = Object.keys(webformState.fields).filter((key) => {
+    const field = webformState.fields[key]
+    return field && field['#group'] === group
+  })
+
+  // Clear selections in other fields of the same group
+  groupFields.forEach((key) => {
+    if (key !== fieldName && Array.isArray(state[key]) && state[key].length) {
       state[key] = []
     }
-  }
+  })
 
-  if (val.length > 1) {
-    return [val[val.length - 1] ?? '']
-  }
+  // Apply the max selection limit for the specific field
+  const fieldMaxLimit =
+    webformState.fields[fieldName]?.['#maxSelected'] ?? Infinity
 
-  return val
-}
-
-/**
- * Enforces the maximum selections allowed.
- */
-export const enforceMaxSelected = (
-  val: string[],
-  max: number = Infinity,
-): string[] => {
-  if (val.length > max) {
-    return val.slice(-max)
-  }
-  return val
+  return enforceMaxSelected(val, fieldMaxLimit)
 }
