@@ -65,6 +65,7 @@ const { visible, checked } = useEvaluateState(
 
 const descriptionContent = props.field['#description'] || ''
 const helpContent = props.field['#help'] || ''
+const labelClass = computed(() => props.field['#class'] || '')
 </script>
 
 <template>
@@ -74,6 +75,9 @@ const helpContent = props.field['#help'] || ''
     :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
     :required="!!field['#required']"
+    :ui="{
+      label: labelClass,
+    }"
   >
     <div
       v-if="descriptionContent && shouldShowDescription"
