@@ -48,11 +48,15 @@ const resolvedComponent = computed(
 )
 
 const shouldShowLabel = computed(
-  () => props.field['#type'] !== 'checkbox' && !useFloatingLabels.value,
+  () =>
+    props.field['#type'] !== 'checkbox' &&
+    props.field['#type'] !== 'hidden' &&
+    !useFloatingLabels.value,
 )
 
 const shouldShowDescription = computed(
-  () => props.field['#type'] !== 'checkbox',
+  () =>
+    props.field['#type'] !== 'checkbox' && props.field['#type'] !== 'hidden',
 )
 
 /**
@@ -69,8 +73,15 @@ const labelClass = computed(() => props.field['#class'] || '')
 </script>
 
 <template>
+  <input
+    v-if="field['#type'] === 'hidden'"
+    :name="fieldName"
+    type="hidden"
+    :value="field['#defaultValue']"
+  />
+
   <UFormField
-    v-if="visible"
+    v-else-if="visible"
     :disabled="!checked"
     :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
