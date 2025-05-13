@@ -90,6 +90,11 @@ const labelClass = computed(() => props.field['#class'] || '')
       label: labelClass,
     }"
   >
+    <ButtonVendor
+      v-if="field['#group'] === 'vendor'"
+      :vendor-id="field['#name']"
+    />
+
     <div
       v-if="descriptionContent && shouldShowDescription"
       :class="webform.description"
