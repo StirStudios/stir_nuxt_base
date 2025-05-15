@@ -72,7 +72,7 @@ export function buildYupSchema(
 
     // Single checkbox (boolean-like "I agree")
     if (isCheckbox) {
-      let checkboxSchema = string().nullable().oneOf(['1'])
+      let checkboxSchema = string().nullable().oneOf(['1'], requiredError)
       if (isRequired) {
         checkboxSchema = checkboxSchema.required(requiredError)
       }
