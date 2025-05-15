@@ -54,15 +54,17 @@ export function buildYupSchema(
     const isMultiple = '#multiple' in field && !!field['#multiple']
 
     if (isMultiple || isCheckboxes) {
-      // If it's a multiple value field OR checkboxes group, treat it as an array
-      shape[key] = array()
-        .of(
-          string().when([], {
-            is: () => isRequired,
-            then: (schema) => schema.required(requiredError),
-          }),
-        )
-        .min(isRequired ? 1 : 0, requiredError)
+      const min = field['#minSelected']
+      const max = field['#maxSelected']
+
+      let validator = array().of(string())
+
+      if (min)
+        validator = validator.min(min, `Please select at least ${min} items`)
+      if (max)
+        validator = validator.max(max, `You can select up to ${max} items`)
+
+      shape[key] = validator
     } else {
       // 3️⃣ Build the base schema
       let base: AnySchema = string().nullable()
