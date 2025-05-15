@@ -21,6 +21,7 @@ const props = defineProps<{
   state: WebformState
   fields: Record<string, WebformFieldProps>
   orderedFieldNames: string[]
+  bypassRelocatedFilter?: boolean
 }>()
 
 const componentMap: Record<string, Component> = {
@@ -38,6 +39,12 @@ const componentMap: Record<string, Component> = {
   address: FieldAddress,
   processed_text: FieldProcessedText,
 }
+
+const shouldRender = computed(() => {
+  return (
+    props.bypassRelocatedFilter === true || props.field['#relocated'] !== true
+  )
+})
 
 const useFloatingLabels = computed(
   () => props.field['#floating_label'] ?? webform.labels.floating,
@@ -59,9 +66,6 @@ const shouldShowDescription = computed(
     props.field['#type'] !== 'checkbox' && props.field['#type'] !== 'hidden',
 )
 
-/**
- * Reactive evaluation using composable
- */
 const { visible, checked } = useEvaluateState(
   props.field['#states'] ?? {},
   props.state,
@@ -81,14 +85,12 @@ const labelClass = computed(() => props.field['#class'] || '')
   />
 
   <UFormField
-    v-else-if="visible"
+    v-else-if="visible && shouldRender"
     :disabled="!checked"
     :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
     :required="!!field['#required']"
-    :ui="{
-      label: labelClass,
-    }"
+    :ui="{ label: labelClass }"
   >
     <ButtonModal v-if="field['#modal'] === true" :modal-id="field['#name']" />
 
