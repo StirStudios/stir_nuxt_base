@@ -85,7 +85,7 @@ const handleModelUpdate = (val: string[]) => {
     @update:model-value="handleModelUpdate"
   >
     <template #label="{ item }">
-      <span :class="{ 'text-muted': item.props.disabled }">{{
+      <span class="label" :class="{ 'text-muted': item.props.disabled }">{{
         item.label
       }}</span>
       <span
