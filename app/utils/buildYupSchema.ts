@@ -3,6 +3,7 @@ import {
   string,
   number,
   array,
+  boolean,
   type ObjectSchema,
   type AnySchema,
   type NumberSchema,
