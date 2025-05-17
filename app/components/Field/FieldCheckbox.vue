@@ -14,7 +14,10 @@ const checkboxValue = ref<boolean>(props.field['#defaultValue'] ?? false)
 const optionProps = props.field['#optionProperties'] || {}
 
 // Reactive states from the composable
-const { checked } = useEvaluateState(props.field['#states'] ?? {}, props.state)
+const { disabled, checked } = useEvaluateState(
+  props.field['#states'] ?? {},
+  props.state,
+)
 
 onMounted(() => {
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
@@ -24,16 +27,17 @@ onMounted(() => {
   }
 })
 
-const syncWithChecked = () => {
-  if (!checked.value) {
-    checkboxValue.value = false
-  }
+// Only sync if there is a `checked` condition
+if (props.field['#states']?.checked) {
+  watch(checked, (value) => {
+    checkboxValue.value = value
+    props.state[props.fieldName] = value
+  })
+} else {
+  watch(checkboxValue, (val) => {
+    props.state[props.fieldName] = val
+  })
 }
-
-effect(() => {
-  syncWithChecked()
-  props.state[props.fieldName] = checkboxValue.value
-})
 
 const handleModelUpdate = (val: boolean) => {
   checkboxValue.value = val
@@ -45,7 +49,7 @@ const handleModelUpdate = (val: boolean) => {
   <UCheckbox
     v-model="checkboxValue"
     class="form-input w-full"
-    :disabled="!checked"
+    :disabled="disabled"
     :label="field['#title']"
     :ui="{
       label: descriptionContent ? 'sr-only' : '',
@@ -53,14 +57,15 @@ const handleModelUpdate = (val: boolean) => {
     @update:model-value="handleModelUpdate"
   >
     <template #label>
-      <span :class="{ 'text-muted': optionProps.disabled }">{{
-        field['#title']
-      }}</span>
+      <span :class="{ 'text-muted': optionProps.disabled }">
+        {{ field['#title'] }}
+      </span>
       <span
         v-if="optionProps.description"
-        :class="{ 'text-muted': item.props.disabled }"
-        >{{ optionProps.description }}</span
+        :class="{ 'text-muted': optionProps.disabled }"
       >
+        {{ optionProps.description }}
+      </span>
       <span
         v-if="optionProps.price"
         class="extra"

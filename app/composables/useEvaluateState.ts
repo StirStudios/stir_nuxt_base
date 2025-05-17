@@ -21,12 +21,16 @@ export function useEvaluateState(
   state: Record<string, unknown>,
 ) {
   const visible = computed(() => evaluateCondition(states.visible, state, true))
+  const disabled = computed(() =>
+    evaluateCondition(states.disabled, state, false),
+  )
   const checked = computed(() =>
     evaluateCondition(states.checked, state, false),
   )
 
   return {
     visible,
+    disabled,
     checked,
   }
 }
