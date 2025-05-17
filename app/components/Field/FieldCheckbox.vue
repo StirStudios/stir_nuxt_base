@@ -9,11 +9,10 @@ const props = defineProps<{
   state: Record<string, boolean | string>
 }>()
 
-const descriptionContent = shallowRef<string>('')
-const checkboxValue = ref<boolean>(props.field['#defaultValue'] ?? false)
+const descriptionContent = shallowRef('')
+const checkboxValue = ref<boolean>(false)
 const optionProps = props.field['#optionProperties'] || {}
 
-// Reactive states from the composable
 const { disabled, checked } = useEvaluateState(
   props.field['#states'] ?? {},
   props.state,
@@ -22,26 +21,32 @@ const { disabled, checked } = useEvaluateState(
 onMounted(() => {
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
 
-  if (props.state[props.fieldName] === undefined) {
-    props.state[props.fieldName] = checkboxValue.value
-  }
+  const initial = Object.prototype.hasOwnProperty.call(
+    props.state,
+    props.fieldName,
+  )
+    ? !!props.state[props.fieldName]
+    : !!props.field['#defaultValue']
+
+  checkboxValue.value = initial
+  props.state[props.fieldName] = initial
 })
 
-// Only sync if there is a `checked` condition
 if (props.field['#states']?.checked) {
   watch(checked, (value) => {
-    checkboxValue.value = value
-    props.state[props.fieldName] = value
+    const safe = !!value
+    checkboxValue.value = safe
+    props.state[props.fieldName] = safe
   })
 } else {
   watch(checkboxValue, (val) => {
-    props.state[props.fieldName] = val
+    props.state[props.fieldName] = !!val
   })
 }
 
 const handleModelUpdate = (val: boolean) => {
-  checkboxValue.value = val
-  props.state[props.fieldName] = val
+  checkboxValue.value = !!val
+  props.state[props.fieldName] = !!val
 }
 </script>
 
