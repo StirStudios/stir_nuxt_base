@@ -4,6 +4,7 @@ import { cleanHTML } from '~/utils/cleanHTML'
 import { useEventBus } from '@vueuse/core'
 import { handleTabChange } from '~/utils/visibilityUtils'
 import { enforceGroupLimit, enforceMaxSelected } from '~/utils/selectionUtils'
+import { normalizeValue } from '~/utils/stringUtils'
 
 const props = defineProps<{
   field: WebformFieldProps
@@ -34,25 +35,31 @@ onMounted(() => {
   handleModelUpdate(props.state[props.fieldName])
 })
 
-const guestCount = computed(() => {
-  return Number(props.state['venueGuestCount'] || 0)
-})
+const getComparisonValue = (key?: string): number | null => {
+  if (!key) return null
+  const normalizedKey = Object.keys(props.state).find(
+    (k) => normalizeValue(k) === normalizeValue(key),
+  )
+  const val = normalizedKey ? props.state[normalizedKey] : null
+  return typeof val === 'number' || typeof val === 'string' ? Number(val) : null
+}
 
 const items = computed(() => {
   return Object.entries(props.field['#options'] || {}).map(([key, label]) => {
-    const optionProps = props.field['#optionProperties']?.[key] || {}
-    const [min, max] = optionProps.range || []
+    const rawProps = props.field['#optionProperties']?.[key] || {}
+    const [min, max] = rawProps.range || []
+    const compareKey = rawProps.checkAgainst
+    const valueToCompare = getComparisonValue(compareKey)
 
     const disabled =
-      (min && guestCount.value < min) || (max && guestCount.value > max)
+      valueToCompare !== null &&
+      ((typeof min === 'number' && valueToCompare < min) ||
+        (typeof max === 'number' && valueToCompare > max))
 
     return {
       label,
       value: key,
-      props: {
-        ...optionProps,
-        disabled,
-      },
+      props: { ...rawProps, disabled },
       disabled,
     }
   })
@@ -64,16 +71,34 @@ const items = computed(() => {
  * - Enforce the max selections
  */
 const handleModelUpdate = (val: string[]) => {
-  let limitedValues = enforceGroupLimit(
-    val,
+  let updated = [...val]
+
+  const disabledKeys = new Set(
+    items.value.filter((item) => item.disabled).map((item) => item.value),
+  )
+
+  for (const selectedKey of val) {
+    const meta = props.field['#optionProperties']?.[selectedKey]
+    const linked = meta?.linked_to || meta?.linkedTo || []
+
+    for (const linkedKey of linked) {
+      if (!updated.includes(linkedKey) && !disabledKeys.has(linkedKey)) {
+        updated.push(linkedKey)
+      }
+    }
+  }
+
+  updated = enforceGroupLimit(
+    updated,
     props.fieldName,
     props.field['#group'],
     props.field['#groupMaxSelected'],
     props.state,
     webformState,
   )
-  limitedValues = enforceMaxSelected(limitedValues, props.field['#maxSelected'])
-  props.state[props.fieldName] = limitedValues
+  updated = enforceMaxSelected(updated, props.field['#maxSelected'])
+
+  props.state[props.fieldName] = updated
 }
 </script>
 
@@ -85,14 +110,15 @@ const handleModelUpdate = (val: string[]) => {
     @update:model-value="handleModelUpdate"
   >
     <template #label="{ item }">
-      <span class="label" :class="{ 'text-muted': item.props.disabled }">{{
-        item.label
-      }}</span>
+      <span class="label" :class="{ 'text-muted': item.props.disabled }">
+        {{ item.label }}
+      </span>
       <span
         v-if="item.props.description"
         :class="{ 'text-muted': item.props.disabled }"
-        >{{ item.props.description }}</span
       >
+        {{ item.props.description }}
+      </span>
       <span
         v-if="item.props.price"
         class="extra"
