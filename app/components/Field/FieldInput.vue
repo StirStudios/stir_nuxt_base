@@ -19,7 +19,7 @@ const isTel = computed(() => props.field['#type'] === 'tel')
   <UInput
     :id="fieldName"
     v-model="state[fieldName]"
-    class="w-full"
+    :class="webform.fieldInput"
     :inputmode="isTel ? 'tel' : undefined"
     :max="isNumber ? field['#max'] : undefined"
     :min="isNumber ? field['#min'] : undefined"

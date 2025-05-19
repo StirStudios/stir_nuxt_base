@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
-import { cleanHTML } from '~/utils/cleanHTML'
-import { evaluateVisibility } from '~/utils/evaluateVisibility'
+import { useEvaluateState } from '~/composables/useEvaluateState'
 
-// Import field components locally
 import FieldInput from '@/components/Field/FieldInput'
 import FieldTextarea from '@/components/Field/FieldTextarea'
 import FieldSelect from '@/components/Field/FieldSelect'
 import FieldRadio from '@/components/Field/FieldRadio'
 import FieldCheckbox from '@/components/Field/FieldCheckbox'
+import FieldCheckboxes from '@/components/Field/FieldCheckboxes'
 import FieldDate from '@/components/Field/FieldDate'
 import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
@@ -16,14 +15,15 @@ import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
 const { webform } = useAppConfig().stirTheme
 
-// Props from parent
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: WebformState
+  fields: Record<string, WebformFieldProps>
+  orderedFieldNames: string[]
+  bypassRelocatedFilter?: boolean
 }>()
 
-// Map the field types to components
 const componentMap: Record<string, Component> = {
   textfield: FieldInput,
   email: FieldInput,
@@ -33,53 +33,69 @@ const componentMap: Record<string, Component> = {
   select: FieldSelect,
   radio: FieldRadio,
   checkbox: FieldCheckbox,
+  checkboxes: FieldCheckboxes,
   datetime: FieldDateTime,
   date: FieldDate,
   address: FieldAddress,
   processed_text: FieldProcessedText,
 }
 
-// Determine if floating labels should be used (configurable per field)
+const shouldRender = computed(() => {
+  return (
+    props.bypassRelocatedFilter === true || props.field['#relocated'] !== true
+  )
+})
+
 const useFloatingLabels = computed(
-  () =>
-    props.field['#floating_label'] !== undefined
-      ? props.field['#floating_label'] // Per-field setting
-      : webform.labels.floating, // Global default
+  () => props.field['#floating_label'] ?? webform.labels.floating,
 )
 
-// Dynamically resolve the component
 const resolvedComponent = computed(
   () => componentMap[props.field['#type']] || null,
 )
 
-// Compute description and help content
-const descriptionContent = computed(() =>
-  cleanHTML(props.field['#description'] || ''),
+const shouldShowLabel = computed(
+  () =>
+    props.field['#type'] !== 'checkbox' &&
+    props.field['#type'] !== 'hidden' &&
+    !useFloatingLabels.value,
 )
-const helpContent = computed(() => cleanHTML(props.field['#help'] || ''))
 
-// Reactive visibility state
-const isVisible = ref(true)
+const shouldShowDescription = computed(
+  () =>
+    props.field['#type'] !== 'checkbox' && props.field['#type'] !== 'hidden',
+)
 
-// Dynamically re-evaluate visibility when form state or field conditions change
-watchEffect(() => {
-  isVisible.value = evaluateVisibility(props.field['#states'], props.state)
-})
+const { visible, checked } = useEvaluateState(
+  props.field['#states'] ?? {},
+  props.state,
+)
+
+const descriptionContent = props.field['#description'] || ''
+const helpContent = props.field['#help'] || ''
+const labelClass = computed(() => props.field['#class'] || '')
 </script>
 
 <template>
+  <input
+    v-if="field['#type'] === 'hidden'"
+    :name="fieldName"
+    type="hidden"
+    :value="field['#defaultValue']"
+  />
+
   <UFormField
-    v-if="isVisible"
-    :label="
-      field['#type'] !== 'checkbox' && !useFloatingLabels
-        ? field['#title']
-        : undefined
-    "
+    v-else-if="visible && shouldRender"
+    :disabled="!checked"
+    :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
     :required="!!field['#required']"
+    :ui="{ label: labelClass }"
   >
+    <ButtonModal v-if="field['#modal'] === true" :modal-id="field['#name']" />
+
     <div
-      v-if="descriptionContent && field['#type'] !== 'checkbox'"
+      v-if="descriptionContent && shouldShowDescription"
       :class="webform.description"
       v-html="descriptionContent"
     />

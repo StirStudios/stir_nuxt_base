@@ -16,8 +16,10 @@ export type InputType =
   | 'select'
   | 'radio'
   | 'checkbox'
+  | 'checkboxes'
   | 'processed_text'
   | 'datetime'
+  | 'section'
 
 export interface DrupalFormProps {
   formId: string
@@ -40,33 +42,54 @@ export interface WebformDefinition {
   actions: WebformActionProps[]
 }
 
+/**
+ * Types for State Conditions (Visible, Disabled, Checked)
+ */
+export type ConditionEntry = Record<string, { value: string }> | 'or'
+export type ConditionType = ConditionEntry[] | Record<string, { value: string }>
+
+export interface States {
+  visible?: ConditionType
+  disabled?: ConditionType
+  checked?: ConditionType
+}
+
 export interface WebformFieldProps {
   '#type': InputType
   '#title': string
+  '#value'?: number | string
+  '#name': string
   '#description'?: string
   '#placeholder'?: string
   '#required'?: boolean
-  '#name': string
   '#requiredError'?: string
   '#options'?: Record<string, string>
+  '#optionProperties'?: Record<string, { price?: number; description?: string }>
   '#text'?: string
   '#min'?: number
   '#max'?: number
   '#step'?: number
   '#multiple'?: number | boolean
-  '#states'?: {
-    visible?:
-      | Record<string, { value: string }>
-      | Array<Record<string, { value: string }> | 'or'>
-  }
+  '#states'?: States
+  '#group'?: string
+  '#groupMaxSelected'?: number
+  '#perGuest'?: boolean
+  '#isTaxable'?: boolean
+  '#serviceFeeApplicable'?: boolean
+  '#maxSelected'?: number
+  '#minSelected'?: number
   floatingLabel?: boolean
   '#composite'?: Record<string, WebformFieldProps>
+}
+
+export interface GroupField extends WebformFieldProps {
+  children?: Record<string, WebformFieldProps>
 }
 
 export interface WebformActionProps {
   '#type': string
   '#title': string
-  '#submit_Label': string
+  '#submit_label': string
 }
 
 export type WebformState = Record<
