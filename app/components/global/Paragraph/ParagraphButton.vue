@@ -51,9 +51,7 @@ const buttonLabel = computed(
     :title="pdf.title || props.item.title"
   >
     <template #body>
-      <ClientOnly>
-        <PdfViewer :src="pdf.url" />
-      </ClientOnly>
+      <PdfViewer :src="pdf.url" />
     </template>
   </UModal>
 </template>

@@ -61,10 +61,10 @@ export default defineAppConfig({
     },
     hero: {
       base: 'flex items-center justify-center overflow-hidden',
-      mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem]',
+      mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
       noMediaSpacing: 'py-24 lg:pt-54',
       overlay:
-        'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50 mb-20',
+        'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50',
       isFront: 'h-screen',
       image: {
         base: 'absolute min-h-full w-auto max-w-none min-w-full',
@@ -123,8 +123,9 @@ export default defineAppConfig({
       },
       fieldGroupHeader: 'mb-6 text-xl font-semibold',
       fieldGroup: 'space-y-10',
-      response: 'space-y-8 px-6 py-3 bg-muted rounded-lg italic',
-      description: 'desc mb-3',
+      fieldInput: 'w-full',
+      response: 'px-6 py-3 bg-muted rounded-lg italic',
+      description: 'desc mb-3 text-muted',
       help: 'desc my-3 text-muted',
       submitAlign: '',
       variant: 'outline',

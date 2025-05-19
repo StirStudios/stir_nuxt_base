@@ -33,7 +33,7 @@ const hasHero = computed(() => !!hero?.text || !!media.value?.type)
 <template>
   <EditLink :link="hero?.editLink">
     <section :class="sectionClasses">
-      <div :class="isFront ? heroTheme.text.isFront : heroTheme.text.base">
+      <div :class="[heroTheme.text.base, isFront && heroTheme.text.isFront]">
         <WrapAnimate :effect="hero?.direction">
           <HeroContent
             v-if="hasHero"

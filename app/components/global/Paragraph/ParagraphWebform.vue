@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { evaluateVisibility } from '~/utils/evaluateVisibility'
-import { transformPayloadToSnakeCase } from '~/utils/transformPayload'
+import { flattenWebformFields } from '~/utils/flattenWebformFields'
+import { webformState } from '~/composables/useWebformState'
+import { evaluateContainerVisibility } from '~/composables/useContainerVisibility'
+import { transformPayloadToSnakeCase } from '~/utils/transformUtils'
 import { buildYupSchema } from '~/utils/buildYupSchema'
+import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
@@ -18,16 +21,24 @@ const { webform: themeWebform } = useAppConfig().stirTheme
 
 // Destructure webform props
 const {
-  fields = {},
+  fields: rawFields = {},
   webformId = '',
   webformSubmissions = '',
   webformConfirmation = '',
   actions = [],
 } = props.webform
 
+// Flatten the fields once at mount
+const fields = flattenWebformFields(rawFields)
+
+const state = reactive({})
+
+// Then safely assign to shared store
+webformState.fields = fields
+webformState.state = state
+
 // Reactive state
 const turnstileToken = ref('')
-const state = reactive({})
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
@@ -45,47 +56,53 @@ const submitButtonLabel = computed(
 
 // Group fields dynamically for better rendering
 const groupedFields = computed(() => {
-  const grouped: Record<string, string[]> = {}
-  orderedFieldNames.value.forEach((fieldName) => {
-    const parent = fields[fieldName]?.parent
-    if (parent) {
-      if (!grouped[parent]) grouped[parent] = []
-      grouped[parent].push(fieldName)
-    }
-  })
-  return grouped
+  return orderedFieldNames.value.reduce(
+    (acc, fieldName) => {
+      const parent = fields[fieldName]?.parent
+      if (parent) {
+        if (!acc[parent]) acc[parent] = []
+        acc[parent].push(fieldName)
+      }
+      return acc
+    },
+    {} as Record<string, string[]>,
+  )
 })
 
 // Initialize state with form defaults
 onMounted(() => {
   for (const [key, field] of Object.entries(fields)) {
     if (field['#composite']) {
-      state[key] = state[key] || {} // Ensure it's an object
+      state[key] = state[key] || {}
       for (const subKey in field['#composite']) {
         state[key][subKey] =
           state[key][subKey] || field['#composite'][subKey]['value'] || ''
       }
+    } else if (field['#type'] === 'checkboxes') {
+      state[key] = Array.isArray(field['#default']) ? field['#default'] : []
     } else {
-      state[key] = field['#default'] || ''
+      state[key] = field['#default'] ?? ''
     }
   }
 })
 
 // Helper functions for field rendering
+const containerTypes = ['section', 'fieldset', 'details', 'webform_section']
+
 const shouldRenderGroupContainer = (fieldName: string) =>
   fields[fieldName]?.parent &&
-  groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName
+  groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName &&
+  !containerTypes.includes(fields[fieldName]['#type'])
 
 const getGroupFields = (parentName: string) =>
   groupedFields.value[parentName] || []
 
 const shouldRenderIndividualField = (fieldName: string) =>
-  !fields[fieldName]?.parent
+  !fields[fieldName]?.parent &&
+  !containerTypes.includes(fields[fieldName]['#type'])
 
 const isContainerVisible = (containerName: string) =>
-  getGroupFields(containerName).some((fieldName) =>
-    evaluateVisibility(fields[fieldName]?.['#states'] || {}, state),
-  )
+  evaluateContainerVisibility(containerName, state, fields, getGroupFields)
 
 // Form submission handler
 async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
@@ -93,10 +110,13 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   errors.value = {}
 
   try {
+    const hiddenDefaults = getHiddenDefaults(fields)
+
     // Prepare Payload
     const payload = {
       webform_id: webformId,
       ...transformPayloadToSnakeCase(state),
+      ...transformPayloadToSnakeCase(hiddenDefaults),
       turnstile_response: turnstileToken.value,
     }
 
@@ -140,68 +160,24 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
 
 <template>
   <EditLink :link="webformSubmissions">
-    <UForm
-      v-if="!isFormSubmitted"
-      :class="
-        themeWebform.variant === 'material'
-          ? themeWebform.spacingLarge
-          : themeWebform.spacing
-      "
+    <WebformContent
+      v-model:turnstile-token="turnstileToken"
+      :fields="fields"
+      :get-group-fields="getGroupFields"
+      :grouped-fields="groupedFields"
+      :is-container-visible="isContainerVisible"
+      :is-form-submitted="isFormSubmitted"
+      :is-loading="isLoading"
+      :ordered-field-names="orderedFieldNames"
       :schema="schema"
+      :should-render-group-container="shouldRenderGroupContainer"
+      :should-render-individual-field="shouldRenderIndividualField"
       :state="state"
+      :submit-button-label="submitButtonLabel"
+      :theme-webform="themeWebform"
+      :webform-confirmation="webformConfirmation"
       @error="onError"
       @submit="onSubmit"
-    >
-      <template v-for="fieldName in orderedFieldNames" :key="fieldName">
-        <template
-          v-if="
-            shouldRenderGroupContainer(fieldName) &&
-            isContainerVisible(fields[fieldName]?.parent)
-          "
-        >
-          <h2 :class="themeWebform.fieldGroupHeader">
-            {{ fields[fieldName]?.parent }}
-          </h2>
-          <div :class="themeWebform.fieldGroup">
-            <template
-              v-for="groupedFieldName in getGroupFields(
-                fields[fieldName]?.parent,
-              )"
-              :key="groupedFieldName"
-            >
-              <FieldRenderer
-                :field="fields[groupedFieldName]"
-                :field-name="groupedFieldName"
-                :state="state"
-              />
-            </template>
-          </div>
-        </template>
-
-        <template v-else-if="shouldRenderIndividualField(fieldName)">
-          <FieldRenderer
-            :field="fields[fieldName]"
-            :field-name="fieldName"
-            :state="state"
-          />
-        </template>
-      </template>
-
-      <FieldTurnstile v-model="turnstileToken" />
-
-      <WrapAlign :align="themeWebform.submitAlign">
-        <UButton
-          :label="submitButtonLabel"
-          :loading="isLoading"
-          type="submit"
-        />
-      </WrapAlign>
-    </UForm>
-
-    <div
-      v-else
-      :class="`${themeWebform.response} prose`"
-      v-html="webformConfirmation"
     />
   </EditLink>
 </template>

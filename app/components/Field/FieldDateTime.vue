@@ -5,6 +5,7 @@ import {
   DateFormatter,
   getLocalTimeZone,
 } from '@internationalized/date'
+import { getOffsetString, generateTimeOptions } from '~/utils/dateUtils'
 
 const { webform } = useAppConfig().stirTheme
 const isMaterial = computed(() => webform.variant === 'material')
@@ -14,41 +15,6 @@ const props = defineProps<{
   fieldName: string
   state: WebformState
 }>()
-
-// Drupal offset: e.g., -0700
-function getOffsetString() {
-  const offsetMinutes = new Date().getTimezoneOffset() * -1
-  const sign = offsetMinutes >= 0 ? '+' : '-'
-  const abs = Math.abs(offsetMinutes)
-  const hours = String(Math.floor(abs / 60)).padStart(2, '0')
-  const minutes = String(abs % 60).padStart(2, '0')
-  return `${sign}${hours}${minutes}`
-}
-
-// Generate 12-hour format dropdowns
-function generateTimeOptions(min: string, max: string, step: number) {
-  const times = []
-  const [minH, minM] = min.split(':').map(Number)
-  const [maxH, maxM] = max.split(':').map(Number)
-
-  const current = new Date()
-  current.setHours(minH, minM, 0, 0)
-  const end = new Date()
-  end.setHours(maxH, maxM, 0, 0)
-
-  while (current <= end) {
-    const h = current.getHours().toString().padStart(2, '0')
-    const m = current.getMinutes().toString().padStart(2, '0')
-    const value = `${h}:${m}`
-    const hour12 = current.getHours() % 12 || 12
-    const suffix = current.getHours() >= 12 ? 'PM' : 'AM'
-    const label = `${hour12}:${m} ${suffix}`
-    times.push({ value, label })
-    current.setSeconds(current.getSeconds() + step)
-  }
-
-  return times
-}
 
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 const multiple = Number(props.field['#multiple']) || 1

@@ -39,7 +39,8 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
         : theme.navigation.background,
       {
         '-translate-y-full':
-          finalIsScrolled && scrollDirection === 'down' && !atBottom,
+          (!finalIsScrolled && theme.navigation.isHidden) ||
+          (finalIsScrolled && scrollDirection === 'down' && !atBottom),
       },
     ]"
     role="navigation"
