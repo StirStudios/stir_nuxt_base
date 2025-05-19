@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "3.1.2",
+    "@nuxt/ui": "3.1.1",
     "@nuxtjs/robots": "^5.2.10",
     "@nuxtjs/sitemap": "^7.2.10",
     "@nuxtjs/turnstile": "^1.0.0",
-    "motion-v": "1.1.0-alpha.1",
-    "nuxt": "^3.17.3",
+    "motion-v": "^1.1.0-alpha.1",
+    "nuxt": "3.16.2",
     "nuxtjs-drupal-ce": "^2.3.0",
     "tailwindcss": "^4.1.7",
     "yup": "^1.6.1"
@@ -41,6 +41,11 @@
     },
     "npm": {
       "publish": false
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "nuxt": "3.16.2"
     }
   }
 }
