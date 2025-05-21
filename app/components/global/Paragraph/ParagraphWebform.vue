@@ -118,7 +118,6 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       ...transformPayloadToSnakeCase(state),
       ...transformPayloadToSnakeCase(hiddenDefaults),
       turnstile_response: turnstileToken.value,
-      client_origin: origin,
     }
 
     // Submit Form Data
