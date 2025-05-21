@@ -4,14 +4,17 @@ const route = useRoute()
 const visible = ref(false)
 
 const consent = useCookie<boolean>('cookie_consent', {
-  default: () => false,
   maxAge: 60 * 60 * 24 * 365,
 })
 
+// ✅ Only show modal if user has not consented, it's enabled, not a bot, and not on policy pages
 onMounted(() => {
+  const isBot = /bot|crawl|spider/i.test(navigator.userAgent)
+
   if (
     !consent.value &&
     config?.enabled &&
+    !isBot &&
     ![config.termsUrl, config.privacyUrl].includes(route.path)
   ) {
     visible.value = true
