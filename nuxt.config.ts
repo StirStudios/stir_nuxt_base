@@ -9,6 +9,15 @@ export default defineNuxtConfig({
           ? [process.env.SERVER_DOMAIN_CLIENT || 'localhost']
           : [],
     },
+    $server: {
+      build: {
+        rollupOptions: {
+          output: {
+            preserveModules: true
+          }
+        }
+      }
+    },
   },
   compatibilityDate: '2025-04-09',
   nitro: {

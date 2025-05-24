@@ -14,19 +14,19 @@
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "3.1.1",
+    "@nuxt/ui": "^3.1.2",
     "@nuxtjs/robots": "^5.2.10",
-    "@nuxtjs/sitemap": "^7.2.10",
+    "@nuxtjs/sitemap": "^7.3.0",
     "@nuxtjs/turnstile": "^1.0.0",
-    "motion-v": "^1.1.0-alpha.1",
-    "nuxt": "3.16.2",
+    "motion-v": "^1.1.1",
+    "nuxt": "^3.17.4",
     "nuxtjs-drupal-ce": "^2.3.0",
     "tailwindcss": "^4.1.7",
     "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.4.0",
-    "@nuxt/eslint-config": "^1.4.0",
+    "@nuxt/eslint": "^1.4.1",
+    "@nuxt/eslint-config": "^1.4.1",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
@@ -41,11 +41,6 @@
     },
     "npm": {
       "publish": false
-    }
-  },
-  "pnpm": {
-    "overrides": {
-      "nuxt": "3.16.2"
     }
   }
 }
