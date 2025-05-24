@@ -9,6 +9,14 @@ export default defineAppConfig({
     forced: false,
     preference: 'dark',
   },
+  analytics: {
+    plausible: {
+      enabled: false,
+      domain: '',
+      scriptUrl:
+        'https://analytics.stirstudiosdesign.com/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js',
+    },
+  },
   cookieConsent: {
     enabled: false,
     // title: 'We value your privacy',
