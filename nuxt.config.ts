@@ -13,10 +13,10 @@ export default defineNuxtConfig({
       build: {
         rollupOptions: {
           output: {
-            preserveModules: true
-          }
-        }
-      }
+            preserveModules: true,
+          },
+        },
+      },
     },
   },
   compatibilityDate: '2025-04-09',
@@ -58,6 +58,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
+    '@nuxt/scripts',
     'motion-v/nuxt',
     [
       '@nuxtjs/turnstile',
