@@ -18,6 +18,9 @@ export default defineNuxtConfig({
         },
       },
     },
+    build: {
+      modulePreload: false,
+    },
   },
   compatibilityDate: '2025-04-09',
   nitro: {
@@ -60,6 +63,14 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/scripts',
     'motion-v/nuxt',
+    [
+      'nuxt-vitalizer',
+      {
+        disableStylesheets: 'entry',
+        disablePrefetchLinks: true,
+        disablePreloadLinks: true,
+      },
+    ],
     [
       '@nuxtjs/turnstile',
       {

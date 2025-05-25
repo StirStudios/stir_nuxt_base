@@ -18,8 +18,10 @@
     "@nuxtjs/robots": "^5.2.10",
     "@nuxtjs/sitemap": "^7.3.0",
     "@nuxtjs/turnstile": "^1.0.0",
+    "add": "^2.0.6",
     "motion-v": "^1.1.1",
     "nuxt": "^3.17.4",
+    "nuxt-vitalizer": "^0.10.0",
     "nuxtjs-drupal-ce": "^2.3.0",
     "tailwindcss": "^4.1.7",
     "yup": "^1.6.1"
