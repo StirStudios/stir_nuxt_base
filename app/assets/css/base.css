@@ -55,4 +55,8 @@
       }
     }
   }
+  /* Animations */
+  section {
+    @apply overflow-x-clip;
+  }
 }
