@@ -43,16 +43,13 @@ watch(
     :ui="{
       container:
         'w-full flex flex-col gap-4 p-6 overflow-y-auto max-w-lg mx-auto',
-      body: 'text-center',
+      body: 'text-center text-xs',
     }"
   >
     <template #body>
-      <p class="text-sm">{{ config.message }}</p>
+      <p>{{ config.message }}</p>
 
-      <p
-        v-if="config.termsUrl || config.privacyUrl"
-        class="text-muted-foreground mt-2 text-xs"
-      >
+      <p v-if="config.termsUrl || config.privacyUrl" class="mt-4">
         {{ config.messageLinks }}
         <ULink
           v-if="config.termsUrl"

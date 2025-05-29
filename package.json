@@ -22,7 +22,7 @@
     "nuxt": "^3.17.4",
     "nuxt-vitalizer": "^0.10.0",
     "nuxtjs-drupal-ce": "^2.3.0",
-    "tailwindcss": "^4.1.7",
+    "tailwindcss": "^4.1.8",
     "yup": "^1.6.1"
   },
   "devDependencies": {
