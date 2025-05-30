@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DialogTitle, DialogDescription, VisuallyHidden } from 'reka-ui'
 const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
 const open = ref(false)
@@ -41,11 +42,16 @@ watch(
     :overlay="false"
     side="bottom"
     :ui="{
-      container:
-        'w-full flex flex-col gap-4 p-6 overflow-y-auto max-w-lg mx-auto',
-      body: 'text-center text-xs',
+      container: 'w-full flex flex-col gap-4 p-4 overflow-y-auto',
+      body: 'text-center text-xs leading-loose',
     }"
   >
+    <template #header>
+      <VisuallyHidden>
+        <DialogTitle>{{ config.title }}</DialogTitle>
+        <DialogDescription>{{ config.message }}</DialogDescription>
+      </VisuallyHidden>
+    </template>
     <template #body>
       <p>{{ config.message }}</p>
 
