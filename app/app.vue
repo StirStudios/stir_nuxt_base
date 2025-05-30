@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { usePageContext } from '~/composables/usePageContext'
+
+const { isAdministrator } = usePageContext()
 const appConfig = useAppConfig()
 </script>
 
@@ -16,6 +19,10 @@ const appConfig = useAppConfig()
       to="#main-content"
       variant="solid"
     />
+    <header aria-label="Site header" :class="appConfig.stirTheme.header">
+      <DrupalTabs v-if="isAdministrator" />
+      <NavigationMain />
+    </header>
     <NuxtPage />
     <LazyAppScrollToTop />
     <CookieConsent />

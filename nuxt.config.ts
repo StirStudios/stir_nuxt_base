@@ -37,6 +37,7 @@ export default defineNuxtConfig({
         class: 'scroll-smooth',
       },
     },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
   site: {
     name: process.env.NUXT_NAME,

@@ -24,14 +24,19 @@ useHead({
 </script>
 
 <template>
-  <NuxtLayout :name="layout">
-    <ParagraphHero
-      :hero="page?.content?.hero?.[0]"
-      :page-title="page.title"
-      :site-slogan="page.site_info?.slogan || ''"
-    />
+  <div class="transition">
+    <NuxtLayout :name="layout">
+      <ParagraphHero
+        :hero="page?.content?.hero?.[0]"
+        :page-title="page.title"
+        :site-slogan="page.site_info?.slogan || ''"
+      />
 
-    <LazySiteBreadcrumbs v-if="theme.crumbs" />
-    <component :is="renderCustomElements(page.content)" v-if="page?.content" />
-  </NuxtLayout>
+      <LazySiteBreadcrumbs v-if="theme.crumbs" />
+      <component
+        :is="renderCustomElements(page.content)"
+        v-if="page?.content"
+      />
+    </NuxtLayout>
+  </div>
 </template>
