@@ -9,6 +9,14 @@ export default defineAppConfig({
     forced: false,
     preference: 'dark',
   },
+  userway: {
+    enabled: false,
+    // account: '',
+    // position: 3,
+    // size: 'small', // or 'medium' | 'large'
+    // color: '#ffffff',
+    // type: '1',
+  },
   analytics: {
     plausible: {
       enabled: false,

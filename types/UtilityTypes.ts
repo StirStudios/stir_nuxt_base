@@ -29,3 +29,17 @@ export interface LayoutProps {
 export interface CalendlyClient {
   initInlineWidget(options: { url: string; parentElement: HTMLElement }): void
 }
+
+// Userway
+declare global {
+  interface Window {
+    _userway_config?: {
+      account: string
+      position?: number
+      size?: 'small' | 'medium' | 'large'
+      color?: string
+      type?: string
+      [key: string]: unknown
+    }
+  }
+}
