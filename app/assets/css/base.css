@@ -60,15 +60,4 @@
   section {
     @apply overflow-x-clip;
   }
-
-  /* Page Transition */
-  .page-enter-active,
-  .page-leave-active {
-    @apply transition duration-400 ease-in-out;
-  }
-
-  .page-enter-from,
-  .page-leave-to {
-    @apply translate-y-[10px] opacity-0;
-  }
 }
