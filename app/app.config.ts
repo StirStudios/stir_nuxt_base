@@ -8,6 +8,7 @@ export default defineAppConfig({
   colorMode: {
     forced: false,
     preference: 'dark',
+    lightRoutes: [],
   },
   userway: {
     enabled: false,
