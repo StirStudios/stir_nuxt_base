@@ -5,12 +5,13 @@ import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 
 const { observeVideos } = useIntersectionObserver()
-const { page, isFront } = usePageContext()
+const { isFront } = usePageContext()
 
-const { hero, pageTitle, siteSlogan } = defineProps<{
+const { hero, pageTitle, siteSlogan, hide } = defineProps<{
   hero?: HeroProps
   pageTitle: string
   siteSlogan: string
+  hide: boolean | string
 }>()
 
 const { hero: heroTheme } = useAppConfig().stirTheme
@@ -24,7 +25,7 @@ const sectionClasses = computed(() => [
   media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
   media.value?.type && heroTheme.overlay,
   isFront.value && heroTheme.isFront,
-  page.value.content?.hide === 'true' && 'sr-only',
+  hide === 'true' && 'sr-only',
 ])
 
 const media = computed(() => hero?.media?.[0] || {})

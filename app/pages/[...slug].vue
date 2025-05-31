@@ -29,6 +29,7 @@ useHead({
       :hero="page?.content?.hero?.[0]"
       :page-title="page.title"
       :site-slogan="page.site_info?.slogan || ''"
+      :hide="page?.content?.hide || ''"
     />
 
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
