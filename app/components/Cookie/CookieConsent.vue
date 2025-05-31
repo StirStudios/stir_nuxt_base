@@ -42,7 +42,7 @@ watch(
     :overlay="false"
     side="bottom"
     :ui="{
-      container: 'w-full flex flex-col gap-4 p-4 overflow-y-auto',
+      container: 'overflow-y-auto',
       body: 'text-center text-xs leading-loose',
     }"
   >
@@ -55,7 +55,7 @@ watch(
     <template #body>
       <p>{{ config.message }}</p>
 
-      <p v-if="config.termsUrl || config.privacyUrl" class="mt-4">
+      <p v-if="config.termsUrl || config.privacyUrl">
         {{ config.messageLinks }}
         <ULink
           v-if="config.termsUrl"

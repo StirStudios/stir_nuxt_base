@@ -29,12 +29,12 @@
     "@nuxt/eslint": "^1.4.1",
     "@nuxt/eslint-config": "^1.4.1",
     "@nuxt/scripts": "^0.11.7",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-prettier": "^5.4.1",
     "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "release-it": "^19.0.2"
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "release-it": "^19.0.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
