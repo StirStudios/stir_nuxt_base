@@ -15,14 +15,20 @@ import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
 const { webform } = useAppConfig().stirTheme
 
-const props = defineProps<{
-  field: WebformFieldProps
-  fieldName: string
-  state: WebformState
-  fields: Record<string, WebformFieldProps>
-  orderedFieldNames: string[]
-  bypassRelocatedFilter?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    field: WebformFieldProps
+    fieldName: string
+    state: WebformState
+    fields?: Record<string, WebformFieldProps>
+    orderedFieldNames?: string[]
+    bypassRelocatedFilter?: boolean
+  }>(),
+  {
+    fields: () => ({}),
+    orderedFieldNames: () => [],
+  },
+)
 
 const componentMap: Record<string, Component> = {
   textfield: FieldInput,
