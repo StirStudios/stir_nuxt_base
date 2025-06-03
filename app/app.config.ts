@@ -91,6 +91,7 @@ export default defineAppConfig({
         base: 'z-10 max-w-2xl relative p-5 text-center',
         isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
       },
+      hide: 'pt-30',
     },
     animations: {
       once: false,
