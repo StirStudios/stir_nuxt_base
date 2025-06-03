@@ -8,7 +8,7 @@ const loaded = ref(false)
 </script>
 
 <template>
-  <div class="media relative">
+  <div class="media group relative overflow-hidden">
     <USkeleton v-if="!loaded" class="absolute inset-0" />
 
     <ClientOnly>
@@ -29,5 +29,12 @@ const loaded = ref(false)
         @load="loaded = true"
       />
     </ClientOnly>
+
+    <span
+      v-if="item.credit"
+      class="absolute right-2 bottom-2 rounded bg-black/60 px-2 py-1 text-xs text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    >
+      {{ item.credit }}
+    </span>
   </div>
 </template>
