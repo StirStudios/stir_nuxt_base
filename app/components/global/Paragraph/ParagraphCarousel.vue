@@ -5,6 +5,8 @@ import { componentExists, resolveComponentName } from '~/utils/componentExists'
 const props = defineProps<CarouselProps>()
 
 const mounted = ref(false)
+const carousel = useTemplateRef('carousel')
+
 onMounted(() => {
   mounted.value = true
 })
@@ -18,12 +20,24 @@ const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
 const itemElement = computed(() => props.itemElement || false)
 
+const autoScrollSpeed = computed(() => {
+  const clamped = Math.max(1000, Math.min(interval.value, 10000))
+  return Math.round(10_000 / clamped)
+})
+
+const basePauseOptions = {
+  stopOnMouseEnter: true,
+  stopOnInteraction: false,
+}
+
 const autoScrollOptions = computed(() =>
-  autoscroll.value ? { speed: 2, startDelay: 1000 } : false,
+  autoscroll.value
+    ? { ...basePauseOptions, speed: autoScrollSpeed.value }
+    : false,
 )
 
 const autoplayOptions = computed(() =>
-  !autoscroll.value ? { delay: interval.value } : false,
+  !autoscroll.value ? { ...basePauseOptions } : false,
 )
 
 const showCarousel = computed(() => mounted.value && props.items?.length > 0)
@@ -34,6 +48,7 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
     <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       v-if="showCarousel"
+      ref="carousel"
       v-slot="{ item }"
       :arrows="showArrows"
       :auto-scroll="autoScrollOptions"
