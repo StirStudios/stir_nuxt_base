@@ -1,20 +1,22 @@
 <script setup lang="ts">
-const { page } = usePageContext()
+import type { RegionItemProps } from '~/types/ContentTypes'
 
-const calculator = computed(() =>
-  page.value.content.section
-    .flatMap((s) => s.regions?.first ?? [])
-    .find((p) => p.element === 'paragraph-calculator'),
-)
+const props = defineProps<{
+  item: RegionItemProps
+}>()
+
+const embedUrl = props.item.embedUrl
+const venueId = props.item.venueId
 
 const { load } = useScript({
   id: 'venue-calculator-script',
-  src: calculator.value?.embedUrl || '',
+  src: embedUrl,
   async: true,
   bundle: true,
 })
 
 onMounted(async () => {
+  if (!embedUrl || !venueId) return
   await load()
   if (typeof window.initVenueCalculatorWidget === 'function') {
     window.initVenueCalculatorWidget()
@@ -23,9 +25,5 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    v-if="calculator"
-    id="venue-calculator-widget"
-    :data-venue="calculator.venueId"
-  />
+  <div id="venue-calculator-widget" :data-venue="item.venueId" />
 </template>
