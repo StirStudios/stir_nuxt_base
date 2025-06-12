@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 
-const { isAdministrator } = usePageContext()
-const appConfig = useAppConfig()
+const { page, isAdministrator } = usePageContext()
+const { header, hero } = useAppConfig().stirTheme
 </script>
 
 <template>
-  <header aria-label="Site header" :class="appConfig.stirTheme.header">
+  <header aria-label="Site header" :class="header">
     <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
   </header>
-  <main id="main-content" role="main">
+  <main
+    id="main-content"
+    :class="page.content.hide ? hero.hide : ''"
+    role="main"
+  >
     <SiteMessages />
     <slot />
   </main>

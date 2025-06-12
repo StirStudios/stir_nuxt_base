@@ -8,6 +8,23 @@ export default defineAppConfig({
   colorMode: {
     forced: false,
     preference: 'dark',
+    lightRoutes: [],
+  },
+  userway: {
+    enabled: false,
+    // account: '',
+    // position: 3,
+    // size: 'small', // or 'medium' | 'large'
+    // color: '#ffffff',
+    // type: '1',
+  },
+  analytics: {
+    plausible: {
+      enabled: false,
+      domain: '',
+      scriptUrl:
+        'https://analytics.stirstudiosdesign.com/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js',
+    },
   },
   cookieConsent: {
     enabled: false,
@@ -74,6 +91,7 @@ export default defineAppConfig({
         base: 'z-10 max-w-2xl relative p-5 text-center',
         isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
       },
+      hide: 'pt-30',
     },
     animations: {
       once: false,

@@ -1,44 +1,61 @@
 <script setup lang="ts">
+import { DialogTitle, DialogDescription, VisuallyHidden } from 'reka-ui'
 const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
-const visible = ref(false)
+const open = ref(false)
 
 const consent = useCookie<boolean>('cookie_consent', {
-  default: () => false,
   maxAge: 60 * 60 * 24 * 365,
-})
-
-onMounted(() => {
-  if (
-    !consent.value &&
-    config?.enabled &&
-    ![config.termsUrl, config.privacyUrl].includes(route.path)
-  ) {
-    visible.value = true
-  }
 })
 
 function accept() {
   consent.value = true
-  visible.value = false
+  open.value = false
 }
+
+watch(
+  () => route.path,
+  () => {
+    if (!import.meta.client) return
+
+    const isBot = /bot|crawl|spider/i.test(navigator.userAgent)
+
+    if (
+      !consent.value &&
+      config?.enabled &&
+      !isBot &&
+      ![config.termsUrl, config.privacyUrl].includes(route.path)
+    ) {
+      open.value = true
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
-  <UModal
-    v-model:open="visible"
+  <UDrawer
+    v-model:open="open"
     :dismissible="false"
-    :title="config.title"
+    :handle="false"
+    :modal="false"
+    :overlay="false"
+    side="bottom"
     :ui="{
-      footer: 'justify-end pb-8',
-      title: 'text-base',
-      content: 'divide-none',
+      container: 'overflow-y-auto',
+      body: 'text-center text-xs leading-loose',
     }"
   >
-    <template #description>
+    <template #header>
+      <VisuallyHidden>
+        <DialogTitle>{{ config.title }}</DialogTitle>
+        <DialogDescription>{{ config.message }}</DialogDescription>
+      </VisuallyHidden>
+    </template>
+    <template #body>
       <p>{{ config.message }}</p>
 
-      <p v-if="config.termsUrl || config.privacyUrl" class="mt-5">
+      <p v-if="config.termsUrl || config.privacyUrl">
         {{ config.messageLinks }}
         <ULink
           v-if="config.termsUrl"
@@ -46,8 +63,8 @@ function accept() {
           target="_blank"
           :to="config.termsUrl"
         >
-          Terms of Service</ULink
-        >
+          Terms of Service
+        </ULink>
         and
         <ULink
           v-if="config.privacyUrl"
@@ -55,12 +72,15 @@ function accept() {
           target="_blank"
           :to="config.privacyUrl"
         >
-          Privacy Policy</ULink
+          Privacy Policy </ULink
         >.
       </p>
     </template>
+
     <template #footer>
-      <UButton :label="config.buttonLabel" size="sm" @click="accept" />
+      <div class="flex justify-center px-6 pb-4">
+        <UButton :label="config.buttonLabel" size="xs" @click="accept" />
+      </div>
     </template>
-  </UModal>
+  </UDrawer>
 </template>

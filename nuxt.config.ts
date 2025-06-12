@@ -9,6 +9,9 @@ export default defineNuxtConfig({
           ? [process.env.SERVER_DOMAIN_CLIENT || 'localhost']
           : [],
     },
+    build: {
+      modulePreload: false,
+    },
   },
   compatibilityDate: '2025-04-09',
   nitro: {
@@ -49,7 +52,16 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
+    '@nuxt/scripts',
     'motion-v/nuxt',
+    [
+      'nuxt-vitalizer',
+      {
+        disableStylesheets: 'entry',
+        disablePrefetchLinks: true,
+        disablePreloadLinks: true,
+      },
+    ],
     [
       '@nuxtjs/turnstile',
       {
