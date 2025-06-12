@@ -1,19 +1,24 @@
 export function useUserwayWidget() {
-  if (import.meta.client) {
-    onMounted(() => {
-      window._userway_config = {
-        account: '2uZAEYYvsx',
-        position: 3,
-        size: 'small',
-        color: '#ffffff',
-        type: '1',
-      }
+  if (!import.meta.client) return
 
-      useScript({
-        src: 'https://cdn.userway.org/widget.js',
-        crossorigin: 'anonymous',
-        referrerPolicy: 'no-referrer',
-      })
+  const appConfig = useAppConfig()
+  const cfg = appConfig.userway
+
+  if (!cfg?.enabled || !cfg.account) return
+
+  onMounted(() => {
+    window._userway_config = {
+      account: cfg.account,
+      position: cfg.position ?? 3,
+      size: cfg.size ?? 'small',
+      color: cfg.color ?? '#ffffff',
+      type: cfg.type ?? '1',
+    }
+
+    useScript({
+      src: 'https://cdn.userway.org/widget.js',
+      crossorigin: 'anonymous',
+      referrerpolicy: 'no-referrer',
     })
-  }
+  })
 }

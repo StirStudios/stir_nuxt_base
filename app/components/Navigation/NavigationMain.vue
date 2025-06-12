@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { DialogTitle, DialogDescription, VisuallyHidden } from 'reka-ui'
 import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
@@ -100,6 +101,11 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     }"
   >
     <template #header>
+      <VisuallyHidden>
+        <DialogTitle>Site navigation</DialogTitle>
+        <DialogDescription>Navigation links for mobile menu</DialogDescription>
+      </VisuallyHidden>
+
       <ULink
         v-if="theme.navigation.slideover.logo"
         aria-label="Logo"
@@ -108,6 +114,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
       >
         <AppLogo />
       </ULink>
+
       <UButton
         aria-label="Close"
         class="-my-1"
