@@ -4,7 +4,7 @@ import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
 
-const { page } = usePageContext()
+const { page, isFront } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const appConfig = useAppConfig()
 const theme = appConfig.stirTheme
@@ -40,7 +40,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
         : theme.navigation.background,
       {
         '-translate-y-full':
-          (!finalIsScrolled && theme.navigation.isHidden) ||
+          (isFront && !finalIsScrolled && theme.navigation.isHidden) ||
           (finalIsScrolled && scrollDirection === 'down' && !atBottom),
       },
     ]"
