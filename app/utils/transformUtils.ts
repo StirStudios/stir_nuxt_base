@@ -72,7 +72,14 @@ export function transformPayloadToSnakeCase<T extends Record<string, unknown>>(
     // Array normalization (multi-selects, checkboxes)
     if (Array.isArray(value)) {
       result[snakeKey] = value
-        .map((v) => (typeof v === 'string' ? toSnakeCase(v) : v))
+        .map((v) => {
+          if (typeof v !== 'string') return v
+
+          // Skip ISO timestamps like 2025-07-12T10:00:00-0700
+          if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4}$/.test(v)) return v
+
+          return toSnakeCase(v)
+        })
         .filter(Boolean)
       return
     }
