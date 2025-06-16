@@ -57,13 +57,12 @@ watchEffect(() => {
   const offset = getOffsetString()
   const values: string[] = []
 
-  blocks.value.forEach((block, i) => {
+  blocks.value.forEach((block) => {
     const value =
       block.date && block.start
         ? `${block.date.toString()}T${block.start}:00${offset}`
         : ''
 
-    props.state[`${props.fieldName}-${i}`] = value
     if (value) values.push(value)
   })
 
@@ -127,7 +126,7 @@ watchEffect(() => {
             :field-name="`${fieldName}-${i}-start`"
             :items="timeSelectOptions"
             placeholder="Select time"
-            :state="state"
+            :state="{}"
           />
         </UFormField>
       </template>
