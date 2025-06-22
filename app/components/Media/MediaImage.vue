@@ -15,7 +15,7 @@ const loaded = ref(false)
         ? { target: '_blank', rel: 'noopener', 'aria-label': item.alt }
         : {}
     "
-    :class="[media.rounded, 'media group relative overflow-hidden']"
+    :class="['block', media.rounded, 'media group relative overflow-hidden']"
     :href="item.link || undefined"
   >
     <USkeleton v-if="!loaded" class="absolute inset-0" />
