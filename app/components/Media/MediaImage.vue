@@ -40,7 +40,7 @@ const loaded = ref(false)
 
     <span
       v-if="item.credit"
-      class="absolute right-0 bottom-0 rounded bg-black/80 p-2 text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="absolute right-0 bottom-0 rounded bg-black/40 p-2 text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
     >
       {{ item.credit }}
     </span>
