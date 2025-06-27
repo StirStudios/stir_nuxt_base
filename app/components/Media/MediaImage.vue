@@ -8,7 +8,16 @@ const loaded = ref(false)
 </script>
 
 <template>
-  <div :class="[media.rounded, 'media group relative overflow-hidden']">
+  <component
+    :is="item.link ? 'a' : 'div'"
+    v-bind="
+      item.link
+        ? { target: '_blank', rel: 'noopener', 'aria-label': item.alt }
+        : {}
+    "
+    :class="['block', media.rounded, 'media group relative overflow-hidden']"
+    :href="item.link || undefined"
+  >
     <USkeleton v-if="!loaded" class="absolute inset-0" />
 
     <ClientOnly>
@@ -35,5 +44,5 @@ const loaded = ref(false)
     >
       {{ item.credit }}
     </span>
-  </div>
+  </component>
 </template>
