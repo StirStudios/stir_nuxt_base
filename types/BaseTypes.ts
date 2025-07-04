@@ -15,7 +15,7 @@ export interface PathProps {
 
 export interface PageProps {
   title: string
-  element: string
+  element?: string
   uid?: string | object
   created: string
   hero?: HeroProps

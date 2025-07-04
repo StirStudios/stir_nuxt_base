@@ -1,25 +1,20 @@
 <script setup lang="ts">
-const { fetchPage, renderCustomElements, getPageLayout } = await useDrupalCe()
+const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
+  useDrupalCe()
 const { bodyClasses, isFront } = usePageContext()
 const theme = useAppConfig().stirTheme
 
-const route = useRoute()
-const page = await fetchPage(route.path, { query: route.query })
-
+const page = await fetchPage(useRoute().path, { query: useRoute().query })
 const layout = getPageLayout(page.value)
+usePageHead(page)
 
-useHead({
-  htmlAttrs: { lang: 'en' },
-  bodyAttrs: { class: bodyClasses },
-  title: page.value?.title,
-  meta: page.value?.metatags?.meta || [],
-  link: page.value?.metatags?.link || [],
-  script: [
-    {
-      type: 'application/ld+json',
-      children: JSON.stringify(page.value?.metatags?.jsonld || []),
-    },
-  ],
+definePageMeta({
+  key: (route) => {
+    const params = new URLSearchParams(
+      route.query as Record<string, any>,
+    ).toString()
+    return params ? `${route.path}?${params}` : route.path
+  },
 })
 </script>
 
