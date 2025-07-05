@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { DialogTitle, DialogDescription, VisuallyHidden } from 'reka-ui'
 const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
 const open = ref(false)
@@ -36,22 +35,20 @@ watch(
 <template>
   <UDrawer
     v-model:open="open"
+    :description="config.message"
     :dismissible="false"
     :handle="false"
     :modal="false"
     :overlay="false"
     side="bottom"
+    :title="config.title"
     :ui="{
       container: 'overflow-y-auto',
       body: 'text-center text-xs leading-loose',
+      title: 'sr-only',
+      description: 'sr-only',
     }"
   >
-    <template #header>
-      <VisuallyHidden>
-        <DialogTitle>{{ config.title }}</DialogTitle>
-        <DialogDescription>{{ config.message }}</DialogDescription>
-      </VisuallyHidden>
-    </template>
     <template #body>
       <p>{{ config.message }}</p>
 
