@@ -64,6 +64,7 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
       :ui="{
         root: appConfig.stirTheme.carousel.root,
         item: amount,
+        container: 'items-center',
       }"
     >
       <template v-if="itemElement">

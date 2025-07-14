@@ -7,21 +7,37 @@ const {
   modal: { header },
 } = useAppConfig().stirTheme
 
-defineProps<{
+const props = defineProps<{
   media?: MediaProps[]
+  grid?: string
 }>()
 
 const modal = ref(false)
 const activeMedia = ref<MediaProps | null>(null)
+const activeIndex = ref(0)
+const carousel = useTemplateRef('carousel')
+const appConfig = useAppConfig()
+
+const modalContentClass = computed(() =>
+  props.media?.length && !activeMedia.value?.mediaEmbed
+    ? 'w-full'
+    : 'max-w-5xl ring-0',
+)
 
 const openModal = (item: MediaProps) => {
+  const index = props.media?.findIndex((m) => m.mid === item.mid) || 0
+  activeIndex.value = index
   activeMedia.value = item
   modal.value = true
+
+  nextTick(() => {
+    carousel.value?.emblaApi?.scrollTo(index)
+  })
 }
 </script>
 
 <template>
-  <div v-if="media?.length" class="space-y-4">
+  <div v-if="media?.length" :class="['space-y-4', grid]">
     <div
       v-for="(item, index) in media"
       :key="index"
@@ -30,10 +46,10 @@ const openModal = (item: MediaProps) => {
       <div
         :class="[
           'group relative transform-gpu overflow-hidden transition-all duration-500 ease-in-out will-change-transform hover:scale-110',
-          aspectRatios(item.width, item.height),
+          !grid?.includes('columns') && aspectRatios(item.width, item.height),
         ]"
       >
-        <MediaImage v-if="item.srcset" :item="item" />
+        <MediaImage v-if="item.srcset" :item="item" @click="openModal(item)" />
         <div
           v-if="item.mediaEmbed"
           class="absolute inset-0 z-10 bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-10"
@@ -54,29 +70,78 @@ const openModal = (item: MediaProps) => {
         </button>
       </div>
     </div>
+
     <UModal
       v-if="activeMedia"
       v-model:open="modal"
       :description="activeMedia?.alt"
-      :title="activeMedia?.alt"
+      :fullscreen="media?.length && !activeMedia?.mediaEmbed"
+      :title="activeMedia?.title"
       :ui="{
-        header: header
+        header: !activeMedia?.mediaEmbed
           ? 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16'
           : 'sr-only',
-        content: 'max-w-5xl ring-0',
-        body: header
-          ? activeMedia?.mediaEmbed
-            ? 'flex items-center justify-center'
-            : 'm-auto'
-          : '!p-0 bg-transparent',
-        title: 'text-highlighted font-semibold text-xl mb-0',
+        content: modalContentClass,
+        body:
+          activeMedia?.mediaEmbed || !header
+            ? '!p-0 bg-transparent'
+            : undefined,
+        title: header
+          ? 'text-highlighted font-semibold text-xl mb-0'
+          : 'sr-only',
         description: 'sr-only',
       }"
     >
       <template #body>
-        <MediaVideo v-if="activeMedia?.mediaEmbed" :item="activeMedia" />
-        <MediaImage v-else-if="activeMedia?.src" :item="activeMedia" />
+        <div
+          :class="[
+            grid?.includes('columns')
+              ? 'gallery ' + appConfig.stirTheme.carousel.padding
+              : 'relative z-10',
+          ]"
+        >
+          <UCarousel
+            v-if="media?.length && !activeMedia?.mediaEmbed"
+            :key="activeMedia?.mid"
+            ref="carousel"
+            :arrows="media.length > 1"
+            :initial="activeIndex"
+            :items="media.filter((m) => !m.mediaEmbed)"
+            :next="appConfig.stirTheme.carousel.arrows.next"
+            :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
+            :prev="appConfig.stirTheme.carousel.arrows.prev"
+            :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
+            :ui="{
+              container: 'items-center',
+            }"
+            @update:model-value="
+              (i) => {
+                const imagesOnly = media.filter((m) => !m.mediaEmbed)
+                const newItem = imagesOnly[i]
+                activeIndex.value = media.findIndex(
+                  (m) => m.mid === newItem.mid,
+                )
+                activeMedia.value = newItem
+              }
+            "
+          >
+            <template #default="{ item }">
+              <MediaImage :key="item.mid" :item="item" />
+            </template>
+          </UCarousel>
+          <MediaVideo
+            v-if="activeMedia?.mediaEmbed"
+            :key="activeMedia.mid"
+            :item="activeMedia"
+          />
+        </div>
       </template>
     </UModal>
   </div>
 </template>
+
+<style>
+img {
+  @apply max-h-[85vh] object-contain;
+}
+</style>
