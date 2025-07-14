@@ -140,7 +140,7 @@ const openModal = (item: MediaProps) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 img {
   @apply max-h-[85vh] object-contain;
 }
