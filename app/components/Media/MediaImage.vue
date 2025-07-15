@@ -15,7 +15,10 @@ const loaded = ref(false)
         ? { target: '_blank', rel: 'noopener', 'aria-label': item.alt }
         : {}
     "
-    :class="['media group relative block overflow-hidden', media.rounded]"
+    :class="[
+      'media group @container relative block overflow-hidden',
+      media.rounded,
+    ]"
     :href="item.link || undefined"
   >
     <USkeleton v-if="!loaded" class="absolute inset-0" />
@@ -42,7 +45,7 @@ const loaded = ref(false)
 
     <span
       v-if="item.credit"
-      class="absolute bottom-0 left-1/2 w-full max-w-sm -translate-x-1/2 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
     >
       {{ item.credit }}
     </span>
