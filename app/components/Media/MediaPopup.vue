@@ -24,15 +24,17 @@ const modalContentClass = computed(() =>
     : 'max-w-5xl ring-0',
 )
 
+const items = computed(() => props.media?.filter((m) => !m.mediaEmbed) || [])
+
 const openModal = (item: MediaProps) => {
-  const index = props.media?.findIndex((m) => m.mid === item.mid) || 0
-  activeIndex.value = index
+  const index = items.value.findIndex((m) => m.mid === item.mid)
+  activeIndex.value = index >= 0 ? index : 0
   activeMedia.value = item
   modal.value = true
+}
 
-  nextTick(() => {
-    carousel.value?.emblaApi?.scrollTo(index)
-  })
+const scrollToActive = () => {
+  carousel.value?.emblaApi?.scrollTo(activeIndex.value)
 }
 </script>
 
@@ -49,11 +51,7 @@ const openModal = (item: MediaProps) => {
           !grid?.includes('columns') && aspectRatios(item.width, item.height),
         ]"
       >
-        <MediaImage
-          v-if="item.srcset"
-          :item="{ ...item, link: true }"
-          @click="openModal(item)"
-        />
+        <MediaImage :item="item" :link="true" @click="openModal(item)" />
         <div
           v-if="item.mediaEmbed"
           class="absolute inset-0 z-10 bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-10"
@@ -95,6 +93,7 @@ const openModal = (item: MediaProps) => {
           : 'sr-only',
         description: 'sr-only',
       }"
+      @after:enter="scrollToActive"
     >
       <template #body>
         <div
@@ -105,29 +104,16 @@ const openModal = (item: MediaProps) => {
           ]"
         >
           <UCarousel
-            v-if="media?.length && !activeMedia?.mediaEmbed"
-            :key="activeMedia?.mid"
+            v-if="items.length && !activeMedia?.mediaEmbed"
             ref="carousel"
-            :arrows="media.length > 1"
-            :initial="activeIndex"
-            :items="media.filter((m) => !m.mediaEmbed)"
+            v-model="activeIndex"
+            :arrows="items.length > 1"
+            :items="items"
             :next="appConfig.stirTheme.carousel.arrows.next"
             :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
             :prev="appConfig.stirTheme.carousel.arrows.prev"
             :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
-            :ui="{
-              container: 'items-center',
-            }"
-            @update:model-value="
-              (i) => {
-                const imagesOnly = media.filter((m) => !m.mediaEmbed)
-                const newItem = imagesOnly[i]
-                activeIndex.value = media.findIndex(
-                  (m) => m.mid === newItem.mid,
-                )
-                activeMedia.value = newItem
-              }
-            "
+            :ui="{ container: 'items-center' }"
           >
             <template #default="{ item }">
               <MediaImage :key="item.mid" :item="item" />

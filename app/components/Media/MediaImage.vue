@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 
-defineProps<{ item: MediaProps }>()
+defineProps<{ item: MediaProps; link?: boolean }>()
 
 const { media } = useAppConfig().stirTheme
 const loaded = ref(false)
@@ -26,7 +26,7 @@ const loaded = ref(false)
         :class="[
           media.base,
           loaded ? 'opacity-100' : 'opacity-0',
-          item.link
+          link
             ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
             : '',
         ]"
