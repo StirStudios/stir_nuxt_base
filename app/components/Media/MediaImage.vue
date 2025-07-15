@@ -15,7 +15,7 @@ const loaded = ref(false)
         ? { target: '_blank', rel: 'noopener', 'aria-label': item.alt }
         : {}
     "
-    :class="['block', media.rounded, 'media group relative overflow-hidden']"
+    :class="['media group relative block overflow-hidden', media.rounded]"
     :href="item.link || undefined"
   >
     <USkeleton v-if="!loaded" class="absolute inset-0" />
@@ -26,7 +26,9 @@ const loaded = ref(false)
         :class="[
           media.base,
           loaded ? 'opacity-100' : 'opacity-0',
-          'transition-opacity duration-500 ease-in-out',
+          item.link
+            ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
+            : '',
         ]"
         :height="item.height"
         :loading="item.loading || 'lazy'"
