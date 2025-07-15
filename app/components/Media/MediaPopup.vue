@@ -45,11 +45,15 @@ const openModal = (item: MediaProps) => {
     >
       <div
         :class="[
-          'group relative transform-gpu overflow-hidden transition-all duration-500 ease-in-out will-change-transform hover:scale-110',
+          'group relative overflow-hidden',
           !grid?.includes('columns') && aspectRatios(item.width, item.height),
         ]"
       >
-        <MediaImage v-if="item.srcset" :item="item" @click="openModal(item)" />
+        <MediaImage
+          v-if="item.srcset"
+          :item="{ ...item, link: true }"
+          @click="openModal(item)"
+        />
         <div
           v-if="item.mediaEmbed"
           class="absolute inset-0 z-10 bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-10"
