@@ -55,7 +55,7 @@ const toggleZoom = (i: number, e: MouseEvent) => {
         "
         @click="(e) => toggleZoom(index, e)"
       >
-        <MediaImage :item="item" class="h-full w-full object-contain" />
+        <MediaImage class="h-full w-full object-contain" :item="item" />
       </div>
 
       <span

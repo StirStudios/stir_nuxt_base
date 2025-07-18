@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { MediaProps } from '~/types/MediaTypes'
-import { aspectRatios } from '~/utils/aspectRatios'
 
 const {
   media: { rounded },
@@ -39,18 +38,13 @@ const scrollToActive = () => {
 </script>
 
 <template>
-  <div v-if="media?.length" :class="['space-y-4', grid]">
+  <div v-if="media?.length" :class="['aspect-wrap', grid]">
     <div
       v-for="(item, index) in media"
       :key="index"
       :class="[rounded, 'overflow-hidden']"
     >
-      <div
-        :class="[
-          'group relative overflow-hidden',
-          !grid?.includes('columns') && aspectRatios(item.width, item.height),
-        ]"
-      >
+      <div class="group relative overflow-hidden">
         <MediaImage :item="item" :link="true" @click="openModal(item)" />
         <div
           v-if="item.mediaEmbed"
@@ -98,9 +92,10 @@ const scrollToActive = () => {
       <template #body>
         <div
           :class="[
-            grid?.includes('columns')
-              ? 'gallery ' + appConfig.stirTheme.carousel.padding
-              : 'relative z-10',
+            'relative z-10',
+            !activeMedia?.mediaEmbed
+              ? appConfig.stirTheme.carousel.padding
+              : '',
           ]"
         >
           <UCarousel
@@ -131,7 +126,7 @@ const scrollToActive = () => {
 </template>
 
 <style>
-.gallery img {
+[role='dialog'] img {
   @apply max-h-[85vh] object-contain;
 }
 </style>

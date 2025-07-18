@@ -15,6 +15,12 @@ const spans = Array.from({ length: 3 }, (_, i) => `col-span-${i + 1}`)
 // ✅ Limit gaps to a max of 10
 const gaps = [...Array.from({ length: 10 }, (_, i) => `gap-${i + 1}`), 'gap-20']
 
+// ✅ Add space-y-* classes up to 10 and space-y-20
+const spaceY = [
+  ...Array.from({ length: 10 }, (_, i) => `space-y-${i + 1}`),
+  'space-y-20',
+]
+
 // ✅ Limit basis to only 1/2, 1/3, 1/4, and 1/5
 const basisValues = [
   'basis-1/1',
@@ -56,6 +62,7 @@ breakpoints.forEach((bp) => {
   columnsDynamic.forEach((col) => safelist.add(`${bp}${col}`))
   spans.forEach((span) => safelist.add(`${bp}${span}`))
   gaps.forEach((gap) => safelist.add(`${bp}${gap}`))
+  spaceY.forEach((space) => safelist.add(`${bp}${space}`))
   basisValues.forEach((basis) => safelist.add(`${bp}${basis}`))
   spacingClasses.forEach((cls) => safelist.add(`${bp}${cls}`))
 
