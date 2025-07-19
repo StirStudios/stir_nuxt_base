@@ -31,10 +31,6 @@ const openModal = (item: MediaProps) => {
   activeMedia.value = item
   modal.value = true
 }
-
-// const scrollToActive = () => {
-// carousel.value?.emblaApi?.scrollTo(activeIndex.value)
-// }
 </script>
 
 <template>
