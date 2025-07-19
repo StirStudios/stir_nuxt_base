@@ -32,9 +32,9 @@ const openModal = (item: MediaProps) => {
   modal.value = true
 }
 
-const scrollToActive = () => {
-  carousel.value?.emblaApi?.scrollTo(activeIndex.value)
-}
+// const scrollToActive = () => {
+// carousel.value?.emblaApi?.scrollTo(activeIndex.value)
+// }
 </script>
 
 <template>
@@ -87,7 +87,6 @@ const scrollToActive = () => {
           : 'sr-only',
         description: 'sr-only',
       }"
-      @after:enter="scrollToActive"
     >
       <template #body>
         <div
@@ -108,6 +107,7 @@ const scrollToActive = () => {
             :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
             :prev="appConfig.stirTheme.carousel.arrows.prev"
             :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
+            :start-index="activeIndex"
             :ui="{ container: 'items-center' }"
           >
             <template #default="{ item }">
