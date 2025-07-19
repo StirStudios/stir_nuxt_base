@@ -1,12 +1,18 @@
 <script setup lang="ts">
 const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
   useDrupalCe()
-const { bodyClasses, isFront } = usePageContext()
+const { bodyClasses } = usePageContext()
 const theme = useAppConfig().stirTheme
 
 const page = await fetchPage(useRoute().path, { query: useRoute().query })
 const layout = getPageLayout(page.value)
 usePageHead(page)
+
+useHead({
+  bodyAttrs: {
+    class: bodyClasses,
+  },
+})
 
 definePageMeta({
   key: (route) => {
