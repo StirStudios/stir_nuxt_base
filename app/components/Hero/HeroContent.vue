@@ -5,11 +5,13 @@ withDefaults(
     siteSlogan?: string
     heroText?: string
     isFront?: boolean
+    button?: RegionItemProps
   }>(),
   {
     pageTitle: '',
     siteSlogan: '',
     heroText: '',
+    button: undefined,
     isFront: false,
   },
 )
@@ -24,4 +26,5 @@ withDefaults(
     {{ pageTitle }}
   </h1>
   <div v-if="heroText" class="hero-copy prose" v-html="heroText" />
+  <ParagraphButton v-if="button" :item="button" />
 </template>
