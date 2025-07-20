@@ -1,4 +1,5 @@
 import type { LayoutProps } from './UtilityTypes'
+import type { RegionItemProps } from '~/types/ContentTypes'
 
 declare global {
   interface Window {
@@ -17,6 +18,7 @@ export interface HeroProps extends LayoutProps {
   text?: string
   media: MediaProps[]
   editLink?: string
+  button?: RegionItemProps
 }
 
 export interface MediaProps {

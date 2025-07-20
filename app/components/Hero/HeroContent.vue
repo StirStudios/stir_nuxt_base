@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { RegionItemProps } from '~/types/ContentTypes'
+
 withDefaults(
   defineProps<{
     pageTitle?: string
