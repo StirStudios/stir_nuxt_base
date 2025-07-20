@@ -18,7 +18,7 @@ export interface HeroProps extends LayoutProps {
   text?: string
   media: MediaProps[]
   editLink?: string
-  button?: RegionItemProps
+  button?: RegionItemProps[]
 }
 
 export interface MediaProps {
