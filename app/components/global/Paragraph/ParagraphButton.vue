@@ -15,8 +15,11 @@ const pdf = computed(
 const link = computed(() =>
   pdf.value?.url ? null : props.item.link?.[0] || null,
 )
-const buttonLabel = computed(
-  () => pdf.value?.title || link.value?.title || props.item.title || 'View PDF',
+const pdfLabel = computed(
+  () => pdf.value?.title || props.item.title || 'View PDF',
+)
+const linkLabel = computed(
+  () => link.value?.title || props.item.title || 'View link',
 )
 </script>
 
@@ -27,17 +30,17 @@ const buttonLabel = computed(
         v-if="pdf?.url"
         class="mt-4"
         icon="i-lucide-file-text"
-        :label="buttonLabel"
-        :title="buttonLabel"
+        :label="pdfLabel"
+        :title="pdfLabel"
         @click="open = true"
       />
 
       <UButton
         v-else-if="link?.uri"
         class="mt-4"
-        :label="buttonLabel"
+        :label="linkLabel"
         target="_blank"
-        :title="buttonLabel"
+        :title="linkLabel"
         :to="link.uri"
       />
     </div>
