@@ -39,7 +39,6 @@ const hasHero = computed(() => !!hero?.text || !!media.value?.type)
         <WrapAnimate :effect="hero?.direction">
           <HeroContent
             v-if="hasHero"
-            :button="hero?.button?.[0]"
             :hero-text="hero?.text"
             :is-front="isFront"
             :page-title="pageTitle"
@@ -54,6 +53,7 @@ const hasHero = computed(() => !!hero?.text || !!media.value?.type)
           >
             {{ pageTitle }}
           </h1>
+          <ParagraphButton v-if="hero?.button" :item="hero?.button?.[0]" />
         </WrapAnimate>
       </div>
 

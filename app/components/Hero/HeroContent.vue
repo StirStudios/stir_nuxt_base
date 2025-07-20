@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types/ContentTypes'
-
 withDefaults(
   defineProps<{
     pageTitle?: string
     siteSlogan?: string
     heroText?: string
     isFront?: boolean
-    button?: RegionItemProps
   }>(),
   {
     pageTitle: '',
     siteSlogan: '',
     heroText: '',
-    button: undefined,
     isFront: false,
   },
 )
