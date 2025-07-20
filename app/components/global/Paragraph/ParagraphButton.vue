@@ -12,12 +12,13 @@ const theme = useAppConfig().stirTheme
 const pdf = computed(
   () => props.item.media?.find((m) => m.type === 'document') || null,
 )
-const link = computed(() =>
-  pdf.value?.url ? null : props.item.link?.[0] || null,
-)
+
+const link = computed(() => (pdf.value?.url ? null : props.item.link || null))
+
 const pdfLabel = computed(
   () => pdf.value?.title || props.item.title || 'View PDF',
 )
+
 const linkLabel = computed(
   () => link.value?.title || props.item.title || 'View link',
 )
@@ -36,12 +37,12 @@ const linkLabel = computed(
       />
 
       <UButton
-        v-else-if="link?.uri"
+        v-else-if="link?.url"
         class="mt-4"
         :label="linkLabel"
         target="_blank"
         :title="linkLabel"
-        :to="link.uri"
+        :to="link.url"
       />
     </div>
   </EditLink>
