@@ -89,38 +89,50 @@ const getNodeProps = (item) => {
   <template v-for="layout in section" :key="layout.id">
     <section
       v-if="isValidParagraphLayout(layout)"
-      :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
+      :class="[layout.classes || 'content', layout.spacing]"
     >
       <template v-if="layout.header">
         <h2 :class="container" v-html="layout.header" />
       </template>
 
       <div
-        :id="sectionId(layout) || undefined"
+        :id="sectionId(layout)"
         :class="[
           layout.width,
           classLayout(layout),
           layout.card ? card.base : '',
         ]"
       >
-        <div
-          v-for="regionItem in layout.regions"
-          :key="regionItem[0]?.uuid"
-          :class="[regionItem[0].region, regionItem[0].align]"
+        <template
+          v-for="[regionName, regionItems] in Object.entries(layout.regions)"
+          :key="regionName"
         >
-          <template v-for="item in regionItem" :key="item.uuid">
-            <article :class="item.element">
-              <component
-                :is="
-                  componentExists(item.element)
-                    ? resolveComponentName(item.element)
-                    : 'ParagraphDefault'
-                "
-                v-bind="getNodeProps(item)"
-              />
-            </article>
+          <template v-if="Array.isArray(regionItems) && regionItems.length > 0">
+            <div
+              :class="[
+                'layout__region',
+                `layout__region--${regionName}`,
+                regionName === 'top' || regionName === 'bottom'
+                  ? 'col-span-full'
+                  : '',
+                regionItems[0].align || '',
+              ]"
+            >
+              <template v-for="item in regionItems" :key="item.uuid">
+                <article :class="item.element">
+                  <component
+                    :is="
+                      componentExists(item.element)
+                        ? resolveComponentName(item.element)
+                        : 'ParagraphDefault'
+                    "
+                    v-bind="getNodeProps(item)"
+                  />
+                </article>
+              </template>
+            </div>
           </template>
-        </div>
+        </template>
 
         <CardGradient v-if="layout.card" :layout="layout" />
       </div>
