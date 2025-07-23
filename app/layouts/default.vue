@@ -12,7 +12,7 @@ const { header, hero } = useAppConfig().stirTheme
   </header>
   <main
     id="main-content"
-    :class="page.content.hide ? hero.hide : ''"
+    :class="page.content.hide === 'true' ? hero.hide : ''"
     role="main"
   >
     <SiteMessages />
