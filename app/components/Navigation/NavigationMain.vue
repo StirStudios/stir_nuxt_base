@@ -127,7 +127,13 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
         :items="navLinks"
         orientation="vertical"
         :ui="{ link: theme.navigation.slideover.link }"
-      />
+      >
+        <template #item="{ item }">
+          <ULink :to="item.to" @click="isOpen = false">
+            {{ item.label }}
+          </ULink>
+        </template>
+      </UNavigationMenu>
     </template>
   </USlideover>
 </template>
