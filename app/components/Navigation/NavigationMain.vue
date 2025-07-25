@@ -100,6 +100,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
       header: 'flex items-center justify-between gap-1.5 p-4 sm:px-6 min-h-16',
       title: 'sr-only',
       description: 'sr-only',
+      body: theme.navigation.slideover.body,
     }"
   >
     <template #header>
