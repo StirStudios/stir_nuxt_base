@@ -21,7 +21,8 @@ export default defineAppConfig({
   // protectedRoutes: {
   //   loginPath: '/login',
   //   redirectOnLogin: '/example',
-  //   requireLoginPath: '/example',
+  //   requireLoginPaths: ['/example'],
+  //   loginHeading: 'Login',
   // },
   analytics: {
     plausible: {
