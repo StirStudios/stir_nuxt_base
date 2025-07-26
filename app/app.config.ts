@@ -18,6 +18,11 @@ export default defineAppConfig({
     // color: '#ffffff',
     // type: '1',
   },
+  // protectedRoutes: {
+  //   loginPath: '/login',
+  //   redirectOnLogin: '/example',
+  //   requireLoginPath: '/example',
+  // },
   analytics: {
     plausible: {
       enabled: false,
