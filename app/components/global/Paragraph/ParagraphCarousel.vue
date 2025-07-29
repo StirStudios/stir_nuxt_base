@@ -19,6 +19,7 @@ const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
 const itemElement = computed(() => props.itemElement || false)
+const overlay = computed(() => props.overlay === true)
 
 const autoScrollSpeed = computed(() => {
   const clamped = Math.max(1000, Math.min(interval.value, 10000))
@@ -78,8 +79,13 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
         />
       </template>
       <template v-else>
-        <MediaSimple v-if="item.type === 'image'" :media="[item]" />
-        <MediaPopup v-else-if="item.type === 'video'" :media="[item]" />
+        <MediaSimple v-if="item.type === 'image' && !overlay" :media="[item]" />
+        <MediaPopup
+          v-else-if="
+            item.type === 'video' || (item.type === 'image' && overlay)
+          "
+          :media="[item]"
+        />
       </template>
     </UCarousel>
   </div>

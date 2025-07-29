@@ -48,6 +48,7 @@ const getNodeProps = (item) => {
       fade: item.carouselFade,
       autoscroll: item.carouselAutoscroll,
       interval: item.carouselInterval,
+      overlay: item.overlay,
       items: item.media,
       width: item.width,
     }
@@ -61,6 +62,7 @@ const getNodeProps = (item) => {
         carouselFade: item.carouselFade,
         carouselAutoscroll: item.carouselAutoscroll,
         carouselInterval: item.carouselInterval,
+        overlay: item.overlay,
         spacing: item.spacing,
         width: item.width,
         gridItems: item.gridItems,
