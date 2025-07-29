@@ -84,7 +84,7 @@ const openModal = (item: MediaProps) => {
       <template #body>
         <div
           :class="[
-            'relative z-10',
+            'relative z-10 h-full',
             !activeMedia?.mediaEmbed
               ? appConfig.stirTheme.carousel.padding
               : '',
@@ -101,7 +101,7 @@ const openModal = (item: MediaProps) => {
             :prev="appConfig.stirTheme.carousel.arrows.prev"
             :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
             :start-index="activeIndex"
-            :ui="{ container: 'items-center' }"
+            :ui="{ container: 'items-center h-full' }"
           >
             <template #default="{ item }">
               <MediaImage :key="item.mid" :item="item" />
@@ -119,7 +119,13 @@ const openModal = (item: MediaProps) => {
 </template>
 
 <style>
-[role='dialog'] img {
-  @apply max-h-[85vh] object-contain;
+[role='dialog'] {
+  [aria-roledescription='carousel'],
+  .overflow-hidden {
+    @apply h-full;
+  }
+  img {
+    @apply max-h-[80vh] object-contain;
+  }
 }
 </style>
