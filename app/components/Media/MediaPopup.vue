@@ -74,10 +74,7 @@ const openModal = (item: MediaProps) => {
           ? 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16'
           : 'sr-only',
         content: modalContentClass,
-        body:
-          activeMedia?.mediaEmbed || !header
-            ? '!p-0 bg-transparent'
-            : undefined,
+        body: activeMedia?.mediaEmbed ? '!p-0 bg-transparent' : undefined,
         title: header
           ? 'text-highlighted font-semibold text-xl mb-0'
           : 'sr-only',
