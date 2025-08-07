@@ -136,22 +136,14 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       color: 'success',
     })
 
-    if (webformConfirmationType === 'url' && webformRedirect) {
-      // For internal redirects, use navigateTo (optional enhancement):
-      // if (webformRedirect.startsWith('/')) {
-      //   return navigateTo(webformRedirect)
-      // }
-      window.top.location.href = webformRedirect
-      return // Stop further logic if redirecting
-    }
-
-    // Reset Form (only if not redirecting)
+    // Reset Form
     Object.keys(state).forEach((key) => (state[key] = ''))
     turnstileToken.value = ''
     isFormSubmitted.value = true
   } catch (error) {
     console.error('Submission Error:', error)
 
+    // Handle Errors from Backend
     const errorMessage =
       error?.response?._data?.error?.message ||
       error?.response?._data?.message ||
