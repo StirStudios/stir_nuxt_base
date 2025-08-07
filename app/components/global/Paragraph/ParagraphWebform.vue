@@ -141,7 +141,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       // if (webformRedirect.startsWith('/')) {
       //   return navigateTo(webformRedirect)
       // }
-      window.location.href = webformRedirect
+      window.top.location.href = webformRedirect
       return // Stop further logic if redirecting
     }
 
