@@ -32,8 +32,9 @@ definePageMeta({
       :site-slogan="page.site_info?.slogan || ''"
       :hide="page?.content?.hide || ''"
     />
-
+    <RegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />
+    <RegionArea area="after_main" />
   </NuxtLayout>
 </template>

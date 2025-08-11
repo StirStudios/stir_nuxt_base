@@ -42,4 +42,5 @@ export interface HTMLInjectionProps {
 export interface ParagraphBlockProps {
   blockName: string
   blocks: Record<string, any>
+  region?: string
 }

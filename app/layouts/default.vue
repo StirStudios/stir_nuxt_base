@@ -6,6 +6,7 @@ const { header, hero } = useAppConfig().stirTheme
 </script>
 
 <template>
+  <RegionArea area="top" />
   <header aria-label="Site header" :class="header">
     <DrupalTabs v-if="isAdministrator" />
     <NavigationMain />
@@ -18,5 +19,6 @@ const { header, hero } = useAppConfig().stirTheme
     <SiteMessages />
     <slot />
   </main>
+  <RegionArea area="sub_footer" />
   <LazyAppFooter />
 </template>

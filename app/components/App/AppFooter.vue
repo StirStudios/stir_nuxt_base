@@ -24,6 +24,7 @@ const iconsSocialConfig = [
 
 <template>
   <footer aria-label="Site Footer" :class="theme.footer">
+    <RegionArea area="footer" />
     <div
       :class="[
         theme.container,
