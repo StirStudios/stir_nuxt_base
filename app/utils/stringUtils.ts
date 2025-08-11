@@ -34,3 +34,12 @@ export const extractFieldName = (selector: string): string | null => {
 export const normalizeValue = (value: string): string => {
   return value.replace(/([A-Z])/g, '_$1').toLowerCase()
 }
+
+/**
+ * Truncates a string to a specified length, appending an ellipsis if it exceeds that length.
+ * Example: truncate('Hello World', 5) => "Hello…"
+ */
+export function truncate(text: string, length = 120): string {
+  if (!text) return ''
+  return text.length > length ? text.slice(0, length).trimEnd() + '…' : text
+}
