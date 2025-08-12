@@ -1,11 +1,10 @@
 <script setup lang="ts">
-const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
-  useDrupalCe()
+const { fetchPage, renderCustomElements, usePageHead } = useDrupalCe()
 const { bodyClasses } = usePageContext()
 const theme = useAppConfig().stirTheme
 
 const page = await fetchPage(useRoute().path, { query: useRoute().query })
-const layout = getPageLayout(page.value)
+const layout = page.value.page_layout
 usePageHead(page)
 
 useHead({
