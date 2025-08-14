@@ -112,8 +112,8 @@ const getNodeProps = (item) => {
           <template v-if="Array.isArray(regionItems) && regionItems.length > 0">
             <div
               :class="[
-                'layout__region',
-                `layout__region--${regionName}`,
+                'region',
+                `${regionName}`,
                 regionName === 'top' || regionName === 'bottom'
                   ? 'col-span-full'
                   : '',
