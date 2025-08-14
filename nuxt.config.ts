@@ -1,7 +1,4 @@
 export default defineNuxtConfig({
-  future: {
-    compatibilityVersion: 4,
-  },
   vite: {
     server: {
       allowedHosts:
@@ -13,7 +10,7 @@ export default defineNuxtConfig({
       modulePreload: false,
     },
   },
-  compatibilityDate: '2025-04-09',
+  compatibilityDate: '2025-08-14',
   nitro: {
     compressPublicAssets: true,
   },
