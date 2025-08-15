@@ -40,7 +40,7 @@ const linkLabel = computed(
         v-else-if="link?.url"
         class="mt-4"
         :label="linkLabel"
-        target="_blank"
+        :target="link.external ? '_blank' : undefined"
         :title="linkLabel"
         :to="link.url"
       />
