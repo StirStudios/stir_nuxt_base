@@ -2,9 +2,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.server) return
 
   const config = useAppConfig().protectedRoutes
-  if (!config) return
+  if (!config || !config.loginPath || !config.redirectOnLogin) return
 
-  // Safely try to use useUserSession
   let ready = ref(true)
   let loggedIn = ref(false)
   let fetch = async () => {}
@@ -16,9 +15,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       loggedIn = session.loggedIn
       fetch = session.fetch
     }
-  } catch {
-    // Fallback: assume unauthenticated, but do not crash
-  }
+  } catch {}
 
   if (!ready.value) await fetch()
 
@@ -27,10 +24,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   if (config.requireLoginPaths?.includes(to.path) && !loggedIn.value) {
-    const password = to.query.password
-    return navigateTo({
-      path: config.loginPath,
-      query: password ? { password } : {},
-    })
+    return navigateTo(config.loginPath)
   }
 })
