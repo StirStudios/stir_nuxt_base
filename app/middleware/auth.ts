@@ -2,10 +2,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.server) return
 
   const config = useAppConfig().protectedRoutes
-  if (!config || !config.loginPath || !config.redirectOnLogin) return
+  if (!config?.requireLoginPaths?.length) return
 
-  const protectedPaths = config.requireLoginPaths ?? []
+  const protectedPaths = config.requireLoginPaths
   const isProtected = protectedPaths.some((path) => to.path.startsWith(path))
+
   if (!isProtected) return
 
   let ready = ref(true)
