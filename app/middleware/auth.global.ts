@@ -2,10 +2,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.server) return
 
   const config = useAppConfig().protectedRoutes
-  if (!config?.requireLoginPaths?.length) return
+  if (!config) return
 
-  const protectedPaths = config.requireLoginPaths
-  const isProtected = protectedPaths.some((path) => to.path.startsWith(path))
+  const protectedPaths = config.requireLoginPaths || []
+  if (!protectedPaths.length) return
+
+  const isProtected = protectedPaths.some((path) => {
+    // Exact match
+    if (path.endsWith('/')) {
+      // Match any child route, e.g., /admin/ matches /admin/settings
+      return to.path.startsWith(path)
+    } else {
+      // Match only exact route, e.g., /admin only matches /admin
+      return to.path === path
+    }
+  })
 
   if (!isProtected) return
 
