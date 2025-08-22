@@ -95,7 +95,9 @@ const sectionClasses = computed(() => [
           heroTheme.image.base,
           isFrontEffective ? heroTheme.image.isFront : 'max-w-none',
         ]"
+        :fetchpriority="media.loading === 'eager' ? 'high' : undefined"
         :height="media.height || ''"
+        :loading="media.loading || 'lazy'"
         :sizes="media.sizes || ''"
         :src="media.src || ''"
         :srcset="media.srcset || ''"

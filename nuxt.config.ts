@@ -15,6 +15,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  nitro: {
+    compressPublicAssets: true,
+  },
   vite: {
     server: {
       allowedHosts:

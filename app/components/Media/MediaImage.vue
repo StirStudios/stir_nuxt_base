@@ -33,6 +33,7 @@ const loaded = ref(false)
             ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
             : '',
         ]"
+        :fetchpriority="item.loading === 'eager' ? 'high' : undefined"
         :height="item.height"
         :loading="item.loading || 'lazy'"
         :sizes="item.sizes"
