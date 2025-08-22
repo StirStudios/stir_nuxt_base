@@ -29,9 +29,6 @@ importers:
       nuxt:
         specifier: ^3.18.1
         version: 3.18.1(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@24.2.1)(@vue/compiler-sfc@3.5.18)(db0@0.3.2)(eslint@9.33.0(jiti@2.5.1))(ioredis@5.7.0)(lightningcss@1.30.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.46.2)(terser@5.43.1)(typescript@5.9.2)(vite@7.1.2(@types/node@24.2.1)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.1))(yaml@2.8.1)
-      nuxt-vitalizer:
-        specifier: ^0.10.0
-        version: 0.10.0(magicast@0.3.5)
       nuxtjs-drupal-ce:
         specifier: ^2.4.1
         version: 2.4.1
@@ -60,6 +57,9 @@ importers:
       eslint-plugin-prettier:
         specifier: ^5.5.4
         version: 5.5.4(eslint-config-prettier@10.1.8(eslint@9.33.0(jiti@2.5.1)))(eslint@9.33.0(jiti@2.5.1))(prettier@3.6.2)
+      nuxt-vitalizer:
+        specifier: ^1.0.0
+        version: 1.0.0(magicast@0.3.5)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -4208,8 +4208,8 @@ packages:
   nuxt-site-config@3.2.2:
     resolution: {integrity: sha512-0zCo8nZKk11F4oEWvioTPpxYesJtiwWGfanh1coOfPmvGdYuCcJ/pusy8zdPb6xQkvAYqpTZUy7KKfjXjrE8rA==}
 
-  nuxt-vitalizer@0.10.0:
-    resolution: {integrity: sha512-z5leudr8wD2msKl7ETLGUICSOVoXVLMA8bAeRuWN4/UuYl7g7G2k7Idzl1z8ft/VmoYZ9ld3J0/2UZOZuxxzog==}
+  nuxt-vitalizer@1.0.0:
+    resolution: {integrity: sha512-+U+sLlJsbaLilRIQ/mKaIpWtwTLQlkIt8qbLVxaejWk+nX6Fzj8BzrZM/ONSTAsYZB2ieFSDkCaLpct4aqztIA==}
 
   nuxt@3.18.1:
     resolution: {integrity: sha512-y2pLKty6R8MCCFlAUsJNJcOuT6M3EovzEpi7/U3WXQsnzf2MzP+5I67ScfmwSqZ3UUMgXvfc9H4+KC4Ifnq5wg==}
@@ -10311,9 +10311,9 @@ snapshots:
       - magicast
       - vue
 
-  nuxt-vitalizer@0.10.0(magicast@0.3.5):
+  nuxt-vitalizer@1.0.0(magicast@0.3.5):
     dependencies:
-      '@nuxt/kit': 3.18.1(magicast@0.3.5)
+      '@nuxt/kit': 4.0.3(magicast@0.3.5)
       defu: 6.1.4
       knitwork: 1.2.0
     transitivePeerDependencies:

@@ -2,6 +2,15 @@ import { useWindowScroll, useThrottleFn } from '@vueuse/core'
 import { usePageContext } from '~/composables/usePageContext'
 
 export function useScrollNav(baseScrollThreshold = 10, directionDelta = 10) {
+  if (!import.meta.client) {
+    return {
+      isScrolled: ref(false),
+      showNavbar: ref(true),
+      scrollDirection: ref(null),
+      atBottom: ref(false),
+    }
+  }
+
   const { y, directions, arrivedState } = useWindowScroll({
     behavior: 'smooth',
   })
@@ -33,8 +42,8 @@ export function useScrollNav(baseScrollThreshold = 10, directionDelta = 10) {
       showNavbar.value = true
     } else if (delta > directionDelta) {
       showNavbar.value = false
-    } else if (delta < -directionDelta) {
-      if (!atBottom.value) showNavbar.value = true
+    } else if (delta < -directionDelta && !atBottom.value) {
+      showNavbar.value = true
     }
 
     lastScrollPosition.value = current

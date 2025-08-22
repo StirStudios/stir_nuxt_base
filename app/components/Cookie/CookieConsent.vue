@@ -12,18 +12,22 @@ function accept() {
   open.value = false
 }
 
+const ignorePaths = [config?.termsUrl, config?.privacyUrl].filter(Boolean)
+
 watch(
   () => route.path,
   () => {
     if (!import.meta.client) return
 
-    const isBot = /bot|crawl|spider/i.test(navigator.userAgent)
+    const isBot = navigator?.userAgent
+      ? /bot|crawl|spider/i.test(navigator.userAgent)
+      : false
 
     if (
       !consent.value &&
       config?.enabled &&
       !isBot &&
-      ![config.termsUrl, config.privacyUrl].includes(route.path)
+      !ignorePaths.includes(route.path)
     ) {
       open.value = true
     }
@@ -62,7 +66,7 @@ watch(
         >
           Terms of Service
         </ULink>
-        and
+        <span class="mx-1">and</span>
         <ULink
           v-if="config.privacyUrl"
           class="underline"

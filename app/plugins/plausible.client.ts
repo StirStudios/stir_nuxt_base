@@ -1,4 +1,6 @@
 export default defineNuxtPlugin((nuxtApp) => {
+  if (!import.meta.client) return
+
   const config = useAppConfig()
   const plausible = config.analytics?.plausible
 

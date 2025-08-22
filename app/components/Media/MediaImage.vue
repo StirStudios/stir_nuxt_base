@@ -41,13 +41,13 @@ const loaded = ref(false)
         :width="item.width"
         @load="loaded = true"
       />
-    </ClientOnly>
 
-    <span
-      v-if="item.credit"
-      class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
-    >
-      {{ item.credit }}
-    </span>
+      <span
+        v-if="item.credit"
+        class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
+      >
+        {{ item.credit }}
+      </span>
+    </ClientOnly>
   </component>
 </template>

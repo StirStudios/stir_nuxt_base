@@ -16,7 +16,7 @@ const { onError } = useValidation()
 const route = useRoute()
 const router = useRouter()
 
-async function onSubmit(event: FormSubmitEvent<typeof state>) {
+const onSubmit = async (event: FormSubmitEvent<typeof state>) => {
   isLoading.value = true
 
   try {
@@ -33,7 +33,7 @@ async function onSubmit(event: FormSubmitEvent<typeof state>) {
         description: 'Access granted!',
         color: 'success',
       })
-      await navigateTo(config?.redirectOnLogin || '/')
+      navigateTo(config?.redirectOnLogin || '/')
     } else {
       toast.add({
         title: 'Session error',
@@ -52,14 +52,15 @@ async function onSubmit(event: FormSubmitEvent<typeof state>) {
   }
 }
 
-// Auto-login if URL contains ?password=...
-onMounted(async () => {
+// Auto-login from ?password=...
+onMounted(() => {
+  if (!import.meta.client) return
+
   const passwordFromUrl = route.query.password
   if (typeof passwordFromUrl === 'string') {
     state.password = passwordFromUrl
-    await onSubmit({ data: { password: passwordFromUrl } })
+    onSubmit({ data: { password: passwordFromUrl } })
 
-    // Remove password from URL
     const { password, ...cleanedQuery } = route.query
     router.replace({ query: cleanedQuery })
   }

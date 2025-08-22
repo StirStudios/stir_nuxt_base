@@ -20,7 +20,6 @@ const timelineItems = computed<TimelineItem[]>(() => {
 </script>
 
 <template>
-  {{ item.width }}
   <EditLink :link="item.editLink">
     <WrapAnimate :effect="item?.direction">
       <WrapAlign :align="item.align">
@@ -32,10 +31,10 @@ const timelineItems = computed<TimelineItem[]>(() => {
           ]"
         >
           <UTimeline
-            :items="timelineItems"
+            class="max-w-3xl"
             :color="item.color ?? 'primary'"
             :default-value="timelineItems.length - 1"
-            class="max-w-3xl"
+            :items="timelineItems"
           >
             <template #rich-description="{ item }">
               <div v-html="item.description" />
