@@ -4,6 +4,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const config = useAppConfig().protectedRoutes
   if (!config || !config.loginPath || !config.redirectOnLogin) return
 
+  const protectedPaths = config.requireLoginPaths ?? []
+  const isProtected = protectedPaths.some((path) => to.path.startsWith(path))
+  if (!isProtected) return
+
   let ready = ref(true)
   let loggedIn = ref(false)
   let fetch = async () => {}
@@ -23,7 +27,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo(config.redirectOnLogin)
   }
 
-  if (config.requireLoginPaths?.includes(to.path) && !loggedIn.value) {
+  if (!loggedIn.value) {
     return navigateTo(config.loginPath)
   }
 })
