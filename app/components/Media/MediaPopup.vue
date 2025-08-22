@@ -47,12 +47,12 @@ const openModal = (item: MediaProps) => {
           class="absolute inset-0 z-10 bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-10"
         />
         <button
+          v-if="item.mediaEmbed"
           aria-label="Play Video"
           class="absolute inset-0 z-20 flex cursor-pointer items-center justify-center text-white transition-transform duration-500 ease-in-out hover:scale-125 hover:drop-shadow-md"
           @click="openModal(item)"
         >
           <UIcon
-            v-if="item.mediaEmbed"
             aria-hidden="true"
             color="white"
             name="i-heroicons-play-circle"
