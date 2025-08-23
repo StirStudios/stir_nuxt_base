@@ -37,6 +37,10 @@ const sectionId = (layout: SectionProps) => {
     : `section-${layout.id}`
 }
 
+const getLazyComponentName = (element: string) => {
+  return `Lazy${componentExists(element) ? resolveComponentName(element) : 'ParagraphDefault'}`
+}
+
 const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
@@ -123,11 +127,7 @@ const getNodeProps = (item) => {
               <template v-for="item in regionItems" :key="item.uuid">
                 <article :class="item.element">
                   <component
-                    :is="
-                      componentExists(item.element)
-                        ? resolveComponentName(item.element)
-                        : 'ParagraphDefault'
-                    "
+                    :is="getLazyComponentName(item.element)"
                     v-bind="getNodeProps(item)"
                   />
                 </article>
@@ -142,11 +142,7 @@ const getNodeProps = (item) => {
 
     <section v-else :class="container">
       <component
-        :is="
-          componentExists(layout.element)
-            ? resolveComponentName(layout.element)
-            : 'ParagraphDefault'
-        "
+        :is="getLazyComponentName(layout.element)"
         v-if="getNodeProps(layout) !== null"
         v-bind="getNodeProps(layout)"
       />

@@ -29,11 +29,11 @@ definePageMeta({
       :hero="page?.content?.hero?.[0]"
       :page-title="page.title"
       :site-slogan="page.site_info?.slogan || ''"
-      :hide="page?.content?.hide || ''"
+      :hide="page?.content?.hide === true || page?.content?.hide === 'true'"
     />
-    <RegionArea area="before_main" />
+    <LazyRegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />
-    <RegionArea area="after_main" />
+    <LazyRegionArea area="after_main" />
   </NuxtLayout>
 </template>
