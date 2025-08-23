@@ -18,8 +18,6 @@ const filteredRows = computed(() =>
 </script>
 
 <template>
-  <h3 v-if="item.title">{{ item.title }}</h3>
-
   <div :class="[item.width, item.spacing]">
     <template v-if="item.carousel">
       <ParagraphCarousel

@@ -97,9 +97,13 @@ const getNodeProps = (item) => {
       v-if="isValidParagraphLayout(layout)"
       :class="[layout.classes || 'content', layout.spacing]"
     >
-      <template v-if="layout.header">
-        <h2 :class="container" v-html="layout.header" />
-      </template>
+      <component
+        :is="layout.headerTag || 'h2'"
+        v-if="layout.header"
+        :class="container"
+      >
+        {{ layout.header }}
+      </component>
 
       <div
         :id="sectionId(layout)"
