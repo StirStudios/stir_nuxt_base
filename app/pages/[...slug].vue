@@ -29,7 +29,7 @@ definePageMeta({
       :hero="page?.content?.hero?.[0]"
       :page-title="page.title"
       :site-slogan="page.site_info?.slogan || ''"
-      :hide="page?.content?.hide === true || page?.content?.hide === 'true'"
+      :hide="page?.content?.hide || ''"
     />
     <LazyRegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
