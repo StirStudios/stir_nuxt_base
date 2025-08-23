@@ -38,8 +38,7 @@
       @apply leading-7;
     }
 
-    ul > li,
-    ol > li {
+    ul:not(.list-none) > li {
       @apply ms-4 list-disc;
     }
 
