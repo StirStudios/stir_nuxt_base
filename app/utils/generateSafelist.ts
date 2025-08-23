@@ -85,6 +85,7 @@ const additionalClasses = [
   'lg:grid-cols-[8fr_4fr]',
   'lg:grid-cols-[4fr_8fr]',
   'text-muted',
+  'list-none',
 ]
 
 additionalClasses.forEach((cls) => safelist.add(cls))
