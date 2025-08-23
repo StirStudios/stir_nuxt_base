@@ -4,13 +4,13 @@ import type { RegionItemProps } from '~/types/ContentTypes'
 const props = defineProps<{ item: RegionItemProps }>()
 
 onMounted(() => {
-  const SCRIPT_ID = '__enzuzo-root-script'
-  const ROOT_ID = '__enzuzo-root'
+  const scriptId = '__enzuzo-root-script'
+  const rootId = '__enzuzo-root'
 
   const { embedUrl } = props.item
-  if (!embedUrl || document.getElementById(SCRIPT_ID)) return
+  if (!embedUrl || document.getElementById(scriptId)) return
 
-  const target = document.getElementById(ROOT_ID)
+  const target = document.getElementById(rootId)
   if (!target) return
 
   const sanitizedUrl = embedUrl.trim().startsWith('http')
@@ -22,7 +22,7 @@ onMounted(() => {
   }
 
   const script = document.createElement('script')
-  script.id = SCRIPT_ID
+  script.id = scriptId
   script.src = sanitizedUrl
   script.defer = true
   script.crossOrigin = 'anonymous'

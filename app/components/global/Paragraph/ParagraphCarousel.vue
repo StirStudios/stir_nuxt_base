@@ -46,7 +46,6 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
 
 <template>
   <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
-    <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       v-if="showCarousel"
       ref="carousel"
