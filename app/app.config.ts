@@ -126,8 +126,8 @@ export default defineAppConfig({
       3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
     },
     carousel: {
-      padding: 'p-8 px-16 pb-12',
-      root: '',
+      padding: 'pb-12',
+      root: ['w-full max-w-xs mx-auto', 'xs:max-w-full xs:mx-0'],
       arrows: {
         // prev: { color: 'neutral', variant: 'outline', size: 'md' },
         // next: { color: 'neutral', variant: 'outline', size: 'md' },
