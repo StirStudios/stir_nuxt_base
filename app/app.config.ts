@@ -127,7 +127,7 @@ export default defineAppConfig({
     },
     carousel: {
       padding: 'pb-12',
-      root: ['w-full max-w-xs mx-auto', 'xs:max-w-full xs:mx-0'],
+      root: '',
       arrows: {
         // prev: { color: 'neutral', variant: 'outline', size: 'md' },
         // next: { color: 'neutral', variant: 'outline', size: 'md' },
