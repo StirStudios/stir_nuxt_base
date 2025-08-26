@@ -18,6 +18,7 @@ export interface RegionItemProps extends LayoutProps {
   uuid: string
   parentUuid: string
   region?: string
+  randomize?: boolean
   text?: string
   src?: string
   gradient?: string

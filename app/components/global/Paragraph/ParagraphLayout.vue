@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { SectionProps } from '~/types/ContentTypes'
+import { useShuffledLayouts } from '~/composables/useShuffledLayouts'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 
-defineProps<{
+const props = defineProps<{
   section?: SectionProps[]
 }>()
 
+const shuffledLayouts = useShuffledLayouts(props.section || [])
+
 const { container, card } = useAppConfig().stirTheme
 
-// Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
   return (layout: SectionProps) => {
     return (
@@ -92,10 +94,14 @@ const getNodeProps = (item) => {
 </script>
 
 <template>
-  <template v-for="layout in section" :key="layout.id">
+  <template v-for="layout in shuffledLayouts" :key="layout.id">
     <section
       v-if="isValidParagraphLayout(layout)"
-      :class="[layout.classes || 'content', layout.spacing]"
+      :class="[
+        layout.classes || 'content',
+        layout.spacing,
+        layout.randomize ? 'randomize' : '',
+      ]"
     >
       <component
         :is="layout.headerTag || 'h2'"
@@ -121,7 +127,7 @@ const getNodeProps = (item) => {
             <div
               :class="[
                 'region',
-                `${regionName}`,
+                regionName,
                 regionName === 'top' || regionName === 'bottom'
                   ? 'col-span-full'
                   : '',
