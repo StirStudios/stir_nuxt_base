@@ -75,7 +75,7 @@ const posterImage = computed(() => {
 
 <template>
   <EditLink :link="hero?.editLink">
-    <section :class="sectionClasses">
+    <section :class="[...sectionClasses, 'relative', 'min-h-[75vh]']">
       <div
         :class="[
           heroTheme.text.base,
@@ -121,7 +121,7 @@ const posterImage = computed(() => {
 
       <video
         v-else-if="media.type === 'video'"
-        class="absolute min-h-full w-auto max-w-none min-w-full"
+        class="absolute inset-0 h-full w-full object-cover"
         disablepictureinpicture
         height="640"
         loop
