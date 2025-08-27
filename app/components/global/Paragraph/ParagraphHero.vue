@@ -56,6 +56,21 @@ const sectionClasses = computed(() => [
   isFrontEffective.value && heroTheme.isFront,
   hide === 'true' && 'sr-only',
 ])
+
+const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
+  return (
+    srcset
+      .split(',')
+      .map((item) => item.trim())
+      .find((item) => item.endsWith(targetWidth))
+      ?.split(' ')[0] || ''
+  )
+}
+
+const posterImage = computed(() => {
+  const srcset = media.value?.srcset
+  return typeof srcset === 'string' ? getPosterFromSrcset(srcset, '1920w') : ''
+})
 </script>
 
 <template>
@@ -112,6 +127,7 @@ const sectionClasses = computed(() => [
         loop
         muted
         playsinline
+        :poster="posterImage"
         preload="metadata"
         type="video/mp4"
         width="360"

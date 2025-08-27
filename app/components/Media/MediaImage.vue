@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 
-defineProps<{ item: MediaProps; link?: boolean }>()
-
+const { item, link } = defineProps<{ item: MediaProps; link?: boolean }>()
 const { media } = useAppConfig().stirTheme
-const loaded = ref(false)
+
+const isEager = computed(() => item.loading === 'eager')
 </script>
 
 <template>
@@ -21,28 +21,57 @@ const loaded = ref(false)
     ]"
     :href="item.link || undefined"
   >
-    <USkeleton v-if="!loaded" class="absolute inset-0" />
+    <ClientOnly v-if="!isEager" fallback-tag="div">
+      <template #default>
+        <img
+          :alt="item.alt || ''"
+          :class="[
+            media.base,
+            link
+              ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
+              : '',
+          ]"
+          :fetchpriority="undefined"
+          :height="item.height"
+          :loading="item.loading || 'lazy'"
+          :sizes="item.sizes"
+          :src="item.src"
+          :srcset="item.srcset"
+          :width="item.width"
+        />
+      </template>
+      <template #fallback>
+        <USkeleton
+          class="w-full"
+          :style="{
+            aspectRatio:
+              item.width && item.height
+                ? `${item.width} / ${item.height}`
+                : '4 / 3',
+          }"
+        />
+      </template>
+    </ClientOnly>
+
+    <img
+      v-else
+      :alt="item.alt || ''"
+      :class="[
+        media.base,
+        link
+          ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
+          : '',
+      ]"
+      fetchpriority="high"
+      :height="item.height"
+      loading="eager"
+      :sizes="item.sizes"
+      :src="item.src"
+      :srcset="item.srcset"
+      :width="item.width"
+    />
 
     <ClientOnly>
-      <img
-        :alt="item.alt || ''"
-        :class="[
-          media.base,
-          loaded ? 'opacity-100' : 'opacity-0',
-          link
-            ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
-            : '',
-        ]"
-        :fetchpriority="item.loading === 'eager' ? 'high' : undefined"
-        :height="item.height"
-        :loading="item.loading || 'lazy'"
-        :sizes="item.sizes"
-        :src="item.src"
-        :srcset="item.srcset"
-        :width="item.width"
-        @load="loaded = true"
-      />
-
       <span
         v-if="item.credit"
         class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
