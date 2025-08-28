@@ -75,7 +75,7 @@ const posterImage = computed(() => {
 
 <template>
   <EditLink :link="hero?.editLink">
-    <section :class="[...sectionClasses, 'relative', 'min-h-[75vh]']">
+    <section :class="[...sectionClasses, 'relative'">
       <div
         :class="[
           heroTheme.text.base,
