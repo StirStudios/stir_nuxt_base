@@ -55,6 +55,7 @@ const sectionClasses = computed(() => [
   media.value?.type && heroTheme.overlay,
   isFrontEffective.value && heroTheme.isFront,
   hide === 'true' && 'sr-only',
+  media.value?.type === 'video' && 'min-h-[75vh]',
 ])
 
 const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
@@ -75,7 +76,7 @@ const posterImage = computed(() => {
 
 <template>
   <EditLink :link="hero?.editLink">
-    <section :class="[...sectionClasses, 'relative']">
+    <section :class="sectionClasses">
       <div
         :class="[
           heroTheme.text.base,
