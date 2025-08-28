@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-08-21',
   css: ['~/assets/css/main.css'],
   features: {
-    inlineStyles: false,
+    inlineStyles: true,
   },
   app: {
     head: {
@@ -60,6 +60,11 @@ export default defineNuxtConfig({
         disableStylesheets: 'entry',
         disablePrefetchLinks: true,
         disablePreloadLinks: true,
+        delayHydration: {
+          hydrateOnEvents: ['mousemove', 'scroll', 'keydown', 'click'],
+          idleCallbackTimeout: 8000,
+          postIdleTimeout: 4000,
+        },
       },
     ],
     [
