@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ViewItemProps } from '~/types/ViewTypes'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
+import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
 const props = defineProps<{
   item: ViewItemProps
@@ -9,12 +10,12 @@ const props = defineProps<{
 const { grid } = useAppConfig().stirTheme
 
 // Filters out 'paragraph-layout' sections
-const filteredRows = computed(() =>
-  (props.item.rows || []).map((row) => ({
-    ...row,
-    section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
-  })),
-)
+const initialRows = (props.item.rows || []).map((row) => ({
+  ...row,
+  section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
+}))
+
+const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
+import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
 const props = defineProps<CarouselProps>()
 
@@ -41,7 +42,10 @@ const autoplayOptions = computed(() =>
   !autoscroll.value ? { ...basePauseOptions } : false,
 )
 
-const showCarousel = computed(() => mounted.value && props.items?.length > 0)
+const shuffledItems = useShuffledOrder(props.items || [], props.randomize)
+const showCarousel = computed(
+  () => mounted.value && shuffledItems.value.length > 0,
+)
 </script>
 
 <template>
@@ -55,7 +59,7 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
       :autoplay="autoplayOptions"
       :dots="showIndicators"
       :fade="transitionFade"
-      :items="items"
+      :items="shuffledItems"
       loop
       :next="appConfig.stirTheme.carousel.arrows.next"
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
