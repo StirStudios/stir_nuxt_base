@@ -9,12 +9,13 @@ const props = defineProps<{
 
 const { grid } = useAppConfig().stirTheme
 
-// Filters out 'paragraph-layout' sections
+// Filter out 'paragraph-layout' sections before passing to shuffle
 const initialRows = (props.item.rows || []).map((row) => ({
   ...row,
   section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
 }))
 
+// Shuffle if randomize is enabled
 const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
 </script>
 
@@ -30,6 +31,7 @@ const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
         :interval="item.carouselInterval"
         :item-element="item.element"
         :items="filteredRows"
+        :randomize="false"
         :vid="item.viewId"
       />
     </template>
