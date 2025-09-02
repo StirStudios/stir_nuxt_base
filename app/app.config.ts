@@ -18,6 +18,15 @@ export default defineAppConfig({
     // color: '#ffffff',
     // type: '1',
   },
+  // protectedRoutes: {
+  //   loginPath: '/login',
+  //   redirectOnLogin: '/example',
+  //   requireLoginPaths: [
+  //     '/example', // exact match only
+  //     '/admin/', // matches /admin/* (e.g., /admin/users)
+  //   ],
+  //   loginHeading: 'Login',
+  // },
   analytics: {
     plausible: {
       enabled: false,
@@ -58,6 +67,7 @@ export default defineAppConfig({
       slideover: {
         logo: true,
         link: 'text-xl text-center block my-3 uppercase',
+        body: 'flex h-full flex-col justify-center text-center',
       },
     },
     // front: {
@@ -79,7 +89,7 @@ export default defineAppConfig({
     hero: {
       base: 'flex items-center justify-center overflow-hidden',
       mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
-      noMediaSpacing: 'py-24 lg:pt-54',
+      noMediaSpacing: 'pt-30 lg:pt-54',
       overlay:
         'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50',
       isFront: 'h-screen',
@@ -116,7 +126,7 @@ export default defineAppConfig({
       3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
     },
     carousel: {
-      padding: 'p-8 px-16 pb-12',
+      padding: 'pb-12',
       root: '',
       arrows: {
         // prev: { color: 'neutral', variant: 'outline', size: 'md' },

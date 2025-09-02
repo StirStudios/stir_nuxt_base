@@ -1,4 +1,5 @@
 import type { LayoutProps } from './UtilityTypes'
+import type { RegionItemProps } from '~/types/ContentTypes'
 
 declare global {
   interface Window {
@@ -17,6 +18,7 @@ export interface HeroProps extends LayoutProps {
   text?: string
   media: MediaProps[]
   editLink?: string
+  button?: RegionItemProps[]
 }
 
 export interface MediaProps {
@@ -43,6 +45,7 @@ export interface CarouselProps extends LayoutProps {
   arrows?: boolean
   fade?: boolean
   autoscroll?: boolean
+  overlay?: boolean
   width?: string
   vid?: string
   itemElement?: string

@@ -1,25 +1,25 @@
 <script setup lang="ts">
-const { fetchPage, renderCustomElements, getPageLayout } = await useDrupalCe()
-const { bodyClasses, isFront } = usePageContext()
+const { fetchPage, renderCustomElements, usePageHead } = useDrupalCe()
+const { bodyClasses } = usePageContext()
 const theme = useAppConfig().stirTheme
 
-const route = useRoute()
-const page = await fetchPage(route.path, { query: route.query })
-
-const layout = getPageLayout(page.value)
+const page = await fetchPage(useRoute().path, { query: useRoute().query })
+const layout = page.value.page_layout
+usePageHead(page)
 
 useHead({
-  htmlAttrs: { lang: 'en' },
-  bodyAttrs: { class: bodyClasses },
-  title: page.value?.title,
-  meta: page.value?.metatags?.meta || [],
-  link: page.value?.metatags?.link || [],
-  script: [
-    {
-      type: 'application/ld+json',
-      children: JSON.stringify(page.value?.metatags?.jsonld || []),
-    },
-  ],
+  bodyAttrs: {
+    class: bodyClasses,
+  },
+})
+
+definePageMeta({
+  key: (route) => {
+    const params = new URLSearchParams(
+      route.query as Record<string, any>,
+    ).toString()
+    return params ? `${route.path}?${params}` : route.path
+  },
 })
 </script>
 
@@ -31,8 +31,9 @@ useHead({
       :site-slogan="page.site_info?.slogan || ''"
       :hide="page?.content?.hide || ''"
     />
-
+    <LazyRegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />
+    <LazyRegionArea area="after_main" />
   </NuxtLayout>
 </template>

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { DialogTitle, DialogDescription, VisuallyHidden } from 'reka-ui'
 import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
@@ -95,17 +94,16 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
 
   <USlideover
     v-model:open="isOpen"
-    title="Menu"
+    description="Navigation links for mobile menu"
+    title="Site navigation"
     :ui="{
       header: 'flex items-center justify-between gap-1.5 p-4 sm:px-6 min-h-16',
+      title: 'sr-only',
+      description: 'sr-only',
+      body: theme.navigation.slideover.body,
     }"
   >
     <template #header>
-      <VisuallyHidden>
-        <DialogTitle>Site navigation</DialogTitle>
-        <DialogDescription>Navigation links for mobile menu</DialogDescription>
-      </VisuallyHidden>
-
       <ULink
         v-if="theme.navigation.slideover.logo"
         aria-label="Logo"
@@ -130,7 +128,13 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
         :items="navLinks"
         orientation="vertical"
         :ui="{ link: theme.navigation.slideover.link }"
-      />
+      >
+        <template #item="{ item }">
+          <ULink :to="item.to" @click="isOpen = false">
+            {{ item.label }}
+          </ULink>
+        </template>
+      </UNavigationMenu>
     </template>
   </USlideover>
 </template>

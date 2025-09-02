@@ -40,7 +40,7 @@ export const getMotionEffect = (
       show: { opacity: 1, x: 0, transition: transitionConfig },
     },
 
-    // ✅ Flip Animations (Restored)
+    // Flip Animations (Restored)
     'flip-up': {
       hidden: { opacity: 0, rotateX: 90 },
       show: { opacity: 1, rotateX: 0, transition: transitionConfig },
@@ -58,7 +58,7 @@ export const getMotionEffect = (
       show: { opacity: 1, rotateY: 0, transition: transitionConfig },
     },
 
-    // ✅ Slide Animations (Restored)
+    // Slide Animations (Restored)
     'slide-up': {
       hidden: { opacity: 0, y: 100 },
       show: { opacity: 1, y: 0, transition: transitionConfig },
@@ -76,7 +76,7 @@ export const getMotionEffect = (
       show: { opacity: 1, x: 0, transition: transitionConfig },
     },
 
-    // ✅ Zoom Animations (Restored)
+    // Zoom Animations (Restored)
     'zoom-in': {
       hidden: { opacity: 0, scale: 0.8 },
       show: { opacity: 1, scale: 1, transition: transitionConfig },
@@ -86,7 +86,7 @@ export const getMotionEffect = (
       show: { opacity: 1, scale: 1, transition: transitionConfig },
     },
 
-    // ✅ Zoom with Direction
+    // Zoom with Direction
     'zoom-in-up': {
       hidden: { opacity: 0, scale: 0.8, y: 100 },
       show: { opacity: 1, scale: 1, y: 0, transition: transitionConfig },

@@ -14,6 +14,7 @@
   --font-sans: 'InterVariable', system-ui, sans-serif;
 
   --container-8xl: 96rem;
+  --breakpoint-xs: 30rem;
 
   --color-white: #ffffff;
   --color-black: #14161a;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ViewItemProps } from '~/types/ViewTypes'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
+import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
 const props = defineProps<{
   item: ViewItemProps
@@ -8,18 +9,17 @@ const props = defineProps<{
 
 const { grid } = useAppConfig().stirTheme
 
-// Filters out 'paragraph-layout' sections
-const filteredRows = computed(() =>
-  (props.item.rows || []).map((row) => ({
-    ...row,
-    section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
-  })),
-)
+// Filter out 'paragraph-layout' sections before passing to shuffle
+const initialRows = (props.item.rows || []).map((row) => ({
+  ...row,
+  section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
+}))
+
+// Shuffle if randomize is enabled
+const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
 </script>
 
 <template>
-  <h3 v-if="item.title">{{ item.title }}</h3>
-
   <div :class="[item.width, item.spacing]">
     <template v-if="item.carousel">
       <ParagraphCarousel
@@ -31,6 +31,7 @@ const filteredRows = computed(() =>
         :interval="item.carouselInterval"
         :item-element="item.element"
         :items="filteredRows"
+        :randomize="false"
         :vid="item.viewId"
       />
     </template>

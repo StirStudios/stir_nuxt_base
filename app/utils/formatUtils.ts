@@ -16,3 +16,23 @@ export function formatCurrency(
     minimumFractionDigits: 2,
   }).format(value)
 }
+
+/**
+ * Converts a UNIX timestamp to a readable date string.
+ * @param unix - The UNIX timestamp (in seconds).
+ * @param locale - Optional locale (default: 'en-US').
+ * @param options - Optional Intl.DateTimeFormat options.
+ * @returns A formatted date string.
+ */
+export function formatUnixDate(
+  unix: number | string,
+  locale = 'en-US',
+  options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  },
+): string {
+  const date = new Date(Number(unix) * 1000)
+  return date.toLocaleDateString(locale, options)
+}

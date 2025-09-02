@@ -12,11 +12,15 @@ const theme = useAppConfig().stirTheme
 const pdf = computed(
   () => props.item.media?.find((m) => m.type === 'document') || null,
 )
-const link = computed(() =>
-  pdf.value?.url ? null : props.item.link?.[0] || null,
+
+const link = computed(() => (pdf.value?.url ? null : props.item.link || null))
+
+const pdfLabel = computed(
+  () => pdf.value?.title || props.item.title || 'View PDF',
 )
-const buttonLabel = computed(
-  () => pdf.value?.title || link.value?.title || props.item.title || 'View PDF',
+
+const linkLabel = computed(
+  () => link.value?.title || props.item.title || 'View link',
 )
 </script>
 
@@ -27,18 +31,18 @@ const buttonLabel = computed(
         v-if="pdf?.url"
         class="mt-4"
         icon="i-lucide-file-text"
-        :label="buttonLabel"
-        :title="buttonLabel"
+        :label="pdfLabel"
+        :title="pdfLabel"
         @click="open = true"
       />
 
       <UButton
-        v-else-if="link?.uri"
+        v-else-if="link?.url"
         class="mt-4"
-        :label="buttonLabel"
-        target="_blank"
-        :title="buttonLabel"
-        :to="link.uri"
+        :label="linkLabel"
+        :target="link.external ? '_blank' : undefined"
+        :title="linkLabel"
+        :to="link.url"
       />
     </div>
   </EditLink>

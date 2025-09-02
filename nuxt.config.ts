@@ -2,24 +2,10 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-  vite: {
-    server: {
-      allowedHosts:
-        process.env.NODE_ENV === 'development'
-          ? [process.env.SERVER_DOMAIN_CLIENT || 'localhost']
-          : [],
-    },
-    build: {
-      modulePreload: false,
-    },
-  },
-  compatibilityDate: '2025-04-09',
-  nitro: {
-    compressPublicAssets: true,
-  },
+  compatibilityDate: '2025-08-21',
   css: ['~/assets/css/main.css'],
   features: {
-    inlineStyles: false,
+    inlineStyles: true,
   },
   app: {
     head: {
@@ -29,12 +15,27 @@ export default defineNuxtConfig({
       },
     },
   },
+  nitro: {
+    compressPublicAssets: true,
+  },
+  vite: {
+    server: {
+      allowedHosts:
+        process.env.NODE_ENV === 'development'
+          ? [process.env.SERVER_DOMAIN_CLIENT || 'localhost']
+          : [],
+    },
+    build: {
+      minify: true,
+      modulePreload: false,
+    },
+  },
   site: {
     name: process.env.NUXT_NAME,
     url: process.env.NUXT_URL,
-    indexable: process.env.NUXT_ENV === 'production' ? true : false,
+    indexable: process.env.NUXT_ENV === 'production',
   },
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
   routeRules: {
     '/admincontrol': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
@@ -45,10 +46,9 @@ export default defineNuxtConfig({
     '/admincontrol/password': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/password`,
     },
-    '/front': {
-      redirect: `${process.env.NUXT_URL}/`,
-    },
+    '/front': { redirect: `${process.env.NUXT_URL}/` },
   },
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
@@ -60,6 +60,11 @@ export default defineNuxtConfig({
         disableStylesheets: 'entry',
         disablePrefetchLinks: true,
         disablePreloadLinks: true,
+        delayHydration: {
+          hydrateOnEvents: ['mousemove', 'scroll', 'keydown', 'click'],
+          idleCallbackTimeout: 8000,
+          postIdleTimeout: 4000,
+        },
       },
     ],
     [
@@ -78,7 +83,7 @@ export default defineNuxtConfig({
       '@nuxtjs/sitemap',
       {
         sources: [`${process.env.DRUPAL_URL}/api/sitemap`],
-        cacheMaxAgeSeconds: 3600, // 1 hour
+        cacheMaxAgeSeconds: 3600,
         xslColumns: [
           { label: 'URL', width: '50%' },
           { label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },

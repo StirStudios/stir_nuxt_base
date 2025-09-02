@@ -17,9 +17,16 @@ export function usePageContext() {
     () => page.value?.current_user?.roles?.includes('administrator') || false,
   )
 
-  // Determine body classes dynamically
-  const bodyClasses = computed(
-    () => `${slug || 'front'} ${isAdministrator.value ? 'logged-in' : ''}`,
+  const pageElement = computed(() => page.value?.content?.element || '')
+
+  const bodyClasses = computed(() =>
+    [
+      slug || 'front',
+      isAdministrator.value ? 'logged-in' : '',
+      pageElement.value,
+    ]
+      .filter(Boolean)
+      .join(' '),
   )
 
   return {

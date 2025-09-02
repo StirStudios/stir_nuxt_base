@@ -7,6 +7,9 @@ export function useUserwayWidget() {
   if (!cfg?.enabled || !cfg.account) return
 
   onMounted(() => {
+    // Prevent duplicate injection
+    if (document.getElementById('userway-widget')) return
+
     window._userway_config = {
       account: cfg.account,
       position: cfg.position ?? 3,
@@ -16,6 +19,7 @@ export function useUserwayWidget() {
     }
 
     useScript({
+      id: 'userway-widget',
       src: 'https://cdn.userway.org/widget.js',
       crossorigin: 'anonymous',
       referrerpolicy: 'no-referrer',

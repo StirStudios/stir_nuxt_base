@@ -1,14 +1,3 @@
-/* Attribute-based selectors must be placed outside of @layer */
-/* [aria-roledescription='carousel'] img {
-  @apply m-auto aspect-1/1 object-cover;
-} */
-
-@utility matrix {
-  img {
-    @apply mb-5 lg:mb-10 xl:mb-16;
-  }
-}
-
 @utility text-dimmed {
   @apply text-muted/60;
 }
@@ -17,4 +6,12 @@
   a {
     @apply underline;
   }
+}
+
+.align-left {
+  @apply mx-auto max-w-sm sm:float-left sm:me-5 sm:mb-5;
+}
+
+.align-right {
+  @apply mx-auto max-w-sm sm:float-right sm:ms-5 sm:mb-5;
 }

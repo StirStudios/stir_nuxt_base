@@ -18,6 +18,7 @@ export interface RegionItemProps extends LayoutProps {
   uuid: string
   parentUuid: string
   region?: string
+  randomize?: boolean
   text?: string
   src?: string
   gradient?: string
@@ -42,4 +43,5 @@ export interface HTMLInjectionProps {
 export interface ParagraphBlockProps {
   blockName: string
   blocks: Record<string, any>
+  region?: string
 }

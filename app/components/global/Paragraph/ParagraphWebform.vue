@@ -25,6 +25,8 @@ const {
   webformId = '',
   webformSubmissions = '',
   webformConfirmation = '',
+  webformConfirmationType = '',
+  webformRedirect = '',
   actions = [],
 } = props.webform
 
