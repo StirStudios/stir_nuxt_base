@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { SectionProps } from '~/types/ContentTypes'
+import { useShuffledLayouts } from '~/composables/useShuffledLayouts'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 
-defineProps<{
+const props = defineProps<{
   section?: SectionProps[]
 }>()
 
+const shuffledLayouts = useShuffledLayouts(props.section || [])
+
 const { container, card } = useAppConfig().stirTheme
 
-// Computed property to check if the layout is valid for rendering
 const isValidParagraphLayout = computed(() => {
   return (layout: SectionProps) => {
     return (
@@ -37,6 +39,10 @@ const sectionId = (layout: SectionProps) => {
     : `section-${layout.id}`
 }
 
+const getLazyComponentName = (element: string) => {
+  return `Lazy${componentExists(element) ? resolveComponentName(element) : 'ParagraphDefault'}`
+}
+
 const getNodeProps = (item) => {
   if (item.element === 'paragraph-carousel') {
     return {
@@ -48,6 +54,8 @@ const getNodeProps = (item) => {
       fade: item.carouselFade,
       autoscroll: item.carouselAutoscroll,
       interval: item.carouselInterval,
+      randomize: item.randomize,
+      overlay: item.overlay,
       items: item.media,
       width: item.width,
     }
@@ -61,6 +69,8 @@ const getNodeProps = (item) => {
         carouselFade: item.carouselFade,
         carouselAutoscroll: item.carouselAutoscroll,
         carouselInterval: item.carouselInterval,
+        randomize: item.randomize,
+        overlay: item.overlay,
         spacing: item.spacing,
         width: item.width,
         gridItems: item.gridItems,
@@ -86,41 +96,57 @@ const getNodeProps = (item) => {
 </script>
 
 <template>
-  <template v-for="layout in section" :key="layout.id">
+  <template v-for="layout in shuffledLayouts" :key="layout.id">
     <section
       v-if="isValidParagraphLayout(layout)"
-      :class="[layout.classes ? layout.classes : 'content', layout.spacing]"
+      :class="[
+        layout.classes || 'content',
+        layout.spacing,
+        layout.randomize ? 'randomize' : '',
+      ]"
     >
-      <template v-if="layout.header">
-        <h2 :class="container" v-html="layout.header" />
-      </template>
+      <component
+        :is="layout.headerTag || 'h2'"
+        v-if="layout.header"
+        :class="container"
+      >
+        {{ layout.header }}
+      </component>
 
       <div
-        :id="sectionId(layout) || undefined"
+        :id="sectionId(layout)"
         :class="[
           layout.width,
           classLayout(layout),
           layout.card ? card.base : '',
         ]"
       >
-        <div
-          v-for="regionItem in layout.regions"
-          :key="regionItem[0]?.uuid"
-          :class="[regionItem[0].region, regionItem[0].align]"
+        <template
+          v-for="[regionName, regionItems] in Object.entries(layout.regions)"
+          :key="regionName"
         >
-          <template v-for="item in regionItem" :key="item.uuid">
-            <article :class="item.element">
-              <component
-                :is="
-                  componentExists(item.element)
-                    ? resolveComponentName(item.element)
-                    : 'ParagraphDefault'
-                "
-                v-bind="getNodeProps(item)"
-              />
-            </article>
+          <template v-if="Array.isArray(regionItems) && regionItems.length > 0">
+            <div
+              :class="[
+                'region',
+                regionName,
+                regionName === 'top' || regionName === 'bottom'
+                  ? 'col-span-full'
+                  : '',
+                regionItems[0].align || '',
+              ]"
+            >
+              <template v-for="item in regionItems" :key="item.uuid">
+                <article :class="item.element">
+                  <component
+                    :is="getLazyComponentName(item.element)"
+                    v-bind="getNodeProps(item)"
+                  />
+                </article>
+              </template>
+            </div>
           </template>
-        </div>
+        </template>
 
         <CardGradient v-if="layout.card" :layout="layout" />
       </div>
@@ -128,11 +154,7 @@ const getNodeProps = (item) => {
 
     <section v-else :class="container">
       <component
-        :is="
-          componentExists(layout.element)
-            ? resolveComponentName(layout.element)
-            : 'ParagraphDefault'
-        "
+        :is="getLazyComponentName(layout.element)"
         v-if="getNodeProps(layout) !== null"
         v-bind="getNodeProps(layout)"
       />

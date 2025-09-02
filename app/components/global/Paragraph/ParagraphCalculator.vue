@@ -25,5 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="venue-calculator-widget" :data-venue="item.venueId" />
+  <ClientOnly>
+    <div id="venue-calculator-widget" :data-venue="item.venueId" />
+  </ClientOnly>
 </template>

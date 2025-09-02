@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { DialogTitle, DialogDescription, VisuallyHidden } from 'reka-ui'
 const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
 const open = ref(false)
@@ -13,18 +12,22 @@ function accept() {
   open.value = false
 }
 
+const ignorePaths = [config?.termsUrl, config?.privacyUrl].filter(Boolean)
+
 watch(
   () => route.path,
   () => {
     if (!import.meta.client) return
 
-    const isBot = /bot|crawl|spider/i.test(navigator.userAgent)
+    const isBot = navigator?.userAgent
+      ? /bot|crawl|spider/i.test(navigator.userAgent)
+      : false
 
     if (
       !consent.value &&
       config?.enabled &&
       !isBot &&
-      ![config.termsUrl, config.privacyUrl].includes(route.path)
+      !ignorePaths.includes(route.path)
     ) {
       open.value = true
     }
@@ -36,22 +39,20 @@ watch(
 <template>
   <UDrawer
     v-model:open="open"
+    :description="config.message"
     :dismissible="false"
     :handle="false"
     :modal="false"
     :overlay="false"
     side="bottom"
+    :title="config.title"
     :ui="{
       container: 'overflow-y-auto',
       body: 'text-center text-xs leading-loose',
+      title: 'sr-only',
+      description: 'sr-only',
     }"
   >
-    <template #header>
-      <VisuallyHidden>
-        <DialogTitle>{{ config.title }}</DialogTitle>
-        <DialogDescription>{{ config.message }}</DialogDescription>
-      </VisuallyHidden>
-    </template>
     <template #body>
       <p>{{ config.message }}</p>
 
@@ -65,7 +66,7 @@ watch(
         >
           Terms of Service
         </ULink>
-        and
+        <span class="mx-1">and</span>
         <ULink
           v-if="config.privacyUrl"
           class="underline"

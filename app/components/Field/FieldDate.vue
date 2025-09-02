@@ -16,81 +16,54 @@ const props = defineProps<{
 }>()
 
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
-const multiple = Number(props.field['#multiple']) || 0
+const max = Number(props.field['#multiple']) || 1
 
+// Init model from stored state
 const models = ref<CalendarDate[]>([])
+const stored = props.state[props.fieldName]
 
-for (let i = 0; i < (multiple || 1); i++) {
-  const key = multiple ? `${props.fieldName}-${i}` : props.fieldName
-  const stored = props.state[key] as string
-  if (stored) {
-    const [y, m, d] = stored.split('T')[0].split('-').map(Number)
-    if (y && m && d) {
-      models.value[i] = new CalendarDate(y, m, d)
-    } else {
-      models.value[i] = null
-    }
-  } else {
-    models.value[i] = null
+if (Array.isArray(stored)) {
+  models.value = stored
+    .map((val) => {
+      const [y, m, d] = val.split('T')[0].split('-').map(Number)
+      return y && m && d ? new CalendarDate(y, m, d) : null
+    })
+    .filter(Boolean) as CalendarDate[]
+} else if (typeof stored === 'string' && stored.includes('-')) {
+  const [y, m, d] = stored.split('T')[0].split('-').map(Number)
+  if (y && m && d) {
+    models.value = [new CalendarDate(y, m, d)]
   }
 }
 
+// Sync state when models change
 watchEffect(() => {
-  const formatted: string[] = []
-
-  models.value.forEach((model, i) => {
-    const val = model ? model.toString() : ''
-    const key = multiple ? `${props.fieldName}-${i}` : props.fieldName
-    props.state[key] = val
-    if (val) formatted.push(val)
-  })
-
-  if (multiple) {
-    if (!Array.isArray(props.state[props.fieldName])) {
-      props.state[props.fieldName] = []
-    }
-    props.state[props.fieldName] = formatted
+  // Enforce max limit
+  if (models.value.length > max) {
+    models.value = models.value.slice(0, max)
   }
+
+  const values = models.value
+    .map((model) => model?.toString?.() ?? '')
+    .filter(Boolean)
+
+  props.state[props.fieldName] = max > 1 ? values : (values[0] ?? '')
 })
 </script>
 
 <template>
-  <div v-if="multiple" class="space-y-6">
-    <template v-for="(model, i) in models" :key="i">
-      <UFormField
-        :label="`${field['#title']} ${i + 1}`"
-        :required="!!field['#required']"
-      >
-        <UPopover :class="{ 'w-full': isMaterial }">
-          <UButton
-            icon="i-lucide-calendar"
-            size="md"
-            :variant="webform.variant"
-          >
-            {{
-              model
-                ? df.format(model.toDate(getLocalTimeZone()))
-                : 'Select Date'
-            }}
-          </UButton>
-          <template #content>
-            <UCalendar v-model="models[i]" class="p-2" />
-          </template>
-        </UPopover>
-      </UFormField>
-    </template>
-  </div>
-
-  <UPopover v-else :class="{ 'w-full': isMaterial }">
+  <UPopover :class="{ 'w-full': isMaterial }">
     <UButton icon="i-lucide-calendar" size="md" :variant="webform.variant">
       {{
-        models[0]
-          ? df.format(models[0].toDate(getLocalTimeZone()))
-          : 'Select Date'
+        models.length
+          ? models
+              .map((m) => df.format(m.toDate(getLocalTimeZone())))
+              .join(', ')
+          : 'Select Date(s)'
       }}
     </UButton>
     <template #content>
-      <UCalendar v-model="models[0]" class="p-2" />
+      <UCalendar v-model="models" class="p-2" multiple />
     </template>
   </UPopover>
 </template>

@@ -6,18 +6,22 @@ export const useValidation = () => {
   const toast = useToast()
 
   const onError = (event: FormErrorEvent) => {
-    if (event?.errors?.[0]?.id) {
-      const element = document.getElementById(event.errors[0].id)
+    if (!import.meta.client) return
+    if (!event?.errors?.length) return
 
-      toast.add({
-        title: 'Form Incomplete',
-        description: 'Some required fields are missing or incorrect.',
-        color: 'error',
-      })
+    const firstError = event.errors[0]
+    const element = document.getElementById(firstError.id)
 
-      element?.focus()
-      element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (element) {
+      element.focus()
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
+
+    toast.add({
+      title: 'Form Incomplete',
+      description: 'Some required fields are missing or incorrect.',
+      color: 'error',
+    })
   }
 
   return { onError }

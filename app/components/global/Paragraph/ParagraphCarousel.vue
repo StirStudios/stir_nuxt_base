@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CarouselProps } from '~/types/MediaTypes'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
+import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
 const props = defineProps<CarouselProps>()
 
@@ -19,6 +20,7 @@ const transitionFade = computed(() => props.fade || false)
 const autoscroll = computed(() => props.autoscroll || false)
 const interval = computed(() => props.interval || 5000)
 const itemElement = computed(() => props.itemElement || false)
+const overlay = computed(() => props.overlay === true)
 
 const autoScrollSpeed = computed(() => {
   const clamped = Math.max(1000, Math.min(interval.value, 10000))
@@ -40,12 +42,14 @@ const autoplayOptions = computed(() =>
   !autoscroll.value ? { ...basePauseOptions } : false,
 )
 
-const showCarousel = computed(() => mounted.value && props.items?.length > 0)
+const shuffledItems = useShuffledOrder(props.items || [], props.randomize)
+const showCarousel = computed(
+  () => mounted.value && shuffledItems.value.length > 0,
+)
 </script>
 
 <template>
   <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
-    <h2 v-if="header" class="mb-5">{{ header }}</h2>
     <UCarousel
       v-if="showCarousel"
       ref="carousel"
@@ -55,7 +59,7 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
       :autoplay="autoplayOptions"
       :dots="showIndicators"
       :fade="transitionFade"
-      :items="items"
+      :items="shuffledItems"
       loop
       :next="appConfig.stirTheme.carousel.arrows.next"
       :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
@@ -64,6 +68,7 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
       :ui="{
         root: appConfig.stirTheme.carousel.root,
         item: amount,
+        container: 'items-center',
       }"
     >
       <template v-if="itemElement">
@@ -77,8 +82,13 @@ const showCarousel = computed(() => mounted.value && props.items?.length > 0)
         />
       </template>
       <template v-else>
-        <MediaSimple v-if="item.type === 'image'" :media="[item]" />
-        <MediaPopup v-else-if="item.type === 'video'" :media="[item]" />
+        <MediaSimple v-if="item.type === 'image' && !overlay" :media="[item]" />
+        <MediaPopup
+          v-else-if="
+            item.type === 'video' || (item.type === 'image' && overlay)
+          "
+          :media="[item]"
+        />
       </template>
     </UCarousel>
   </div>

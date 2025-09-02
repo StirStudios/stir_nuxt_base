@@ -5,26 +5,28 @@ export function useVideoPlayers() {
   const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
   const isScriptLoaded = ref(false)
 
-  useHead({
-    script: [
-      {
-        src: '//assets.mediadelivery.net/playerjs/player-0.1.0.min.js',
-        defer: true,
-        onload: () => {
-          isScriptLoaded.value = true
+  if (import.meta.client) {
+    useHead({
+      script: [
+        {
+          src: '//assets.mediadelivery.net/playerjs/player-0.1.0.min.js',
+          defer: true,
+          onload: () => {
+            isScriptLoaded.value = true
+          },
         },
-      },
-    ],
-  })
+      ],
+    })
 
-  // Only initialize players after script is loaded
-  watchOnce(isScriptLoaded, (loaded) => {
-    if (loaded) {
-      initializePlayers()
-    }
-  })
+    // Only initialize players after script is loaded
+    watchOnce(isScriptLoaded, (loaded) => {
+      if (loaded) {
+        initializePlayers()
+      }
+    })
+  }
 
-  async function initializePlayers() {
+  async function initializePlayers(): Promise<void> {
     await nextTick()
 
     const iframes = document.querySelectorAll('iframe[data-mid]')
@@ -34,8 +36,12 @@ export function useVideoPlayers() {
 
       iframe.addEventListener('load', () => {
         try {
-          const player = new window.playerjs.Player(iframe as HTMLIFrameElement)
-          playersReady(iframeKey, player)
+          if (typeof window.playerjs?.Player === 'function') {
+            const player = new window.playerjs.Player(
+              iframe as HTMLIFrameElement,
+            )
+            playersReady(iframeKey, player)
+          }
         } catch (err) {
           console.error(`PlayerJS init failed for ${iframeKey}:`, err)
         }
@@ -43,7 +49,6 @@ export function useVideoPlayers() {
     })
   }
 
-  // Modularized playersReady function for single-player handling
   function playersReady(iframeKey: string, player: VideoPlayer): void {
     player.on('ready', () => {
       videoPlayers.value.set(iframeKey, player)
@@ -60,7 +65,7 @@ export function useVideoPlayers() {
   }
 
   function addEventToAllPlayers(event: string, callback: () => void): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('event', event)) {
         player.on(event, callback)
       }
@@ -68,7 +73,7 @@ export function useVideoPlayers() {
   }
 
   function playAllPlayers(): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('method', 'play')) {
         player.play()
       }
@@ -76,14 +81,14 @@ export function useVideoPlayers() {
   }
 
   function pauseAllPlayers(): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('method', 'pause')) {
         player.pause()
       }
     })
   }
 
-  function addFullscreenExitOnEnd() {
+  function addFullscreenExitOnEnd(): void {
     addEventToAllPlayers('ended', () => {
       if (document.fullscreenElement && 'exitFullscreen' in document) {
         document
@@ -94,7 +99,7 @@ export function useVideoPlayers() {
   }
 
   function muteAllPlayers(): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('method', 'mute')) {
         player.mute()
       }
@@ -102,7 +107,7 @@ export function useVideoPlayers() {
   }
 
   function unmuteAllPlayers(): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('method', 'unmute')) {
         player.unmute()
       }
@@ -110,7 +115,7 @@ export function useVideoPlayers() {
   }
 
   function setVolumeForAll(value: number): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('method', 'setVolume')) {
         player.setVolume(value)
       }
@@ -118,7 +123,7 @@ export function useVideoPlayers() {
   }
 
   function seekAllPlayers(timeInSeconds: number): void {
-    videoPlayers.value.forEach((player: VideoPlayer) => {
+    videoPlayers.value.forEach((player) => {
       if (player.isReady && player.supports('method', 'setCurrentTime')) {
         player.setCurrentTime(timeInSeconds)
       }

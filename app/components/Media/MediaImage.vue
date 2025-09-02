@@ -1,39 +1,83 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
 
-defineProps<{ item: MediaProps }>()
-
+const { item, link } = defineProps<{ item: MediaProps; link?: boolean }>()
 const { media } = useAppConfig().stirTheme
-const loaded = ref(false)
+
+const isEager = computed(() => item.loading === 'eager')
 </script>
 
 <template>
-  <div :class="[media.rounded, 'media group relative overflow-hidden']">
-    <USkeleton v-if="!loaded" class="absolute inset-0" />
-
-    <ClientOnly>
-      <img
-        :alt="item.alt || ''"
-        :class="[
-          media.base,
-          loaded ? 'opacity-100' : 'opacity-0',
-          'transition-opacity duration-500 ease-in-out',
-        ]"
-        :height="item.height"
-        :loading="item.loading || 'lazy'"
-        :sizes="item.sizes"
-        :src="item.src"
-        :srcset="item.srcset"
-        :width="item.width"
-        @load="loaded = true"
-      />
+  <component
+    :is="item.link ? 'a' : 'div'"
+    v-bind="
+      item.link
+        ? { target: '_blank', rel: 'noopener', 'aria-label': item.alt }
+        : {}
+    "
+    :class="[
+      'media group @container relative block overflow-hidden',
+      media.rounded,
+    ]"
+    :href="item.link || undefined"
+  >
+    <ClientOnly v-if="!isEager" fallback-tag="div">
+      <template #default>
+        <img
+          :alt="item.alt || ''"
+          :class="[
+            media.base,
+            link
+              ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
+              : '',
+          ]"
+          :fetchpriority="undefined"
+          :height="item.height"
+          :loading="item.loading || 'lazy'"
+          :sizes="item.sizes"
+          :src="item.src"
+          :srcset="item.srcset"
+          :width="item.width"
+        />
+      </template>
+      <template #fallback>
+        <USkeleton
+          class="w-full"
+          :style="{
+            aspectRatio:
+              item.width && item.height
+                ? `${item.width} / ${item.height}`
+                : '4 / 3',
+          }"
+        />
+      </template>
     </ClientOnly>
 
-    <span
-      v-if="item.credit"
-      class="absolute right-0 bottom-0 rounded bg-black/80 p-2 text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-    >
-      {{ item.credit }}
-    </span>
-  </div>
+    <img
+      v-else
+      :alt="item.alt || ''"
+      :class="[
+        media.base,
+        link
+          ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
+          : '',
+      ]"
+      fetchpriority="high"
+      :height="item.height"
+      loading="eager"
+      :sizes="item.sizes"
+      :src="item.src"
+      :srcset="item.srcset"
+      :width="item.width"
+    />
+
+    <ClientOnly>
+      <span
+        v-if="item.credit"
+        class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
+      >
+        {{ item.credit }}
+      </span>
+    </ClientOnly>
+  </component>
 </template>

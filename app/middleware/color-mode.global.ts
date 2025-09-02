@@ -1,12 +1,21 @@
+// middleware/color-mode.global.ts
 export default defineNuxtRouteMiddleware((to) => {
   const colorMode = useColorMode()
-  const lightRoutes = useAppConfig().colorMode.lightRoutes || []
+  const { forced, preference, lightRoutes = [] } = useAppConfig().colorMode
+
+  if (forced) {
+    colorMode.preference = preference
+    colorMode.value = preference
+    to.meta.colorMode = preference
+    return
+  }
 
   const isLight = lightRoutes.some((prefix: string) =>
     to.path.startsWith(prefix),
   )
 
-  to.meta.colorMode = isLight ? 'light' : 'dark'
-  colorMode.preference = isLight ? 'light' : 'dark'
-  colorMode.value = isLight ? 'light' : 'dark'
+  const mode = isLight ? 'light' : preference
+  colorMode.preference = mode
+  colorMode.value = mode
+  to.meta.colorMode = mode
 })

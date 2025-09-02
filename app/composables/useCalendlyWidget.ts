@@ -12,7 +12,9 @@ function loadCalendlyScript(): Promise<CalendlyClient | undefined> {
   if (calendlyScriptLoaded) return calendlyScriptLoaded
 
   calendlyScriptLoaded = new Promise((resolve) => {
-    if (typeof window === 'undefined') return resolve(undefined)
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return resolve(undefined)
+    }
 
     if ('Calendly' in window) {
       return resolve(window.Calendly)
@@ -47,6 +49,8 @@ export function useCalendlyWidget(
   url: string,
   onReady?: () => void,
 ) {
+  let handler: ((e: MessageEvent) => void) | null = null
+
   onMounted(async () => {
     const calendly = await loadCalendlyScript()
     if (!calendly || !container.value) return
@@ -58,7 +62,7 @@ export function useCalendlyWidget(
 
     onReady?.()
 
-    const handler = (e: MessageEvent) => {
+    handler = (e: MessageEvent) => {
       if (
         isCalendlyEvent(e) &&
         e.data.event === 'calendly.page_height' &&
@@ -72,9 +76,11 @@ export function useCalendlyWidget(
     }
 
     window.addEventListener('message', handler)
+  })
 
-    onBeforeUnmount(() => {
+  onBeforeUnmount(() => {
+    if (handler) {
       window.removeEventListener('message', handler)
-    })
+    }
   })
 }
