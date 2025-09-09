@@ -53,6 +53,12 @@ const autoScrollOptions = computed(() =>
 const autoplayOptions = computed(() =>
   !autoscroll.value ? { delay: interval.value } : false,
 )
+
+function handleSelect() {
+  const plugins = carousel.value?.emblaApi?.plugins?.()
+  plugins?.autoplay?.reset?.()
+  plugins?.autoScroll?.reset?.()
+}
 </script>
 
 <template>
@@ -77,6 +83,7 @@ const autoplayOptions = computed(() =>
         item: amount,
         container: 'items-center',
       }"
+      @select="handleSelect"
     >
       <template v-if="itemElement">
         <component
