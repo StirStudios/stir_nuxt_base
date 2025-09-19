@@ -14,27 +14,27 @@
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "^3.3.3",
-    "@nuxtjs/robots": "^5.5.1",
-    "@nuxtjs/sitemap": "^7.4.3",
-    "@nuxtjs/turnstile": "^1.0.0",
+    "@nuxt/ui": "^3.3.4",
+    "@nuxtjs/robots": "^5.5.5",
+    "@nuxtjs/sitemap": "^7.4.7",
+    "@nuxtjs/turnstile": "^1.1.0",
     "motion-v": "^1.7.1",
-    "nuxt": "^3.19.0",
+    "nuxt": "^3.19.2",
     "nuxt-vitalizer": "^1.0.0",
     "nuxtjs-drupal-ce": "^2.4.2",
-    "tailwindcss": "^4.1.12",
+    "tailwindcss": "^4.1.13",
     "yup": "^1.7.0"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.9.0",
     "@nuxt/eslint-config": "^1.9.0",
     "@nuxt/scripts": "^0.11.13",
-    "eslint": "^9.34.0",
+    "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "release-it": "^19.0.4"
+    "release-it": "^19.0.5"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
