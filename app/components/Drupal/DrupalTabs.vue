@@ -60,11 +60,8 @@ const links = computed(() => {
       {
         label: 'Drupal CMS',
         icon: getIconForLabel('Drupal CMS'),
-        to: {
-          href: `${siteApi}/admin/content`,
-          target: '_self',
-          external: true,
-        },
+        to: `${siteApi}/admin/content`,
+        target: '_self'
       },
     ],
   ]
