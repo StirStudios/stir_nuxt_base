@@ -81,7 +81,7 @@ export default defineNuxtConfig({
     ],
     [
       '@nuxtjs/sitemap',
-      {
+      process.env.NUXT_INDEXABLE !== 'false' && {
         sources: [`${process.env.DRUPAL_URL}/api/sitemap`],
         cacheMaxAgeSeconds: 3600,
         xslColumns: [
