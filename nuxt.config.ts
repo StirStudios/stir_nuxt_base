@@ -113,7 +113,6 @@ export default defineNuxtConfig({
     },
     public: {
       api: process.env.DRUPAL_URL,
-      turnstileDisable: process.env.NUXT_ENV === 'local',
     },
   },
 })
