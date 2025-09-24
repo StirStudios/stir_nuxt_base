@@ -30,9 +30,6 @@ export default defineNuxtConfig({
       modulePreload: false,
     },
   },
-  experimental: {
-    buildCache: true
-  },
   site: {
     name: process.env.NUXT_NAME,
     url: process.env.NUXT_URL,
