@@ -72,20 +72,21 @@ const isEager = computed(() => item.loading === 'eager')
     />
 
     <ClientOnly>
-      <span
-        v-if="item.credit"
-        class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
-      >
-        {{ item.credit }}
-      </span>
       <div
-        v-else-if="item.titleOverlay"
+        v-if="item.link?.includes('instagram.com')"
         class="absolute inset-0 z-10 flex items-center justify-center bg-black/70 px-4 text-center text-sm font-semibold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       >
         <span class="max-w-full break-words">
           {{ item.title }}
         </span>
       </div>
+
+      <span
+        v-else-if="item.credit"
+        class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
+      >
+        {{ item.credit }}
+      </span>
     </ClientOnly>
   </component>
 </template>
