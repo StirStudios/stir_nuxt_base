@@ -78,6 +78,14 @@ const isEager = computed(() => item.loading === 'eager')
       >
         {{ item.credit }}
       </span>
+      <div
+        v-else-if="item.title"
+        class="absolute inset-0 z-10 flex items-center justify-center bg-black/70 px-4 text-center text-sm font-semibold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      >
+        <span class="max-w-full break-words">
+          {{ item.title }}
+        </span>
+      </div>
     </ClientOnly>
   </component>
 </template>
