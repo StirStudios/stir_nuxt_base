@@ -34,6 +34,7 @@ export interface MediaProps {
   platform?: string
   mediaEmbed?: string
   loading?: string
+  titleOverlay?: boolean
 }
 
 export interface CarouselProps extends LayoutProps {
