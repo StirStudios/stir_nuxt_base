@@ -8,7 +8,6 @@
 
 /* Safelist for dynamic Tailwind classes */
 @import './safelist.inline';
-/* @source './safelist.txt'; */
 
 /* Tailwind Theme Variables */
 @theme static {
