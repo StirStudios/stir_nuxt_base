@@ -28,11 +28,7 @@
   .prose {
     p,
     ul,
-    ol {
-      @apply py-3 leading-7;
-    }
-
-    p,
+    ol,
     ul > li,
     ol > li {
       @apply leading-7;
