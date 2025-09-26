@@ -26,6 +26,7 @@ const isEager = computed(() => item.loading === 'eager')
         <img
           :alt="item.alt || ''"
           :class="[
+            item.platform === 'instagram' ? 'aspect-3/4' : '',
             media.base,
             link
               ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
@@ -73,8 +74,8 @@ const isEager = computed(() => item.loading === 'eager')
 
     <ClientOnly>
       <div
-        v-if="item.link?.includes('instagram.com')"
-        class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/80 px-4 text-center text-sm font-semibold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        v-if="item.platform === 'instagram'"
+        class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/90 px-4 text-center text-sm font-semibold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       >
         <div class="line-clamp-5 max-w-full leading-relaxed break-words">
           {{ item.title }}
