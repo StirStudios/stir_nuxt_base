@@ -79,23 +79,27 @@ export default defineNuxtConfig({
         // disallow: ['/secret', '/admin'],
       },
     ],
-    [
-      '@nuxtjs/sitemap',
-      {
-        sources: [`${process.env.DRUPAL_URL}/api/sitemap`],
-        cacheMaxAgeSeconds: 3600,
-        xslColumns: [
-          { label: 'URL', width: '50%' },
-          { label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },
-          { label: 'Priority', select: 'sitemap:priority', width: '12.5%' },
-          {
-            label: 'Change Frequency',
-            select: 'sitemap:changefreq',
-            width: '12.5%',
-          },
-        ],
-      },
-    ],
+    ...(
+      process.env.NUXT_INDEXABLE !== 'false'
+        ? [[
+            '@nuxtjs/sitemap',
+            {
+              sources: [`${process.env.DRUPAL_URL}/api/sitemap`],
+              cacheMaxAgeSeconds: 3600,
+              xslColumns: [
+                { label: 'URL', width: '50%' },
+                { label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },
+                { label: 'Priority', select: 'sitemap:priority', width: '12.5%' },
+                {
+                  label: 'Change Frequency',
+                  select: 'sitemap:changefreq',
+                  width: '12.5%',
+                },
+              ],
+            }
+          ]]
+        : []
+    ),
     [
       'nuxtjs-drupal-ce',
       {
@@ -113,7 +117,6 @@ export default defineNuxtConfig({
     },
     public: {
       api: process.env.DRUPAL_URL,
-      turnstileDisable: process.env.NUXT_ENV === 'local',
     },
   },
 })

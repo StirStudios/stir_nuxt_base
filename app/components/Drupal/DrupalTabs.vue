@@ -4,8 +4,8 @@ import { usePageContext } from '~/composables/usePageContext'
 const { page } = usePageContext()
 const config = useRuntimeConfig()
 const siteApi = config.public.api
-
 const { fetchMenu } = useDrupalCe()
+
 const accountMenu = ref([])
 
 const tabs = computed(
@@ -13,7 +13,7 @@ const tabs = computed(
 )
 const user = computed(() => page.value?.current_user)
 
-function getIconForLabel(label: string): string | null {
+const getIconForLabel = (label: string): string | null => {
   const iconMap: Record<string, string> = {
     'Drupal CMS': 'i-heroicons-home',
     Settings: 'i-heroicons-cog',
@@ -24,42 +24,36 @@ function getIconForLabel(label: string): string | null {
     Export: 'i-heroicons-arrow-up-tray',
     API: 'i-heroicons-code-bracket',
     'Log out': 'i-heroicons-arrow-left-start-on-rectangle',
+    'Log in': 'i-heroicons-arrow-right-start-on-rectangle',
     'My account': 'i-heroicons-user-circle',
   }
 
   return iconMap[label] || null
 }
 
-// Load account menu items and dynamically assign icons
-async function loadAccountMenu() {
-  try {
-    const menuResponse = await fetchMenu('account')
-    const menuItems = Array.isArray(menuResponse?._value)
-      ? menuResponse._value
-      : []
-
-    accountMenu.value = menuItems.map((item) => ({
-      label: item.title,
-      to: item.relative || item.url,
-      icon: getIconForLabel(item.title),
-    }))
-  } catch (error) {
-    console.error('Error fetching account menu:', error)
-  }
+// Safe, clean async call with fallback
+try {
+  const rawMenu = await fetchMenu('account')
+  accountMenu.value = Array.isArray(rawMenu.value)
+    ? rawMenu.value.map((item) => ({
+        label: item.title,
+        to: item.relative || item.url,
+        icon: getIconForLabel(item.title),
+      }))
+    : []
+} catch (e) {
+  console.error('Failed to fetch account menu:', e)
 }
 
-await loadAccountMenu()
-
-// Map tabs to navigation links and assign icons
-const getLocalTaskLinks = () => {
-  return tabs.value.primary.map((tab) => ({
+// Optional: helper to map local tasks
+const getLocalTaskLinks = () =>
+  tabs.value.primary.map((tab) => ({
     label: tab.label,
     to: tab.url,
     icon: getIconForLabel(tab.label),
   }))
-}
 
-// Dynamically compute navigation links
+// Dynamic nav links
 const links = computed(() => {
   const baseLinks = [
     [
@@ -67,6 +61,7 @@ const links = computed(() => {
         label: 'Drupal CMS',
         icon: getIconForLabel('Drupal CMS'),
         to: `${siteApi}/admin/content`,
+        target: '_self'
       },
     ],
   ]
