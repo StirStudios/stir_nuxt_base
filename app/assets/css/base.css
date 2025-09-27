@@ -29,7 +29,7 @@
     p,
     ul,
     ol {
-      @apply my-3 leading-7;
+      @apply py-3 leading-7;
     }
 
     p,
