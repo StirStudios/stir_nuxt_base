@@ -90,10 +90,25 @@ const additionalClasses = [
 
 additionalClasses.forEach((cls) => safelist.add(cls))
 
-// ✅ Write to Tailwind safelist file
-const safelistPath = path.resolve('app/assets/css/safelist.txt')
-fs.writeFileSync(safelistPath, Array.from(safelist).join('\n'))
+// ✅ Write to Tailwind inline() safelist file (Tailwind v4 compatible)
+function generateInlineSources(classes: Set<string>): string {
+  const lines: string[] = []
+  const sorted = Array.from(classes).sort()
+
+  // Split into groups of 15–20 per line for readability
+  const chunkSize = 20
+  for (let i = 0; i < sorted.length; i += chunkSize) {
+    const chunk = sorted.slice(i, i + chunkSize).join(' ')
+    lines.push(`@source inline("${chunk}");`)
+  }
+
+  return lines.join('\n')
+}
+
+const safelistPath = path.resolve('app/assets/css/safelist.inline.css')
+const inlineCSS = generateInlineSources(safelist)
+fs.writeFileSync(safelistPath, inlineCSS)
 
 console.log(
-  `✅ Safelist generated: ${safelist.size} classes saved to ${safelistPath}`,
+  `✅ Tailwind v4 inline safelist generated: ${safelist.size} classes saved to ${safelistPath}`,
 )

@@ -14,8 +14,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Validate Turnstile CAPTCHA if required
-    if (!config.public.turnstileDisable && !body.turnstile_response) {
+    // Validate Turnstile CAPTCHA
+    if (!body.turnstile_response) {
       throw createError({
         statusCode: 400,
         statusMessage: 'CAPTCHA validation failed',

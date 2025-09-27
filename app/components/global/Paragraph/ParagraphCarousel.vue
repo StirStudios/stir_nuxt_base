@@ -22,30 +22,43 @@ const interval = computed(() => props.interval || 5000)
 const itemElement = computed(() => props.itemElement || false)
 const overlay = computed(() => props.overlay === true)
 
-const autoScrollSpeed = computed(() => {
-  const clamped = Math.max(1000, Math.min(interval.value, 10000))
-  return Math.round(10_000 / clamped)
-})
-
-const basePauseOptions = {
-  stopOnMouseEnter: true,
-  stopOnInteraction: false,
-}
-
-const autoScrollOptions = computed(() =>
-  autoscroll.value
-    ? { ...basePauseOptions, speed: autoScrollSpeed.value }
-    : false,
-)
-
-const autoplayOptions = computed(() =>
-  !autoscroll.value ? { ...basePauseOptions } : false,
-)
-
 const shuffledItems = useShuffledOrder(props.items || [], props.randomize)
 const showCarousel = computed(
   () => mounted.value && shuffledItems.value.length > 0,
 )
+
+const autoScrollSpeed = computed(() => {
+  const minInterval = 1000
+  const maxInterval = 10000
+  const minSpeed = 1 // slowest (for 10s)
+  const maxSpeed = 10 // fastest (for 1s)
+
+  const clamped = Math.max(minInterval, Math.min(interval.value, maxInterval))
+  const ratio = (maxInterval - clamped) / (maxInterval - minInterval)
+  const speed = minSpeed + ratio * (maxSpeed - minSpeed)
+
+  return +speed.toFixed(2)
+})
+
+const autoScrollOptions = computed(() =>
+  autoscroll.value
+    ? {
+        stopOnMouseEnter: true,
+        stopOnInteraction: false,
+        speed: autoScrollSpeed.value,
+      }
+    : false,
+)
+
+const autoplayOptions = computed(() =>
+  !autoscroll.value ? { delay: interval.value } : false,
+)
+
+function handleSelect() {
+  const plugins = carousel.value?.emblaApi?.plugins?.()
+  plugins?.autoplay?.reset?.()
+  plugins?.autoScroll?.reset?.()
+}
 </script>
 
 <template>
@@ -70,6 +83,7 @@ const showCarousel = computed(
         item: amount,
         container: 'items-center',
       }"
+      @select="handleSelect"
     >
       <template v-if="itemElement">
         <component

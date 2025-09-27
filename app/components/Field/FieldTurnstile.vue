@@ -1,10 +1,7 @@
 <script setup lang="ts">
 const turnstileToken = defineModel<string>()
 
-const config = useRuntimeConfig()
 const { turnstile: themeTurnstile = {} } = useAppConfig().stirTheme
-
-const showContainer = computed(() => !config.public.turnstileDisable)
 
 const showLabel = computed(
   () =>
@@ -13,13 +10,11 @@ const showLabel = computed(
 </script>
 
 <template>
-  <div v-if="showContainer">
-    <p v-if="showLabel" class="text-muted mb-2 text-sm">
-      {{ themeTurnstile.label }}
-    </p>
-    <NuxtTurnstile
-      v-model="turnstileToken"
-      :options="{ appearance: themeTurnstile.appearance }"
-    />
-  </div>
+  <p v-if="showLabel" class="text-muted mb-2 text-sm">
+    {{ themeTurnstile.label }}
+  </p>
+  <NuxtTurnstile
+    v-model="turnstileToken"
+    :options="{ appearance: themeTurnstile.appearance }"
+  />
 </template>
