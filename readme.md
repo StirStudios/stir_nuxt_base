@@ -16,10 +16,10 @@ A production-ready Nuxt 3 starter with full integration for Nuxt UI 3, Tailwind 
 
 ## 🧱 Tech Stack
 
-- **Nuxt**: `^3.18.1`
-- **Nuxt UI**: `^3.3.2`
-- **Tailwind CSS**: `^4.1.12`
-- **Drupal CE**: `^2.4.1`
+- **Nuxt**: `^4.1.2`
+- **Nuxt UI**: `^4.0.0`
+- **Tailwind CSS**: `^4.1.13`
+- **Drupal CE**: `^2.4.2`
 - **Vite + Nitro**: asset compression and custom build rules
 
 ## 📦 Project Structure
