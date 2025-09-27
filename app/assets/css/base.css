@@ -28,7 +28,11 @@
   .prose {
     p,
     ul,
-    ol,
+    ol {
+      @apply my-3 leading-7;
+    }
+
+    p,
     ul > li,
     ol > li {
       @apply leading-7;
