@@ -23,56 +23,63 @@ const iconsSocialConfig = [
 </script>
 
 <template>
-  <footer aria-label="Site Footer" :class="theme.footer">
+  <UFooter
+    aria-label="Site Footer"
+    :ui="{
+      root: `${theme.footer}`,
+      container: `${theme.container} text-center`,
+      left: 'text-muted text-sm leading-relaxed lg:text-left',
+      right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',
+    }"
+  >
     <LazyRegionArea area="footer" />
-    <div
-      :class="[
-        theme.container,
-        'grid gap-4 text-center md:text-center lg:grid-cols-2',
-      ]"
-    >
-      <div class="rights lg:text-left">
-        <ul
-          v-if="page.footer_menu.length"
-          class="mb-3 flex flex-wrap gap-x-4 gap-y-2 text-sm"
+
+    <template #left>
+      <p class="mb-0">
+        © {{ page.site_info?.name }} {{ currentYear }}. All Rights Reserved.
+        <br />
+        Website created & powered by
+        <ULink
+          active-class="text-primary-400"
+          inactive-class="text-primary hover:text-primary-400"
+          rel="noopener"
+          target="_blank"
+          to="//www.stirstudiosdesign.com"
         >
-          <li v-for="menuItem in page.footer_menu" :key="menuItem.title">
-            <ULink class="item" :to="menuItem.url">{{ menuItem.title }}</ULink>
-          </li>
-        </ul>
-        <p class="mb-0 leading-relaxed">
-          © {{ page.site_info?.name }} {{ currentYear }}. All Rights
-          Reserved.<br />
-          Website created & powered by
-          <ULink
-            active-class="text-primary-400"
-            inactive-class="text-primary hover:text-primary-400"
-            rel="noopener"
-            target="_blank"
-            to="//www.stirstudiosdesign.com"
-          >
-            StirStudios
-          </ULink>
-        </p>
-      </div>
-      <div class="social lg:text-right">
+          StirStudios
+        </ULink>
+      </p>
+    </template>
+
+    <UNavigationMenu
+      v-if="page.footer_menu.length"
+      class="mb-3"
+      :items="
+        page.footer_menu.map((item) => ({
+          label: item.title,
+          to: item.url,
+        }))
+      "
+      variant="link"
+    />
+
+    <template #right>
+      <div class="flex gap-2">
         <IconsSocial
           v-for="(icon, index) in iconsSocialConfig"
           :key="index"
           v-bind="icon"
         />
-        <div class="mt-3">
-          <UTooltip :text="`Email ${page.site_info?.name}`">
-            <ULink
-              rel="noopener"
-              target="_blank"
-              :to="`mailto:${page.site_info?.mail}`"
-            >
-              {{ page.site_info?.mail }}
-            </ULink>
-          </UTooltip>
-        </div>
       </div>
-    </div>
-  </footer>
+      <UTooltip :text="`Email ${page.site_info?.name}`">
+        <ULink
+          rel="noopener"
+          target="_blank"
+          :to="`mailto:${page.site_info?.mail}`"
+        >
+          {{ page.site_info?.mail }}
+        </ULink>
+      </UTooltip>
+    </template>
+  </UFooter>
 </template>
