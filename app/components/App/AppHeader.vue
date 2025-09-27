@@ -32,8 +32,10 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     :mode="theme.navigation.toggleType"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
-      root: [
-        theme.header,
+      root: [theme.header, 'bg-transparent backdrop-blur-none border-none'],
+      container: [
+        theme.container,
+        'flex-wrap',
         theme.navigation.base,
         theme.navigation.transparentTop && !finalIsScrolled
           ? ''
@@ -44,7 +46,6 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
             (finalIsScrolled && scrollDirection === 'down' && !atBottom),
         },
       ],
-      container: `${theme.container} flex-wrap`,
       body: theme.navigation.slideover.body,
     }"
   >
