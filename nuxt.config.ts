@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-08-21',
+  compatibilityDate: '2025-00-26',
   css: ['~/assets/css/main.css'],
   features: {
     inlineStyles: true,
@@ -47,7 +47,6 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxt/scripts',
     'motion-v/nuxt',
