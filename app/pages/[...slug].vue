@@ -27,9 +27,9 @@ definePageMeta({
   <NuxtLayout :name="layout">
     <ParagraphHero
       :hero="page?.content?.hero?.[0]"
+      :hide="page?.content?.hide || ''"
       :page-title="page.title"
       :site-slogan="page.site_info?.slogan || ''"
-      :hide="page?.content?.hide || ''"
     />
     <LazyRegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
