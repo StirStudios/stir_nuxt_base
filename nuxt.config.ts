@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-00-26',
+  compatibilityDate: '2025-09-26',
   css: ['~/assets/css/main.css'],
   features: {
     inlineStyles: true,
