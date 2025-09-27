@@ -5,7 +5,7 @@ defineProps<EditLinkProps>()
 </script>
 
 <template>
-  <div v-if="link" class="group/edit relative">
+  <div v-if="link" class="group/edit relative" :class="class">
     <UButton
       aria-label="Edit content"
       class="absolute top-0 right-0 z-20 rounded opacity-0 transition-opacity duration-300 group-hover/edit:opacity-100"

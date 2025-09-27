@@ -10,4 +10,5 @@ export interface IconsSocialProps {
 
 export interface EditLinkProps {
   link?: string
+  class?: string
 }
