@@ -24,7 +24,6 @@ export default defineNuxtConfig({
     },
     build: {
       minify: true,
-      modulePreload: false,
     },
   },
   site: {
