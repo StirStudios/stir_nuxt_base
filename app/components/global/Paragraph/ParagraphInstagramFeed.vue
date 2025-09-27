@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ViewItemProps } from '~/types/CustomElementTypes'
+import type { ViewItemProps } from '~/types/ViewTypes'
 
 defineProps<{ item: ViewItemProps }>()
 </script>
