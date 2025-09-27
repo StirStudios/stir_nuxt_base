@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 
-const { page } = usePageContext()
-const { hero } = useAppConfig().stirTheme
+const { page, isAdministrator } = usePageContext()
+const { header, hero } = useAppConfig().stirTheme
 </script>
 
 <template>
   <LazyRegionArea area="top" />
-  <AppHeader />
+  <div :class="header">
+    <LazyDrupalTabs v-if="!isAdministrator" />
+    <AppHeader />
+  </div>
   <main
     id="main-content"
     :class="

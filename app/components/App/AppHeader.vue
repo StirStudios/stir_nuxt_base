@@ -32,10 +32,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     :mode="theme.navigation.toggleType"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
-      root: [theme.header, 'bg-transparent backdrop-blur-none border-none'],
-      container: [
-        theme.container,
-        'flex-wrap',
+      root: [
         theme.navigation.base,
         theme.navigation.transparentTop && !finalIsScrolled
           ? ''
@@ -46,13 +43,10 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
             (finalIsScrolled && scrollDirection === 'down' && !atBottom),
         },
       ],
+      container: 'flex-wrap',
       body: theme.navigation.slideover.body,
     }"
   >
-    <template #top>
-      <LazyDrupalTabs v-if="isAdministrator" />
-    </template>
-
     <template #left>
       <ULink aria-label="Site Logo" to="/">
         <template v-if="theme.navigation.logo">
