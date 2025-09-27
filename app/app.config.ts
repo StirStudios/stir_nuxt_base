@@ -51,12 +51,12 @@ export default defineAppConfig({
     // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
     crumbs: false,
     h1: 'mb-20 text-center text-6xl',
-    header: 'h-auto md:px-auto fixed top-0 z-30 w-full !p-0',
+    header: 'md:px-auto fixed top-0 z-30 w-full !p-0',
     navigation: {
       logo: true,
       isHidden: false,
       transparentTop: false,
-      base: 'transform py-3 duration-500',
+      base: 'h-auto transform py-3 duration-500',
       background:
         'border-none bg-white/90 shadow backdrop-blur-md dark:bg-gray-950/70',
       color: 'primary',

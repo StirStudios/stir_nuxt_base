@@ -45,6 +45,9 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
       ],
       container: 'flex-wrap',
       body: theme.navigation.slideover.body,
+      right: appConfig.colorMode?.forced
+        ? 'hidden md:block lg:flex-0'
+        : 'lg:flex-1',
     }"
   >
     <template #left>
@@ -63,7 +66,9 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
       :class="appConfig.colorMode?.forced ? 'ml-auto' : ''"
       :color="theme.navigation.color"
       :highlight="theme.navigation.highlight.show"
-      :highlight-color="theme.navigation.highlight.color"
+      :highlight-color="
+        theme.navigation.highlight.show ? theme.navigation.highlight.color : ''
+      "
       :items="navLinks"
       :variant="theme.navigation.variant"
     />
