@@ -1,21 +1,31 @@
 <script setup lang="ts">
 import useDarkMode from '~/composables/useDarkMode'
+import { usePageContext } from '~/composables/usePageContext'
 
 const { isDark } = useDarkMode()
+const theme = useAppConfig().stirTheme
+const { page } = usePageContext()
 
-const logoFillColor = computed(() => {
-  return isDark.value ? 'fill-white' : 'fill-black'
-})
+const props = defineProps<{
+  addClasses?: string
+}>()
+
+const svgClasses = computed(() =>
+  `${theme.navigation.logoSize} ${props.addClasses || ''} ${isDark.value ? 'fill-white' : 'fill-black'}`.trim(),
+)
 </script>
 
 <template>
-  <ClientOnly>
-    Add SVG Logo Here
-    <!-- <svg
-    xmlns="http://www.w3.org/2000/svg"
+  Add SVG Logo Here
+  <!-- <svg
+    :class="svgClasses"
+    fill="currentColor"
+    height="100%"
+    :title="page.site_info?.name"
+    viewBox="0 0 2400 1560"
+    width="100%"
     xml:space="preserve"
-    viewBox="0 0 2400 1920"
-    :class="logoFillColor"
-  ></svg> -->
-  </ClientOnly>
+    xmlns="http://www.w3.org/2000/svg"
+  >
+  </svg> -->
 </template>

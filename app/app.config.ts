@@ -67,6 +67,7 @@ export default defineAppConfig({
     header: 'md:px-auto fixed top-0 z-30 w-full !p-0',
     navigation: {
       logo: true,
+      logoSize: 'h-[5rem]',
       isHidden: false,
       transparentTop: false,
       base: 'h-auto transform py-3 duration-500',

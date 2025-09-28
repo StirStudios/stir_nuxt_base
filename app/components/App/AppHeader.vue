@@ -24,6 +24,7 @@ const headerRootClasses = computed(() => [
     ? 'bg-transparent backdrop-none border-none'
     : theme.navigation.background,
   {
+    'is-scrolled': finalIsScrolled.value,
     '-translate-y-full':
       (isFront && !finalIsScrolled.value && theme.navigation.isHidden) ||
       (finalIsScrolled.value &&
@@ -56,9 +57,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     }"
   >
     <template #title>
-      <template v-if="theme.navigation.logo">
-        <AppLogo class="h-6 w-auto" />
-      </template>
+      <AppLogo v-if="theme.navigation.logo" class="w-auto" />
       <template v-else>
         {{ page.site_info?.name }}
       </template>
