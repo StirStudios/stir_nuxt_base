@@ -3,36 +3,37 @@ import useDarkMode from '~/composables/useDarkMode'
 import { usePageContext } from '~/composables/usePageContext'
 
 const { isDark } = useDarkMode()
-const theme = useAppConfig().stirTheme
 const { page } = usePageContext()
+const theme = useAppConfig().stirTheme
 
 const props = defineProps<{
   addClasses?: string
   logoSize?: string
 }>()
 
-const svgClasses = computed(() => {
-  const size = props.logoSize || theme.navigation.logoSize || ''
-  return `${size} ${props.addClasses || ''} ${isDark.value ? 'fill-white' : 'fill-black'}`.trim()
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
 })
 
-const logoTitle = computed(() => page.site_info?.name ?? '')
+const svgClasses = computed(() => {
+  const size = props.logoSize || theme.navigation.logoSize || ''
+  const fillClass = mounted.value
+    ? isDark.value
+      ? 'fill-white'
+      : 'fill-black'
+    : ''
+  return `${size} ${props.addClasses || ''} ${fillClass}`.trim()
+})
+
+const logoTitle = computed(() => page.value.site_info?.name ?? '')
+
+const slots = computed(() => ({
+  classes: svgClasses.value,
+  title: logoTitle.value,
+}))
 </script>
 
 <template>
-  <slot :class="svgClasses" :title="logoTitle">
-    Add SVG Logo Here
-    <!-- <svg
-      :class="svgClasses"
-      fill="currentColor"
-      height="100%"
-      :title="logoTitle"
-      viewBox="0 0 2400 1560"
-      width="100%"
-      xml:space="preserve"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect fill="currentColor" height="1560" width="2400" />
-    </svg> -->
-  </slot>
+  <slot v-bind="slots"> Add SVG log here </slot>
 </template>

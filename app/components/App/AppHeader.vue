@@ -45,6 +45,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
   <UHeader
     aria-label="Site header"
     :mode="theme.navigation.toggleType"
+    :title="page.site_info?.name"
     :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
@@ -57,7 +58,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     }"
   >
     <template #title>
-      <AppLogo v-if="theme.navigation.logo" class="w-auto" />
+      <AppLogo v-if="theme.navigation.logo" add-classes="w-auto" />
       <template v-else>
         {{ page.site_info?.name }}
       </template>
