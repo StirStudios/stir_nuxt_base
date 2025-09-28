@@ -30,6 +30,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
   <UHeader
     aria-label="Site header"
     :mode="theme.navigation.toggleType"
+    :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
       root: [
@@ -46,24 +47,20 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
       container: 'flex-wrap',
       body: theme.navigation.slideover.body,
       right: appConfig.colorMode?.forced
-        ? 'hidden md:block lg:flex-0'
+        ? 'block lg:hidden lg:flex-0'
         : 'lg:flex-1',
     }"
   >
-    <template #left>
-      <ULink aria-label="Site Logo" to="/">
-        <template v-if="theme.navigation.logo">
-          <AppLogo class="h-6 w-auto" />
-        </template>
-        <template v-else>
-          {{ page.site_info?.name }}
-        </template>
-      </ULink>
+    <template #title>
+      <template v-if="theme.navigation.logo">
+        <AppLogo class="h-6 w-auto" />
+      </template>
+      <template v-else>
+        {{ page.site_info?.name }}
+      </template>
     </template>
 
     <UNavigationMenu
-      class="hidden md:block"
-      :class="appConfig.colorMode?.forced ? 'ml-auto' : ''"
       :color="theme.navigation.color"
       :highlight="theme.navigation.highlight.show"
       :highlight-color="
