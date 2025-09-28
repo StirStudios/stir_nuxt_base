@@ -46,6 +46,20 @@ export default defineAppConfig({
     // buttonLabel: 'Accept',
   },
   stirTheme: {
+    socialName: '',
+    footerRights: '',
+    socials: [
+      {
+        title: 'IMDB',
+        url: '//imdb.com/name/CLIENT/',
+        icon: 'i-simple-icons:imdb',
+      },
+      {
+        title: 'LinkedIn',
+        url: '//linkedin.com/in/CLIENT',
+        icon: 'i-simple-icons:linkedin',
+      },
+    ],
     pdf: false,
     // loadingIndicator:
     // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
