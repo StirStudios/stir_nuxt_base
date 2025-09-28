@@ -15,3 +15,7 @@
 .align-right {
   @apply mx-auto max-w-sm sm:float-right sm:ms-5 sm:mb-5;
 }
+
+.hero {
+  @apply text-white;
+}

@@ -103,7 +103,7 @@ export default defineAppConfig({
       fourThree: 'aspect-[4/3]',
     },
     hero: {
-      base: 'flex items-center justify-center overflow-hidden',
+      base: 'hero flex items-center justify-center overflow-hidden',
       mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
       noMediaSpacing: 'pt-30 lg:pt-54',
       overlay:
