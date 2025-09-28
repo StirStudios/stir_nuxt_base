@@ -8,7 +8,7 @@ const { header, hero } = useAppConfig().stirTheme
 <template>
   <LazyRegionArea area="top" />
   <div :class="header">
-    <LazyDrupalTabs v-if="!isAdministrator" />
+    <LazyDrupalTabs v-if="isAdministrator" />
     <AppHeader />
   </div>
   <main

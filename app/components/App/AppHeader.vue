@@ -3,7 +3,7 @@ import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
-const { page, isFront, isAdministrator } = usePageContext()
+const { page, isFront } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -17,6 +17,20 @@ const navLinks = mainMenu.value.map((item) => ({
     ? item.absolute
     : `/${item.alias}${item.options?.fragment ? `#${item.options.fragment}` : ''}`,
 }))
+
+const headerRootClasses = computed(() => [
+  theme.navigation.base,
+  theme.navigation.transparentTop && !finalIsScrolled.value
+    ? 'bg-transparent backdrop-none border-none'
+    : theme.navigation.background,
+  {
+    '-translate-y-full':
+      (isFront && !finalIsScrolled.value && theme.navigation.isHidden) ||
+      (finalIsScrolled.value &&
+        scrollDirection.value === 'down' &&
+        !atBottom.value),
+  },
+])
 
 // Optional: Override isScrolled on hash load
 const forceScrolled = ref(false)
@@ -33,17 +47,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
-      root: [
-        theme.navigation.base,
-        theme.navigation.transparentTop && !finalIsScrolled
-          ? ''
-          : theme.navigation.background,
-        {
-          '-translate-y-full':
-            (isFront && !finalIsScrolled && theme.navigation.isHidden) ||
-            (finalIsScrolled && scrollDirection === 'down' && !atBottom),
-        },
-      ],
+      root: headerRootClasses,
       container: 'flex-wrap',
       body: theme.navigation.slideover.body,
       right: appConfig.colorMode?.forced
