@@ -28,12 +28,12 @@ const svgClasses = computed(() => {
 
 const logoTitle = computed(() => page.value.site_info?.name ?? '')
 
-const slots = computed(() => ({
+const slotProps = computed(() => ({
   classes: svgClasses.value,
   title: logoTitle.value,
 }))
 </script>
 
 <template>
-  <slot v-bind="slots"> Add SVG log here </slot>
+  <slot v-bind="slotProps"> Add SVG log here </slot>
 </template>
