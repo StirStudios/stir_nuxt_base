@@ -22,11 +22,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
     await session.fetch()
   }
 
+  // Redirect logged-in user away from login page
   if (to.path === config.loginPath && session.loggedIn.value) {
     return navigateTo(config.redirectOnLogin)
   }
 
+  // Not logged in → redirect to login, preserving query (e.g. ?password=...)
   if (!session.loggedIn.value) {
-    return navigateTo(config.loginPath)
+    return navigateTo({
+      path: config.loginPath,
+      query: to.query, // ← preserve ?password=...
+    })
   }
 })
