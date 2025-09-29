@@ -1,7 +1,7 @@
 import useDarkMode from '~/composables/useDarkMode'
 import { usePageContext } from '~/composables/usePageContext'
 
-export function useAppLogo(props: { logoSize?: string; class?: string }) {
+export function useAppLogo(props: { logoSize?: string; addClasses?: string }) {
   const { isDark } = useDarkMode()
   const { page } = usePageContext()
   const theme = useAppConfig().stirTheme
@@ -18,7 +18,7 @@ export function useAppLogo(props: { logoSize?: string; class?: string }) {
         ? 'fill-white'
         : 'fill-black'
       : ''
-    return `${size} ${props.class || ''} ${fillClass}`.trim()
+    return `${size} ${props.addClasses || ''} ${fillClass}`.trim()
   })
 
   const logoTitle = computed(() => page.value.site_info?.name ?? '')
