@@ -23,8 +23,8 @@ const iconsSocialConfig = theme.socials || []
     <template #left>
       <p class="mb-0">
         © {{ page.site_info?.name }} {{ currentYear }}. All Rights Reserved.<br />
-        <template v-if="theme.footerRights">
-          {{ theme.footerRights }}<br />
+        <template v-if="theme.footer.rights">
+          {{ theme.footer.rights }}<br />
         </template>
         Website created & powered by
         <ULink
