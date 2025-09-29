@@ -62,6 +62,8 @@ const iconsSocialConfig = theme.socials || []
       </div>
 
       <ULink
+        active-class="text-primary-400"
+        inactive-class="text-primary hover:text-primary-400"
         rel="noopener"
         target="_blank"
         :to="`mailto:${page.site_info?.mail}`"
