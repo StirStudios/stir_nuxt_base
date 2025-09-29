@@ -12,10 +12,10 @@ const iconsSocialConfig = theme.socials || []
   <UFooter
     aria-label="Site Footer"
     :ui="{
-      root: theme.footer,
+      root: theme.footer.base,
       container: `${theme.container} text-center`,
-      left: 'text-muted text-sm leading-relaxed lg:text-left',
-      right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',
+      left: theme.footer.left,
+      right: theme.footer.right,
     }"
   >
     <LazyRegionArea area="footer" />

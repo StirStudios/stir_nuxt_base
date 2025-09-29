@@ -46,19 +46,6 @@ export default defineAppConfig({
     // buttonLabel: 'Accept',
   },
   stirTheme: {
-    // footerRights: '',
-    // socials: [
-    //   {
-    //     title: 'IMDB',
-    //     url: '//imdb.com/name/CLIENT/',
-    //     icon: 'i-simple-icons:imdb',
-    //   },
-    //   {
-    //     title: 'LinkedIn',
-    //     url: '//linkedin.com/in/CLIENT',
-    //     icon: 'i-simple-icons:linkedin',
-    //   },
-    // ],
     pdf: false,
     // loadingIndicator:
     // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
@@ -92,7 +79,24 @@ export default defineAppConfig({
     //   main: 'mt-0',
     // },
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
-    footer: 'mt-20 bg-gray-100 py-10 text-sm dark:bg-black',
+    footer: {
+      base: 'mt-20 bg-zinc-900 py-10 text-white text-sm dark:bg-black',
+      left: 'text-sm leading-relaxed lg:text-left',
+      right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',
+      // rights: '',
+    },
+    // socials: [
+    //   {
+    //     title: 'IMDB',
+    //     url: '//imdb.com/name/CLIENT/',
+    //     icon: 'i-simple-icons:imdb',
+    //   },
+    //   {
+    //     title: 'LinkedIn',
+    //     url: '//linkedin.com/in/CLIENT',
+    //     icon: 'i-simple-icons:linkedin',
+    //   },
+    // ],
     media: {
       base: 'relative h-full w-full overflow-hidden object-cover',
       rounded: 'rounded-xl',
