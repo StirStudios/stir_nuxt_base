@@ -1,6 +1,4 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (import.meta.server) return
-
   const config = useAppConfig().protectedRoutes
   if (!config) return
 
@@ -8,38 +6,27 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!protectedPaths.length) return
 
   const isProtected = protectedPaths.some((path) => {
-    // Exact match
     if (path.endsWith('/')) {
-      // Match any child route, e.g., /admin/ matches /admin/settings
       return to.path.startsWith(path)
     } else {
-      // Match only exact route, e.g., /admin only matches /admin
       return to.path === path
     }
   })
 
   if (!isProtected) return
 
-  let ready = ref(true)
-  let loggedIn = ref(false)
-  let fetch = async () => {}
+  const session = useUserSession?.()
+  if (!session) return
 
-  try {
-    const session = useUserSession?.()
-    if (session) {
-      ready = session.ready
-      loggedIn = session.loggedIn
-      fetch = session.fetch
-    }
-  } catch {}
+  if (!session.ready.value) {
+    await session.fetch()
+  }
 
-  if (!ready.value) await fetch()
-
-  if (to.path === config.loginPath && loggedIn.value) {
+  if (to.path === config.loginPath && session.loggedIn.value) {
     return navigateTo(config.redirectOnLogin)
   }
 
-  if (!loggedIn.value) {
+  if (!session.loggedIn.value) {
     return navigateTo(config.loginPath)
   }
 })

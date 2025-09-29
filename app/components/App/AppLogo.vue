@@ -2,7 +2,7 @@
 import { useAppLogo } from '~/composables/useAppLogo'
 
 const props = defineProps<{
-  class?: string
+  addClasses?: string
   logoSize?: string
 }>()
 
