@@ -1,39 +1,14 @@
 <script setup lang="ts">
-import useDarkMode from '~/composables/useDarkMode'
-import { usePageContext } from '~/composables/usePageContext'
-
-const { isDark } = useDarkMode()
-const { page } = usePageContext()
-const theme = useAppConfig().stirTheme
+import { useAppLogo } from '~/composables/useAppLogo'
 
 const props = defineProps<{
-  addClasses?: string
+  class?: string
   logoSize?: string
 }>()
 
-const mounted = ref(false)
-onMounted(() => {
-  mounted.value = true
-})
-
-const svgClasses = computed(() => {
-  const size = props.logoSize || theme.navigation.logoSize || ''
-  const fillClass = mounted.value
-    ? isDark.value
-      ? 'fill-white'
-      : 'fill-black'
-    : ''
-  return `${size} ${props.addClasses || ''} ${fillClass}`.trim()
-})
-
-const logoTitle = computed(() => page.value.site_info?.name ?? '')
-
-const slotProps = computed(() => ({
-  classes: svgClasses.value,
-  title: logoTitle.value,
-}))
+const { slotProps } = useAppLogo(props)
 </script>
 
 <template>
-  <slot v-bind="slotProps"> Add SVG log here </slot>
+  <slot v-bind="slotProps"> Add SVG logo here </slot>
 </template>
