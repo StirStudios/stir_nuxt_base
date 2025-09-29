@@ -49,6 +49,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
+      title: 'title',
       root: headerRootClasses,
       container: 'flex-wrap',
       body: theme.navigation.slideover.body,
