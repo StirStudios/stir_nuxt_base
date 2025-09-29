@@ -26,7 +26,7 @@ const headerRootClasses = computed(() => [
   {
     'is-scrolled': finalIsScrolled.value,
     '-translate-y-full':
-      (isFront && !finalIsScrolled.value && theme.navigation.isHidden) ||
+      (isFront.value && !finalIsScrolled.value && theme.navigation.isHidden) ||
       (finalIsScrolled.value &&
         scrollDirection.value === 'down' &&
         !atBottom.value),
