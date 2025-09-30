@@ -3,18 +3,14 @@ import type { IconsSocialProps } from '~/types/LinkTypes'
 
 const props = defineProps<IconsSocialProps>()
 
-const activeClass = props.activeClass ?? 'text-primary'
-const inactiveClass =
-  props.inactiveClass ?? 'text-black dark:text-white hover:text-primary-400'
-const iconSize = props.iconSize ?? 'size-10'
+const iconSize = props.iconSize || 'size-10'
 </script>
 
 <template>
   <ULink
-    :active-class="activeClass"
     :aria-label="`Visit our ${title} page`"
-    :inactive-class="inactiveClass"
-    rel="noopener"
+    inactive-class="transition-colors hover:text-primary-400"
+    raw
     target="_blank"
     :to="url"
   >

@@ -28,8 +28,8 @@ const iconsSocialConfig = theme.socials || []
         </template>
         Website created & powered by
         <ULink
-          active-class="text-primary-400"
-          inactive-class="text-primary hover:text-primary-400"
+          inactive-class="transition-colors text-primary hover:text-primary-400"
+          raw
           rel="noopener"
           target="_blank"
           to="//www.stirstudiosdesign.com"
@@ -62,8 +62,8 @@ const iconsSocialConfig = theme.socials || []
       </div>
 
       <ULink
-        active-class="text-primary-400"
-        inactive-class="text-primary hover:text-primary-400"
+        inactive-class="transition-colors text-primary hover:text-primary-400"
+        raw
         rel="noopener"
         target="_blank"
         :to="`mailto:${page.site_info?.mail}`"

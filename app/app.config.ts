@@ -90,11 +90,13 @@ export default defineAppConfig({
     //     title: 'IMDB',
     //     url: '//imdb.com/name/CLIENT/',
     //     icon: 'i-simple-icons:imdb',
+    //     iconSize: 'size-10',
     //   },
     //   {
     //     title: 'LinkedIn',
     //     url: '//linkedin.com/in/CLIENT',
     //     icon: 'i-simple-icons:linkedin',
+    //     iconSize: 'size-10',
     //   },
     // ],
     media: {
