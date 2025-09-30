@@ -12,6 +12,10 @@
   @apply mx-auto max-w-sm sm:float-left sm:me-5 sm:mb-5;
 }
 
+.align-center {
+  @apply mx-auto my-10 max-w-sm;
+}
+
 .align-right {
   @apply mx-auto max-w-sm sm:float-right sm:ms-5 sm:mb-5;
 }
