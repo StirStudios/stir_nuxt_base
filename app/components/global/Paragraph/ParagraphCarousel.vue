@@ -24,7 +24,7 @@ const overlay = computed(() => item.value.overlay === true)
 const amount = computed(() => item.value.gridItems || 'basis-full')
 
 const shuffledItems = useShuffledOrder(
-  item.value.items ?? [],
+  item.value.items ?? item.value.media ?? [],
   item.value.randomize ?? false,
 )
 
