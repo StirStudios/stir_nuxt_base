@@ -9,7 +9,7 @@ const iconSize = props.iconSize || 'size-10'
 <template>
   <ULink
     :aria-label="`Visit our ${title} page`"
-    inactive-class="transition-colors hover:text-primary-400"
+    inactive-class="transition-colors hover:text-primary"
     raw
     target="_blank"
     :to="url"

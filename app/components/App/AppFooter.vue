@@ -28,7 +28,7 @@ const iconsSocialConfig = theme.socials || []
         </template>
         Website created & powered by
         <ULink
-          inactive-class="transition-colors text-primary hover:text-primary-400"
+          inactive-class="transition-colors text-primary hover:text-primary-300"
           raw
           rel="noopener"
           target="_blank"
@@ -62,9 +62,8 @@ const iconsSocialConfig = theme.socials || []
       </div>
 
       <ULink
-        inactive-class="transition-colors text-primary hover:text-primary-400"
+        inactive-class="transition-colors text-primary hover:text-primary-300"
         raw
-        rel="noopener"
         target="_blank"
         :to="`mailto:${page.site_info?.mail}`"
       >
