@@ -3,26 +3,31 @@ import type { CarouselProps } from '~/types/MediaTypes'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
-const props = defineProps<CarouselProps>()
+const props = defineProps<{ item: CarouselProps }>()
+const item = computed(() => props.item || {})
 
 const mounted = ref(false)
 const carousel = useTemplateRef('carousel')
+const appConfig = useAppConfig()
 
 onMounted(() => {
   mounted.value = true
 })
 
-const appConfig = useAppConfig()
+const showIndicators = computed(() => item.value.carouselIndicators || false)
+const showArrows = computed(() => item.value.carouselArrows || false)
+const transitionFade = computed(() => item.value.carouselFade || false)
+const autoscroll = computed(() => item.value.carouselAutoscroll || false)
+const interval = computed(() => item.value.carouselInterval || 5000)
+const itemElement = computed(() => item.value.itemElement || false)
+const overlay = computed(() => item.value.overlay === true)
+const amount = computed(() => item.value.gridItems || 'basis-full')
 
-const showIndicators = computed(() => props.indicators || false)
-const showArrows = computed(() => props.arrows || false)
-const transitionFade = computed(() => props.fade || false)
-const autoscroll = computed(() => props.autoscroll || false)
-const interval = computed(() => props.interval || 5000)
-const itemElement = computed(() => props.itemElement || false)
-const overlay = computed(() => props.overlay === true)
+const shuffledItems = useShuffledOrder(
+  item.value.items ?? [],
+  item.value.randomize ?? false,
+)
 
-const shuffledItems = useShuffledOrder(props.items || [], props.randomize)
 const showCarousel = computed(
   () => mounted.value && shuffledItems.value.length > 0,
 )
@@ -95,8 +100,24 @@ function handleSelect() {
           :item="item"
         />
       </template>
+
       <template v-else>
-        <MediaSimple v-if="item.type === 'image' && !overlay" :media="[item]" />
+        <!-- Paragraph-style content (e.g., node-review) -->
+        <component
+          :is="
+            componentExists(item.element)
+              ? resolveComponentName(item.element)
+              : 'ParagraphDefault'
+          "
+          v-if="item.element"
+          :item="item"
+        />
+
+        <!-- Media fallback if no element key -->
+        <MediaSimple
+          v-else-if="item.type === 'image' && !overlay"
+          :media="[item]"
+        />
         <MediaPopup
           v-else-if="
             item.type === 'video' || (item.type === 'image' && overlay)

@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { useCalendlyWidget } from '~/composables/useCalendlyWidget'
 
-const props = defineProps<{ calendlyUrl: string }>()
+// Accept full item
+const props = defineProps<{
+  item: { calendlyUrl?: string; calendlyScheme?: string; title?: string }
+}>()
 
 const container = ref<HTMLElement | null>(null)
-useCalendlyWidget(container, props.calendlyUrl)
+
+// Use the calendlyUrl from the item
+useCalendlyWidget(container, props.item.calendlyUrl || '')
 </script>
 
 <template>

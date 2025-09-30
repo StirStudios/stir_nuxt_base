@@ -8,9 +8,8 @@ import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
-const props = withDefaults(defineProps<{ webform?: WebformDefinition }>(), {
-  webform: {} as WebformDefinition,
-})
+const props = defineProps<{ item: { webform?: WebformDefinition } }>()
+const webform = computed(() => props.item.webform || ({} as WebformDefinition))
 
 // Composables & Utilities
 const { onError } = useValidation()
@@ -28,7 +27,7 @@ const {
   webformConfirmationType = '',
   webformRedirect = '',
   actions = [],
-} = props.webform
+} = webform.value
 
 // Flatten the fields once at mount
 const fields = flattenWebformFields(rawFields)

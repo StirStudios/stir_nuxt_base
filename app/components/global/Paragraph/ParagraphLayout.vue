@@ -43,56 +43,56 @@ const getLazyComponentName = (element: string) => {
   return `Lazy${componentExists(element) ? resolveComponentName(element) : 'ParagraphDefault'}`
 }
 
-const getNodeProps = (item) => {
-  if (item.element === 'paragraph-carousel') {
-    return {
-      item,
-      amount: item.gridItems,
-      header: item.header,
-      indicators: item.carouselIndicators,
-      arrows: item.carouselArrows,
-      fade: item.carouselFade,
-      autoscroll: item.carouselAutoscroll,
-      interval: item.carouselInterval,
-      randomize: item.randomize,
-      overlay: item.overlay,
-      items: item.media,
-      width: item.width,
-    }
-  } else if (item.element === 'paragraph-view') {
-    return {
-      item: {
-        ...item.content,
-        carousel: item.carousel,
-        carouselIndicators: item.carouselIndicators,
-        carouselArrows: item.carouselArrows,
-        carouselFade: item.carouselFade,
-        carouselAutoscroll: item.carouselAutoscroll,
-        carouselInterval: item.carouselInterval,
-        randomize: item.randomize,
-        overlay: item.overlay,
-        spacing: item.spacing,
-        width: item.width,
-        gridItems: item.gridItems,
-        direction: item.direction,
-      },
-    }
-  } else if (item.element === 'paragraph-calendly') {
-    return {
-      calendlyUrl: item.calendlyUrl,
-      calendlyScheme: item.calendlyScheme,
-      title: item.title,
-    }
-  } else if (item.element === 'paragraph-webform') {
-    return {
-      webform: item.webform,
-    }
-  } else {
-    return {
-      item,
-    }
-  }
-}
+// const getNodeProps = (item) => {
+// if (item.element === 'paragraph-carousel') {
+//   return {
+//     item,
+//     amount: item.gridItems,
+//     header: item.header,
+//     indicators: item.carouselIndicators,
+//     arrows: item.carouselArrows,
+//     fade: item.carouselFade,
+//     autoscroll: item.carouselAutoscroll,
+//     interval: item.carouselInterval,
+//     randomize: item.randomize,
+//     overlay: item.overlay,
+//     items: item.media,
+//     width: item.width,
+//   }
+// } else if (item.element === 'paragraph-view') {
+//   return {
+//     item: {
+//       ...item.content,
+//       carousel: item.carousel,
+//       carouselIndicators: item.carouselIndicators,
+//       carouselArrows: item.carouselArrows,
+//       carouselFade: item.carouselFade,
+//       carouselAutoscroll: item.carouselAutoscroll,
+//       carouselInterval: item.carouselInterval,
+//       randomize: item.randomize,
+//       overlay: item.overlay,
+//       spacing: item.spacing,
+//       width: item.width,
+//       gridItems: item.gridItems,
+//       direction: item.direction,
+//     },
+//   }
+// } else if (item.element === 'paragraph-calendly') {
+//   return {
+//     calendlyUrl: item.calendlyUrl,
+//     calendlyScheme: item.calendlyScheme,
+//     title: item.title,
+//   }
+// } else if (item.element === 'paragraph-webform') {
+//   return {
+//     webform: item.webform,
+//   }
+// } else {
+//   return {
+//     item,
+//   }
+// }
+// }
 </script>
 
 <template>
@@ -138,9 +138,13 @@ const getNodeProps = (item) => {
             >
               <template v-for="item in regionItems" :key="item.uuid">
                 <article :class="item.element">
-                  <component
+                  <!-- <component
                     :is="getLazyComponentName(item.element)"
                     v-bind="getNodeProps(item)"
+                  /> -->
+                  <component
+                    :is="getLazyComponentName(item.element)"
+                    :item="item"
                   />
                 </article>
               </template>
@@ -153,11 +157,7 @@ const getNodeProps = (item) => {
     </section>
 
     <section v-else :class="container">
-      <component
-        :is="getLazyComponentName(layout.element)"
-        v-if="getNodeProps(layout) !== null"
-        v-bind="getNodeProps(layout)"
-      />
+      <component :is="getLazyComponentName(layout.element)" :item="layout" />
     </section>
   </template>
 </template>

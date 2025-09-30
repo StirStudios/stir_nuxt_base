@@ -10,7 +10,7 @@ const props = defineProps<{
 const { grid } = useAppConfig().stirTheme
 
 // Filter out 'paragraph-layout' sections before passing to shuffle
-const initialRows = (props.item.rows || []).map((row) => ({
+const initialRows = (props.item.content?.rows || []).map((row) => ({
   ...row,
   section: row.section?.filter((node) => node.element !== 'paragraph-layout'),
 }))
@@ -22,18 +22,7 @@ const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
 <template>
   <div :class="[item.width, item.spacing]">
     <template v-if="item.carousel">
-      <ParagraphCarousel
-        :amount="item.gridItems"
-        :arrows="item.carouselArrows"
-        :autoscroll="item.carouselAutoscroll"
-        :fade="item.carouselFade"
-        :indicators="item.carouselIndicators"
-        :interval="item.carouselInterval"
-        :item-element="item.element"
-        :items="filteredRows"
-        :randomize="false"
-        :vid="item.viewId"
-      />
+      <ParagraphCarousel :item="{ ...item, items: filteredRows }" />
     </template>
 
     <div v-else :class="item.gridItems">
@@ -41,11 +30,11 @@ const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
         <WrapAnimate :effect="item?.direction">
           <component
             :is="
-              componentExists(item.element)
-                ? resolveComponentName(item.element)
+              componentExists(row.element)
+                ? resolveComponentName(row.element)
                 : 'ParagraphDefault'
             "
-            v-bind="{ item: row }"
+            :item="row"
           />
 
           <USeparator

@@ -45,6 +45,8 @@ export interface CarouselProps extends LayoutProps {
   arrows?: boolean
   fade?: boolean
   autoscroll?: boolean
+  autoheight?: boolean
+  randomize?: boolean
   overlay?: boolean
   width?: string
   vid?: string
