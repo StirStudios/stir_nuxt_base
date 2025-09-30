@@ -18,6 +18,7 @@ const showIndicators = computed(() => item.value.carouselIndicators || false)
 const showArrows = computed(() => item.value.carouselArrows || false)
 const transitionFade = computed(() => item.value.carouselFade || false)
 const autoscroll = computed(() => item.value.carouselAutoscroll || false)
+const autoHeight = computed(() => item.value.carouselAutoheight || false)
 const interval = computed(() => item.value.carouselInterval || 5000)
 const itemElement = computed(() => item.value.itemElement || false)
 const overlay = computed(() => item.value.overlay === true)
@@ -73,6 +74,7 @@ function handleSelect() {
       ref="carousel"
       v-slot="{ item }"
       :arrows="showArrows"
+      :auto-height="autoHeight"
       :auto-scroll="autoScrollOptions"
       :autoplay="autoplayOptions"
       :dots="showIndicators"
