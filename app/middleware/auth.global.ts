@@ -1,5 +1,4 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (import.meta.server) return
   const config = useAppConfig().protectedRoutes
   if (!config) return
 
@@ -7,20 +6,28 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!protectedPaths.length) return
 
   const isProtected = protectedPaths.some((path) => {
-    return path.endsWith('/') ? to.path.startsWith(path) : to.path === path
+    if (path.endsWith('/')) {
+      return to.path.startsWith(path)
+    } else {
+      return to.path === path
+    }
   })
 
   if (!isProtected) return
 
-  const session = useUserSession()
+  const session = useUserSession?.()
+  if (!session) return
+
   if (!session.ready.value) {
     await session.fetch()
   }
 
+  // Redirect logged-in user away from login page
   if (to.path === config.loginPath && session.loggedIn.value) {
     return navigateTo(config.redirectOnLogin)
   }
 
+  // Not logged in → redirect to login, preserving query (e.g. ?password=...)
   if (!session.loggedIn.value) {
     return navigateTo({
       path: config.loginPath,
