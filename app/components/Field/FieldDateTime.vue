@@ -70,6 +70,9 @@ watchEffect(() => {
   })
 
   props.state[props.fieldName] = values
+
+  // 🔍 Debug until you’re 100% sure
+  console.log('Submitting', props.fieldName, values)
 })
 </script>
 
