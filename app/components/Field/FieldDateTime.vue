@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import type { WebformFieldProps, WebformState } from '~/types/formTypes'
-import {
-  CalendarDate,
-  DateFormatter,
-  getLocalTimeZone,
-} from '@internationalized/date'
+import { CalendarDate, DateFormatter } from '@internationalized/date'
 import { getOffsetString, generateTimeOptions } from '~/utils/dateUtils'
 
 const { webform } = useAppConfig().stirTheme
@@ -21,6 +17,7 @@ const multiple = Number(props.field['#multiple']) || 1
 const minTime = props.field['#dateTimeMin'] ?? '10:00:00'
 const maxTime = props.field['#dateTimeMax'] ?? '22:00:00'
 const step = Number(props.field['#dateTimeStep']) || 1800
+const siteTimezone = props.field['#timezone'] || 'America/Los_Angeles'
 
 const timeOptions = generateTimeOptions(minTime, maxTime, step)
 const timeSelectOptions = Object.fromEntries(
@@ -30,6 +27,12 @@ const timeSelectOptions = Object.fromEntries(
 type DateTimeBlock = {
   date: CalendarDate | null
   start: string
+}
+
+function formatCalendarDate(date: CalendarDate): string {
+  return `${date.year}-${String(date.month).padStart(2, '0')}-${String(
+    date.day,
+  ).padStart(2, '0')}`
 }
 
 const blocks = ref<DateTimeBlock[]>(
@@ -54,21 +57,17 @@ const blocks = ref<DateTimeBlock[]>(
 )
 
 watchEffect(() => {
-  const offset = getOffsetString()
   const values: string[] = []
 
   blocks.value.forEach((block) => {
-    const value =
-      block.date && block.start
-        ? `${block.date.toString()}T${block.start}:00${offset}`
-        : ''
-
-    if (value) values.push(value)
+    if (block.date && block.start) {
+      const dateStr = formatCalendarDate(block.date)
+      const offset = getOffsetString(siteTimezone)
+      const [h, m] = block.start.split(':')
+      const full = `${dateStr}T${h}:${m}:00${offset}`
+      values.push(full)
+    }
   })
-
-  if (!Array.isArray(props.state[props.fieldName])) {
-    props.state[props.fieldName] = []
-  }
 
   props.state[props.fieldName] = values
 })
@@ -92,7 +91,7 @@ watchEffect(() => {
             >
               {{
                 block.date
-                  ? df.format(block.date.toDate(getLocalTimeZone()))
+                  ? df.format(block.date.toDate(siteTimezone))
                   : 'Select Date'
               }}
             </UButton>
@@ -111,7 +110,7 @@ watchEffect(() => {
           >
             {{
               block.date
-                ? df.format(block.date.toDate(getLocalTimeZone()))
+                ? df.format(block.date.toDate(siteTimezone))
                 : 'Select Date'
             }}
           </UButton>
