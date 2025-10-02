@@ -88,7 +88,7 @@ function handleSelect() {
       :ui="{
         root: appConfig.stirTheme.carousel.root,
         item: amount,
-        container: 'items-center',
+        container: 'items-center transition-[height]',
       }"
       @select="handleSelect"
     >
