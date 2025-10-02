@@ -1,14 +1,31 @@
 /**
- * Generates a timezone offset string in the format "+hhmm" or "-hhmm".
- * @returns The formatted timezone offset.
+ * Generates a timezone offset string (e.g. "-0700", "+0100") for a given IANA timezone.
+ * Defaults to the current date/time if no date is provided.
  */
-export function getOffsetString(): string {
-  const offsetMinutes = new Date().getTimezoneOffset() * -1
-  const sign = offsetMinutes >= 0 ? '+' : '-'
-  const abs = Math.abs(offsetMinutes)
-  const hours = String(Math.floor(abs / 60)).padStart(2, '0')
-  const minutes = String(abs % 60).padStart(2, '0')
-  return `${sign}${hours}${minutes}`
+export function getOffsetString(
+  timeZone: string,
+  date: Date = new Date(),
+): string {
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    timeZoneName: 'shortOffset',
+  })
+
+  const parts = dtf.formatToParts(date)
+  const offset = parts.find((p) => p.type === 'timeZoneName')?.value || 'GMT+0'
+
+  // Example offsets: "GMT-7", "GMT+05:30"
+  const match = offset.match(/GMT([+-]?\d+)(?::(\d+))?/)
+  if (match && match[1] !== undefined) {
+    const rawHours = match[1] // includes sign
+    const sign = rawHours.startsWith('-') ? '-' : '+'
+    const hours = String(Math.abs(Number(rawHours))).padStart(2, '0')
+    const minutes = String(match[2] || '0').padStart(2, '0')
+    return `${sign}${hours}${minutes}`
+  }
+
+  // Fallback: no match, return UTC
+  return '+0000'
 }
 
 /**
