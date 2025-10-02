@@ -62,17 +62,20 @@ watchEffect(() => {
   blocks.value.forEach((block) => {
     if (block.date && block.start) {
       const dateStr = formatCalendarDate(block.date)
-      const offset = getOffsetString(siteTimezone)
       const [h, m] = block.start.split(':')
+
+      // Construct a JS Date for the chosen day + time
+      const jsDate = new Date(`${dateStr}T${h}:${m}:00`)
+
+      // Pass this date into getOffsetString so DST is correct
+      const offset = getOffsetString(siteTimezone, jsDate)
+
       const full = `${dateStr}T${h}:${m}:00${offset}`
       values.push(full)
     }
   })
 
   props.state[props.fieldName] = values
-
-  // 🔍 Debug until you’re 100% sure
-  console.log('Submitting', props.fieldName, values)
 })
 </script>
 
