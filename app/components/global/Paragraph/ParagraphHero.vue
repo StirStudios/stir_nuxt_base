@@ -122,6 +122,7 @@ const posterImage = computed(() => {
 
       <video
         v-else-if="media.type === 'video'"
+        aria-hidden="true"
         class="absolute inset-0 h-full w-full object-cover"
         disablepictureinpicture
         height="640"

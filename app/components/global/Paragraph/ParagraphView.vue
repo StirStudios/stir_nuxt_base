@@ -20,7 +20,7 @@ const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
 </script>
 
 <template>
-  <div :class="[item.width, item.spacing]">
+  <WrapDiv :align="item.align" :styles="[item.width, item.spacing]">
     <template v-if="item.carousel">
       <ParagraphCarousel :item="{ ...item, items: filteredRows }" />
     </template>
@@ -47,5 +47,5 @@ const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
         </WrapAnimate>
       </div>
     </div>
-  </div>
+  </WrapDiv>
 </template>

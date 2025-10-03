@@ -161,24 +161,26 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
 
 <template>
   <EditLink :link="webformSubmissions">
-    <WebformContent
-      v-model:turnstile-token="turnstileToken"
-      :fields="fields"
-      :get-group-fields="getGroupFields"
-      :grouped-fields="groupedFields"
-      :is-container-visible="isContainerVisible"
-      :is-form-submitted="isFormSubmitted"
-      :is-loading="isLoading"
-      :ordered-field-names="orderedFieldNames"
-      :schema="schema"
-      :should-render-group-container="shouldRenderGroupContainer"
-      :should-render-individual-field="shouldRenderIndividualField"
-      :state="state"
-      :submit-button-label="submitButtonLabel"
-      :theme-webform="themeWebform"
-      :webform-confirmation="webformConfirmation"
-      @error="onError"
-      @submit="onSubmit"
-    />
+    <WrapDiv :align="item.align" :styles="[item.width, item.spacing]">
+      <WebformContent
+        v-model:turnstile-token="turnstileToken"
+        :fields="fields"
+        :get-group-fields="getGroupFields"
+        :grouped-fields="groupedFields"
+        :is-container-visible="isContainerVisible"
+        :is-form-submitted="isFormSubmitted"
+        :is-loading="isLoading"
+        :ordered-field-names="orderedFieldNames"
+        :schema="schema"
+        :should-render-group-container="shouldRenderGroupContainer"
+        :should-render-individual-field="shouldRenderIndividualField"
+        :state="state"
+        :submit-button-label="submitButtonLabel"
+        :theme-webform="themeWebform"
+        :webform-confirmation="webformConfirmation"
+        @error="onError"
+        @submit="onSubmit"
+      />
+    </WrapDiv>
   </EditLink>
 </template>
