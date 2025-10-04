@@ -14,6 +14,13 @@ export interface LinkProps {
   options?: Record<string, unknown>
 }
 
+// IconProps
+export interface IconPorps {
+  align: string
+  iconName: string
+  iconSize?: string
+}
+
 // LayoutProps
 export interface LayoutProps {
   container?: boolean
