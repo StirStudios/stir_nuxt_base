@@ -180,6 +180,7 @@ export default defineAppConfig({
       description: 'desc mb-3 text-muted',
       help: 'desc my-3 text-muted',
       submitAlign: '',
+      buttonSize: '2xl',
       variant: 'outline',
     },
     turnstile: {
@@ -258,6 +259,11 @@ export default defineAppConfig({
             // base: 'px-6 py-3 text-md gap-2',
             // leadingIcon: 'size-8',
             // trailingIcon: 'size-8',
+          },
+          '2xl': {
+            base: 'px-10 py-4 text-md gap-2',
+            leadingIcon: 'size-10',
+            trailingIcon: 'size-10',
           },
         },
         variant: {
