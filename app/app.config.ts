@@ -80,6 +80,7 @@ export default defineAppConfig({
     // },
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
     footer: {
+      hideEmail: false,
       base: 'mt-20 bg-zinc-900 py-10 text-white text-sm dark:bg-black',
       left: 'text-sm leading-relaxed lg:text-left',
       right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',

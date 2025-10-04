@@ -62,6 +62,7 @@ const iconsSocialConfig = theme.socials || []
       </div>
 
       <ULink
+        v-if="!theme.footer.hideEmail"
         inactive-class="transition-colors text-primary hover:text-primary-300"
         raw
         target="_blank"
