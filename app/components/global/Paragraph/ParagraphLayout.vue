@@ -48,6 +48,7 @@ const getLazyComponentName = (element: string) => {
   <template v-for="layout in shuffledLayouts" :key="layout.id">
     <section
       v-if="isValidParagraphLayout(layout)"
+      :id="sectionId(layout)"
       :class="[
         layout.classes || 'content',
         layout.spacing,
@@ -63,7 +64,6 @@ const getLazyComponentName = (element: string) => {
       </component>
 
       <div
-        :id="sectionId(layout)"
         :class="[
           layout.width,
           classLayout(layout),
