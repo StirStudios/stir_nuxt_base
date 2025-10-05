@@ -2,8 +2,10 @@
 import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 
+const props = defineProps<{ mode?: 'fixed' | 'static' }>()
+
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
-const { page, isFront } = usePageContext()
+const { page, isFront, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -18,18 +20,26 @@ const navLinks = mainMenu.value.map((item) => ({
     : `/${item.alias}${item.options?.fragment ? `#${item.options.fragment}` : ''}`,
 }))
 
+const isFixed = computed(
+  () => props.mode === 'fixed' || isScrolled.value || isFront.value,
+)
+
 const headerRootClasses = computed(() => [
   theme.navigation.base,
+  isFixed.value
+    ? ['fixed z-50 w-full', isAdministrator.value ? 'top-[3.1rem]' : 'top-0']
+    : 'relative w-full',
   theme.navigation.transparentTop && !finalIsScrolled.value
     ? 'bg-transparent backdrop-none border-none'
     : theme.navigation.background,
   {
     'is-scrolled': finalIsScrolled.value,
     '-translate-y-full':
-      (isFront.value && !finalIsScrolled.value && theme.navigation.isHidden) ||
-      (finalIsScrolled.value &&
-        scrollDirection.value === 'down' &&
-        !atBottom.value),
+      isFixed.value &&
+      ((isFront.value && !finalIsScrolled.value && theme.navigation.isHidden) ||
+        (finalIsScrolled.value &&
+          scrollDirection.value === 'down' &&
+          !atBottom.value)),
   },
 ])
 

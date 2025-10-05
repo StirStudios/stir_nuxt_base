@@ -2,15 +2,13 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const { isAdministrator } = usePageContext()
-const { header } = useAppConfig().stirTheme
+const { navigation } = useAppConfig().stirTheme
 </script>
 
 <template>
   <LazyRegionArea area="top" />
-  <div :class="header">
-    <LazyDrupalTabs v-if="isAdministrator" />
-    <AppHeader />
-  </div>
+  <LazyDrupalTabs v-if="isAdministrator" />
+  <AppHeader :mode="navigation.mode" />
   <UMain id="main-content" role="main">
     <LazySiteMessages />
     <slot />

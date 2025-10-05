@@ -53,6 +53,7 @@ export default defineAppConfig({
     h1: 'mb-20 text-center text-6xl',
     header: 'md:px-auto fixed top-0 z-30 w-full !p-0',
     navigation: {
+      mode: 'fixed',
       logo: true,
       logoSize: 'h-[5rem]',
       isHidden: false,
