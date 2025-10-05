@@ -55,7 +55,7 @@ const sectionClasses = computed(() => [
   media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
   media.value?.type && heroTheme.overlay,
   isFrontEffective.value && heroTheme.isFront,
-  isHidden.value && 'sr-only',
+  !isFrontEffective.value && isHidden.value && 'sr-only',
   media.value?.type === 'video' && 'min-h-[75vh]',
 ])
 
