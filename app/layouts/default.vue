@@ -2,10 +2,7 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const { page, isAdministrator } = usePageContext()
-const { header, hero } = useAppConfig().stirTheme
-const isHidden = computed(() =>
-  ['true', '1', true, 1].includes(page.value?.content?.hide),
-)
+const { header } = useAppConfig().stirTheme
 </script>
 
 <template>
@@ -14,7 +11,7 @@ const isHidden = computed(() =>
     <LazyDrupalTabs v-if="isAdministrator" />
     <AppHeader />
   </div>
-  <UMain id="main-content" :class="isHidden ? hero.hide : ''" role="main">
+  <UMain id="main-content" role="main">
     <LazySiteMessages />
     <slot />
   </UMain>

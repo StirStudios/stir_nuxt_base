@@ -5,7 +5,7 @@ import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 import { useNavLock } from '~/composables/useNavLock'
 
 const { observeVideos } = useIntersectionObserver()
-const { isFront } = usePageContext()
+const { isFront, page } = usePageContext()
 const { locked } = useNavLock()
 
 const { hero, pageTitle, siteSlogan, hide } = defineProps<{
@@ -48,14 +48,18 @@ const siteSloganEffective = computed(() =>
 
 const media = computed(() => hero?.media?.[0] || {})
 const hasHero = computed(() => !!hero?.text || !!media.value?.type)
-const isHidden = computed(() => ['true', '1', true, 1].includes(hide))
+const isHidden = computed(
+  () =>
+    !isFrontEffective.value &&
+    ['true', '1', true, 1].includes(page.value?.content?.hide),
+)
 
 const sectionClasses = computed(() => [
   heroTheme.base,
   media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
   media.value?.type && heroTheme.overlay,
   isFrontEffective.value && heroTheme.isFront,
-  !isFrontEffective.value && isHidden.value && 'sr-only',
+  isHidden.value && [heroTheme.hide, !isFrontEffective.value && 'sr-only'],
   media.value?.type === 'video' && 'min-h-[75vh]',
 ])
 
