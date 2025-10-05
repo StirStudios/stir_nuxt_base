@@ -48,13 +48,14 @@ const siteSloganEffective = computed(() =>
 
 const media = computed(() => hero?.media?.[0] || {})
 const hasHero = computed(() => !!hero?.text || !!media.value?.type)
+const isHidden = computed(() => ['true', '1', true, 1].includes(hide))
 
 const sectionClasses = computed(() => [
   heroTheme.base,
   media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
   media.value?.type && heroTheme.overlay,
   isFrontEffective.value && heroTheme.isFront,
-  hide === 'true' && 'sr-only',
+  isHidden.value && 'sr-only',
   media.value?.type === 'video' && 'min-h-[75vh]',
 ])
 
