@@ -4,14 +4,14 @@ import type { MediaProps } from '~/types/MediaTypes'
 const { item, link } = defineProps<{ item: MediaProps; link?: boolean }>()
 const { media } = useAppConfig().stirTheme
 
-const isEager = computed(() => item.loading === 'eager')
+const isEager = computed(() => item?.loading === 'eager')
 </script>
 
 <template>
   <component
-    :is="item.link ? 'a' : 'div'"
+    :is="item?.link ? 'a' : 'div'"
     v-bind="
-      item.link
+      item?.link
         ? { target: '_blank', rel: 'noopener', 'aria-label': item.alt }
         : {}
     "
@@ -19,7 +19,7 @@ const isEager = computed(() => item.loading === 'eager')
       'media group @container relative block overflow-hidden',
       media.rounded,
     ]"
-    :href="item.link || undefined"
+    :href="item?.link || undefined"
   >
     <ClientOnly v-if="!isEager" fallback-tag="div">
       <template #default>
@@ -81,7 +81,7 @@ const isEager = computed(() => item.loading === 'eager')
           {{ item.title }}
         </div>
 
-        <UButton class="mt-5" size="sm" :to="item.link" variant="outline">
+        <UButton class="mt-5" size="sm" :to="item?.link" variant="outline">
           View on Instagram
         </UButton>
       </div>
