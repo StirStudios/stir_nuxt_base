@@ -11,7 +11,15 @@ const { header } = useAppConfig().stirTheme
     <LazyDrupalTabs v-if="isAdministrator" />
     <AppHeader />
   </div>
-  <UMain id="main-content" role="main">
+  <UMain
+    id="main-content"
+    :class="
+      page.content.hide === true || page.content.hide === 'true'
+        ? hero.hide
+        : ''
+    "
+    role="main"
+  >
     <LazySiteMessages />
     <slot />
   </UMain>
