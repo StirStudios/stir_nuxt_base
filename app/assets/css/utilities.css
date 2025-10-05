@@ -20,6 +20,10 @@
   @apply mx-auto max-w-sm sm:float-right sm:ms-5 sm:mb-5;
 }
 
+.sr-hide {
+  @apply invisible h-0 opacity-0;
+}
+
 .dark .hero {
   @apply text-white;
 }

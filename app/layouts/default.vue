@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 
-const { page, isAdministrator } = usePageContext()
+const { isAdministrator } = usePageContext()
 const { header } = useAppConfig().stirTheme
 </script>
 
@@ -11,15 +11,7 @@ const { header } = useAppConfig().stirTheme
     <LazyDrupalTabs v-if="isAdministrator" />
     <AppHeader />
   </div>
-  <UMain
-    id="main-content"
-    :class="
-      page.content.hide === true || page.content.hide === 'true'
-        ? hero.hide
-        : ''
-    "
-    role="main"
-  >
+  <UMain id="main-content" role="main">
     <LazySiteMessages />
     <slot />
   </UMain>
