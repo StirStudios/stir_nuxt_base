@@ -85,6 +85,8 @@ export default defineAppConfig({
       base: 'mt-20 bg-zinc-900 py-10 text-white text-sm dark:bg-black',
       left: 'text-sm leading-relaxed lg:text-left',
       right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',
+      footerLinks: 'transition-colors text-primary hover:text-primary-400',
+      poweredby: true,
       // rights: '',
     },
     // socials: [

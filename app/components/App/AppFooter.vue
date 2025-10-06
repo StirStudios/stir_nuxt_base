@@ -26,16 +26,17 @@ const iconsSocialConfig = theme.socials || []
         <template v-if="theme.footer.rights">
           {{ theme.footer.rights }}<br />
         </template>
-        Website created & powered by
-        <ULink
-          inactive-class="transition-colors text-primary hover:text-primary-300"
-          raw
-          rel="noopener"
-          target="_blank"
-          to="//www.stirstudiosdesign.com"
-        >
-          StirStudios
-        </ULink>
+        <template v-if="theme.footer.poweredby">
+          Website created & powered by
+          <ULink
+            :inactive-class="theme.footer.footerLinks"
+            raw
+            target="_blank"
+            to="//www.stirstudiosdesign.com"
+          >
+            StirStudios
+          </ULink>
+        </template>
       </p>
     </template>
 
@@ -63,7 +64,7 @@ const iconsSocialConfig = theme.socials || []
 
       <ULink
         v-if="!theme.footer.hideEmail"
-        inactive-class="transition-colors text-primary hover:text-primary-300"
+        :inactive-class="theme.footer.footerLinks"
         raw
         target="_blank"
         :to="`mailto:${page.site_info?.mail}`"
