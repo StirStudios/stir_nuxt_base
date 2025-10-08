@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { MediaProps } from '~/types/MediaTypes'
+import { aspectRatios } from '~/utils/aspectRatios'
 
 const { item, link } = defineProps<{ item: MediaProps; link?: boolean }>()
 const { media } = useAppConfig().stirTheme
@@ -44,12 +45,7 @@ const isEager = computed(() => item?.loading === 'eager')
       <template #fallback>
         <USkeleton
           class="w-full"
-          :style="{
-            aspectRatio:
-              item.width && item.height
-                ? `${item.width} / ${item.height}`
-                : '4 / 3',
-          }"
+          :class="aspectRatios(item.width, item.height) || 'aspect-[4/3]'"
         />
       </template>
     </ClientOnly>
