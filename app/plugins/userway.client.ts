@@ -1,13 +1,11 @@
-export function useUserwayWidget() {
-  if (!import.meta.client) return
+import { useScript } from '#imports'
 
-  const appConfig = useAppConfig()
-  const cfg = appConfig.userway
+export default defineNuxtPlugin(() => {
+  const cfg = useAppConfig().userway
 
   if (!cfg?.enabled || !cfg.account) return
 
-  onMounted(() => {
-    // Prevent duplicate injection
+  if (import.meta.client) {
     if (document.getElementById('userway-widget')) return
 
     window._userway_config = {
@@ -24,5 +22,5 @@ export function useUserwayWidget() {
       crossorigin: 'anonymous',
       referrerpolicy: 'no-referrer',
     })
-  })
-}
+  }
+})
