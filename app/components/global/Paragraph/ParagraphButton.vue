@@ -32,7 +32,6 @@ const linkLabel = computed(
         class="mt-4"
         icon="i-lucide-file-text"
         :label="pdfLabel"
-        :title="pdfLabel"
         @click="open = true"
       />
 
@@ -41,7 +40,6 @@ const linkLabel = computed(
         class="mt-4"
         :label="linkLabel"
         :target="link.external ? '_blank' : undefined"
-        :title="linkLabel"
         :to="link.url"
       />
     </div>
