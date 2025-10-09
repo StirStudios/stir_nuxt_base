@@ -45,5 +45,10 @@
     "npm": {
       "publish": false
     }
+  },
+  "pnpm": {
+    "overrides": {
+      "nuxt": "4.1.2"
+    }
   }
 }
