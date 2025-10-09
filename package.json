@@ -45,5 +45,10 @@
     "npm": {
       "publish": false
     }
+  },
+  "pnpm": {
+    "overrides": {
+      "@nuxt/cli": "3.28.0"
+    }
   }
 }
