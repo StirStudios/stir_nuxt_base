@@ -2,7 +2,8 @@
 import { getMotionEffect } from '~/utils/animations'
 import { motion } from 'motion-v'
 
-const animations = useAppConfig().stirTheme.animations.once
+const config = useAppConfig()
+const animations = computed(() => config.stirTheme.animations.once)
 
 const props = defineProps<{
   effect?: string

@@ -160,7 +160,6 @@ export default defineAppConfig({
     },
   },
 
-  // === Nuxt UI ===
   ui: {
     colors: {
       primary: 'lime',
