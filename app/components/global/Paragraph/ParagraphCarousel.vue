@@ -34,13 +34,6 @@ const showCarousel = computed(
   () => mounted.value && shuffledItems.value.length > 0,
 )
 
-const defaultArrow = {
-  prev: { label: 'Previous' },
-  next: { label: 'Next' },
-  prevIcon: 'i-heroicons-arrow-left',
-  nextIcon: 'i-heroicons-arrow-right',
-}
-
 const autoScrollSpeed = computed(() => {
   const minInterval = 1000
   const maxInterval = 10000
@@ -89,10 +82,10 @@ function handleSelect() {
       :fade="transitionFade"
       :items="shuffledItems"
       loop
-      :next="carouselConfig.arrows?.next ?? defaultArrow.next"
-      :next-icon="carouselConfig.arrows?.nextIcon ?? defaultArrow.nextIcon"
-      :prev="carouselConfig.arrows?.prev ?? defaultArrow.prev"
-      :prev-icon="carouselConfig.arrows?.prevIcon ?? defaultArrow.prevIcon"
+      :next="carouselConfig.arrows?.next"
+      :next-icon="carouselConfig.arrows?.nextIcon"
+      :prev="carouselConfig.arrows?.prev"
+      :prev-icon="carouselConfig.arrows?.prevIcon"
       :ui="{
         root: carouselConfig.root,
         item: amount,

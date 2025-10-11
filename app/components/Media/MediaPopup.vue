@@ -16,6 +16,7 @@ const activeMedia = ref<MediaProps | null>(null)
 const activeIndex = ref(0)
 const carousel = useTemplateRef('carousel')
 const appConfig = useAppConfig()
+const { carousel: carouselConfig = {} } = appConfig.stirTheme
 
 const modalContentClass = computed(() =>
   props.media?.length && !activeMedia.value?.mediaEmbed
@@ -96,10 +97,10 @@ const openModal = (item: MediaProps) => {
             v-model="activeIndex"
             :arrows="items.length > 1"
             :items="items"
-            :next="appConfig.stirTheme.carousel.arrows.next"
-            :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
-            :prev="appConfig.stirTheme.carousel.arrows.prev"
-            :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
+            :next="carouselConfig.arrows?.next"
+            :next-icon="carouselConfig.arrows?.nextIcon"
+            :prev="carouselConfig.arrows?.prev"
+            :prev-icon="carouselConfig.arrows?.prevIcon"
             :start-index="activeIndex"
             :ui="{ container: 'items-center h-full' }"
           >
