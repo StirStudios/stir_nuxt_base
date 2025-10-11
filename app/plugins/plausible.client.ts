@@ -1,10 +1,9 @@
-import { useScript } from '#imports'
+import { defineNuxtPlugin, useAppConfig, useScript } from '#imports'
 
 export default defineNuxtPlugin((nuxtApp) => {
   if (!import.meta.client) return
 
   const cfg = useAppConfig().analytics?.plausible
-
   if (process.env.NODE_ENV !== 'production' || !cfg?.enabled || !cfg.domain)
     return
 
@@ -17,19 +16,31 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   onLoaded(() => {
-    // Initialize plausible queue if needed
-    window.plausible =
-      window.plausible ||
-      function (...args) {
-        ;(window.plausible.q = window.plausible.q || []).push(args)
+    type PlausibleQueueFunction = ((
+      event: string,
+      options?: Record<string, unknown>,
+    ) => void) & {
+      q?: unknown[]
+    }
+
+    const win = window as unknown as {
+      plausible?: PlausibleQueueFunction
+    }
+
+    const plausibleFn: PlausibleQueueFunction =
+      win.plausible ??
+      function (event, options) {
+        ;(plausibleFn.q ??= []).push([event, options])
       }
 
-    // Initial pageview
-    window.plausible('pageview')
+    win.plausible = plausibleFn
 
-    // SPA route change tracking
+    // Initial pageview
+    plausibleFn('pageview')
+
+    // SPA route tracking
     nuxtApp.hook('page:finish', () => {
-      window.plausible('pageview')
+      plausibleFn('pageview')
     })
   })
 })

@@ -5,53 +5,28 @@ import {
 } from './utils/uiVariants'
 
 export default defineAppConfig({
+  // === Global ===
   colorMode: {
     forced: false,
-    // preference: 'dark',
     lightRoutes: [],
-  },
-  userway: {
-    enabled: false,
-    // account: '',
-    // position: 3,
-    // size: 'small', // or 'medium' | 'large'
-    // color: '#ffffff',
-    // type: '1',
-  },
-  // protectedRoutes: {
-  //   loginPath: '/login',
-  //   redirectOnLogin: '/example',
-  //   requireLoginPaths: [
-  //     '/example', // exact match only
-  //     '/admin/', // matches /admin/* (e.g., /admin/users)
-  //   ],
-  //   loginHeading: 'Login',
-  // },
-  analytics: {
-    plausible: {
-      enabled: false,
-      domain: '',
-      scriptUrl:
-        'https://analytics.stirstudiosdesign.com/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js',
-    },
   },
   cookieConsent: {
     enabled: false,
-    // title: 'We value your privacy',
-    // message:
-    //   'We use cookies to enhance your experience and collect the information you provide through our booking forms to help plan your wedding. We do not sell your data.',
-    // messageLinks: 'For more information please review our',
-    // termsUrl: '/terms',
-    // privacyUrl: '/privacy',
-    // buttonLabel: 'Accept',
   },
+
+  // === Stir Theme ===
   stirTheme: {
+    // Global toggles
     pdf: false,
-    // loadingIndicator:
-    // 'repeating-linear-gradient(to right,#D21B18 0%,#ED6663 50%,#F28E8D 100%)',
     crumbs: false,
+
+    // Typography & spacing
     h1: 'mb-20 text-center text-6xl',
+    container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
+
+    // Layout sections
     header: 'md:px-auto fixed top-0 z-30 w-full !p-0',
+
     navigation: {
       mode: 'fixed',
       logo: true,
@@ -63,8 +38,8 @@ export default defineAppConfig({
         'border-none bg-white/90 shadow backdrop-blur-md dark:bg-gray-950/70',
       color: 'primary',
       variant: 'link',
-      toggleType: 'slideover', // 'modal', 'slideover' or 'drawer'
-      toggleDirection: 'right', // 'left' or 'right'
+      toggleType: 'slideover',
+      toggleDirection: 'right',
       highlight: {
         show: false,
         color: 'primary',
@@ -75,44 +50,34 @@ export default defineAppConfig({
         body: 'flex h-full flex-col justify-center text-center',
       },
     },
-    // front: {
-    //   h1: 'sr-only',
-    //   main: 'mt-0',
-    // },
-    container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
+
     footer: {
       hideEmail: false,
-      base: 'mt-20 bg-zinc-900 py-10 text-white text-sm dark:bg-black',
+      base: 'mt-20 bg-accented dark:bg-muted/50 py-10 text-default text-sm',
       left: 'text-sm leading-relaxed lg:text-left',
       right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',
-      footerLinks: 'transition-colors text-primary hover:text-primary-400',
-      poweredby: true, // Hide powered by
-      // rights: '',
+      footerLinks: 'transition-colors text-primary hover:text-primary/90',
+      poweredby: true,
     },
-    // socials: [
-    //   {
-    //     title: 'IMDB',
-    //     url: '//imdb.com/name/CLIENT/',
-    //     icon: 'i-simple-icons:imdb',
-    //     iconSize: 'size-10',
-    //   },
-    //   {
-    //     title: 'LinkedIn',
-    //     url: '//linkedin.com/in/CLIENT',
-    //     icon: 'i-simple-icons:linkedin',
-    //     iconSize: 'size-10',
-    //   },
-    // ],
+
     media: {
       base: 'relative h-full w-full overflow-hidden object-cover',
       rounded: 'rounded-xl',
     },
-    aspectRatios: {
-      portrait: 'aspect-[9/16]',
-      landscape: 'aspect-[16/9]',
-      square: 'aspect-square',
-      fourThree: 'aspect-[4/3]',
+
+    card: {
+      base: 'relative isolate overflow-hidden rounded-xl bg-black/80 dark:bg-black py-16 text-white sm:py-20',
+      effect:
+        'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
     },
+
+    gradients: {
+      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
+      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
+      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
+    },
+
+    // UI components
     hero: {
       base: 'hero flex items-center justify-center overflow-hidden',
       mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
@@ -130,41 +95,30 @@ export default defineAppConfig({
       },
       hide: 'pt-30',
     },
-    animations: {
-      once: false,
-    },
-    grid: {
-      // separator: {
-      //   condition: 'node-',
-      //   base: 'mt-16 mb-10 xl:mt-28 max-w-screen-sm lg:w-[20rem] mx-auto',
-      //   color: 'white',
-      //   type: 'solid',
-      //   size: 'xs',
-      // },
-    },
-    card: {
-      base: 'relative isolate overflow-hidden rounded-xl bg-black py-16 text-white sm:py-20',
-      effect:
-        'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
-    },
-    gradients: {
-      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
-      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
-      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
-    },
+
     carousel: {
       padding: 'pb-12',
       root: '',
-      arrows: {
-        // prev: { color: 'neutral', variant: 'outline', size: 'md' },
-        // next: { color: 'neutral', variant: 'outline', size: 'md' },
-        // prevIcon: 'i-lucide-chevron-left',
-        // nextIcon: 'i-lucide-chevron-right',
-      },
     },
+
     modal: {
       header: true,
     },
+
+    scrollButton: {
+      base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 shadow-md transition-opacity duration-300',
+      icon: 'i-heroicons:arrow-up',
+      variant: 'solid',
+      showAtScrollY: 200,
+    },
+
+    error: {
+      label: 'Take me back home',
+      color: 'primary',
+      variant: 'solid',
+    },
+
+    // Forms
     webform: {
       spacing: 'space-y-5',
       spacingLarge: 'space-y-10',
@@ -186,108 +140,54 @@ export default defineAppConfig({
       buttonSize: '2xl',
       variant: 'outline',
     },
+
     turnstile: {
-      appearance: 'always', // 'always' or 'execute' or 'interaction-only'
+      appearance: 'always',
       label: 'Let us know you’re human',
     },
-    scrollButton: {
-      base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 shadow-md transition-opacity duration-300',
-      icon: 'i-heroicons:arrow-up',
-      variant: 'solid',
-      showAtScrollY: 200,
+
+    // Animation control
+    animations: {
+      once: false,
+    },
+
+    // Ratios
+    aspectRatios: {
+      portrait: 'aspect-[9/16]',
+      landscape: 'aspect-[16/9]',
+      square: 'aspect-square',
+      fourThree: 'aspect-[4/3]',
     },
   },
+
+  // === Nuxt UI ===
   ui: {
     colors: {
       primary: 'lime',
       neutral: 'zinc',
     },
-    //     navigationMenu: {
-    //       slots: {
-    //         link: 'font-medium text-md',
-    //       },
-    //       variants: {
-    //         active: {
-    //           false: {
-    //             link: 'text-highlighted',
-    //           },
-    //         },
-    //       },
-    //       compoundVariants: [
-    //         {
-    //           orientation: 'horizontal',
-    //           highlight: true,
-    //           class: {
-    //             link: ['after:-bottom-1 after:h-[2px]'],
-    //           },
-    //         },
-    //         {
-    //           disabled: false,
-    //           active: false,
-    //           variant: 'pill',
-    //           class: {
-    //             link: ['hover:text-primary bg-transparent'],
-    //           },
-    //         },
-    //
-    //         {
-    //           color: 'primary',
-    //           variant: 'pill',
-    //           active: true,
-    //           class: {
-    //             link: 'transition-all duration-300 text-primary',
-    //           },
-    //         },
-    //         {
-    //           variant: 'pill',
-    //           active: true,
-    //           highlight: false,
-    //           class: {
-    //             link: 'before:bg-transparent hover:bg-transparent hover:text-red-500 after:h-px:after after:bg-red-500',
-    //           },
-    //         },
-    //       ],
-    //     },
+
     button: {
       slots: {
         base: 'transition-all duration-300',
       },
       variants: {
         size: {
-          // lg: {
-          //   leadingIcon: 'size-6',
-          //   trailingIcon: 'size-6',
-          // },
-          md: {
-            // base: 'px-6 py-3 text-md gap-2',
-            // leadingIcon: 'size-8',
-            // trailingIcon: 'size-8',
-          },
           '2xl': {
-            base: 'px-10 py-4 text-md gap-2',
+            base: 'px-10 py-3 text-md gap-2',
             leadingIcon: 'size-10',
             trailingIcon: 'size-10',
           },
-        },
-        variant: {
-          material: materialVariantMuted,
+          variant: {
+            material: materialVariantMuted,
+          },
         },
       },
       defaultVariants: {
-        // color: 'primary',
-        // variant: 'solid',
         size: 'xl',
       },
     },
-    // slideover: {
-    //   variants: {
-    //     side: {
-    //       right: {
-    //         content: 'right-0 inset-y-0 w-full max-w-full',
-    //       },
-    //     },
-    //   },
-    // },
+
     formField: {
       slots: {
         label: 'block font-medium text-dimmed',
@@ -295,77 +195,50 @@ export default defineAppConfig({
         error: 'mt-1 text-error',
       },
     },
+
     input: {
       variants: {
         variant: {
           material: materialVariant,
         },
-        // size: {
-        //   xl: {
-        //     base: 'pt-4',
-        //   },
-        // },
       },
       defaultVariants: {
         size: 'xl',
       },
     },
+
     select: {
       variants: {
         variant: {
           material: materialVariantWithPB,
         },
-        // size: {
-        //   xl: {
-        //     base: 'pt-4',
-        //   },
-        // },
       },
       defaultVariants: {
         size: 'xl',
       },
     },
+
     selectMenu: {
       variants: {
         variant: {
           material: materialVariantWithPB,
         },
-        // size: {
-        //   xl: {
-        //     base: 'pt-4',
-        //   },
-        // },
       },
       defaultVariants: {
         size: 'xl',
       },
     },
+
     textarea: {
       variants: {
         variant: {
           material: materialVariant,
         },
-        // size: {
-        //   xl: {
-        //     base: 'pt-4',
-        //   },
-        // },
       },
       defaultVariants: {
         size: 'xl',
         variant: 'material',
       },
     },
-    // carousel: {
-    //   variants: {
-    //     orientation: {
-    //       horizontal: {
-    //         item: 'ps-0',
-    //         prev: '-start-12 top-1/2 -translate-y-1/2',
-    //         next: '-end-12 top-1/2 -translate-y-1/2',
-    //       },
-    //     },
-    //   },
-    // },
   },
 })

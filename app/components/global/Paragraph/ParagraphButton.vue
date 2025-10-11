@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types/ContentTypes'
+import type { RegionItemProps } from '~/types'
 
 const props = defineProps<{
   item: RegionItemProps

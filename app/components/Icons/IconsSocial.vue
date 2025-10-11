@@ -1,5 +1,12 @@
-<script lang="ts" setup>
-import type { IconsSocialProps } from '~/types/LinkTypes'
+<script setup lang="ts">
+type IconsSocialProps = {
+  title: string
+  url: string
+  icon: string
+  iconSize?: string
+  activeClass?: string
+  inactiveClass?: string
+}
 
 const props = defineProps<IconsSocialProps>()
 

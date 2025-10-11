@@ -1,4 +1,4 @@
-import type { WebformFields } from '~/types/webform'
+import type { WebformFields } from '~/types'
 
 type HiddenField = {
   '#type'?: string

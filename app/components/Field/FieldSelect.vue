@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps } from '~/types/formTypes'
+import type { WebformFieldProps } from '~/types'
 import { transformOptions } from '~/utils/transformUtils'
 import { useEventBus } from '@vueuse/core'
 

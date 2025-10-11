@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CarouselProps } from '~/types/MediaTypes'
+import type { CarouselProps } from '~/types'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
@@ -9,6 +9,7 @@ const item = computed(() => props.item || {})
 const mounted = ref(false)
 const carousel = useTemplateRef('carousel')
 const appConfig = useAppConfig()
+const { carousel: carouselConfig = {} } = appConfig.stirTheme
 
 onMounted(() => {
   mounted.value = true
@@ -32,6 +33,13 @@ const shuffledItems = useShuffledOrder(
 const showCarousel = computed(
   () => mounted.value && shuffledItems.value.length > 0,
 )
+
+const defaultArrow = {
+  prev: { label: 'Previous' },
+  next: { label: 'Next' },
+  prevIcon: 'i-heroicons-arrow-left',
+  nextIcon: 'i-heroicons-arrow-right',
+}
 
 const autoScrollSpeed = computed(() => {
   const minInterval = 1000
@@ -68,7 +76,7 @@ function handleSelect() {
 </script>
 
 <template>
-  <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
+  <div :class="`relative z-10 ${carouselConfig.padding}`">
     <UCarousel
       v-if="showCarousel"
       ref="carousel"
@@ -81,12 +89,12 @@ function handleSelect() {
       :fade="transitionFade"
       :items="shuffledItems"
       loop
-      :next="appConfig.stirTheme.carousel.arrows.next"
-      :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
-      :prev="appConfig.stirTheme.carousel.arrows.prev"
-      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
+      :next="carouselConfig.arrows?.next ?? defaultArrow.next"
+      :next-icon="carouselConfig.arrows?.nextIcon ?? defaultArrow.nextIcon"
+      :prev="carouselConfig.arrows?.prev ?? defaultArrow.prev"
+      :prev-icon="carouselConfig.arrows?.prevIcon ?? defaultArrow.prevIcon"
       :ui="{
-        root: appConfig.stirTheme.carousel.root,
+        root: carouselConfig.root,
         item: amount,
         container: 'items-center transition-[height]',
       }"

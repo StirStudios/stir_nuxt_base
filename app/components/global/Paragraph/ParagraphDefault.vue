@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { resolveComponentName, componentExists } from '~/utils/componentExists'
-defineProps<{ item: any }>()
+
+defineProps<{ item: unknown }>()
 </script>
 
 <template>
@@ -25,10 +26,10 @@ defineProps<{ item: any }>()
               Missing component:
               <code>{{ resolveComponentName(node.element) }}</code>
             </p>
-            <p class="text-gray-500">
+            <p class="text-default">
               You can override this using any of the following:
             </p>
-            <ul class="list-disc pl-4 text-gray-500">
+            <ul class="text-default list-disc pl-4">
               <li>
                 <code>{{ resolveComponentName(node.element) }}.vue</code>
               </li>
@@ -64,10 +65,10 @@ defineProps<{ item: any }>()
                 Missing component:
                 <code>{{ resolveComponentName(node.element) }}</code>
               </p>
-              <p class="text-gray-500">
+              <p class="text-default">
                 You can override this using any of the following:
               </p>
-              <ul class="list-disc pl-4 text-gray-500">
+              <ul class="text-default list-disc pl-4">
                 <li>
                   <code>{{ resolveComponentName(node.element) }}.vue</code>
                 </li>
@@ -87,7 +88,9 @@ defineProps<{ item: any }>()
 
   <!-- Catch-all: render entire object for debugging -->
   <template v-else>
-    <pre class="rounded bg-gray-100 p-4 text-sm text-gray-500">
+    <pre
+      class="bg-muted text-default overflow-x-auto rounded p-4 text-sm leading-loose break-words whitespace-pre-wrap"
+    >
       {{ item }}
     </pre>
   </template>

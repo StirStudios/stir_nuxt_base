@@ -1,9 +1,22 @@
-import { useScript } from '#imports'
+import { defineNuxtPlugin, useAppConfig, useScript } from '#imports'
+
+declare global {
+  interface Window {
+    _userway_config?: {
+      account: string
+      position?: number
+      size?: 'small' | 'medium' | 'large'
+      color?: string
+      type?: string
+      [key: string]: unknown
+    }
+  }
+}
 
 export default defineNuxtPlugin(() => {
-  const cfg = useAppConfig().userway
+  const cfg = useAppConfig().userway ?? {}
 
-  if (!cfg?.enabled || !cfg.account) return
+  if (!cfg.enabled || !cfg.account) return
 
   if (import.meta.client) {
     if (document.getElementById('userway-widget')) return

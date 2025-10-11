@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MediaProps } from '~/types/MediaTypes'
+import type { MediaProps } from '~/types'
 import { aspectRatios } from '~/utils/aspectRatios'
 import { useVideoPlayers } from '~/composables/useVideoPlayers'
 

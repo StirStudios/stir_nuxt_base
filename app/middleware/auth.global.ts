@@ -1,3 +1,5 @@
+import { defineNuxtRouteMiddleware, navigateTo, useAppConfig } from '#imports'
+
 export default defineNuxtRouteMiddleware(async (to) => {
   const config = useAppConfig().protectedRoutes
   if (!config) return

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SectionProps } from '~/types/ContentTypes'
+import type { SectionProps } from '~/types'
 import { useShuffledLayouts } from '~/composables/useShuffledLayouts'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 

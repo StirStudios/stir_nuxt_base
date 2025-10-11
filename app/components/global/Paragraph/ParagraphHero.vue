@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HeroProps } from '~/types/MediaTypes'
+import type { HeroProps } from '~/types'
 import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 import { useNavLock } from '~/composables/useNavLock'

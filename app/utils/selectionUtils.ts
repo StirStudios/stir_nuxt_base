@@ -1,4 +1,4 @@
-import type { WebformFieldProps, WebformState } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types'
 
 /**
  * Enforces the maximum selections within the same vendor (local limit).

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MediaProps } from '~/types/MediaTypes'
+import type { MediaProps } from '~/types'
 
 const {
   media: { rounded },

@@ -1,4 +1,4 @@
-import type { SectionProps } from '~/types/ContentTypes'
+import type { SectionProps } from '~/types'
 
 /**
  * Fisher-Yates shuffle for randomizing layout order

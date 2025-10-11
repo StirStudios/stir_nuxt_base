@@ -1,4 +1,4 @@
-import type { ConditionEntry, WebformState } from '~/types/formTypes'
+import type { ConditionEntry, WebformState } from '~/types'
 
 /**
  * Determines if a field should be visible for the selected tab.

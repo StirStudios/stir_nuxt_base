@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import type { NodeLinkProps } from '~/types/BaseTypes'
+type NodeLink = {
+  nid: string
+  title: string
+  url: string
+}
+
 const { page } = usePageContext()
 
-const prevNode = page.value?.prev_node as NodeLinkProps | null
-const nextNode = page.value?.next_node as NodeLinkProps | null
+const prevNode = page.value?.prev_node as NodeLink | null
+const nextNode = page.value?.next_node as NodeLink | null
 </script>
 
 <template>

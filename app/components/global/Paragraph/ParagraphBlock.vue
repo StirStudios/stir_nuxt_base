@@ -1,8 +1,20 @@
 <script setup lang="ts">
-import type { ParagraphBlockProps } from '~/types/ContentTypes'
+type ParagraphBlockItem = {
+  element?: string
+  [key: string]: unknown
+}
+
+type BlocksProp = Record<
+  string,
+  Record<string, { paragraphBlock?: ParagraphBlockItem[] }>
+>
 
 const props = withDefaults(
-  defineProps<ParagraphBlockProps & { region?: string }>(),
+  defineProps<{
+    blockName: string
+    blocks: BlocksProp
+    region?: string
+  }>(),
   { region: 'decoupled' },
 )
 

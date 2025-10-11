@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { IconPorps } from '~/types/UtilityTypes'
-
 defineProps<{
-  item: IconPorps
+  item: {
+    align: string
+    iconName: string
+    iconSize?: string
+  }
 }>()
 </script>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ViewItemProps } from '~/types/ViewTypes'
+import type { ViewItemProps } from '~/types'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
@@ -7,7 +7,7 @@ const props = defineProps<{
   item: ViewItemProps
 }>()
 
-const { grid } = useAppConfig().stirTheme
+const { separator } = useAppConfig().stirTheme
 
 // Filter out 'paragraph-layout' sections before passing to shuffle
 const initialRows = (props.item.content?.rows || []).map((row) => ({
@@ -38,11 +38,11 @@ const filteredRows = useShuffledOrder(initialRows, props.item.randomize)
           />
 
           <USeparator
-            v-if="grid.separator?.condition?.includes(row.element)"
-            :class="grid.separator?.base"
-            :color="grid.separator?.color"
-            :size="grid.separator?.size"
-            :type="grid.separator?.solid"
+            v-if="separator?.condition?.includes(row.element)"
+            :class="separator?.base"
+            :color="separator?.color"
+            :size="separator?.size"
+            :type="separator?.solid"
           />
         </WrapAnimate>
       </div>

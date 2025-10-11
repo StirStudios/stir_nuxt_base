@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MediaProps } from '@stir/base/types/MediaTypes'
+import type { MediaProps } from '~/types'
 import { useMediaQuery } from '@vueuse/core'
 
 const {
