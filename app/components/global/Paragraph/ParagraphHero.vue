@@ -5,15 +5,24 @@ import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 import { useNavLock } from '~/composables/useNavLock'
 
 const { observeVideos } = useIntersectionObserver()
-const { isFront, page } = usePageContext()
+const { isFront } = usePageContext()
 const { locked } = useNavLock()
 
-const { hero, pageTitle, siteSlogan, hide } = defineProps<{
-  hero?: HeroProps
-  pageTitle: string
-  siteSlogan: string
-  hide: boolean | string
-}>()
+const props = withDefaults(
+  defineProps<{
+    hero?: HeroProps
+    pageTitle: string
+    siteSlogan?: string
+    hide?: boolean | string
+  }>(),
+  {
+    hero: undefined,
+    siteSlogan: '',
+    hide: undefined,
+  },
+)
+
+const { hero, pageTitle, siteSlogan, hide } = props
 
 const { hero: heroTheme } = useAppConfig().stirTheme
 
