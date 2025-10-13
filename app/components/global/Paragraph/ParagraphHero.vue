@@ -13,12 +13,12 @@ const props = withDefaults(
     hero?: HeroProps
     pageTitle: string
     siteSlogan?: string
-    hide?: boolean | string
+    hide?: boolean
   }>(),
   {
     hero: undefined,
     siteSlogan: '',
-    hide: undefined,
+    hide: false,
   },
 )
 
@@ -58,22 +58,18 @@ const siteSloganEffective = computed(() =>
 const media = computed(() => hero?.media?.[0] || {})
 const hasHero = computed(() => !!hero?.text || !!media.value?.type)
 
-const isHidden = computed(
-  () => !isFrontEffective.value && ['true', '1', true, 1].includes(hide),
-)
+const hideHeroSection = computed(() => hide && !isFrontEffective.value)
 
-const hiddenClass = computed(() =>
-  isHidden.value ? `${heroTheme.hide} sr-hide` : '',
+const sectionClasses = computed(() =>
+  [
+    heroTheme.base,
+    media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
+    media.value?.type && heroTheme.overlay,
+    isFrontEffective.value && heroTheme.isFront,
+    hideHeroSection.value && `${heroTheme.hide} sr-hide`,
+    media.value?.type === 'video' && 'min-h-[75vh]',
+  ].filter(Boolean),
 )
-
-const sectionClasses = computed(() => [
-  heroTheme.base,
-  media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
-  media.value?.type && heroTheme.overlay,
-  isFrontEffective.value && heroTheme.isFront,
-  isHidden.value && hiddenClass.value,
-  media.value?.type === 'video' && 'min-h-[75vh]',
-])
 
 const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
   return (
@@ -85,10 +81,11 @@ const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
   )
 }
 
-const posterImage = computed(() => {
-  const srcset = media.value?.srcset
-  return typeof srcset === 'string' ? getPosterFromSrcset(srcset, '1920w') : ''
-})
+const posterImage = computed(() =>
+  typeof media.value?.srcset === 'string'
+    ? getPosterFromSrcset(media.value.srcset, '1920w')
+    : '',
+)
 </script>
 
 <template>

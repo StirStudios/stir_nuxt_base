@@ -11,12 +11,6 @@ const page = await fetchPage(
 )
 const layout = page.value.page_layout
 
-const hideHero = computed(() =>
-  ['true', '1'].includes(String(page.value?.content?.hide ?? '').toLowerCase())
-    ? true
-    : undefined,
-)
-
 usePageHead(page)
 
 useHead({
@@ -46,7 +40,7 @@ function customPageError(error: Record<string, any>) {
   <NuxtLayout :name="layout">
     <ParagraphHero
       :hero="page?.content?.hero?.[0]"
-      :hide="hideHero"
+      :hide="page?.content?.hide"
       :page-title="page.title"
       :site-slogan="page.site_info?.slogan || ''"
     />
