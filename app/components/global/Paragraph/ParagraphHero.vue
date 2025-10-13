@@ -44,7 +44,6 @@ watch(locked, (l) => {
   }
 })
 
-// effective values (3 short lines)
 const isFrontEffective = computed(() =>
   locked.value ? snap.isFront : isFront.value,
 )
@@ -63,10 +62,14 @@ const hideHeroSection = computed(() => hide && !isFrontEffective.value)
 const sectionClasses = computed(() =>
   [
     heroTheme.base,
-    media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
+    hideHeroSection.value
+      ? `${heroTheme.hide} sr-hide`
+      : media.value?.type
+        ? heroTheme.mediaSpacing
+        : heroTheme.noMediaSpacing,
+
     media.value?.type && heroTheme.overlay,
     isFrontEffective.value && heroTheme.isFront,
-    hideHeroSection.value && `${heroTheme.hide} sr-hide`,
     media.value?.type === 'video' && 'min-h-[75vh]',
   ].filter(Boolean),
 )
