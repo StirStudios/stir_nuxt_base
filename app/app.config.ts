@@ -174,8 +174,6 @@ export default defineAppConfig({
         size: {
           '2xl': {
             base: 'px-10 py-3 text-md gap-2',
-            leadingIcon: 'size-10',
-            trailingIcon: 'size-10',
           },
           variant: {
             material: materialVariantMuted,
