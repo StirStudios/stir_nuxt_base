@@ -72,9 +72,9 @@ watch(
       :ui="{
         overlay: 'fixed inset-0 bg-elevated/75',
         content:
-          'fixed bg-default divide-y divide-none flex flex-col focus:outline-none',
+          'popup fixed bg-default divide-y divide-none flex flex-col focus:outline-none',
         header: 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16 sr-only',
-        wrapper: 'popup',
+        wrapper: '',
         body: 'flex-1 overflow-y-auto p-0 sm:p-0',
         footer: 'flex items-center gap-1.5 p-4 sm:px-6',
         title: 'text-highlighted font-semibold',
