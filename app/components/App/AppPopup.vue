@@ -7,7 +7,9 @@ const { y } = useWindowScroll()
 const open = ref(false)
 const route = useRoute()
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
-const title = computed(() => popup.value?.webform?.webformTitle || '')
+const title = computed(
+  () => popup.value?.webform?.webformTitle ?? 'Announcement',
+)
 const description = computed(() => popup.value?.text || '')
 const hasPopup = computed(() => !!popup.value)
 
@@ -20,7 +22,7 @@ function showModalOnce() {
 function handleTrigger() {
   if (!popup.value) return
 
-  if (config.value.trigger === 'delay' && config.value.delay) {
+  if (config.value.trigger === 'delay') {
     setTimeout(showModalOnce, config.value.delay)
   }
 
@@ -58,7 +60,7 @@ watch(
   () => route.path,
   async () => {
     await nextTick()
-    if (hasPopup.value) handleTrigger()
+    handleTrigger()
   },
 )
 </script>
@@ -73,7 +75,7 @@ watch(
       :ui="{
         overlay: 'fixed inset-0 bg-black/60',
         content:
-          'popup fixed bg-default divide-y divide-none flex flex-col focus:outline-none',
+          'popup fixed bg-default divide-y divide-none flex flex-col focus:outline-none ring-0',
         header: 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16 sr-only',
         wrapper: '',
         body: 'flex-1 overflow-y-auto p-0 sm:p-0',
