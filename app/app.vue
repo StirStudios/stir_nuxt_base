@@ -18,7 +18,7 @@ const appConfig = useAppConfig()
     />
     <NuxtPage />
     <LazyAppScrollToTop />
-    <AppPopup />
+    <LazyAppPopup />
     <LazyCookieConsent />
   </UApp>
 </template>
