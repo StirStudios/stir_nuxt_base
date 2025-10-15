@@ -58,7 +58,6 @@ function handleTrigger() {
 
 onMounted(() => {
   if (hasPopup.value) {
-    console.info('[Popup] triggering on mount')
     handleTrigger()
   }
 })
@@ -69,7 +68,6 @@ watch(
     open.value = false
 
     if (!popup.value) {
-      console.info('[Popup] Skipping trigger — no popup on this route')
       return
     }
 
@@ -80,7 +78,6 @@ watch(
 
 watch(popup, (val) => {
   if (val) {
-    console.info('[Popup] popup became available — triggering now')
     handleTrigger()
   }
 })
