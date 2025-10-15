@@ -49,6 +49,10 @@ const iconsSocialConfig = theme.socials || []
           to: item.url,
         }))
       "
+      :ui="{
+        list: 'flex flex-wrap justify-center',
+        item: 'py-0',
+      }"
       variant="link"
     />
 
