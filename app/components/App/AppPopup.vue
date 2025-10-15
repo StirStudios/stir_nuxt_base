@@ -1,63 +1,45 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core'
+import { usePopupData } from '~/composables/usePopupData'
 
+const { popup, config } = usePopupData()
 const { y } = useWindowScroll()
 const open = ref(false)
 const route = useRoute()
-const config = useAppConfig()
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
-
-const appPopup = config.appPopup ?? {}
-const {
-  enabled = false,
-  delay = 0,
-  pages = '*',
-  excludePages = [],
-  showOnce = false,
-  trigger = 'scroll',
-  scrollThreshold = 0.25,
-} = appPopup
-
-const shouldShowOnPage = computed(() => {
-  if (pages === '*') {
-    return !excludePages?.includes(route.path)
-  }
-
-  return Array.isArray(pages) && pages.includes(route.path)
-})
+const title = computed(() => popup.value?.webform?.webformTitle || '')
+const description = computed(() => popup.value?.text || '')
+const hasPopup = computed(() => !!popup.value)
 
 function showModalOnce() {
-  if (open.value || (showOnce && seen.value)) return
+  if (open.value || (config.value.showOnce && seen.value)) return
   open.value = true
-  if (showOnce) seen.value = true
+  if (config.value.showOnce) seen.value = true
 }
 
 function handleTrigger() {
-  if (!enabled || !shouldShowOnPage.value) return
+  if (!config.value.enabled || !popup.value) return
 
-  if (trigger === 'delay' && delay) {
-    setTimeout(showModalOnce, delay)
+  if (config.value.trigger === 'delay' && config.value.delay) {
+    setTimeout(showModalOnce, config.value.delay)
   }
 
-  if (trigger === 'scroll') {
-    // declare first so the symbol exists before the watcher executes
+  if (config.value.trigger === 'scroll') {
     let stop: (() => void) | undefined
-
     stop = watch(
       y,
       (val) => {
         const percent = val / (document.body.scrollHeight - window.innerHeight)
-        if (percent > scrollThreshold) {
+        if (percent > config.value.scrollThreshold) {
           showModalOnce()
-          // guard to avoid TDZ / undefined calls
-          if (stop) stop()
+          stop?.()
         }
       },
       { immediate: true },
     )
   }
 
-  if (trigger === 'exit') {
+  if (config.value.trigger === 'exit') {
     const onMouseLeave = (e: MouseEvent) => {
       if (e.clientY <= 0) {
         showModalOnce()
@@ -68,21 +50,48 @@ function handleTrigger() {
   }
 }
 
-onMounted(handleTrigger)
-watch(() => route.path, handleTrigger)
+onMounted(() => {
+  if (hasPopup.value) handleTrigger()
+})
+
+watch(
+  () => route.path,
+  () => {
+    if (hasPopup.value) handleTrigger()
+  },
+)
 </script>
 
 <template>
-  <UModal v-model:open="open" title="Join Our Newsletter">
-    <template #body>
-      <p class="mb-4">
-        Get early access to exclusive offers and upcoming events!
-      </p>
-      <UInput placeholder="Enter your email" />
-    </template>
-    <template #footer="{ close }">
-      <UButton color="neutral" label="Maybe later" @click="close" />
-      <UButton label="Sign up" @click="close" />
-    </template>
-  </UModal>
+  <ClientOnly>
+    <UModal
+      v-if="hasPopup"
+      v-model:open="open"
+      :description="description"
+      :title="title"
+      :ui="{
+        overlay: 'fixed inset-0 bg-elevated/75',
+        content:
+          'fixed bg-default divide-y divide-none flex flex-col focus:outline-none',
+        header: 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16 sr-only',
+        wrapper: 'popup',
+        body: 'flex-1 overflow-y-auto p-0 sm:p-0',
+        footer: 'flex items-center gap-1.5 p-4 sm:px-6',
+        title: 'text-highlighted font-semibold',
+        description: 'mt-1 text-muted text-sm',
+        close: 'absolute top-4 end-4',
+      }"
+    >
+      <template #body>
+        <UButton
+          class="absolute end-5 top-5 z-100"
+          color="neutral"
+          icon="i-lucide-x"
+          variant="solid"
+          @click="open = false"
+        />
+        <ParagraphPopup :item="popup" :on-close="() => (open = false)" />
+      </template>
+    </UModal>
+  </ClientOnly>
 </template>
