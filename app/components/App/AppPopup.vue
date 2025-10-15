@@ -18,7 +18,7 @@ function showModalOnce() {
 }
 
 function handleTrigger() {
-  if (!config.value.enabled || !popup.value) return
+  if (!popup.value) return
 
   if (config.value.trigger === 'delay' && config.value.delay) {
     setTimeout(showModalOnce, config.value.delay)
@@ -70,7 +70,7 @@ watch(
       :description="description"
       :title="title"
       :ui="{
-        overlay: 'fixed inset-0 bg-elevated/75',
+        overlay: 'fixed inset-0 bg-black/60',
         content:
           'popup fixed bg-default divide-y divide-none flex flex-col focus:outline-none',
         header: 'flex items-center gap-1.5 p-4 sm:px-6 min-h-16 sr-only',

@@ -13,7 +13,6 @@ export const usePopupData = () => {
   const config = computed(() => {
     if (!popup.value) {
       return {
-        enabled: false,
         delay: 0,
         showOnce: false,
         trigger: 'delay',
@@ -22,9 +21,8 @@ export const usePopupData = () => {
     }
 
     return {
-      enabled: popup.value.enabled ?? true,
-      delay: popup.value.delay ?? 3000,
-      showOnce: popup.value.showOnce ?? true,
+      delay: popup.value.delay ?? 100,
+      showOnce: popup.value.showOnce ?? false,
       trigger: popup.value.trigger ?? 'delay',
       scrollThreshold: popup.value.scrollThreshold ?? 0.25,
     }
