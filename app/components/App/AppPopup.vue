@@ -56,7 +56,8 @@ onMounted(() => {
 
 watch(
   () => route.path,
-  () => {
+  async () => {
+    await nextTick()
     if (hasPopup.value) handleTrigger()
   },
 )
