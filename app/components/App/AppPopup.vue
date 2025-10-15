@@ -42,13 +42,17 @@ function handleTrigger() {
   }
 
   if (config.value.trigger === 'exit') {
-    const onMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
+    const onExitIntent = (e: MouseEvent) => {
+      const isLeavingTop = e.clientY <= 0
+      const isLeavingWindow = !e.relatedTarget
+
+      if (isLeavingTop && isLeavingWindow) {
         showModalOnce()
-        document.removeEventListener('mouseleave', onMouseLeave)
+        document.removeEventListener('mouseout', onExitIntent)
       }
     }
-    document.addEventListener('mouseleave', onMouseLeave)
+
+    document.addEventListener('mouseout', onExitIntent)
   }
 }
 
