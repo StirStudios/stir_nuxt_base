@@ -63,6 +63,7 @@ onMounted(() => {
 watch(
   () => route.path,
   async () => {
+    open.value = false
     await nextTick()
     handleTrigger()
   },
