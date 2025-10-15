@@ -21,20 +21,20 @@ type DecoupledBlocks = Record<string, ParagraphBlockContainer>
 
 export const usePopupData = () => {
   const { page } = usePageContext()
+  const popup = ref<PopupData | null>(null)
 
-  const popup = computed<PopupData | null>(() => {
+  watchEffect(() => {
     const decoupledBlocks: DecoupledBlocks = page.value?.blocks?.decoupled ?? {}
 
     const allParagraphs: PopupData[] = Object.values(decoupledBlocks)
       .flatMap((block) => block.paragraphBlock ?? [])
       .flatMap((p) => Object.values(p.regions ?? {}).flat()) as PopupData[]
 
-    return (
+    popup.value =
       allParagraphs.find(
         (el): el is PopupData =>
           typeof el.element === 'string' && el.element === 'paragraph-popup',
       ) ?? null
-    )
   })
 
   const config = computed(() => {
