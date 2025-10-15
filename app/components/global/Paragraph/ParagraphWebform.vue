@@ -8,7 +8,10 @@ import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
-const props = defineProps<{ item: { webform?: WebformDefinition } }>()
+const props = defineProps<{
+  item: { webform?: WebformDefinition }
+  onClose?: () => void
+}>()
 const webform = computed(() => props.item.webform || ({} as WebformDefinition))
 
 // Composables & Utilities
@@ -134,6 +137,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       description: 'Form submitted successfully!',
       color: 'success',
     })
+    props.onClose?.()
 
     // Reset Form
     Object.keys(state).forEach((key) => (state[key] = ''))
