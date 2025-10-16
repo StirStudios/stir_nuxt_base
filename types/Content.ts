@@ -19,4 +19,16 @@ export interface RegionItemProps extends LayoutProps {
   height?: string
   align?: string
   spacing?: string
+  iconName?: string
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  variant?: 'link' | 'solid' | 'outline' | 'soft' | 'subtle' | 'ghost'
+  color?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'info'
+    | 'warning'
+    | 'error'
+    | 'neutral'
+  block?: boolean
 }
