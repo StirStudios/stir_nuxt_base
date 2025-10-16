@@ -30,6 +30,13 @@
   }
 }
 
+.btn-block {
+  a,
+  button {
+    @apply block w-full;
+  }
+}
+
 header {
   svg {
     @apply transition-all;
