@@ -66,13 +66,8 @@ watch(
   () => route.path,
   async () => {
     open.value = false
-
-    if (!popup.value) {
-      return
-    }
-
     await nextTick()
-    handleTrigger()
+    if (popup.value) handleTrigger()
   },
 )
 
