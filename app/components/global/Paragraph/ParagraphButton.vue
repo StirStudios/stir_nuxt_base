@@ -8,7 +8,7 @@ const props = defineProps<{
 const open = ref(false)
 const theme = useAppConfig().stirTheme
 
-const iconName = computed(() => props.item.iconName || null)
+const iconName = computed(() => props.item.icon || null)
 const btnSize = computed(() => props.item.size || 'xl')
 const btnVariant = computed(() => props.item.variant || 'solid')
 const btnColor = computed(() => props.item.color || 'primary')
