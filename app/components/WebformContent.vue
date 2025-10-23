@@ -18,6 +18,7 @@ defineProps<{
   submitButtonLabel: string
   webformConfirmation: string
   turnstileToken: string
+  webformUuid: string
 }>()
 
 const emit = defineEmits<{
@@ -76,6 +77,7 @@ const emit = defineEmits<{
               :fields="fields"
               :ordered-field-names="orderedFieldNames"
               :state="state"
+              :webform-uuid="webformUuid"
             />
           </template>
         </div>
@@ -89,6 +91,7 @@ const emit = defineEmits<{
           :fields="fields"
           :ordered-field-names="orderedFieldNames"
           :state="state"
+          :webform-uuid="webformUuid"
         />
       </template>
     </template>

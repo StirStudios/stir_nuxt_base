@@ -47,6 +47,8 @@ const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
 
+const webformUuid = computed(() => props.item?.uuid ?? '')
+
 // Compute Yup schema dynamically
 const schema = computed(() => buildYupSchema(fields, state))
 
@@ -182,6 +184,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         :submit-button-label="submitButtonLabel"
         :theme-webform="themeWebform"
         :webform-confirmation="webformConfirmation"
+        :webform-uuid="webformUuid"
         @error="onError"
         @submit="onSubmit"
       />
