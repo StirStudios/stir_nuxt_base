@@ -100,6 +100,7 @@ watch(popup, (val) => {
     >
       <template #body>
         <UButton
+          aria-label="Close"
           class="absolute end-5 top-5 z-100"
           color="neutral"
           icon="i-lucide-x"
