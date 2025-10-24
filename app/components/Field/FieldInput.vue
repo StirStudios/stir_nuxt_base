@@ -11,13 +11,14 @@ const props = defineProps<{
 const { webform } = useAppConfig().stirTheme
 const isMaterial = computed(() => webform.variant === 'material')
 
+const id = ref(useId())
 const isNumber = computed(() => props.field['#type'] === 'number')
 const isTel = computed(() => props.field['#type'] === 'tel')
 </script>
 
 <template>
   <UInput
-    :id="fieldName"
+    :id="id"
     v-model="state[fieldName]"
     :class="webform.fieldInput"
     :inputmode="isTel ? 'tel' : undefined"
@@ -32,7 +33,7 @@ const isTel = computed(() => props.field['#type'] === 'tel')
     <label
       v-if="floatingLabel"
       :class="[isMaterial ? '' : 'px-1.5', webform.labels.base]"
-      :for="fieldName"
+      :for="id"
     >
       <span :class="[isMaterial ? '' : 'px-1', 'bg-default inline-flex']">
         {{ field['#title'] }}
