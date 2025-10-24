@@ -43,6 +43,7 @@ const iconsSocialConfig = theme.socials || []
     <UNavigationMenu
       v-if="page.footer_menu?.length"
       class="mb-3"
+      data-nav="Footer Navigation"
       :items="
         page.footer_menu.map((item) => ({
           label: item.title,

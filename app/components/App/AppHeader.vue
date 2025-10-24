@@ -77,6 +77,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
 
     <UNavigationMenu
       :color="theme.navigation.color"
+      data-nav="Site Navigation"
       :highlight="theme.navigation.highlight.show"
       :highlight-color="
         theme.navigation.highlight.show ? theme.navigation.highlight.color : ''
@@ -91,6 +92,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
 
     <template #body>
       <UNavigationMenu
+        data-nav="Mobile Navigation"
         :items="navLinks"
         orientation="vertical"
         :ui="{ link: theme.navigation.slideover.link }"
