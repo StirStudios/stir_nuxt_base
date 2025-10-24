@@ -2,7 +2,6 @@
 import type { WebformFieldProps, WebformState } from '~/types'
 import { useEvaluateState } from '~/composables/useEvaluateState'
 
-// Field type components
 import FieldInput from '@/components/Field/FieldInput'
 import FieldTextarea from '@/components/Field/FieldTextarea'
 import FieldSelect from '@/components/Field/FieldSelect'
@@ -14,7 +13,23 @@ import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
-// Component map hoisted for performance
+const { webform } = useAppConfig().stirTheme
+
+const props = withDefaults(
+  defineProps<{
+    field: WebformFieldProps
+    fieldName: string
+    state: WebformState
+    fields?: Record<string, WebformFieldProps>
+    orderedFieldNames?: string[]
+    bypassRelocatedFilter?: boolean
+  }>(),
+  {
+    fields: () => ({}),
+    orderedFieldNames: () => [],
+  },
+)
+
 const componentMap: Record<string, Component> = {
   textfield: FieldInput,
   email: FieldInput,
@@ -30,28 +45,6 @@ const componentMap: Record<string, Component> = {
   address: FieldAddress,
   processed_text: FieldProcessedText,
 }
-
-const { webform } = useAppConfig().stirTheme
-
-const props = withDefaults(
-  defineProps<{
-    field: WebformFieldProps
-    fieldName: string
-    state: WebformState
-    fields?: Record<string, WebformFieldProps>
-    orderedFieldNames?: string[]
-    bypassRelocatedFilter?: boolean
-    webformUuid: string
-  }>(),
-  {
-    fields: () => ({}),
-    orderedFieldNames: () => [],
-  },
-)
-
-const uniqueFieldId = computed(
-  () => `webform-${props.webformUuid}-${props.fieldName}`,
-)
 
 const shouldRender = computed(() => {
   return (
@@ -84,8 +77,8 @@ const { visible, checked } = useEvaluateState(
   props.state,
 )
 
-const descriptionContent = computed(() => props.field['#description'] || '')
-const helpContent = computed(() => props.field['#help'] || '')
+const descriptionContent = props.field['#description'] || ''
+const helpContent = props.field['#help'] || ''
 const labelClass = computed(() => props.field['#class'] || '')
 </script>
 
@@ -94,16 +87,11 @@ const labelClass = computed(() => props.field['#class'] || '')
     v-if="field['#type'] === 'hidden'"
     :name="fieldName"
     type="hidden"
-    :value="
-      typeof field['#defaultValue'] === 'string'
-        ? field['#defaultValue']
-        : JSON.stringify(field['#defaultValue'])
-    "
+    :value="field['#defaultValue']"
   />
 
   <UFormField
     v-else-if="visible && shouldRender"
-    :id="uniqueFieldId"
     :disabled="!checked"
     :label="shouldShowLabel ? field['#title'] : undefined"
     :name="fieldName"
@@ -121,8 +109,6 @@ const labelClass = computed(() => props.field['#class'] || '')
     <component
       :is="resolvedComponent"
       v-if="resolvedComponent"
-      :id="uniqueFieldId"
-      :key="uniqueFieldId"
       :field="field"
       :field-name="fieldName"
       :floating-label="useFloatingLabels"
