@@ -71,6 +71,8 @@ const sectionClasses = computed(() =>
     media.value?.type && heroTheme.overlay,
     isFrontEffective.value && heroTheme.isFront,
     media.value?.type === 'video' && 'min-h-[75vh]',
+
+    !media.value?.type && heroTheme.noMediaFallback,
   ].filter(Boolean),
 )
 

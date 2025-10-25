@@ -5,7 +5,6 @@ import {
 } from './utils/uiVariants'
 
 export default defineAppConfig({
-  // === Global ===
   colorMode: {
     forced: false,
     lightRoutes: [],
@@ -15,17 +14,13 @@ export default defineAppConfig({
     enabled: false,
   },
 
-  // === Stir Theme ===
   stirTheme: {
-    // Global toggles
     pdf: false,
     crumbs: false,
 
-    // Typography & spacing
     h1: 'mb-20 text-center text-6xl',
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
 
-    // Layout sections
     header: 'md:px-auto fixed top-0 z-30 w-full !p-0',
 
     navigation: {
@@ -78,11 +73,11 @@ export default defineAppConfig({
       3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
     },
 
-    // UI components
     hero: {
       base: 'hero flex items-center justify-center overflow-hidden',
       mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
       noMediaSpacing: 'pt-30 lg:pt-54',
+      noMediaFallback: 'bg-gradient-to-b from-gray-900 via-gray-800 to-black',
       overlay:
         'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50',
       isFront: 'h-screen',
@@ -147,12 +142,10 @@ export default defineAppConfig({
       label: 'Let us know you’re human',
     },
 
-    // Animation control
     animations: {
       once: false,
     },
 
-    // Ratios
     aspectRatios: {
       portrait: 'aspect-[9/16]',
       landscape: 'aspect-[16/9]',
