@@ -66,14 +66,16 @@ const sectionClasses = computed(() =>
       ? `${heroTheme.hide} sr-hide`
       : media.value?.type
         ? heroTheme.mediaSpacing
-        : heroTheme.noMediaSpacing,
+        : hasHero.value
+          ? [heroTheme.mediaSpacing, heroTheme.noMediaFallback]
+          : heroTheme.noMediaSpacing,
 
     media.value?.type && heroTheme.overlay,
     isFrontEffective.value && heroTheme.isFront,
     media.value?.type === 'video' && 'min-h-[75vh]',
-
-    !media.value?.type && heroTheme.noMediaFallback,
-  ].filter(Boolean),
+  ]
+    .flat() // ensure nested arrays are flattened
+    .filter(Boolean),
 )
 
 const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
