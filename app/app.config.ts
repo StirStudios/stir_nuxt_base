@@ -175,9 +175,6 @@ export default defineAppConfig({
           },
         },
       },
-      defaultVariants: {
-        size: 'xl',
-      },
     },
 
     formField: {
