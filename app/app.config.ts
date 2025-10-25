@@ -10,6 +10,7 @@ export default defineAppConfig({
     forced: false,
     lightRoutes: [],
   },
+
   cookieConsent: {
     enabled: false,
   },
