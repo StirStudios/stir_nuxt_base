@@ -115,7 +115,6 @@ export default defineAppConfig({
       variant: 'solid',
     },
 
-    // Forms
     webform: {
       spacing: 'space-y-5',
       spacingLarge: 'space-y-10',
