@@ -36,14 +36,3 @@
     @apply block w-full;
   }
 }
-
-header {
-  svg {
-    @apply transition-all;
-  }
-  &.is-scrolled {
-    svg {
-      @apply h-[4rem];
-    }
-  }
-}

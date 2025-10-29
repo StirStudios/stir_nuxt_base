@@ -69,7 +69,17 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
     }"
   >
     <template #title>
-      <AppLogo v-if="theme.navigation.logo" add-classes="w-auto" />
+      <AppLogo
+        v-if="theme.navigation.logo"
+        :add-classes="
+          [
+            'transition-all duration-300',
+            finalIsScrolled
+              ? theme.navigation.logoScrolledSize || theme.navigation.logoSize
+              : theme.navigation.logoSize,
+          ].join(' ')
+        "
+      />
       <template v-else>
         {{ page.site_info?.name }}
       </template>

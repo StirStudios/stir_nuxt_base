@@ -27,6 +27,7 @@ export default defineAppConfig({
       mode: 'fixed',
       logo: true,
       logoSize: 'h-[5rem]',
+      // logoScrolledSize: 'h-[4rem]',
       isHidden: false,
       transparentTop: false,
       base: 'h-auto transform py-3 duration-500',
