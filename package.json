@@ -26,9 +26,9 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.9.0",
+    "@nuxt/eslint": "^1.10.0",
     "@nuxt/scripts": "^0.13.0",
-    "@types/node": "^24.9.1",
+    "@types/node": "^24.9.2",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-nuxt": "^4.0.0",
@@ -45,11 +45,6 @@
     },
     "npm": {
       "publish": false
-    }
-  },
-  "pnpm": {
-    "overrides": {
-      "@nuxt/cli": "3.28.0"
     }
   }
 }
