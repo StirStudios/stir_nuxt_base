@@ -57,6 +57,10 @@ const blocks = ref<DateTimeBlock[]>(
 )
 
 watchEffect(() => {
+  if (!Array.isArray(props.state[props.fieldName])) {
+    props.state[props.fieldName] = []
+  }
+
   const values: string[] = []
 
   blocks.value.forEach((block) => {

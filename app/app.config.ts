@@ -170,9 +170,9 @@ export default defineAppConfig({
           '2xl': {
             base: 'px-10 py-3 text-md gap-2',
           },
-          variant: {
-            material: materialVariantMuted,
-          },
+        },
+        variant: {
+          material: materialVariantMuted,
         },
       },
     },
