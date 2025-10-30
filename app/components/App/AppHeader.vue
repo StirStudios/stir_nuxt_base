@@ -3,7 +3,6 @@ import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 
 const props = defineProps<{ mode?: 'fixed' | 'static' }>()
-
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
 const { page, isFront, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
@@ -11,7 +10,6 @@ const route = useRoute()
 const appConfig = useAppConfig()
 const theme = appConfig.stirTheme
 
-// Fetch menu items
 const mainMenu = await fetchMenu('main')
 const navLinks = mainMenu.value.map((item) => ({
   label: item.title,
@@ -23,6 +21,12 @@ const navLinks = mainMenu.value.map((item) => ({
 const isFixed = computed(
   () => props.mode === 'fixed' || isScrolled.value || isFront.value,
 )
+
+const forceScrolled = ref(false)
+onMounted(() => {
+  if (route.hash) forceScrolled.value = true
+})
+const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
 
 const headerRootClasses = computed(() => [
   theme.navigation.base,
@@ -43,12 +47,11 @@ const headerRootClasses = computed(() => [
   },
 ])
 
-// Optional: Override isScrolled on hash load
-const forceScrolled = ref(false)
-onMounted(() => {
-  if (route.hash) forceScrolled.value = true
-})
-const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
+// ✅ Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
+const onOpen = (val: boolean) => {
+  if (val && import.meta.client)
+    (document.activeElement as HTMLElement | null)?.blur()
+}
 </script>
 
 <template>
@@ -67,6 +70,7 @@ const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
         ? 'block lg:hidden lg:flex-0'
         : 'lg:flex-1',
     }"
+    @update:open="onOpen"
   >
     <template #title>
       <AppLogo
