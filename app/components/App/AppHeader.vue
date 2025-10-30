@@ -49,7 +49,7 @@ const headerRootClasses = computed(() => [
   },
 ])
 
-// ✅ Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
+// Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
 const onOpen = (val: boolean) => {
   if (val && import.meta.client)
     (document.activeElement as HTMLElement | null)?.blur()
