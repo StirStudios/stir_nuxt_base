@@ -21,7 +21,7 @@
     "motion-v": "^1.7.4",
     "nuxt": "^4.2.0",
     "nuxt-vitalizer": "^2.0.0",
-    "nuxtjs-drupal-ce": "^2.4.2",
+    "nuxtjs-drupal-ce": "^2.5.0-rc.1",
     "tailwindcss": "^4.1.16",
     "yup": "^1.7.1"
   },
