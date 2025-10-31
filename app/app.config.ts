@@ -39,7 +39,6 @@ export default defineAppConfig({
       toggleType: 'slideover',
       toggleDirection: 'right',
       header: 'p-4',
-      // left: '',
       highlight: {
         show: false,
         color: 'primary',

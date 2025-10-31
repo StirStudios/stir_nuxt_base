@@ -57,7 +57,7 @@ const onOpen = (val: boolean) => {
 </script>
 
 <template>
-  <UHeader
+  <LazyUHeader
     aria-label="Site header"
     :mode="theme.navigation.toggleType"
     :title="page.site_info?.name"
@@ -68,7 +68,6 @@ const onOpen = (val: boolean) => {
       container: theme.navigation.container,
       header: theme.navigation.header,
       body: theme.navigation.slideover.body,
-      left: theme.navigation.left,
       right: appConfig.colorMode?.forced
         ? 'block lg:hidden lg:flex-0'
         : 'lg:flex-1',
@@ -76,7 +75,7 @@ const onOpen = (val: boolean) => {
     @update:open="onOpen"
   >
     <template #title>
-      <AppLogo
+      <LazyAppLogo
         v-if="theme.navigation.logo"
         :add-classes="
           [
@@ -92,7 +91,7 @@ const onOpen = (val: boolean) => {
       </template>
     </template>
 
-    <UNavigationMenu
+    <LazyUNavigationMenu
       :color="theme.navigation.color"
       data-nav="Site Navigation"
       :highlight="theme.navigation.highlight.show"
@@ -104,16 +103,16 @@ const onOpen = (val: boolean) => {
     />
 
     <template #right>
-      <IconsColorMode />
+      <LazyIconsColorMode />
     </template>
 
     <template #body>
-      <UNavigationMenu
+      <LazyUNavigationMenu
         data-nav="Mobile Navigation"
         :items="navLinks"
         orientation="vertical"
         :ui="{ link: theme.navigation.slideover.link }"
       />
     </template>
-  </UHeader>
+  </LazyUHeader>
 </template>
