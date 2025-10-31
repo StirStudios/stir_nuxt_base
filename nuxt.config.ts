@@ -1,9 +1,12 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-09-26',
+  compatibilityDate: '2025-10-31',
+
   css: ['~/assets/css/main.css'],
+
   features: {
     inlineStyles: true,
   },
+
   app: {
     head: {
       htmlAttrs: {
@@ -12,9 +15,11 @@ export default defineNuxtConfig({
       },
     },
   },
+
   nitro: {
     compressPublicAssets: true,
   },
+
   vite: {
     server: {
       allowedHosts:
@@ -26,12 +31,17 @@ export default defineNuxtConfig({
       minify: true,
     },
   },
+
   site: {
     name: process.env.NUXT_NAME,
     url: process.env.NUXT_URL,
     indexable: process.env.NUXT_ENV === 'production',
   },
-  devtools: { enabled: process.env.NODE_ENV === 'development' },
+
+  devtools: {
+    enabled: process.env.NODE_ENV === 'development',
+  },
+
   routeRules: {
     '/admincontrol': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/login`,
@@ -42,7 +52,9 @@ export default defineNuxtConfig({
     '/admincontrol/password': {
       redirect: `${process.env.DRUPAL_URL}/admincontrol/password`,
     },
-    '/front': { redirect: `${process.env.NUXT_URL}/` },
+    '/front': {
+      redirect: `${process.env.NUXT_URL}/`,
+    },
   },
 
   modules: [
@@ -50,6 +62,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/scripts',
     'motion-v/nuxt',
+
     [
       'nuxt-vitalizer',
       {
@@ -63,18 +76,21 @@ export default defineNuxtConfig({
         },
       },
     ],
+
     [
       '@nuxtjs/turnstile',
       {
         siteKey: `${process.env.TURNSTILE_KEY}`,
       },
     ],
+
     [
       '@nuxtjs/robots',
       {
         // disallow: ['/secret', '/admin'],
       },
     ],
+
     ...(process.env.NUXT_INDEXABLE !== 'false'
       ? [
           [
@@ -104,6 +120,7 @@ export default defineNuxtConfig({
           ],
         ]
       : []),
+
     [
       'nuxtjs-drupal-ce',
       {
@@ -113,6 +130,7 @@ export default defineNuxtConfig({
       },
     ],
   ],
+
   runtimeConfig: {
     api: process.env.DRUPAL_URL,
     apiKey: process.env.DRUPAL_API_KEY || '',
