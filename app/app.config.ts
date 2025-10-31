@@ -33,11 +33,13 @@ export default defineAppConfig({
       base: 'h-auto transform py-3 duration-500',
       background:
         'border-none bg-white/90 shadow backdrop-blur-md dark:bg-gray-950/70',
+      container: 'flex-wrap',
       color: 'primary',
       variant: 'link',
       toggleType: 'slideover',
       toggleDirection: 'right',
       header: 'p-4',
+      // left: '',
       highlight: {
         show: false,
         color: 'primary',

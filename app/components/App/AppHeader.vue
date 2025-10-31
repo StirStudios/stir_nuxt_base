@@ -65,9 +65,10 @@ const onOpen = (val: boolean) => {
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
       root: headerRootClasses,
-      container: 'flex-wrap',
+      container: theme.navigation.container,
       header: theme.navigation.header,
       body: theme.navigation.slideover.body,
+      left: theme.navigation.left,
       right: appConfig.colorMode?.forced
         ? 'block lg:hidden lg:flex-0'
         : 'lg:flex-1',
