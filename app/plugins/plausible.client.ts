@@ -1,37 +1,46 @@
+import { defineNuxtPlugin, useAppConfig, useScript } from '#imports'
+
 export default defineNuxtPlugin((nuxtApp) => {
   if (!import.meta.client) return
 
-  const config = useAppConfig()
-  const plausible = config.analytics?.plausible
-
-  if (
-    process.env.NODE_ENV !== 'production' ||
-    !plausible?.enabled ||
-    !plausible.domain
-  )
+  const cfg = useAppConfig().analytics?.plausible
+  if (process.env.NODE_ENV !== 'production' || !cfg?.enabled || !cfg.domain)
     return
 
-  const { load } = useScript({
+  const { onLoaded } = useScript({
     id: 'plausible-script',
-    src: plausible.scriptUrl,
+    src: cfg.scriptUrl,
     async: true,
     defer: true,
-    'data-domain': plausible.domain,
+    'data-domain': cfg.domain,
   })
 
-  load().then(() => {
-    window.plausible =
-      window.plausible ||
-      function (...args) {
-        ;(window.plausible.q = window.plausible.q || []).push(args)
+  onLoaded(() => {
+    type PlausibleQueueFunction = ((
+      event: string,
+      options?: Record<string, unknown>,
+    ) => void) & {
+      q?: unknown[]
+    }
+
+    const win = window as unknown as {
+      plausible?: PlausibleQueueFunction
+    }
+
+    const plausibleFn: PlausibleQueueFunction =
+      win.plausible ??
+      function (event, options) {
+        ;(plausibleFn.q ??= []).push([event, options])
       }
 
-    // Send initial pageview
-    window.plausible('pageview')
+    win.plausible = plausibleFn
 
-    // Track SPA navigation
+    // Initial pageview
+    plausibleFn('pageview')
+
+    // SPA route tracking
     nuxtApp.hook('page:finish', () => {
-      window.plausible('pageview')
+      plausibleFn('pageview')
     })
   })
 })

@@ -1,4 +1,4 @@
-import type { VideoPlayer } from '~/types/MediaTypes'
+import type { VideoPlayer } from '~/types'
 import { watchOnce } from '@vueuse/core'
 
 export function useVideoPlayers() {

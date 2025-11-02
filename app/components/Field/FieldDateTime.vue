@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types'
 import { CalendarDate, DateFormatter } from '@internationalized/date'
 import { getOffsetString, generateTimeOptions } from '~/utils/dateUtils'
 
@@ -57,13 +57,23 @@ const blocks = ref<DateTimeBlock[]>(
 )
 
 watchEffect(() => {
+  if (!Array.isArray(props.state[props.fieldName])) {
+    props.state[props.fieldName] = []
+  }
+
   const values: string[] = []
 
   blocks.value.forEach((block) => {
     if (block.date && block.start) {
       const dateStr = formatCalendarDate(block.date)
-      const offset = getOffsetString(siteTimezone)
       const [h, m] = block.start.split(':')
+
+      // Construct a JS Date for the chosen day + time
+      const jsDate = new Date(`${dateStr}T${h}:${m}:00`)
+
+      // Pass this date into getOffsetString so DST is correct
+      const offset = getOffsetString(siteTimezone, jsDate)
+
       const full = `${dateStr}T${h}:${m}:00${offset}`
       values.push(full)
     }

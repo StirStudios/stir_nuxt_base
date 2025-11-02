@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps } from '~/types/formTypes'
+import type { WebformFieldProps } from '~/types'
 import { cleanHTML } from '~/utils/cleanHTML'
 import { useEvaluateState } from '~/composables/useEvaluateState'
 

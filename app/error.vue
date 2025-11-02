@@ -1,29 +1,27 @@
 <script setup lang="ts">
-defineProps<{
-  error: NuxtError
-}>()
+import { usePageContext } from '~/composables/usePageContext'
 
-const clearHome = () => clearError({ redirect: '/' })
+const { isAdministrator } = usePageContext()
+const { navigation, error: errorConfig } = useAppConfig().stirTheme
 
-useHead({
-  title: 'Ooops',
-})
+defineProps<{ error: NuxtError }>()
 </script>
 
 <template>
-  <section class="bg-gray-50 p-10 dark:bg-gray-900">
-    <div
-      class="mx-auto flex flex-col items-center justify-center py-8 md:h-screen lg:py-0"
-    >
-      <UIcon class="mb-10 size-20" name="i-heroicons-bolt" />
-      <h1>{{ error.statusCode }}</h1>
-      <p>{{ error.message }}</p>
-      <UButton
-        class="mt-5"
-        color="primary"
-        label="Take me back home"
-        @click="clearHome"
-      />
-    </div>
-  </section>
+  <LazyRegionArea area="top" />
+  <LazyDrupalTabs v-if="isAdministrator" />
+  <AppHeader :mode="navigation.mode" />
+  <UMain id="main-content" role="main">
+    <UError
+      :clear="{
+        label: errorConfig.label,
+        color: errorConfig.color,
+        variant: errorConfig.variant,
+      }"
+      :error="error"
+      redirect="/"
+    />
+  </UMain>
+  <LazyRegionArea area="sub_footer" />
+  <LazyAppFooter />
 </template>

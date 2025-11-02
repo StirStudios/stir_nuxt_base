@@ -5,8 +5,8 @@ export default function useDarkMode() {
     get() {
       return colorMode.value === 'dark'
     },
-    set() {
-      colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+    set(_isDark: boolean) {
+      colorMode.preference = _isDark ? 'dark' : 'light'
     },
   })
 

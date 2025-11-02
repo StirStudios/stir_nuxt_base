@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types'
 import { cleanHTML } from '~/utils/cleanHTML'
 import { useEventBus } from '@vueuse/core'
 import { handleTabChange } from '~/utils/visibilityUtils'

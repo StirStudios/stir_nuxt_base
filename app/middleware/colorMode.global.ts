@@ -1,4 +1,5 @@
-// middleware/color-mode.global.ts
+import { defineNuxtRouteMiddleware, useColorMode, useAppConfig } from '#imports'
+
 export default defineNuxtRouteMiddleware((to) => {
   const colorMode = useColorMode()
   const { forced, preference, lightRoutes = [] } = useAppConfig().colorMode

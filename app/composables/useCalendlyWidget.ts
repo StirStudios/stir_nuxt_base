@@ -1,14 +1,17 @@
-import type { CalendlyClient } from '~/types/UtilityTypes'
-
 declare global {
   interface Window {
-    Calendly: CalendlyClient
+    Calendly: {
+      initInlineWidget(options: {
+        url: string
+        parentElement: HTMLElement
+      }): void
+    }
   }
 }
 
-let calendlyScriptLoaded: Promise<CalendlyClient | undefined> | null = null
+let calendlyScriptLoaded: Promise<Window['Calendly'] | undefined> | null = null
 
-function loadCalendlyScript(): Promise<CalendlyClient | undefined> {
+function loadCalendlyScript(): Promise<Window['Calendly'] | undefined> {
   if (calendlyScriptLoaded) return calendlyScriptLoaded
 
   calendlyScriptLoaded = new Promise((resolve) => {

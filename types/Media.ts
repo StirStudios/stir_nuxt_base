@@ -1,25 +1,5 @@
-import type { LayoutProps } from './UtilityTypes'
-import type { RegionItemProps } from '~/types/ContentTypes'
-
-declare global {
-  interface Window {
-    playerjs: {
-      Player: new (iframe: HTMLIFrameElement) => VideoPlayer
-    }
-  }
-}
-
-export interface HeroProps extends LayoutProps {
-  title: string
-  element: string
-  id: string
-  uuid: string
-  header?: string
-  text?: string
-  media: MediaProps[]
-  editLink?: string
-  button?: RegionItemProps[]
-}
+import type { LayoutProps } from '~/types/Utility'
+import type { RegionItemProps } from '~/types/Content'
 
 export interface MediaProps {
   type?: string
@@ -36,6 +16,18 @@ export interface MediaProps {
   loading?: string
 }
 
+export interface HeroProps extends LayoutProps {
+  title: string
+  element: string
+  id: string
+  uuid: string
+  header?: string
+  text?: string
+  media: MediaProps[]
+  editLink?: string
+  button?: RegionItemProps[]
+}
+
 export interface CarouselProps extends LayoutProps {
   items: MediaProps[]
   header?: string
@@ -45,6 +37,8 @@ export interface CarouselProps extends LayoutProps {
   arrows?: boolean
   fade?: boolean
   autoscroll?: boolean
+  autoheight?: boolean
+  randomize?: boolean
   overlay?: boolean
   width?: string
   vid?: string
@@ -66,5 +60,3 @@ export interface VideoPlayer {
   on: (event: string, callback: () => void) => void
   off: (event: string, callback?: () => void) => void
 }
-
-export {}

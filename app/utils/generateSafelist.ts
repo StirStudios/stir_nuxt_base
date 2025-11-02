@@ -7,7 +7,7 @@ import path from 'path'
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
 
 // ✅ Limit grid columns to a max of 5
-const columns = Array.from({ length: 5 }, (_, i) => `grid-cols-${i + 1}`)
+const columns = Array.from({ length: 6 }, (_, i) => `grid-cols-${i + 1}`)
 
 // ✅ Limit col-span to a max of 3 (we rarely go higher)
 const spans = Array.from({ length: 3 }, (_, i) => `col-span-${i + 1}`)
@@ -36,7 +36,7 @@ const basisValues = [
 const columnsDynamic = Array.from({ length: 5 }, (_, i) => `columns-${i + 1}`)
 
 // ✅ Limit spacing sizes to a reasonable range
-const spacings = [2, 5, 10, 15, 20] // Removed 25 for efficiency
+const spacings = [0, 1, 2, 3, 4, 5, 10, 15, 20]
 const spacingClasses = spacings.flatMap((size) => [
   `p-${size}`,
   `pt-${size}`,

@@ -1,3 +1,4 @@
+import type { WebformFieldProps } from '~/types'
 import {
   object,
   string,
@@ -9,7 +10,6 @@ import {
   type NumberSchema,
 } from 'yup'
 import { useEvaluateState } from '~/composables/useEvaluateState'
-import type { WebformFieldProps } from '~/types/FormTypes'
 
 export function buildYupSchema(
   fields: Record<string, WebformFieldProps>,

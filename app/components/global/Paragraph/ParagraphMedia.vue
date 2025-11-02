@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { MediaSettings, MediaProps } from '~/types/MediaTypes'
+import type { MediaProps } from '~/types'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 
 const props = defineProps<{
   item: {
-    settings: MediaSettings
+    settings: {
+      matrix?: boolean
+    }
     media: MediaProps[]
   }
 }>()

@@ -1,4 +1,4 @@
-import type { WebformFieldProps, GroupField } from '~/types/formTypes'
+import type { WebformFieldProps, GroupField } from '~/types'
 
 interface FlattenedField extends WebformFieldProps {
   parent: string | null

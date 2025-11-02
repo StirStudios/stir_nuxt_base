@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SectionProps } from '~/types/ContentTypes'
+import type { SectionProps } from '~/types'
 
 const props = defineProps<{
   layout: SectionProps
@@ -37,6 +37,6 @@ const gradientClass = computed(() =>
           70% 30%
         );
       "
-    ></div>
+    />
   </div>
 </template>

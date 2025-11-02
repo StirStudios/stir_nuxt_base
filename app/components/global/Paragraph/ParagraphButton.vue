@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types/ContentTypes'
+import type { RegionItemProps } from '~/types'
 
 const props = defineProps<{
   item: RegionItemProps
@@ -8,17 +8,20 @@ const props = defineProps<{
 const open = ref(false)
 const theme = useAppConfig().stirTheme
 
-// Prefer PDF media if available, otherwise fallback to first link
+const iconName = computed(() => props.item.icon || null)
+const btnSize = computed(() => props.item.size || 'xl')
+const btnVariant = computed(() => props.item.variant || 'solid')
+const btnColor = computed(() => props.item.color || 'primary')
+const btnBlock = computed(() => props.item.block ?? false)
+
 const pdf = computed(
   () => props.item.media?.find((m) => m.type === 'document') || null,
 )
-
 const link = computed(() => (pdf.value?.url ? null : props.item.link || null))
 
 const pdfLabel = computed(
   () => pdf.value?.title || props.item.title || 'View PDF',
 )
-
 const linkLabel = computed(
   () => link.value?.title || props.item.title || 'View link',
 )
@@ -29,20 +32,27 @@ const linkLabel = computed(
     <div :class="['flex w-full', item.align, item.spacing, item.width]">
       <UButton
         v-if="pdf?.url"
+        :block="btnBlock"
         class="mt-4"
-        icon="i-lucide-file-text"
+        :color="btnColor"
+        :icon="iconName ?? 'i-lucide-file-text'"
         :label="pdfLabel"
-        :title="pdfLabel"
+        :size="btnSize"
+        :variant="btnVariant"
         @click="open = true"
       />
 
       <UButton
         v-else-if="link?.url"
+        :block="btnBlock"
         class="mt-4"
+        :color="btnColor"
+        :icon="iconName"
         :label="linkLabel"
+        :size="btnSize"
         :target="link.external ? '_blank' : undefined"
-        :title="linkLabel"
         :to="link.url"
+        :variant="btnVariant"
       />
     </div>
   </EditLink>

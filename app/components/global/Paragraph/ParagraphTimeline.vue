@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types/ContentTypes'
+import type { RegionItemProps } from '~/types'
 
 const props = defineProps<{
   item: RegionItemProps
@@ -36,8 +36,8 @@ const timelineItems = computed<TimelineItem[]>(() => {
             :default-value="timelineItems.length - 1"
             :items="timelineItems"
           >
-            <template #rich-description="{ item }">
-              <div v-html="item.description" />
+            <template #rich-description="{ item: slotItem }">
+              <div v-html="slotItem.description" />
             </template>
           </UTimeline>
         </div>

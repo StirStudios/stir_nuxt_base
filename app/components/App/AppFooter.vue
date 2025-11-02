@@ -5,74 +5,78 @@ const { page } = usePageContext()
 const theme = useAppConfig().stirTheme
 
 const currentYear = new Date().getFullYear()
-
-const iconsSocialConfig = [
-  {
-    title: 'IMDB',
-    tooltip: `Follow ${page.site_info?.name} on IMDB`,
-    url: '//imdb.com/name/CLIENT/',
-    icon: 'i-simple-icons:imdb',
-  },
-  {
-    title: 'LinkedIn',
-    tooltip: `Follow ${page.site_info?.name} on LinkedIn`,
-    url: '//linkedin.com/in/CLIENT',
-    icon: 'i-simple-icons:linkedin',
-  },
-]
+const iconsSocialConfig = theme.socials || []
 </script>
 
 <template>
-  <footer aria-label="Site Footer" :class="theme.footer">
+  <UFooter
+    aria-label="Site Footer"
+    :ui="{
+      root: theme.footer.base,
+      container: `${theme.container} text-center`,
+      left: theme.footer.left,
+      right: theme.footer.right,
+    }"
+  >
     <LazyRegionArea area="footer" />
-    <div
-      :class="[
-        theme.container,
-        'grid gap-4 text-center md:text-center lg:grid-cols-2',
-      ]"
-    >
-      <div class="rights lg:text-left">
-        <ul
-          v-if="page.footer_menu.length"
-          class="mb-3 flex flex-wrap gap-x-4 gap-y-2 text-sm"
-        >
-          <li v-for="menuItem in page.footer_menu" :key="menuItem.title">
-            <ULink class="item" :to="menuItem.url">{{ menuItem.title }}</ULink>
-          </li>
-        </ul>
-        <p class="mb-0 leading-relaxed">
-          © {{ page.site_info?.name }} {{ currentYear }}. All Rights
-          Reserved.<br />
+
+    <template #left>
+      <p class="mb-0">
+        © {{ page.site_info?.name }} {{ currentYear }}. All Rights Reserved.<br />
+        <template v-if="theme.footer.rights">
+          {{ theme.footer.rights }}<br />
+        </template>
+        <template v-if="theme.footer.poweredby">
           Website created & powered by
           <ULink
-            active-class="text-primary-400"
-            inactive-class="text-primary hover:text-primary-400"
-            rel="noopener"
+            :inactive-class="theme.footer.footerLinks"
+            raw
             target="_blank"
             to="//www.stirstudiosdesign.com"
           >
             StirStudios
           </ULink>
-        </p>
-      </div>
-      <div class="social lg:text-right">
+        </template>
+      </p>
+    </template>
+
+    <UNavigationMenu
+      v-if="page.footer_menu?.length"
+      class="mb-3"
+      data-nav="Footer Navigation"
+      :items="
+        page.footer_menu.map((item) => ({
+          label: item.title,
+          to: item.url,
+        }))
+      "
+      :ui="{
+        list: 'flex flex-wrap justify-center',
+        item: 'min-w-0 py-0',
+        link: theme.footer.footerLinks,
+      }"
+      variant="link"
+    />
+
+    <template #right>
+      <div class="flex gap-1">
         <IconsSocial
           v-for="(icon, index) in iconsSocialConfig"
           :key="index"
           v-bind="icon"
+          class="me-1"
         />
-        <div class="mt-3">
-          <UTooltip :text="`Email ${page.site_info?.name}`">
-            <ULink
-              rel="noopener"
-              target="_blank"
-              :to="`mailto:${page.site_info?.mail}`"
-            >
-              {{ page.site_info?.mail }}
-            </ULink>
-          </UTooltip>
-        </div>
       </div>
-    </div>
-  </footer>
+
+      <ULink
+        v-if="!theme.footer.hideEmail"
+        :inactive-class="theme.footer.footerLinks"
+        raw
+        target="_blank"
+        :to="`mailto:${page.site_info?.mail}`"
+      >
+        {{ page.site_info?.mail }}
+      </ULink>
+    </template>
+  </UFooter>
 </template>
