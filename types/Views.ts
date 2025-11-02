@@ -1,8 +1,4 @@
-import type { LayoutProps } from './UtilityTypes'
-
-export interface ViewProps {
-  item: ViewItemProps
-}
+import type { LayoutProps } from '~/types/Utility'
 
 export interface ViewItemProps extends LayoutProps {
   element: string
@@ -14,10 +10,4 @@ export interface ViewItemProps extends LayoutProps {
   showIndicators?: boolean
   rows?: object[]
   pager?: object
-}
-
-export interface ViewsPagerProps {
-  current: number
-  totalPages: number
-  maxLinks: number
 }

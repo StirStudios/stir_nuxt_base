@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MediaProps } from '~/types/MediaTypes'
+import type { MediaProps } from '~/types'
 
 defineProps<{ media?: MediaProps[] }>()
 </script>

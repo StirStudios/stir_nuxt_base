@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { EditLinkProps } from '~/types/LinkTypes'
-
-defineProps<EditLinkProps>()
+defineProps<{
+  link?: string
+}>()
 </script>
 
 <template>

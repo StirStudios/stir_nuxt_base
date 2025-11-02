@@ -12,6 +12,27 @@
   @apply mx-auto max-w-sm sm:float-left sm:me-5 sm:mb-5;
 }
 
+.align-center {
+  @apply mx-auto my-10 max-w-sm;
+}
+
 .align-right {
   @apply mx-auto max-w-sm sm:float-right sm:ms-5 sm:mb-5;
+}
+
+.sr-hide {
+  @apply invisible h-0 opacity-0;
+}
+
+.front {
+  .hero {
+    @apply text-white;
+  }
+}
+
+.btn-block {
+  a,
+  button {
+    @apply block w-full;
+  }
 }

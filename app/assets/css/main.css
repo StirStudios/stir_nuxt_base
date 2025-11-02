@@ -15,6 +15,7 @@
 
   --container-8xl: 96rem;
   --breakpoint-xs: 30rem;
+  --ui-header-height: auto;
 
   --color-white: #ffffff;
   --color-black: #14161a;

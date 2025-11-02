@@ -1,28 +1,35 @@
 <script setup lang="ts">
-import type { CarouselProps } from '~/types/MediaTypes'
+import type { CarouselProps } from '~/types'
 import { componentExists, resolveComponentName } from '~/utils/componentExists'
 import { useShuffledOrder } from '~/composables/useShuffledOrder'
 
-const props = defineProps<CarouselProps>()
+const props = defineProps<{ item: CarouselProps }>()
+const item = computed(() => props.item || {})
 
 const mounted = ref(false)
 const carousel = useTemplateRef('carousel')
+const appConfig = useAppConfig()
+const { carousel: carouselConfig = {} } = appConfig.stirTheme
 
 onMounted(() => {
   mounted.value = true
 })
 
-const appConfig = useAppConfig()
+const showIndicators = computed(() => item.value.carouselIndicators || false)
+const showArrows = computed(() => item.value.carouselArrows || false)
+const transitionFade = computed(() => item.value.carouselFade || false)
+const autoscroll = computed(() => item.value.carouselAutoscroll || false)
+const autoHeight = computed(() => item.value.carouselAutoheight || false)
+const interval = computed(() => item.value.carouselInterval || 5000)
+const itemElement = computed(() => item.value.itemElement || false)
+const overlay = computed(() => item.value.overlay === true)
+const amount = computed(() => item.value.gridItems || 'basis-full')
 
-const showIndicators = computed(() => props.indicators || false)
-const showArrows = computed(() => props.arrows || false)
-const transitionFade = computed(() => props.fade || false)
-const autoscroll = computed(() => props.autoscroll || false)
-const interval = computed(() => props.interval || 5000)
-const itemElement = computed(() => props.itemElement || false)
-const overlay = computed(() => props.overlay === true)
+const shuffledItems = useShuffledOrder(
+  item.value.items ?? item.value.media ?? [],
+  item.value.randomize ?? false,
+)
 
-const shuffledItems = useShuffledOrder(props.items || [], props.randomize)
 const showCarousel = computed(
   () => mounted.value && shuffledItems.value.length > 0,
 )
@@ -62,26 +69,27 @@ function handleSelect() {
 </script>
 
 <template>
-  <div :class="`relative z-10 ${appConfig.stirTheme.carousel.padding}`">
+  <div :class="`relative z-10 ${carouselConfig.padding}`">
     <UCarousel
       v-if="showCarousel"
       ref="carousel"
       v-slot="{ item }"
       :arrows="showArrows"
+      :auto-height="autoHeight"
       :auto-scroll="autoScrollOptions"
       :autoplay="autoplayOptions"
       :dots="showIndicators"
       :fade="transitionFade"
       :items="shuffledItems"
       loop
-      :next="appConfig.stirTheme.carousel.arrows.next"
-      :next-icon="appConfig.stirTheme.carousel.arrows.nextIcon"
-      :prev="appConfig.stirTheme.carousel.arrows.prev"
-      :prev-icon="appConfig.stirTheme.carousel.arrows.prevIcon"
+      :next="carouselConfig.arrows?.next"
+      :next-icon="carouselConfig.arrows?.nextIcon"
+      :prev="carouselConfig.arrows?.prev"
+      :prev-icon="carouselConfig.arrows?.prevIcon"
       :ui="{
-        root: appConfig.stirTheme.carousel.root,
+        root: carouselConfig.root,
         item: amount,
-        container: 'items-center',
+        container: 'items-center transition-[height]',
       }"
       @select="handleSelect"
     >
@@ -95,8 +103,24 @@ function handleSelect() {
           :item="item"
         />
       </template>
+
       <template v-else>
-        <MediaSimple v-if="item.type === 'image' && !overlay" :media="[item]" />
+        <!-- Paragraph-style content (e.g., node-review) -->
+        <component
+          :is="
+            componentExists(item.element)
+              ? resolveComponentName(item.element)
+              : 'ParagraphDefault'
+          "
+          v-if="item.element"
+          :item="item"
+        />
+
+        <!-- Media fallback if no element key -->
+        <MediaSimple
+          v-else-if="item.type === 'image' && !overlay"
+          :media="[item]"
+        />
         <MediaPopup
           v-else-if="
             item.type === 'video' || (item.type === 'image' && overlay)

@@ -8,9 +8,11 @@ import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
-const props = withDefaults(defineProps<{ webform?: WebformDefinition }>(), {
-  webform: {} as WebformDefinition,
-})
+const props = defineProps<{
+  item: { webform?: WebformDefinition }
+  onClose?: () => void
+}>()
+const webform = computed(() => props.item.webform || ({} as WebformDefinition))
 
 // Composables & Utilities
 const { onError } = useValidation()
@@ -28,7 +30,7 @@ const {
   webformConfirmationType = '',
   webformRedirect = '',
   actions = [],
-} = props.webform
+} = webform.value
 
 // Flatten the fields once at mount
 const fields = flattenWebformFields(rawFields)
@@ -135,6 +137,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       description: 'Form submitted successfully!',
       color: 'success',
     })
+    props.onClose?.()
 
     // Reset Form
     Object.keys(state).forEach((key) => (state[key] = ''))
@@ -162,24 +165,26 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
 
 <template>
   <EditLink :link="webformSubmissions">
-    <WebformContent
-      v-model:turnstile-token="turnstileToken"
-      :fields="fields"
-      :get-group-fields="getGroupFields"
-      :grouped-fields="groupedFields"
-      :is-container-visible="isContainerVisible"
-      :is-form-submitted="isFormSubmitted"
-      :is-loading="isLoading"
-      :ordered-field-names="orderedFieldNames"
-      :schema="schema"
-      :should-render-group-container="shouldRenderGroupContainer"
-      :should-render-individual-field="shouldRenderIndividualField"
-      :state="state"
-      :submit-button-label="submitButtonLabel"
-      :theme-webform="themeWebform"
-      :webform-confirmation="webformConfirmation"
-      @error="onError"
-      @submit="onSubmit"
-    />
+    <WrapDiv :align="item.align" :styles="[item.width, item.spacing]">
+      <WebformContent
+        v-model:turnstile-token="turnstileToken"
+        :fields="fields"
+        :get-group-fields="getGroupFields"
+        :grouped-fields="groupedFields"
+        :is-container-visible="isContainerVisible"
+        :is-form-submitted="isFormSubmitted"
+        :is-loading="isLoading"
+        :ordered-field-names="orderedFieldNames"
+        :schema="schema"
+        :should-render-group-container="shouldRenderGroupContainer"
+        :should-render-individual-field="shouldRenderIndividualField"
+        :state="state"
+        :submit-button-label="submitButtonLabel"
+        :theme-webform="themeWebform"
+        :webform-confirmation="webformConfirmation"
+        @error="onError"
+        @submit="onSubmit"
+      />
+    </WrapDiv>
   </EditLink>
 </template>

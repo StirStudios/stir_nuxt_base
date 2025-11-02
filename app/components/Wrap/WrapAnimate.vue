@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import type { AosProps } from '~/types/UtilityTypes'
 import { getMotionEffect } from '~/utils/animations'
 import { motion } from 'motion-v'
 
-const appConfig = useAppConfig()
+const config = useAppConfig()
+const animations = computed(() => config.stirTheme.animations.once)
 
-const props = defineProps<AosProps>()
+const props = defineProps<{
+  effect?: string
+}>()
 
 const motionEffects = getMotionEffect(props.effect)
 </script>
@@ -14,7 +16,7 @@ const motionEffects = getMotionEffect(props.effect)
   <motion.div
     v-if="effect"
     class="media"
-    :in-view-options="{ once: appConfig.stirTheme.animations.once }"
+    :in-view-options="{ once: animations }"
     initial="hidden"
     :variants="motionEffects"
     while-in-view="show"

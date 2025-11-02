@@ -96,3 +96,5 @@ export type WebformState = Record<
   string,
   string | number | boolean | string[] | undefined | object
 >
+
+export type WebformFields = Record<string, WebformFieldProps>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { ViewItemProps } from '~/types/CustomElementTypes'
-import type { MediaProps } from '~/types/MediaTypes'
+import type { ViewItemProps } from '~/types'
 
 defineProps<{ item: ViewItemProps }>()
 </script>

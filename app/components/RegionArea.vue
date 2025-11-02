@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const props = defineProps<{ area: string }>()
 const { page } = usePageContext()
+const props = defineProps<{ area: string }>()
 
 const regionBlocks = computed(() => page.value?.blocks?.[props.area] ?? {})
 const names = computed(() => Object.keys(regionBlocks.value))

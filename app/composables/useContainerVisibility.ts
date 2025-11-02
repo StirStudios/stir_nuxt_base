@@ -1,4 +1,4 @@
-import type { WebformFieldProps, WebformState } from '~/types/FormTypes'
+import type { WebformFieldProps, WebformState } from '~/types'
 import { useEvaluateState } from '~/composables/useEvaluateState'
 
 export function evaluateContainerVisibility(

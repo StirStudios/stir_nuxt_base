@@ -1,4 +1,4 @@
-import type { WebformState } from '~/types/FormTypes'
+import type { WebformState } from '~/types'
 import { normalizeValue } from '~/utils/stringUtils'
 
 /**

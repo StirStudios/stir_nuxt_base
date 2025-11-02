@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types'
 import type { ObjectSchema } from 'yup'
 
 defineProps<{
@@ -99,7 +99,12 @@ const emit = defineEmits<{
     />
 
     <WrapAlign :align="themeWebform.submitAlign">
-      <UButton :label="submitButtonLabel" :loading="isLoading" type="submit" />
+      <UButton
+        :label="submitButtonLabel"
+        :loading="isLoading"
+        :size="themeWebform.buttonSize"
+        type="submit"
+      />
     </WrapAlign>
   </UForm>
 

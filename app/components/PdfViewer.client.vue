@@ -1,4 +1,3 @@
-<!-- components/PdfViewer.vue (layer stub) -->
 <script setup lang="ts">
 // Stub component for projects that do not include PDF Viewer
 if (import.meta.dev) {

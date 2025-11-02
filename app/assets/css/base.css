@@ -15,7 +15,8 @@
     @apply mb-5 text-[clamp(1.75rem,4vw,3rem)] font-medium;
   }
 
-  h3 {
+  h3,
+  .display-h3 {
     @apply text-[clamp(1.5rem,3vw,2.25rem)];
   }
 
@@ -44,14 +45,6 @@
 
     a {
       @apply text-primary;
-    }
-
-    /* Blockquotes */
-    blockquote {
-      @apply text-lg;
-      em {
-        @apply text-sm;
-      }
     }
   }
 

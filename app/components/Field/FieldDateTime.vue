@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types/formTypes'
+import type { WebformFieldProps, WebformState } from '~/types'
 import { CalendarDate, DateFormatter } from '@internationalized/date'
 import { getOffsetString, generateTimeOptions } from '~/utils/dateUtils'
 
@@ -57,6 +57,10 @@ const blocks = ref<DateTimeBlock[]>(
 )
 
 watchEffect(() => {
+  if (!Array.isArray(props.state[props.fieldName])) {
+    props.state[props.fieldName] = []
+  }
+
   const values: string[] = []
 
   blocks.value.forEach((block) => {

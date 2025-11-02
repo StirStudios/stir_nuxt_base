@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import type { CrumbProps } from '~/types/NavigationTypes'
+type CrumbItem = {
+  label: string
+  url?: string
+}
 
-const props = defineProps<CrumbProps>()
+defineProps<{
+  crumbs?: CrumbItem[]
+}>()
 
 const { getPage } = useDrupalCe()
 const page = getPage()
 
 const breadcrumbs = ref(
-  props.crumb && props.crumb.length > 0
-    ? props.crumb
-    : page.value?.breadcrumbs || [],
+  crumbs && crumbs.length > 0 ? crumbs : page.value?.breadcrumbs || [],
 )
 
 const breadcrumbLinks = ref(

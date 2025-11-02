@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HeroProps } from '~/types/MediaTypes'
+import type { HeroProps } from '~/types'
 import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 import { useNavLock } from '~/composables/useNavLock'
@@ -8,12 +8,21 @@ const { observeVideos } = useIntersectionObserver()
 const { isFront } = usePageContext()
 const { locked } = useNavLock()
 
-const { hero, pageTitle, siteSlogan, hide } = defineProps<{
-  hero?: HeroProps
-  pageTitle: string
-  siteSlogan: string
-  hide: boolean | string
-}>()
+const props = withDefaults(
+  defineProps<{
+    hero?: HeroProps
+    pageTitle: string
+    siteSlogan?: string
+    hide?: boolean
+  }>(),
+  {
+    hero: undefined,
+    siteSlogan: '',
+    hide: false,
+  },
+)
+
+const { hero, pageTitle, siteSlogan, hide } = props
 
 const { hero: heroTheme } = useAppConfig().stirTheme
 
@@ -35,7 +44,6 @@ watch(locked, (l) => {
   }
 })
 
-// effective values (3 short lines)
 const isFrontEffective = computed(() =>
   locked.value ? snap.isFront : isFront.value,
 )
@@ -49,14 +57,26 @@ const siteSloganEffective = computed(() =>
 const media = computed(() => hero?.media?.[0] || {})
 const hasHero = computed(() => !!hero?.text || !!media.value?.type)
 
-const sectionClasses = computed(() => [
-  heroTheme.base,
-  media.value?.type ? heroTheme.mediaSpacing : heroTheme.noMediaSpacing,
-  media.value?.type && heroTheme.overlay,
-  isFrontEffective.value && heroTheme.isFront,
-  hide === 'true' && 'sr-only',
-  media.value?.type === 'video' && 'min-h-[75vh]',
-])
+const hideHeroSection = computed(() => hide && !isFrontEffective.value)
+
+const sectionClasses = computed(() =>
+  [
+    heroTheme.base,
+    hideHeroSection.value
+      ? `${heroTheme.hide} sr-hide`
+      : media.value?.type
+        ? heroTheme.mediaSpacing
+        : hasHero.value
+          ? [heroTheme.mediaSpacing, heroTheme.noMediaFallback]
+          : heroTheme.noMediaSpacing,
+
+    media.value?.type && heroTheme.overlay,
+    isFrontEffective.value && heroTheme.isFront,
+    media.value?.type === 'video' && 'min-h-[75vh]',
+  ]
+    .flat() // ensure nested arrays are flattened
+    .filter(Boolean),
+)
 
 const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
   return (
@@ -68,10 +88,11 @@ const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
   )
 }
 
-const posterImage = computed(() => {
-  const srcset = media.value?.srcset
-  return typeof srcset === 'string' ? getPosterFromSrcset(srcset, '1920w') : ''
-})
+const posterImage = computed(() =>
+  typeof media.value?.srcset === 'string'
+    ? getPosterFromSrcset(media.value.srcset, '1920w')
+    : '',
+)
 </script>
 
 <template>
@@ -122,6 +143,7 @@ const posterImage = computed(() => {
 
       <video
         v-else-if="media.type === 'video'"
+        aria-hidden="true"
         class="absolute inset-0 h-full w-full object-cover"
         disablepictureinpicture
         height="640"
