@@ -1,5 +1,5 @@
-import type { LayoutProps } from '~/types/Utility'
-import type { RegionItemProps } from '~/types/Content'
+import type { LayoutProps } from './Utility'
+import type { CustomElement, ElementProps } from './Content'
 
 export interface MediaProps {
   type?: string
@@ -11,23 +11,26 @@ export interface MediaProps {
   height: number
   srcset: string
   sizes: string
-  platform?: string
-  mediaEmbed?: string
-  loading?: string
+  platform?: string // 'youtube', 'vimeo', 'bunny', etc.
+  mediaEmbed?: string // HTML for embedded players
+  loading?: string // 'lazy', 'eager', etc.
 }
 
 export interface HeroProps extends LayoutProps {
-  title: string
   element: string
   id: string
   uuid: string
+  title: string
   header?: string
   text?: string
   media: MediaProps[]
+  button?: CustomElement<ElementProps>[] // formerly RegionItemProps[]
   editLink?: string
-  button?: RegionItemProps[]
 }
 
+/**
+ * Carousel of media (image, video, etc.)
+ */
 export interface CarouselProps extends LayoutProps {
   items: MediaProps[]
   header?: string
@@ -60,3 +63,5 @@ export interface VideoPlayer {
   on: (event: string, callback: () => void) => void
   off: (event: string, callback?: () => void) => void
 }
+
+export type MediaElement = CustomElement<MediaProps>

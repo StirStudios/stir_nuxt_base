@@ -1,162 +1,81 @@
 <script setup lang="ts">
-import type { HeroProps } from '~/types'
+import { provide } from 'vue'
 import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
-import { useNavLock } from '~/composables/useNavLock'
+
+const props = defineProps<{
+  text?: string
+  editLink?: string
+  direction?: string
+  siteSlogan?: string
+}>()
+
+const slots = defineSlots<{ media?(): unknown; button?(): unknown }>()
 
 const { observeVideos } = useIntersectionObserver()
-const { isFront } = usePageContext()
-const { locked } = useNavLock()
-
-const props = withDefaults(
-  defineProps<{
-    hero?: HeroProps
-    pageTitle: string
-    siteSlogan?: string
-    hide?: boolean
-  }>(),
-  {
-    hero: undefined,
-    siteSlogan: '',
-    hide: false,
-  },
-)
-
-const { hero, pageTitle, siteSlogan, hide } = props
-
+const { isFront, pageTitle, pageHide } = usePageContext()
 const { hero: heroTheme } = useAppConfig().stirTheme
 
 onMounted(() => observeVideos(0.1))
 
-// one snapshot object
-const snap = reactive({
-  isFront: isFront.value,
-  title: pageTitle,
-  slogan: siteSlogan,
-})
+// Expose "hero media context" to descendants (like MediaImage)
+provide('heroNoWrapper', true)
 
-// refresh snapshot only after navigation finishes
-watch(locked, (l) => {
-  if (!l) {
-    snap.isFront = isFront.value
-    snap.title = pageTitle
-    snap.slogan = siteSlogan
-  }
-})
+// Visibility + hero/media detection
+const hideHeroSection = computed(() => pageHide.value && !isFront.value)
+const hasMediaSlot = computed(() => !!slots.media)
+const hasHero = computed(() => !!props.text || hasMediaSlot.value)
 
-const isFrontEffective = computed(() =>
-  locked.value ? snap.isFront : isFront.value,
-)
-const pageTitleEffective = computed(() =>
-  locked.value ? snap.title : pageTitle,
-)
-const siteSloganEffective = computed(() =>
-  locked.value ? snap.slogan : siteSlogan,
-)
+const sectionClasses = computed(() => {
+  const hasHeroContent = hasHero.value
 
-const media = computed(() => hero?.media?.[0] || {})
-const hasHero = computed(() => !!hero?.text || !!media.value?.type)
-
-const hideHeroSection = computed(() => hide && !isFrontEffective.value)
-
-const sectionClasses = computed(() =>
-  [
+  return [
     heroTheme.base,
     hideHeroSection.value
       ? `${heroTheme.hide} sr-hide`
-      : media.value?.type
+      : hasMediaSlot.value
         ? heroTheme.mediaSpacing
-        : hasHero.value
+        : hasHeroContent
           ? [heroTheme.mediaSpacing, heroTheme.noMediaFallback]
           : heroTheme.noMediaSpacing,
-
-    media.value?.type && heroTheme.overlay,
-    isFrontEffective.value && heroTheme.isFront,
-    media.value?.type === 'video' && 'min-h-[75vh]',
+    hasMediaSlot.value && heroTheme.overlay,
+    isFront.value && heroTheme.isFront,
+    hasMediaSlot.value && 'min-h-[75vh]',
   ]
-    .flat() // ensure nested arrays are flattened
-    .filter(Boolean),
-)
-
-const getPosterFromSrcset = (srcset: string, targetWidth = '1920w') => {
-  return (
-    srcset
-      .split(',')
-      .map((item) => item.trim())
-      .find((item) => item.endsWith(targetWidth))
-      ?.split(' ')[0] || ''
-  )
-}
-
-const posterImage = computed(() =>
-  typeof media.value?.srcset === 'string'
-    ? getPosterFromSrcset(media.value.srcset, '1920w')
-    : '',
-)
+    .flat()
+    .filter(Boolean)
+})
 </script>
 
 <template>
-  <EditLink :link="hero?.editLink">
+  <EditLink :link="props.editLink">
     <section :class="sectionClasses">
-      <div
-        :class="[
-          heroTheme.text.base,
-          isFrontEffective && heroTheme.text.isFront,
-        ]"
-      >
-        <WrapAnimate :effect="hero?.direction">
+      <div :class="[heroTheme.text.base, isFront && heroTheme.text.isFront]">
+        <WrapAnimate :effect="props.direction">
           <HeroContent
-            v-if="hasHero"
-            :hero-text="hero?.text"
-            :is-front="isFrontEffective"
-            :page-title="pageTitleEffective"
-            :site-slogan="siteSloganEffective"
+            v-if="props.text"
+            :hero-text="props.text"
+            :is-front="isFront"
+            :page-title="pageTitle"
+            :site-slogan="props.siteSlogan"
           />
+
           <h1
             v-else
             :class="[
-              isFrontEffective ? heroTheme.text?.isFront : heroTheme.text?.h1,
+              isFront ? heroTheme.text?.isFront : heroTheme.text?.h1,
               heroTheme.text?.container,
             ]"
           >
-            {{ pageTitleEffective }}
+            {{ pageTitle }}
           </h1>
-          <ParagraphButton v-if="hero?.button" :item="hero?.button?.[0]" />
+
+          <slot name="button" />
         </WrapAnimate>
       </div>
 
-      <img
-        v-if="media.type === 'image'"
-        :alt="media.alt || ''"
-        :class="[
-          heroTheme.image.base,
-          isFrontEffective ? heroTheme.image.isFront : 'max-w-none',
-        ]"
-        :fetchpriority="media.loading === 'eager' ? 'high' : undefined"
-        :height="media.height || ''"
-        :loading="media.loading || 'lazy'"
-        :sizes="media.sizes || ''"
-        :src="media.src || ''"
-        :srcset="media.srcset || ''"
-        :width="media.width || ''"
-      />
-
-      <video
-        v-else-if="media.type === 'video'"
-        aria-hidden="true"
-        class="absolute inset-0 h-full w-full object-cover"
-        disablepictureinpicture
-        height="640"
-        loop
-        muted
-        playsinline
-        :poster="posterImage"
-        preload="metadata"
-        type="video/mp4"
-        width="360"
-      >
-        <source :src="media.mediaEmbed" type="video/mp4" />
-      </video>
+      <!-- Plain slot, no scoped props – CE renderer still works -->
+      <slot name="media" />
     </section>
   </EditLink>
 </template>

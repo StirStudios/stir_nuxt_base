@@ -127,6 +127,8 @@ export default defineNuxtConfig({
         drupalBaseUrl: process.env.DRUPAL_URL,
         exposeAPIRouteRules: true,
         disableFormHandler: true,
+        customElementJsonFormat: 'explicit', // 'explicit' (default) or 'legacy',
+        addRequestFormat: true,
       },
     ],
   ],

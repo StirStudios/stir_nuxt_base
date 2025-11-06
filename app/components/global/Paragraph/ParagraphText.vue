@@ -1,22 +1,26 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types'
-
-defineProps<{
-  item: RegionItemProps
+const props = defineProps<{
+  text?: string
+  align?: string
+  width?: string
+  spacing?: string
+  classes?: string
+  direction?: string
+  editLink?: string
 }>()
 </script>
 
 <template>
-  <EditLink :link="item.editLink">
-    <WrapAnimate :effect="item?.direction">
-      <WrapAlign :align="item.align">
+  <EditLink :link="props.editLink">
+    <WrapAnimate :effect="props.direction">
+      <WrapAlign :align="props.align">
         <div
           :class="[
-            [item.classes, 'prose'].filter(Boolean).join(' '),
-            item.width,
-            item.spacing,
+            [props.classes, 'prose'].filter(Boolean).join(' '),
+            props.width,
+            props.spacing,
           ]"
-          v-html="item.text"
+          v-html="props.text"
         />
       </WrapAlign>
     </WrapAnimate>

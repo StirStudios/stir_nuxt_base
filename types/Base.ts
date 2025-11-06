@@ -1,13 +1,39 @@
-import type { HeroProps } from '~/types/Media'
-import type { SectionProps } from '~/types/Section'
+import type { CustomElement } from './Content'
+import type { HeroProps } from './Media'
+import type { SectionProps } from './Section'
 
 export interface PageProps {
-  title: string
-  element?: string
-  uid?: string | object
-  created: string
-  hero?: HeroProps
-  section?: SectionProps[]
+  element: string
+  props: {
+    title: string
+    created: string
+    uid?: string | object
+    hide?: boolean | string
+
+    path?: {
+      alias: string
+      pid: string
+      langcode: string
+    }
+
+    prev_node?: {
+      nid: string
+      title: string
+      url: string
+    } | null
+
+    next_node?: {
+      nid: string
+      title: string
+      url: string
+    } | null
+  }
+
+  slots?: {
+    hero?: CustomElement<HeroProps>
+    section?: CustomElement<SectionProps>[]
+  }
+
   siteInfo?: {
     logo?: {
       url?: string
@@ -18,21 +44,6 @@ export interface PageProps {
     slogan?: string
     mail?: string
   }
-  prev_node?: {
-    nid: string
-    title: string
-    url: string
-  } | null
-  next_node?: {
-    nid: string
-    title: string
-    url: string
-  } | null
-  path?: {
-    alias: string
-    pid: string
-    langcode: string
-  }
+
   body?: string[]
-  hide?: boolean | string
 }

@@ -1,68 +1,77 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types'
-
 const props = defineProps<{
-  item: RegionItemProps
+  link?: {
+    element?: string
+    title?: string
+    url?: string
+    external?: boolean
+  }
+  color?: string
+  size?: string
+  variant?: string
+  icon?: string
+  block?: boolean
+  align?: string
+  spacing?: string
+  width?: string
+  editLink?: string
 }>()
 
 const open = ref(false)
 const theme = useAppConfig().stirTheme
 
-const iconName = computed(() => props.item.icon || null)
-const btnSize = computed(() => props.item.size || 'xl')
-const btnVariant = computed(() => props.item.variant || 'solid')
-const btnColor = computed(() => props.item.color || 'primary')
-const btnBlock = computed(() => props.item.block ?? false)
+const linkData = computed(() => props.link || {})
+const hasLink = computed(() => !!linkData.value.url)
+const isExternal = computed(() => !!linkData.value.external)
+const btnLabel = computed(() => linkData.value.title || 'View link')
+const btnColor = computed(() => props.color || 'primary')
+const btnVariant = computed(() => props.variant || 'solid')
+const btnSize = computed(() => props.size || 'xl')
+const btnBlock = computed(() => props.block ?? false)
+const iconName = computed(() => props.icon || null)
 
 const pdf = computed(
-  () => props.item.media?.find((m) => m.type === 'document') || null,
+  () => props.media?.find((m) => m.type === 'document') || null,
 )
-const link = computed(() => (pdf.value?.url ? null : props.item.link || null))
-
-const pdfLabel = computed(
-  () => pdf.value?.title || props.item.title || 'View PDF',
-)
-const linkLabel = computed(
-  () => link.value?.title || props.item.title || 'View link',
-)
+const hasPdf = computed(() => !!pdf.value?.url)
 </script>
 
 <template>
-  <EditLink :link="item.editLink">
-    <div :class="['flex w-full', item.align, item.spacing, item.width]">
+  <EditLink :link="props.editLink">
+    <div :class="['flex w-full', props.align, props.spacing, props.width]">
       <UButton
-        v-if="pdf?.url"
+        v-if="hasPdf"
         :block="btnBlock"
         class="mt-4"
         :color="btnColor"
         :icon="iconName ?? 'i-lucide-file-text'"
-        :label="pdfLabel"
+        :label="pdf.title || btnLabel"
         :size="btnSize"
         :variant="btnVariant"
         @click="open = true"
       />
 
       <UButton
-        v-else-if="link?.url"
+        v-else-if="hasLink"
         :block="btnBlock"
         class="mt-4"
         :color="btnColor"
         :icon="iconName"
-        :label="linkLabel"
+        :label="btnLabel"
         :size="btnSize"
-        :target="link.external ? '_blank' : undefined"
-        :to="link.url"
+        :target="isExternal ? '_blank' : undefined"
+        :to="linkData.url"
         :variant="btnVariant"
       />
     </div>
   </EditLink>
 
   <UModal
-    v-if="pdf?.url && theme.pdf"
+    v-if="hasPdf && theme.pdf"
     v-model:open="open"
     :description="pdf.alt"
     fullscreen
-    :title="pdf.title || props.item.title"
+    :title="pdf.title || btnLabel"
   >
     <template #body>
       <PdfViewer :src="pdf.url" />

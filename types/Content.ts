@@ -1,8 +1,21 @@
-import type { LayoutProps, LinkProps } from '~/types/Utility'
-import type { MediaProps } from '~/types/Media'
+import type { LayoutProps, LinkProps } from './Utility'
+import type { MediaProps } from './Media'
+import type { PageProps } from './Base'
+import type { SectionProps } from './Section'
 
-export interface RegionItemProps extends LayoutProps {
+/**
+ * Base structure for all Custom Elements
+ */
+export interface CustomElement<T = unknown> {
   element: string
+  props?: T
+  slots?: Record<string, CustomElement[]>
+}
+
+/**
+ * Shared content props used by region, view, button, etc.
+ */
+export interface ElementProps extends LayoutProps {
   id: string
   uuid: string
   parentUuid: string
@@ -11,7 +24,7 @@ export interface RegionItemProps extends LayoutProps {
   text?: string
   src?: string
   gradient?: string
-  media?: MediaProps
+  media?: MediaProps | MediaProps[]
   link?: LinkProps[]
   title?: string
   alt?: string
@@ -31,4 +44,16 @@ export interface RegionItemProps extends LayoutProps {
     | 'error'
     | 'neutral'
   block?: boolean
+  editLink?: string
+  gridItems?: string | number // Used for layout columns
+  direction?: string // Animation
+  overlay?: boolean // Media overlay flag
 }
+
+export type RegionElement = CustomElement<ElementProps>
+export type ViewElement = CustomElement<ElementProps>
+export type ButtonElement = CustomElement<ElementProps>
+export type MediaElement = CustomElement<ElementProps>
+export type PageElement = CustomElement<PageProps>
+export type HeroElement = CustomElement<HeroProps>
+export type SectionElement = CustomElement<SectionProps>

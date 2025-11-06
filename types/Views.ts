@@ -1,13 +1,19 @@
-import type { LayoutProps } from '~/types/Utility'
+import type { LayoutProps } from './Utility'
 
-export interface ViewItemProps extends LayoutProps {
+export interface ViewProps extends LayoutProps {
   element: string
   viewId: string
   title: string
-  gridItems: number
+  gridItems: number | string
   carousel?: boolean
   carouselInterval?: number
   showIndicators?: boolean
-  rows?: object[]
-  pager?: object
+  randomize?: boolean
+  rows?: Record<string, unknown>[] // or a typed RowProps if structure is known
+  pager?: {
+    current: number
+    total: number
+    hasMore: boolean
+    nextUrl?: string
+  }
 }

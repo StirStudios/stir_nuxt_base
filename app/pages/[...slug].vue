@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const { fetchPage, renderCustomElements, usePageHead } = useDrupalCe()
 const { bodyClasses } = usePageContext()
 const theme = useAppConfig().stirTheme
@@ -38,12 +38,6 @@ function customPageError(error: Record<string, any>) {
 
 <template>
   <NuxtLayout :name="layout">
-    <ParagraphHero
-      :hero="page?.content?.hero?.[0]"
-      :hide="page?.content?.hide"
-      :page-title="page.title"
-      :site-slogan="page.site_info?.slogan || ''"
-    />
     <LazyRegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />
