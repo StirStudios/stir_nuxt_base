@@ -1,5 +1,10 @@
 <script setup lang="ts">
 const props = defineProps<{
+  id?: number | string
+  uuid?: string
+  parentUuid?: string
+  region?: string
+
   link?: {
     element?: string
     title?: string

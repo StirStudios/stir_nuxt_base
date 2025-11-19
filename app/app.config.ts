@@ -99,6 +99,12 @@ export default defineAppConfig({
     carousel: {
       padding: 'pb-12',
       root: '',
+      arrows: {
+        prev: { color: 'neutral', variant: 'outline', size: 'xl' },
+        next: { color: 'neutral', variant: 'outline', size: 'xl' },
+        prevIcon: 'i-lucide-chevron-left',
+        nextIcon: 'i-lucide-chevron-right',
+      },
     },
 
     modal: {
@@ -175,6 +181,22 @@ export default defineAppConfig({
         },
         variant: {
           material: materialVariantMuted,
+        },
+      },
+    },
+
+    carousel: {
+      slots: {
+        root: 'group relative focus:outline-none',
+      },
+      variants: {
+        orientation: {
+          horizontal: {
+            container: 'flex-row -ms-0',
+            item: 'ps-0',
+            prev: 'start-5 sm:start-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity',
+            next: 'end-5 sm:end-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity',
+          },
         },
       },
     },

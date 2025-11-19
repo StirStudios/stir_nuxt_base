@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
-
 const props = defineProps<{
   title?: string
   alt?: string
   src?: string
+  type?: string
   srcset?: string
   sizes?: string
   width?: number
@@ -15,26 +14,35 @@ const props = defineProps<{
   link?: string
   credit?: string
   noWrapper?: boolean
+  isHero?: boolean
 }>()
 
 const theme = useAppConfig().stirTheme
 const isEager = computed(() => props.loading === 'eager')
 
-// 👇 This will be true when rendered inside Hero
-const heroNoWrapper = inject<boolean>('heroNoWrapper', false)
+// try to get context from a parent (like <Hero>)
+const injectedIsHero = inject<boolean>('isHero', false)
 
-// Single source of truth: should we skip the wrapper?
-const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
+// this will be true if either the prop or provided context say so
+const isHero = computed(() => props.isHero === true || injectedIsHero)
+
+// true when we shouldn’t wrap (for hero / noWrapper contexts)
+const isBare = computed(() => isHero.value || props.noWrapper === true)
 </script>
 
 <template>
-  <!-- ==========================================================
-       BARE MODE (no outer wrapper – e.g. Hero background)
-  ========================================================== -->
   <img
     v-if="isBare"
     :alt="props.alt || ''"
-    :class="theme.hero.image.base"
+    :class="
+      isHero
+        ? theme.hero.image.base
+        : [
+            theme.media.base,
+            theme.media.rounded,
+            'm-auto max-w-fit !object-contain',
+          ]
+    "
     :fetchpriority="props.fetchpriority || undefined"
     :height="props.height"
     :loading="props.loading || 'lazy'"
@@ -44,9 +52,6 @@ const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
     :width="props.width"
   />
 
-  <!-- ==========================================================
-       WRAPPED MODE (card/gallery usage: overlay, credit, etc.)
-  ========================================================== -->
   <component
     :is="props.link ? 'a' : 'div'"
     v-else
@@ -65,7 +70,6 @@ const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
       theme.media.rounded,
     ]"
   >
-    <!-- Lazy load path with skeleton -->
     <ClientOnly v-if="!isEager" fallback-tag="div">
       <template #default>
         <img
@@ -73,9 +77,8 @@ const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
           :class="[
             theme.media.base,
             props.platform === 'instagram' ? 'aspect-3/4' : '',
-            props.link
-              ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
-              : '',
+            props.link &&
+              'transition-transform duration-500 ease-in-out group-hover:scale-110',
           ]"
           :height="props.height"
           :loading="props.loading || 'lazy'"
@@ -90,16 +93,10 @@ const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
       </template>
     </ClientOnly>
 
-    <!-- Eager version (Hero / priority / above-the-fold) -->
     <img
       v-else
       :alt="props.alt || ''"
-      :class="[
-        theme.media.base,
-        props.link
-          ? 'transition-transform duration-500 ease-in-out group-hover:scale-110'
-          : '',
-      ]"
+      :class="[theme.media.base]"
       fetchpriority="high"
       :height="props.height"
       loading="eager"
@@ -109,9 +106,7 @@ const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
       :width="props.width"
     />
 
-    <!-- Overlays -->
     <ClientOnly>
-      <!-- Instagram caption overlay -->
       <div
         v-if="props.platform === 'instagram'"
         class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/90 px-4 text-center text-sm font-semibold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -130,7 +125,6 @@ const isBare = computed(() => heroNoWrapper || props.noWrapper === true)
         </UButton>
       </div>
 
-      <!-- Photo credit overlay -->
       <span
         v-else-if="props.credit"
         class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
