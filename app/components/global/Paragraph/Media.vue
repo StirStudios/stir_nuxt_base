@@ -8,6 +8,7 @@ interface MediaProps {
   parentUuid?: string
   region?: string
 
+  randomize?: boolean
   gridItems?: string
   spacing?: string
   widthClass?: string
