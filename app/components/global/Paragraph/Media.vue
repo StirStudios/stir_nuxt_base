@@ -29,27 +29,25 @@ const tk = useSlotsToolkit(vueSlots)
 const theme = useAppConfig().stirTheme
 const breakpoints = useBreakpoints(breakpointsTailwind)
 
-// Toolkit: get all <slot name="media"> items
+// raw <slot name="media">
 const slotMedia = computed(() => tk.mediaItems())
 
-// Helper — detect video
 const isVideo = (vnode: any) => !!vnode?.props?.mediaEmbed
 
-// Grid + layout classes
 const gridClasses = computed(() =>
   [props.overlay ? '' : props.gridItems, props.widthClass, props.spacing]
     .filter(Boolean)
     .join(' '),
 )
 
-// Modal state
+// modal
 const open = ref(false)
-const activeIndex = ref(0)
+const activeIndex = ref(0) // current slide (for metadata)
+const startIndex = ref(0) // ONLY used to initialize carousel
 
-// Matrix detection
+// matrix
 const isMatrixLayout = computed(() => !!props.isMatrix)
 
-// Determine column count from grid classes
 const columnCount = computed(() => {
   if (!isMatrixLayout.value) return 1
 
@@ -66,51 +64,85 @@ const columnCount = computed(() => {
   return map.base || 1
 })
 
-// Base indices
+// stable SSR order
 const baseIndices = computed(() => slotMedia.value.map((_, i) => i))
 
-// Determine DOM order (matrix waterfall)
-const domOrder = computed(() => {
+// CLIENT-ONLY matrix reorder
+function computeMatrixDomOrder() {
   if (!isMatrixLayout.value) return baseIndices.value
 
   const cols = columnCount.value
   const buckets: number[][] = Array.from({ length: cols }, () => [])
-  baseIndices.value.forEach((idx, i) => buckets[i % cols].push(idx))
-  return buckets.flat()
-})
 
-// Reordered VNodes
-const slotMediaOrdered = computed(() =>
-  domOrder.value.map((i) => slotMedia.value[i]),
+  baseIndices.value.forEach((idx, i) => {
+    buckets[i % cols].push(idx)
+  })
+
+  return buckets.flat()
+}
+
+const orderedIndices = tk.hydrateOrder(
+  () => baseIndices.value, // SSR
+  () => computeMatrixDomOrder(), // CSR
 )
 
-// Clean item props for modal
+// ordered vnodes for grid
+const slotMediaOrdered = computed(() =>
+  orderedIndices.value.map((i) => slotMedia.value[i]),
+)
+
+// display items (grid keys)
 const displayItems = computed(() =>
-  domOrder.value.map((i) => {
+  orderedIndices.value.map((i) => {
     const vnode = slotMedia.value[i]
     const p = tk.propsOf(vnode)
-    return { ...p, key: p.mid || p.src || hash(p), type: p.type }
+    return {
+      ...p,
+      key: p.mid || p.src || JSON.stringify(p),
+      type: p.type,
+    }
   }),
 )
 
-// Logical order for carousel movement
+// modal items always use base order (correct behavior)
 const itemsOrdered = computed(() =>
   baseIndices.value.map((i) => {
     const vnode = slotMedia.value[i]
     const p = tk.propsOf(vnode)
-    return { ...p, key: p.mid || p.src || hash(p), type: p.type }
+    return {
+      ...p,
+      key: p.mid || p.src || JSON.stringify(p),
+      type: p.type,
+    }
   }),
 )
+
+// Current modal item (reactive + follows carousel)
+const activeItem = computed(() => itemsOrdered.value[activeIndex.value] || null)
+
+// Modal metadata
+const modalTitle = computed(() => activeItem.value?.title || '')
+
+const modalDescription = computed(
+  () => activeItem.value?.alt || activeItem.value?.credit || '',
+)
+
+// Called when the user clicks a thumb in the grid
+function openModal(domIdx: number) {
+  const initialIndex = orderedIndices.value[domIdx] ?? domIdx
+  startIndex.value = initialIndex // used once when carousel mounts
+  activeIndex.value = initialIndex // metadata matches immediately
+  open.value = true
+}
+
+// Called when Embla selects a new slide
+function onSelect(index: number) {
+  activeIndex.value = index
+}
 
 const componentMap = {
   video: resolveComponent('MediaVideo'),
   image: resolveComponent('MediaImage'),
-}
-
-// CLICK HANDLING RULES
-function openModal(domIdx: number) {
-  activeIndex.value = domOrder.value[domIdx] ?? domIdx
-  open.value = true
 }
 </script>
 
@@ -125,7 +157,7 @@ function openModal(domIdx: number) {
           >
             <template
               v-for="(node, i) in slotMediaOrdered"
-              :key="displayItems[i]?.key"
+              :key="displayItems[i].key"
             >
               <div
                 class="group relative"
@@ -174,13 +206,14 @@ function openModal(domIdx: number) {
   <UModal
     v-model:open="open"
     aria-modal="true"
+    :description="modalDescription"
     fullscreen
+    :title="modalTitle"
     :ui="{ content: 'bg-transparent divide-none' }"
   >
     <template #body>
       <LazyUCarousel
         v-if="open && itemsOrdered.length"
-        v-model="activeIndex"
         :arrows="itemsOrdered.length > 1"
         :items="itemsOrdered"
         loop
@@ -188,8 +221,9 @@ function openModal(domIdx: number) {
         :next-icon="theme.carousel.arrows?.nextIcon"
         :prev="theme.carousel.arrows?.prev"
         :prev-icon="theme.carousel.arrows?.prevIcon"
-        :start-index="activeIndex"
+        :start-index="startIndex"
         :ui="{ container: 'items-center h-full' }"
+        @select="onSelect"
       >
         <template #default="{ item }">
           <component

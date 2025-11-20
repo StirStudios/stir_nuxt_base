@@ -28,23 +28,12 @@ const props = defineProps<{
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
 
-// Step 1: Raw rows from slots (stable SSR)
 const rawRows = computed(() => tk.slot('rows'))
 
-// Step 2: Store shuffled result ONLY after mount
-const shuffled = ref<VNode[]>([])
-
-onMounted(() => {
-  if (props.randomize) {
-    shuffled.value = tk.shuffle(rawRows.value)
-  }
-})
-
-// Step 3: Final rows — stable SSR, stable hydration, shuffled client-side only
-const slotRows = computed(() => {
-  if (!props.randomize) return rawRows.value
-  return shuffled.value.length ? shuffled.value : rawRows.value
-})
+const slotRows = tk.hydrateOrder(
+  () => rawRows.value,
+  () => (props.randomize ? tk.shuffle(rawRows.value) : rawRows.value),
+)
 </script>
 
 <template>

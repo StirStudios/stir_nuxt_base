@@ -1,6 +1,5 @@
-// ~/composables/useSlotsToolkit.ts
 import type { VNode } from 'vue'
-import { isVNode } from 'vue'
+import { isVNode, onMounted, ref, computed } from 'vue'
 
 /* -------------------------------------------------------
  *  LOW-LEVEL HELPERS
@@ -51,6 +50,20 @@ export function shuffleArray<T>(items: T[]): T[] {
 }
 
 /* -------------------------------------------------------
+ *  HYDRATION-SAFE ORDERING (SSR → CSR)
+ * ----------------------------------------------------- */
+
+function hydrateOrder<T>(baseFn: () => T[], clientFn: () => T[]) {
+  const clientList = ref<T[] | null>(null)
+
+  onMounted(() => {
+    clientList.value = clientFn()
+  })
+
+  return computed(() => clientList.value || baseFn())
+}
+
+/* -------------------------------------------------------
  *  TOOLKIT EXPORT
  * ----------------------------------------------------- */
 
@@ -84,5 +97,7 @@ export function useSlotsToolkit(slots: any) {
     isMediaEmbed(vnode: VNode | undefined) {
       return isVNodeMediaEmbed(vnode)
     },
+
+    hydrateOrder,
   }
 }
