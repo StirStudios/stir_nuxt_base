@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   items: any[]
-  randomize?: boolean
   gridItems?: string
   editLink?: string
   carouselIndicators?: boolean
@@ -15,15 +14,12 @@ const props = defineProps<{
 const carousel = useTemplateRef<'carousel'>('carousel')
 const theme = useAppConfig().stirTheme
 
+// No randomize. No sorting. Just a clean map.
 const slides = computed(() => {
-  const list = props.items ?? []
-
-  const base = list.map((vnode, i) => ({
+  return (props.items ?? []).map((vnode, i) => ({
     vnode,
     key: vnode.key || i,
   }))
-
-  return props.randomize ? [...base].sort(() => Math.random() - 0.5) : base
 })
 
 /* -------------------------------------------------------
@@ -65,35 +61,33 @@ function handleSelect() {
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
-    <div class="relative z-10" :class="theme.carousel.padding">
-      <UCarousel
-        v-if="slides.length"
-        ref="carousel"
-        v-slot="{ item }"
-        :arrows="props.carouselArrows"
-        :auto-height="props.carouselAutoheight"
-        :auto-scroll="autoScrollOptions"
-        :autoplay="autoplayOptions"
-        :dots="props.carouselIndicators"
-        :fade="props.carouselFade"
-        :items="slides"
-        loop
-        :next="theme.carousel.arrows?.next"
-        :next-icon="theme.carousel.arrows?.nextIcon"
-        :prev="theme.carousel.arrows?.prev"
-        :prev-icon="theme.carousel.arrows?.prevIcon"
-        :ui="{
-          root: theme.carousel.root,
-          container: 'items-center transition-[height]',
-          item: props.gridItems,
-        }"
-        @select="handleSelect"
-      >
-        <div :class="props.gridItems">
-          <component :is="item.vnode" :key="item.key" />
-        </div>
-      </UCarousel>
-    </div>
-  </EditLink>
+  <div class="relative z-10" :class="theme.carousel.padding">
+    <UCarousel
+      v-if="slides.length"
+      ref="carousel"
+      v-slot="{ item }"
+      :arrows="props.carouselArrows"
+      :auto-height="props.carouselAutoheight"
+      :auto-scroll="autoScrollOptions"
+      :autoplay="autoplayOptions"
+      :dots="props.carouselIndicators"
+      :fade="props.carouselFade"
+      :items="slides"
+      loop
+      :next="theme.carousel.arrows?.next"
+      :next-icon="theme.carousel.arrows?.nextIcon"
+      :prev="theme.carousel.arrows?.prev"
+      :prev-icon="theme.carousel.arrows?.prevIcon"
+      :ui="{
+        root: theme.carousel.root,
+        container: 'items-center transition-[height]',
+        item: props.gridItems,
+      }"
+      @select="handleSelect"
+    >
+      <div :class="props.gridItems">
+        <component :is="item.vnode" :key="item.key" />
+      </div>
+    </UCarousel>
+  </div>
 </template>
