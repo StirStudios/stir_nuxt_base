@@ -15,11 +15,8 @@ const props = defineProps<{
 const carousel = useTemplateRef<'carousel'>('carousel')
 const theme = useAppConfig().stirTheme
 
-/* -------------------------------------------------------
-   WRAP VNodes INTO SLIDE OBJECTS
-------------------------------------------------------- */
 const slides = computed(() => {
-  const list = props.items ?? [] // ← 🛡️ Protects `.map` from undefined
+  const list = props.items ?? []
 
   const base = list.map((vnode, i) => ({
     vnode,
