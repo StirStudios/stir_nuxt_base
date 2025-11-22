@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { slugify } from '~/utils/stringUtils'
+
 const props = defineProps<{
+  id?: number | string
+  uuid?: string
+  layout?: string
+  label?: string
   header?: string
   headerTag?: string
   width?: string
@@ -14,10 +20,15 @@ const props = defineProps<{
 const vueSlots = useSlots()
 
 const orderedSlots = computed(() => Object.entries(vueSlots))
+
+const sectionId = computed(() => {
+  if (props.label) return slugify(props.label)
+  return `section-${props.id ?? 'unknown'}`
+})
 </script>
 
 <template>
-  <section :class="[props.classes || 'content', props.spacing]">
+  <section :id="sectionId" :class="[props.classes || 'content', props.spacing]">
     <component :is="props.headerTag || 'h2'" v-if="props.header">
       {{ props.header }}
     </component>
@@ -41,7 +52,5 @@ const orderedSlots = computed(() => Object.entries(vueSlots))
         </div>
       </template>
     </Grid>
-
-    <CardGradient v-if="props.card" :layout="props" />
   </section>
 </template>
