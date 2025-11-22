@@ -2,11 +2,10 @@
 const { fetchPage, renderCustomElements, usePageHead } = useDrupalCe()
 const { bodyClasses } = usePageContext()
 const theme = useAppConfig().stirTheme
-const route = useRoute()
 
 const page = await fetchPage(
-  route.path,
-  { query: route.query },
+  useRoute().path,
+  { query: useRoute().query },
   customPageError,
 )
 const layout = page.value.page_layout
@@ -20,12 +19,7 @@ useHead({
 })
 
 definePageMeta({
-  key: (route) => {
-    const params = new URLSearchParams(
-      route.query as Record<string, any>,
-    ).toString()
-    return params ? `${route.path}?${params}` : route.path
-  },
+  key: (route) => route.fullPath.split('#')[0],
 })
 
 function customPageError(error: Record<string, any>) {
@@ -38,9 +32,10 @@ function customPageError(error: Record<string, any>) {
 
 <template>
   <NuxtLayout :name="layout">
-    <LazyRegionArea area="before_main" />
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
+
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />
+
     <LazyRegionArea area="after_main" />
   </NuxtLayout>
 </template>
