@@ -26,7 +26,7 @@ const motionEffects = computed(() => getMotionEffect(props.effect))
     <slot />
   </motion.div>
 
-  <div v-else :class="props.class" v-bind="$attrs">
+  <template v-else>
     <slot />
-  </div>
+  </template>
 </template>
