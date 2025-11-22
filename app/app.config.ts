@@ -108,7 +108,8 @@ export default defineAppConfig({
     },
 
     modal: {
-      header: true,
+      title: true,
+      description: false,
     },
 
     scrollButton: {

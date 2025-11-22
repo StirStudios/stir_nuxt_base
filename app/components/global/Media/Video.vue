@@ -20,19 +20,19 @@ const theme = useAppConfig().stirTheme
 const { media: mediaTheme } = theme
 const { initializePlayers } = useVideoPlayers()
 
-// Hero context flag
+// Hero context: no wrapper visible
 const isHero = inject<boolean>('isHero', false)
 const isBare = computed(() => isHero || props.noWrapper === true)
 
-// Processing: Bunny uses width=180 thumbnail while encoding
+// Bunny thumbnail while encoding
 const isProcessing = computed(() => props.width === 180)
 
-// Aspect ratio utility (same as old component)
+// Aspect ratio class utility
 const aspectClass = computed(() =>
   aspectRatios(props.width ?? 16, props.height ?? 9),
 )
 
-// Initialize Bunny players only for normal embedded mode
+// Initialize Bunny players only for iframe mode
 onMounted(() => {
   if (!isBare.value && props.mediaEmbed && !isProcessing.value) {
     initializePlayers()
@@ -57,12 +57,7 @@ onMounted(() => {
 
   <div
     v-else-if="props.mediaEmbed"
-    :class="[
-      mediaTheme.base,
-      mediaTheme.rounded,
-      aspectClass,
-      'm-auto max-w-6xl',
-    ]"
+    :class="['m-auto max-w-6xl', mediaTheme.base, aspectClass]"
   >
     <div
       v-if="isProcessing"
@@ -78,7 +73,7 @@ onMounted(() => {
       v-else
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
-      class="absolute inset-0 h-full w-full bg-black"
+      :class="['absolute inset-0 h-full w-full bg-black', theme.media.rounded]"
       :data-mid="props.mid"
       frameborder="0"
       loading="lazy"

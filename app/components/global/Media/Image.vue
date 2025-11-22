@@ -13,6 +13,7 @@ const props = defineProps<{
   platform?: string
   link?: string
   credit?: string
+  hideCredit?: boolean
   noWrapper?: boolean
   isHero?: boolean
 }>()
@@ -20,13 +21,13 @@ const props = defineProps<{
 const theme = useAppConfig().stirTheme
 const isEager = computed(() => props.loading === 'eager')
 
-// try to get context from a parent (like <Hero>)
+// Try to get hero context
 const injectedIsHero = inject<boolean>('isHero', false)
 
-// this will be true if either the prop or provided context say so
+// Explicit prop OR inherited hero → hero mode
 const isHero = computed(() => props.isHero === true || injectedIsHero)
 
-// true when we shouldn’t wrap (for hero / noWrapper contexts)
+// Bare mode: Hero OR noWrapper
 const isBare = computed(() => isHero.value || props.noWrapper === true)
 </script>
 
@@ -77,8 +78,6 @@ const isBare = computed(() => isHero.value || props.noWrapper === true)
           :class="[
             theme.media.base,
             props.platform === 'instagram' ? 'aspect-3/4' : '',
-            props.link &&
-              'transition-transform duration-500 ease-in-out group-hover:scale-110',
           ]"
           :height="props.height"
           :loading="props.loading || 'lazy'"
@@ -126,7 +125,7 @@ const isBare = computed(() => isHero.value || props.noWrapper === true)
       </div>
 
       <span
-        v-else-if="props.credit"
+        v-else-if="props.credit && !props.hideCredit"
         class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
       >
         {{ props.credit }}

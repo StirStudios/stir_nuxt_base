@@ -16,23 +16,24 @@ interface MediaProps {
   align?: string
   direction?: string
   editLink?: string
-  header?: string
   isMatrix?: boolean
 }
 
 const props = defineProps<MediaProps>()
 
-// Unified slot access
+// Slot access
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
 
 const theme = useAppConfig().stirTheme
 const breakpoints = useBreakpoints(breakpointsTailwind)
 
-// raw <slot name="media">
+// Normalize media slots
 const slotMedia = computed(() => tk.mediaItems())
 
 const isVideo = (vnode: any) => !!vnode?.props?.mediaEmbed
+const isDocument = (vnode: any) => vnode?.props?.type === 'document'
+const isAudio = (vnode: any) => vnode?.props?.type === 'audio'
 
 const gridClasses = computed(() =>
   [props.overlay ? '' : props.gridItems, props.widthClass, props.spacing]
@@ -40,12 +41,12 @@ const gridClasses = computed(() =>
     .join(' '),
 )
 
-// modal
+// modal state
 const open = ref(false)
-const activeIndex = ref(0) // current slide (for metadata)
-const startIndex = ref(0) // ONLY used to initialize carousel
+const activeIndex = ref(0)
+const startIndex = ref(0)
 
-// matrix
+// matrix layout
 const isMatrixLayout = computed(() => !!props.isMatrix)
 
 const columnCount = computed(() => {
@@ -61,50 +62,33 @@ const columnCount = computed(() => {
   for (const bp of order) {
     if (breakpoints.greaterOrEqual(bp).value && map[bp]) return map[bp]
   }
+
   return map.base || 1
 })
 
-// stable SSR order
 const baseIndices = computed(() => slotMedia.value.map((_, i) => i))
 
-// CLIENT-ONLY matrix reorder
 function computeMatrixDomOrder() {
   if (!isMatrixLayout.value) return baseIndices.value
 
   const cols = columnCount.value
   const buckets: number[][] = Array.from({ length: cols }, () => [])
 
-  baseIndices.value.forEach((idx, i) => {
-    buckets[i % cols].push(idx)
-  })
+  baseIndices.value.forEach((idx, i) => buckets[i % cols].push(idx))
 
   return buckets.flat()
 }
 
 const orderedIndices = tk.hydrateOrder(
-  () => baseIndices.value, // SSR
-  () => computeMatrixDomOrder(), // CSR
+  () => baseIndices.value,
+  () => computeMatrixDomOrder(),
 )
 
-// ordered vnodes for grid
 const slotMediaOrdered = computed(() =>
   orderedIndices.value.map((i) => slotMedia.value[i]),
 )
 
-// display items (grid keys)
-const displayItems = computed(() =>
-  orderedIndices.value.map((i) => {
-    const vnode = slotMedia.value[i]
-    const p = tk.propsOf(vnode)
-    return {
-      ...p,
-      key: p.mid || p.src || JSON.stringify(p),
-      type: p.type,
-    }
-  }),
-)
-
-// modal items always use base order (correct behavior)
+// Items for modal
 const itemsOrdered = computed(() =>
   baseIndices.value.map((i) => {
     const vnode = slotMedia.value[i]
@@ -117,32 +101,42 @@ const itemsOrdered = computed(() =>
   }),
 )
 
-// Current modal item (reactive + follows carousel)
-const activeItem = computed(() => itemsOrdered.value[activeIndex.value] || null)
+const activeItem = computed(() => itemsOrdered.value[activeIndex.value] ?? null)
 
-// Modal metadata
 const modalTitle = computed(() => activeItem.value?.title || '')
-
 const modalDescription = computed(
   () => activeItem.value?.alt || activeItem.value?.credit || '',
 )
+const modalCredit = computed(() => activeItem.value?.credit || '')
 
-// Called when the user clicks a thumb in the grid
+// Grid → modal index
 function openModal(domIdx: number) {
   const initialIndex = orderedIndices.value[domIdx] ?? domIdx
-  startIndex.value = initialIndex // used once when carousel mounts
-  activeIndex.value = initialIndex // metadata matches immediately
+  startIndex.value = initialIndex
+  activeIndex.value = initialIndex
   open.value = true
 }
 
-// Called when Embla selects a new slide
 function onSelect(index: number) {
   activeIndex.value = index
 }
 
+// Embeds
+const AudioEmbed = {
+  props: {
+    mediaEmbed: { type: String, required: true },
+  },
+  template: '<div v-html="mediaEmbed"></div>',
+}
+
+const DocumentEmbed = resolveComponent('MediaDocument')
+
+// Component map
 const componentMap = {
-  video: resolveComponent('MediaVideo'),
   image: resolveComponent('MediaImage'),
+  video: resolveComponent('MediaVideo'),
+  audio: AudioEmbed,
+  document: DocumentEmbed,
 }
 </script>
 
@@ -151,38 +145,39 @@ const componentMap = {
     <WrapAlign :align="props.align">
       <WrapGrid :classes="gridClasses" :header="props.header">
         <WrapAnimate class="relative" :effect="props.direction">
-          <div
-            class="aspect-wrap relative overflow-hidden"
-            :class="[props.gridItems, theme.media.rounded]"
-          >
-            <template
-              v-for="(node, i) in slotMediaOrdered"
-              :key="displayItems[i].key"
-            >
+          <div :class="props.gridItems">
+            <template v-for="(node, i) in slotMediaOrdered" :key="i">
+              <!-- DOCUMENTS & AUDIO should NOT show image hover wrapper -->
+              <component
+                :is="componentMap[tk.propsOf(node).type]"
+                v-if="isDocument(node) || isAudio(node)"
+                v-bind="tk.propsOf(node)"
+              />
+
+              <!-- IMAGES + VIDEO thumbnails (clickable) -->
               <div
-                class="group relative"
-                :class="isVideo(node) || props.overlay ? 'cursor-pointer' : ''"
+                v-else
+                class="group relative overflow-hidden"
+                :class="[
+                  theme.media.rounded,
+                  isVideo(node) || props.overlay ? 'cursor-pointer' : '',
+                ]"
                 @click="(isVideo(node) || props.overlay) && openModal(i)"
               >
-                <template v-if="isVideo(node) && node.props?.src">
-                  <img
-                    :alt="node.props.alt || 'Video thumbnail'"
-                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    decoding="async"
-                    loading="lazy"
-                    :src="node.props.src"
+                <div
+                  class="transition-transform duration-300 group-hover:scale-105"
+                >
+                  <MediaImage
+                    v-bind="{ ...tk.propsOf(node), hideCredit: true }"
                   />
-                </template>
+                </div>
 
-                <component
-                  :is="node"
-                  v-else
-                  :class="[
-                    isVideo(node) || props.overlay
-                      ? 'transition-transform duration-300 group-hover:scale-105'
-                      : '',
-                  ]"
-                />
+                <span
+                  v-if="tk.propsOf(node).credit"
+                  class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
+                >
+                  {{ tk.propsOf(node).credit }}
+                </span>
 
                 <template v-if="isVideo(node)">
                   <div
@@ -206,12 +201,27 @@ const componentMap = {
   <UModal
     v-model:open="open"
     aria-modal="true"
+    :close="false"
     :description="modalDescription"
     fullscreen
     :title="modalTitle"
-    :ui="{ content: 'bg-transparent divide-none' }"
+    :ui="{
+      content: 'bg-transparent divide-none p-0',
+      header: 'hidden',
+      title: 'hidden',
+      description: 'hidden',
+    }"
   >
     <template #body>
+      <UButton
+        class="absolute top-4 right-4 z-10"
+        color="neutral"
+        icon="i-lucide-x"
+        size="lg"
+        variant="soft"
+        @click="open = false"
+      />
+
       <LazyUCarousel
         v-if="open && itemsOrdered.length"
         :arrows="itemsOrdered.length > 1"
@@ -226,16 +236,42 @@ const componentMap = {
         @select="onSelect"
       >
         <template #default="{ item }">
-          <component
-            :is="componentMap[item.type]"
-            :key="item.key"
-            v-bind="{
-              ...item,
-              ...(item.type === 'image' ? { noWrapper: true } : {}),
-            }"
-          />
+          <div :class="['overflow-hidden', theme.media.rounded]">
+            <component
+              :is="componentMap[item.type]"
+              :key="item.key"
+              v-bind="{
+                ...item,
+                ...(item.type === 'image' ? { noWrapper: true } : {}),
+              }"
+            />
+          </div>
         </template>
       </LazyUCarousel>
+
+      <div
+        v-if="
+          (theme.modal.title && modalTitle) ||
+          (theme.modal.description && modalDescription) ||
+          modalCredit
+        "
+        class="absolute bottom-6 left-1/2 max-w-[90%] -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
+      >
+        <div v-if="theme.modal.title && modalTitle" class="font-semibold">
+          {{ modalTitle }}
+        </div>
+
+        <div
+          v-if="theme.modal.description && modalDescription"
+          class="text-sm opacity-80"
+        >
+          {{ modalDescription }}
+        </div>
+
+        <div v-if="modalCredit" class="text-xs italic opacity-70">
+          {{ modalCredit }}
+        </div>
+      </div>
     </template>
   </UModal>
 </template>
