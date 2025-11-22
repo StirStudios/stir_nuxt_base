@@ -31,5 +31,6 @@ const gridClasses = computed(
     <div :class="gridClasses">
       <slot />
     </div>
+    <CardGradient v-if="props.card" :layout="props" />
   </div>
 </template>
