@@ -2,6 +2,7 @@
 import { usePageContext } from '~/composables/usePageContext'
 import { useIntersectionObserver } from '~/composables/useIntersectionObserver'
 import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
+import { useNavLock } from '~/composables/useNavLock'
 
 const props = defineProps<{
   mode?: 'full' | 'simple'
@@ -25,6 +26,7 @@ const tk = useSlotsToolkit(vueSlots)
 
 const { observeVideos } = useIntersectionObserver()
 const { isFront, pageTitle, pageHide } = usePageContext()
+const { locked } = useNavLock()
 const { hero: heroTheme } = useAppConfig().stirTheme
 
 // Only needed in FULL mode
@@ -33,9 +35,31 @@ if (props.mode !== 'simple') {
   provide('isHero', true)
 }
 
-const hideHeroSection = computed(
-  () => props.mode !== 'simple' && pageHide.value && !isFront.value,
+// Snapshot anti-flicker system
+const snap = reactive({
+  isFront: isFront.value,
+  title: pageTitle.value,
+})
+
+watch(locked, (l) => {
+  if (!l) {
+    snap.isFront = isFront.value
+    snap.title = pageTitle.value
+  }
+})
+
+const isFrontEffective = computed(() =>
+  locked.value ? snap.isFront : isFront.value,
 )
+
+const pageTitleEffective = computed(() =>
+  locked.value ? snap.title : pageTitle.value,
+)
+
+const hideHeroSection = computed(
+  () => props.mode !== 'simple' && pageHide.value && !isFrontEffective.value,
+)
+
 const hasMediaSlot = computed(() => tk.slot('media').length > 0)
 const hasHero = computed(() => !!props.text || hasMediaSlot.value)
 
@@ -56,7 +80,7 @@ const sectionClasses = computed(() => {
           ? [heroTheme.mediaSpacing, heroTheme.noMediaFallback]
           : heroTheme.noMediaSpacing,
     hasMediaSlot.value && heroTheme.overlay,
-    isFront.value && heroTheme.isFront,
+    isFrontEffective.value && heroTheme.isFront,
     hasMediaSlot.value && 'min-h-[75vh]',
   ]
     .flat()
@@ -74,25 +98,32 @@ const sectionClasses = computed(() => {
 
     <template v-else>
       <section :class="sectionClasses">
-        <div :class="[heroTheme.text.base, isFront && heroTheme.text.isFront]">
+        <div
+          :class="[
+            heroTheme.text.base,
+            isFrontEffective && heroTheme.text.isFront,
+          ]"
+        >
           <WrapAnimate :effect="props.direction">
             <slot name="title">
               <HeroContent
                 v-if="props.text"
                 :hero-text="props.text"
-                :is-front="isFront"
-                :page-title="pageTitle"
+                :is-front="isFrontEffective"
+                :page-title="pageTitleEffective"
                 :site-slogan="props.siteSlogan"
               />
 
               <h1
                 v-else
                 :class="[
-                  isFront ? heroTheme.text?.isFront : heroTheme.text?.h1,
+                  isFrontEffective
+                    ? heroTheme.text?.isFront
+                    : heroTheme.text?.h1,
                   heroTheme.text?.container,
                 ]"
               >
-                {{ pageTitle }}
+                {{ pageTitleEffective }}
               </h1>
             </slot>
 
