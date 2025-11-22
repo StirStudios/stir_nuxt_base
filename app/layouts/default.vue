@@ -7,12 +7,18 @@ const { navigation } = useAppConfig().stirTheme
 
 <template>
   <LazyRegionArea area="top" />
+
   <LazyDrupalTabs v-if="isAdministrator" />
+
   <AppHeader :mode="navigation.mode" />
-  <UMain id="main-content" role="main">
+
+  <UMain id="main-content" as="main" role="main">
     <LazySiteMessages />
+
     <slot />
   </UMain>
+
   <LazyRegionArea area="sub_footer" />
+
   <LazyAppFooter />
 </template>

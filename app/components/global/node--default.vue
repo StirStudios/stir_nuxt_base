@@ -4,6 +4,7 @@ defineOptions({
 })
 
 defineProps<{ title?: string }>()
+
 defineSlots<{
   hero?(): unkown
   section?(): unkown
@@ -12,5 +13,8 @@ defineSlots<{
 
 <template>
   <slot name="hero" />
+
+  <LazyRegionArea area="before_main" />
+
   <slot name="section" />
 </template>

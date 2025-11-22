@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { page } = usePageContext()
 const { renderCustomElements } = useDrupalCe()
+const { page } = usePageContext()
 
 const props = defineProps<{ area: string }>()
 
