@@ -91,7 +91,6 @@ const sectionClasses = computed(() => {
     hasMediaSlot.value && heroTheme.overlay,
     isFrontEffective.value && heroTheme.isFront,
 
-    // ⭐ Restored legacy behavior:
     // Only add video height if the hero contains a video
     containsVideo.value && 'min-h-[75vh]',
   ]
