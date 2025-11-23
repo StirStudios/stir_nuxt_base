@@ -62,6 +62,15 @@ export default defineAppConfig({
     media: {
       base: 'relative h-full w-full overflow-hidden object-cover',
       rounded: 'rounded-xl',
+
+      transitions: {
+        fast: 'duration-300',
+        slow: 'duration-700',
+      },
+
+      effects: {
+        scale: 'group-hover:scale-105',
+      },
     },
 
     card: {
