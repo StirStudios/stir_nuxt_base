@@ -70,8 +70,16 @@ const sectionClasses = computed(() => {
 
   const hasHeroContent = hasHero.value
 
+  // Detect if the media slot contains a video
+  const containsVideo = computed(() =>
+    tk
+      .slot('media')
+      .some((node) => node?.props?.type === 'video' || node?.props?.mediaEmbed),
+  )
+
   return [
     heroTheme.base,
+
     hideHeroSection.value
       ? `${heroTheme.hide} sr-hide`
       : hasMediaSlot.value
@@ -79,9 +87,13 @@ const sectionClasses = computed(() => {
         : hasHeroContent
           ? [heroTheme.mediaSpacing, heroTheme.noMediaFallback]
           : heroTheme.noMediaSpacing,
+
     hasMediaSlot.value && heroTheme.overlay,
     isFrontEffective.value && heroTheme.isFront,
-    hasMediaSlot.value && 'min-h-[75vh]',
+
+    // ⭐ Restored legacy behavior:
+    // Only add video height if the hero contains a video
+    containsVideo.value && 'min-h-[75vh]',
   ]
     .flat()
     .filter(Boolean)
