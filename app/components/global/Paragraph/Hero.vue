@@ -100,8 +100,8 @@ const sectionClasses = computed(() => {
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
-    <template v-if="props.mode === 'simple'">
+  <EditLink :link="editLink">
+    <template v-if="mode === 'simple'">
       <slot name="header" />
       <slot name="media" />
       <slot name="footer" />
@@ -115,14 +115,14 @@ const sectionClasses = computed(() => {
             isFrontEffective && heroTheme.text.isFront,
           ]"
         >
-          <WrapAnimate :effect="props.direction">
+          <WrapAnimate :effect="direction">
             <slot name="title">
               <HeroContent
-                v-if="props.text"
-                :hero-text="props.text"
+                v-if="text"
+                :hero-text="text"
                 :is-front="isFrontEffective"
                 :page-title="pageTitleEffective"
-                :site-slogan="props.siteSlogan"
+                :site-slogan="siteSlogan"
               />
 
               <h1

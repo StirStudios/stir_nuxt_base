@@ -5,7 +5,7 @@ import { isVNode, onMounted, ref, computed } from 'vue'
  *  LOW-LEVEL HELPERS
  * ----------------------------------------------------- */
 
-export function useSlotVNode(slots: any, name: string): VNode[] {
+export function useSlotVNode(slots: unknown, name: string): VNode[] {
   const content = slots?.[name]?.()
   return Array.isArray(content) ? content : []
 }
@@ -18,7 +18,7 @@ export function getVNodeProps(vnode: VNode | undefined) {
  *  HERO + MEDIA HELPERS
  * ----------------------------------------------------- */
 
-export function extractHeroMedia(slots: any) {
+export function extractHeroMedia(slots: unknown) {
   const heroNodes = useSlotVNode(slots, 'hero')
   if (!heroNodes.length) return null
 
@@ -27,7 +27,7 @@ export function extractHeroMedia(slots: any) {
   return Array.isArray(nested) ? (nested[0] ?? null) : null
 }
 
-export function extractMediaItems(slots: any): VNode[] {
+export function extractMediaItems(slots: unknown): VNode[] {
   return useSlotVNode(slots, 'media')
 }
 
@@ -67,7 +67,7 @@ function hydrateOrder<T>(baseFn: () => T[], clientFn: () => T[]) {
  *  TOOLKIT EXPORT
  * ----------------------------------------------------- */
 
-export function useSlotsToolkit(slots: any) {
+export function useSlotsToolkit(slots: unknown) {
   return {
     slots,
 

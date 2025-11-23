@@ -2,17 +2,20 @@
 import { aspectRatios } from '~/utils/aspectRatios'
 import { useVideoPlayers } from '~/composables/useVideoPlayers'
 
-defineOptions({ inheritAttrs: false })
-
 const props = defineProps<{
+  // Core media
   mid?: string | number
   title?: string
   alt?: string
   src?: string
   platform?: string
+  mediaEmbed?: string
+
+  // Dimensions
   width?: number
   height?: number
-  mediaEmbed?: string
+
+  // Rendering flags
   noWrapper?: boolean
 }>()
 
@@ -20,19 +23,19 @@ const theme = useAppConfig().stirTheme
 const { media: mediaTheme } = theme
 const { initializePlayers } = useVideoPlayers()
 
-// Hero context: no wrapper visible
+// Hero mode removes wrapper
 const isHero = inject<boolean>('isHero', false)
 const isBare = computed(() => isHero || props.noWrapper === true)
 
-// Bunny thumbnail while encoding
+// Bunny placeholder size
 const isProcessing = computed(() => props.width === 180)
 
-// Aspect ratio class utility
+// Aspect-ratio utility
 const aspectClass = computed(() =>
   aspectRatios(props.width ?? 16, props.height ?? 9),
 )
 
-// Initialize Bunny players only for iframe mode
+// Init Bunny player for iframe embeds
 onMounted(() => {
   if (!isBare.value && props.mediaEmbed && !isProcessing.value) {
     initializePlayers()
@@ -42,21 +45,21 @@ onMounted(() => {
 
 <template>
   <video
-    v-if="isBare && props.mediaEmbed"
+    v-if="isBare && mediaEmbed"
     aria-hidden="true"
     class="absolute inset-0 h-full w-full object-cover"
     disablepictureinpicture
     loop
     muted
     playsinline
-    :poster="props.src"
+    :poster="src"
     preload="metadata"
   >
-    <source :src="props.mediaEmbed" type="video/mp4" />
+    <source :src="mediaEmbed" type="video/mp4" />
   </video>
 
   <div
-    v-else-if="props.mediaEmbed"
+    v-else-if="mediaEmbed"
     :class="['m-auto max-w-6xl', mediaTheme.base, aspectClass]"
   >
     <div
@@ -74,11 +77,11 @@ onMounted(() => {
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
       :class="['absolute inset-0 h-full w-full bg-black', theme.media.rounded]"
-      :data-mid="props.mid"
+      :data-mid="mid"
       frameborder="0"
       loading="lazy"
-      :src="props.mediaEmbed"
-      :title="props.title"
+      :src="mediaEmbed"
+      :title="title"
     />
   </div>
 </template>

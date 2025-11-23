@@ -3,37 +3,44 @@ import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
 import { useMediaOrdering } from '~/composables/useMediaOrdering'
 import { useMediaModal } from '~/composables/useMediaModal'
 
-interface MediaProps {
+const props = defineProps<{
+  /* Identity */
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  randomize?: boolean
+  /* Layout */
   gridItems?: string
   spacing?: string
   widthClass?: string
-  overlay?: boolean
   align?: string
   direction?: string
-  editLink?: string
+  overlay?: boolean
   isMatrix?: boolean
-}
 
-const props = defineProps<MediaProps>()
+  /* Content */
+  header?: string
 
-// Slot access
+  /* Behavior */
+  randomize?: boolean
+  editLink?: string
+}>()
+
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
-
 const theme = useAppConfig().stirTheme
 
-// Normalize media slots
 const slotMedia = computed(() => tk.mediaItems())
 
-const isVideo = (vnode: any) => !!vnode?.props?.mediaEmbed
-const isDocument = (vnode: any) => vnode?.props?.type === 'document'
-const isAudio = (vnode: any) => vnode?.props?.type === 'audio'
+type VNodeLoose = {
+  props?: Record<string, unknown>
+  [key: string]: unknown
+}
+
+const isVideo = (vnode: VNodeLoose) => !!vnode?.props?.mediaEmbed
+const isDocument = (vnode: VNodeLoose) => vnode?.props?.type === 'document'
+const isAudio = (vnode: VNodeLoose) => vnode?.props?.type === 'audio'
 
 const gridClasses = computed(() =>
   [props.overlay ? '' : props.gridItems, props.widthClass, props.spacing]
@@ -43,14 +50,10 @@ const gridClasses = computed(() =>
 
 const { baseIndices, orderedIndices } = useMediaOrdering(slotMedia, props, tk)
 
-/* DOM-ordered VNodes */
 const slotMediaOrdered = computed(() =>
   orderedIndices.value.map((i) => slotMedia.value[i]),
 )
 
-// ---------------------------------------------
-// 🔹 MODAL (centralized composable)
-// ---------------------------------------------
 const {
   open,
   startIndex,
@@ -62,34 +65,25 @@ const {
   onSelect,
 } = useMediaModal(slotMedia, baseIndices, tk)
 
-// Embeds
-const AudioEmbed = {
-  props: {
-    mediaEmbed: { type: String, required: true },
-  },
-  template: '<div v-html="mediaEmbed"></div>',
-}
-
-// Component map
 const componentMap = {
   image: resolveComponent('MediaImage'),
   video: resolveComponent('MediaVideo'),
   document: resolveComponent('MediaDocument'),
-  audio: AudioEmbed,
+  audio: resolveComponent('MediaAudio'),
 }
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
-    <WrapAlign :align="props.align">
-      <WrapGrid :classes="gridClasses" :header="props.header">
-        <WrapAnimate class="relative" :effect="props.direction">
-          <div :class="props.gridItems">
+  <EditLink :link="editLink">
+    <WrapAlign :align="align">
+      <WrapGrid :classes="gridClasses" :header="header">
+        <WrapAnimate class="relative" :effect="direction">
+          <div :class="gridItems">
             <template v-for="(node, i) in slotMediaOrdered" :key="i">
               <!-- DOCUMENTS & AUDIO should NOT show image hover wrapper -->
               <component
                 :is="componentMap[tk.propsOf(node).type]"
-                v-if="!props.overlay || isDocument(node) || isAudio(node)"
+                v-if="!overlay || isDocument(node) || isAudio(node)"
                 v-bind="tk.propsOf(node)"
               />
 
@@ -99,11 +93,10 @@ const componentMap = {
                 class="group relative overflow-hidden"
                 :class="[
                   theme.media.rounded,
-                  isVideo(node) || props.overlay ? 'cursor-pointer' : '',
+                  isVideo(node) || overlay ? 'cursor-pointer' : '',
                 ]"
                 @click="
-                  (isVideo(node) || props.overlay) &&
-                  openModal(i, orderedIndices)
+                  (isVideo(node) || overlay) && openModal(i, orderedIndices)
                 "
               >
                 <div

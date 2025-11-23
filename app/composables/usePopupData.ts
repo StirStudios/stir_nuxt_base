@@ -22,10 +22,10 @@ type DecoupledBlocks = Record<string, ParagraphBlockContainer>
 export const usePopupData = () => {
   const { page } = usePageContext()
 
-  const popup = ref<any>(null)
+  const popup = ref<unknown>(null)
 
   // Walk CE tree looking for element === 'paragraph-popup'
-  function walk(node: any) {
+  function walk(node: unknown) {
     if (!node) return
 
     if (node.element === 'paragraph-popup') {

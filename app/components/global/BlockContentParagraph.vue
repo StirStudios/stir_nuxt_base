@@ -6,7 +6,7 @@ defineProps<{
 }>()
 
 defineSlots<{
-  paragraphBlock?(): unkown
+  paragraphBlock?: () => unknown
 }>()
 </script>
 

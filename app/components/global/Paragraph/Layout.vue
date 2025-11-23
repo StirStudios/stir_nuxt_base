@@ -2,23 +2,31 @@
 import { slugify } from '~/utils/stringUtils'
 
 const props = defineProps<{
+  // Identity
   id?: number | string
   uuid?: string
+
+  // Layout behavior
   layout?: string
+  container?: boolean
+  card?: boolean
+
+  // Labels / heading
   label?: string
   header?: string
   headerTag?: string
+
+  // Styling / classes
   width?: string
   spacing?: string
-  container?: boolean
-  card?: boolean
   gridClass?: string
-  randomize?: boolean
   classes?: string
+
+  // Options
+  randomize?: boolean
 }>()
 
 const vueSlots = useSlots()
-
 const orderedSlots = computed(() => Object.entries(vueSlots))
 
 const sectionId = computed(() => {
@@ -28,17 +36,17 @@ const sectionId = computed(() => {
 </script>
 
 <template>
-  <section :id="sectionId" :class="[props.classes || 'content', props.spacing]">
-    <component :is="props.headerTag || 'h2'" v-if="props.header">
+  <section :id="sectionId" :class="[classes || 'content', spacing]">
+    <component :is="headerTag || 'h2'" v-if="header">
       {{ props.header }}
     </component>
 
     <Grid
-      :card="props.card"
-      :container="props.container"
-      :grid-items="props.gridClass"
-      :spacing="props.spacing"
-      :width="props.width"
+      :card="card"
+      :container="container"
+      :grid-items="gridClass"
+      :spacing="spacing"
+      :width="width"
     >
       <template v-for="[slotName] in orderedSlots" :key="slotName">
         <div

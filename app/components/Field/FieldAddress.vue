@@ -1,13 +1,13 @@
 <script setup lang="ts">
-const { webform } = useAppConfig().stirTheme
-const isMaterial = computed(() => webform.variant === 'material')
-
 const props = defineProps<{
   field: Record<string, unknown>
   fieldName: string
   state: Record<string, Record<string, string>>
   floatingLabel?: boolean
 }>()
+
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
 
 // Ensure composite fields exist before accessing
 const compositeFields = computed(() => {

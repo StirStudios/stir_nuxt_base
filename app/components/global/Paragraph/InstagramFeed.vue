@@ -1,10 +1,13 @@
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false })
-
 defineProps<{
+  /* Core identifiers */
   id?: number
   uid?: number
   uuid?: string
+  parentUuid?: string
+  region?: string
+
+  /* Display */
   maxItems?: number
   gridItems?: string
   randomize?: boolean

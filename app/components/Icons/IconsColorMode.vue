@@ -15,6 +15,7 @@ const { isDark } = useDarkMode()
       variant="ghost"
       @click="isDark = !isDark"
     />
+
     <template #fallback>
       <div class="size-8" />
     </template>

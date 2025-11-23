@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const { container: themeContainer, card: themeCard } = useAppConfig().stirTheme
-
 const props = defineProps<{
   spacing?: string
   classes?: string
@@ -12,6 +10,8 @@ const props = defineProps<{
 }>()
 
 defineSlots<{ default(): unknown }>()
+
+const { container: themeContainer, card: themeCard } = useAppConfig().stirTheme
 
 const gridClasses = computed(
   () => props.gridItems || props.gridClasses || 'grid-cols-1',

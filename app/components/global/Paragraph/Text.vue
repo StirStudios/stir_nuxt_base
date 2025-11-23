@@ -1,31 +1,36 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
+  // Identity
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
+  // Content
   text?: string
+
+  // Layout
   align?: string
   width?: string
   spacing?: string
   classes?: string
   direction?: string
+
+  // Meta
   editLink?: string
 }>()
 </script>
-
 <template>
-  <EditLink :link="props.editLink">
-    <WrapAnimate :effect="props.direction">
-      <WrapAlign :align="props.align">
+  <EditLink :link="editLink">
+    <WrapAnimate :effect="direction">
+      <WrapAlign :align="align">
         <div
           :class="[
-            [props.classes, 'prose'].filter(Boolean).join(' '),
-            props.width,
-            props.spacing,
+            [classes, 'prose'].filter(Boolean).join(' '),
+            width,
+            spacing,
           ]"
-          v-html="props.text"
+          v-html="text"
         />
       </WrapAlign>
     </WrapAnimate>

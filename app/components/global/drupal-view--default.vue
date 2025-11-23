@@ -23,6 +23,8 @@ const props = defineProps<{
   carouselFade?: boolean
   carouselIndicators?: boolean
   carouselInterval?: number
+
+  editLink?: string
 }>()
 
 const vueSlots = useSlots()
@@ -38,25 +40,25 @@ const slotRows = tk.hydrateOrder(
 
 <template>
   <ParagraphCarousel
-    v-if="props.carousel"
-    :carousel-arrows="props.carouselArrows"
-    :carousel-autoheight="props.carouselAutoheight"
-    :carousel-autoscroll="props.carouselAutoscroll"
-    :carousel-fade="props.carouselFade"
-    :carousel-indicators="props.carouselIndicators"
-    :carousel-interval="props.carouselInterval"
-    :edit-link="props.editLink"
-    :grid-items="props.gridItems"
+    v-if="carousel"
+    :carousel-arrows="carouselArrows"
+    :carousel-autoheight="carouselAutoheight"
+    :carousel-autoscroll="carouselAutoscroll"
+    :carousel-fade="carouselFade"
+    :carousel-indicators="carouselIndicators"
+    :carousel-interval="carouselInterval"
+    :edit-link="editLink"
+    :grid-items="gridItems"
     :items="slotRows"
-    :randomize="props.randomize"
+    :randomize="randomize"
   />
 
   <Grid
     v-else
-    :container="props.container"
-    :grid-items="props.gridItems"
-    :spacing="props.spacing"
-    :width="props.width"
+    :container="container"
+    :grid-items="gridItems"
+    :spacing="spacing"
+    :width="width"
   >
     <template v-for="(node, i) in slotRows" :key="i">
       <component :is="node" />
@@ -64,9 +66,9 @@ const slotRows = tk.hydrateOrder(
   </Grid>
 
   <DrupalViewsPagination
-    v-if="props.pager && !props.carousel"
+    v-if="pager && !carousel"
     class="mt-8"
-    :current="props.pager.current"
-    :total-pages="props.pager.totalPages"
+    :current="pager.current"
+    :total-pages="pager.totalPages"
   />
 </template>

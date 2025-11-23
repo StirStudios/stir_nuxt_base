@@ -1,6 +1,6 @@
 import type { ConditionType, ConditionEntry } from '~/types'
-import { getNestedStateValue, matchesCondition } from '~/utils/stateUtils'
-import { extractFieldName } from '~/utils/stringUtils'
+import { getNestedStateValue, matchesCondition } from './stateUtils'
+import { extractFieldName } from './stringUtils'
 
 /**
  * Main evaluation function that checks conditions against the state.

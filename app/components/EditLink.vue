@@ -1,9 +1,7 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 defineProps<{
+  id?: number | string
+  uuid?: string
   link?: string
 }>()
 </script>

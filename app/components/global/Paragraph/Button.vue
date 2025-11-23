@@ -1,24 +1,32 @@
 <script setup lang="ts">
 const props = defineProps<{
+  // Identity
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
+  // Layout
+  align?: string
+  spacing?: string
+  width?: string
+
+  // Button appearance
+  color?: string
+  size?: string
+  variant?: string
+  icon?: string
+  block?: boolean
+
+  // Link
   link?: {
     element?: string
     title?: string
     url?: string
     external?: boolean
   }
-  color?: string
-  size?: string
-  variant?: string
-  icon?: string
-  block?: boolean
-  align?: string
-  spacing?: string
-  width?: string
+
+  // Extras
   editLink?: string
 }>()
 
@@ -42,8 +50,8 @@ const hasPdf = computed(() => !!pdf.value?.url)
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
-    <div :class="['flex w-full', props.align, props.spacing, props.width]">
+  <EditLink :link="editLink">
+    <div :class="['flex w-full', align, spacing, width]">
       <UButton
         v-if="hasPdf"
         :block="btnBlock"

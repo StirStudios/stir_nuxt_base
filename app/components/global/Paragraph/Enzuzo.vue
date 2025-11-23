@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import type { RegionItemProps } from '~/types'
+const props = defineProps<{
+  // Base CE identity
+  id?: number | string
+  uuid?: string
+  parentUuid?: string
+  region?: string
 
-const props = defineProps<{ item: RegionItemProps }>()
+  // Component-specific
+  embedUrl?: string
+}>()
 
 onMounted(() => {
   const scriptId = '__enzuzo-root-script'
   const rootId = '__enzuzo-root'
 
-  const { embedUrl } = props.item
-  if (!embedUrl || document.getElementById(scriptId)) return
+  if (!props.embedUrl || document.getElementById(scriptId)) return
 
   const target = document.getElementById(rootId)
   if (!target) return
 
-  const sanitizedUrl = embedUrl.trim().startsWith('http')
-    ? embedUrl.trim()
-    : `https://${embedUrl.trim()}`
-
-  if (import.meta.dev) {
-    console.log('[Enzuzo] Injecting script:', sanitizedUrl)
-  }
+  const url = props.embedUrl.trim().startsWith('http')
+    ? props.embedUrl.trim()
+    : `https://${props.embedUrl.trim()}`
 
   const script = document.createElement('script')
   script.id = scriptId
-  script.src = sanitizedUrl
+  script.src = url
   script.defer = true
   script.crossOrigin = 'anonymous'
   script.referrerPolicy = 'no-referrer'

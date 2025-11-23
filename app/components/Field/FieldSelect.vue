@@ -3,8 +3,6 @@ import type { WebformFieldProps } from '~/types'
 import { transformOptions } from '~/utils/transformUtils'
 import { useEventBus } from '@vueuse/core'
 
-const { webform } = useAppConfig().stirTheme
-
 const props = defineProps<{
   field?: WebformFieldProps
   fieldName: string
@@ -12,6 +10,8 @@ const props = defineProps<{
   items?: Record<string, string>
   placeholder?: string
 }>()
+
+const { webform } = useAppConfig().stirTheme
 
 // Initialize Event Bus
 const tabBus = useEventBus<string>('tab-changed')

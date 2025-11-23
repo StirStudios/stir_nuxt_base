@@ -1,25 +1,24 @@
 <script setup lang="ts">
 defineProps<{
-  id?: number
+  // Base identifiers
+  id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  // layout
+  // Basic display
   header?: string
   gridItems?: string
   randomize?: boolean
   editLink?: string
-
-  // NEW – fixes your warning
   direction?: string
 
-  // view-specific props
+  // Views
   viewId?: string
   displayId?: string
-  view?: any
+  view?: unknown
 
-  // carousel props
+  // Carousel options
   carousel?: boolean
   carouselArrows?: boolean
   carouselAutoheight?: boolean

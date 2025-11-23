@@ -1,7 +1,7 @@
 export function useMediaModal(
-  slotMedia: Ref<any[]>,
+  slotMedia: Ref<unknown[]>,
   baseIndices: Ref<number[]>,
-  tk: any,
+  tk: unknown,
 ) {
   const open = ref(false)
   const activeIndex = ref(0)

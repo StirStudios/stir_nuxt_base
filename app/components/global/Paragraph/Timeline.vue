@@ -15,20 +15,25 @@ type TimelineEntry = {
 }
 
 const props = defineProps<{
+  // Identity
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
+  // Layout & styling
   align?: string
   direction?: string
   classes?: string
   width?: string
   spacing?: string
   color?: string
-  editLink?: string
 
+  // Data
   timeline?: TimelineEntry[]
+
+  // Editing
+  editLink?: string
 }>()
 
 const timelineItems = computed<UITimelineItem[]>(() => {
@@ -49,13 +54,13 @@ const wrapperClasses = computed(() =>
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
-    <WrapAnimate :effect="props.direction">
-      <WrapAlign :align="props.align">
+  <EditLink :link="editLink">
+    <WrapAnimate :effect="direction">
+      <WrapAlign :align="align">
         <div :class="wrapperClasses">
           <UTimeline
             class="max-w-3xl"
-            :color="props.color ?? 'primary'"
+            :color="color ?? 'primary'"
             :default-value="timelineItems.length - 1"
             :items="timelineItems"
           >

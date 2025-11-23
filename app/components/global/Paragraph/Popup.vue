@@ -1,35 +1,32 @@
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false })
-
-const props = defineProps<{
+defineProps<{
+  /* Identity */
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
+  /* Content */
   text?: string
+  webform?: unknown
+
+  /* Behaviour */
   direction?: string
-  editLink?: string
-  webform?: any
-
   onClose?: () => void
-}>()
 
-const slots = useSlots()
+  /* Editor tools */
+  editLink?: string
+}>()
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
+  <EditLink :link="editLink">
     <div class="space-y-6 p-5">
       <slot name="media" />
 
-      <div v-if="props.text" v-html="props.text" />
+      <div v-if="text" v-html="text" />
 
-      <ParagraphWebform
-        v-if="props.webform"
-        :on-close="props.onClose"
-        :webform="props.webform"
-      />
+      <ParagraphWebform v-if="webform" :on-close="onClose" :webform="webform" />
     </div>
   </EditLink>
 </template>

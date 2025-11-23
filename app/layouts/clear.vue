@@ -7,6 +7,7 @@ const { header } = useAppConfig().stirTheme
   <header aria-label="Site header" :class="header">
     <DrupalTabs v-if="isAdministrator" />
   </header>
+
   <main id="main-content" role="main">
     <slot />
   </main>

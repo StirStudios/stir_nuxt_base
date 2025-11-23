@@ -25,7 +25,6 @@ definePageMeta({
 function customPageError(error: Record<string, any>) {
   const code = error?.value?.statusCode ?? 500
   const message = error?.value?.statusMessage ?? 'Page not found'
-
   throw createError({ statusCode: code, statusMessage: message })
 }
 </script>

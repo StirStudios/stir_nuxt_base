@@ -1,4 +1,4 @@
-import { toSnakeCase } from '~/utils/stringUtils'
+import { toSnakeCase } from './stringUtils'
 
 /**
  * Transforms an options object into an array of option objects.

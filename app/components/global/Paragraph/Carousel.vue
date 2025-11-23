@@ -1,14 +1,21 @@
 <script setup lang="ts">
 const props = defineProps<{
-  items: any[]
+  // Core content
+  items: unknown[]
+
+  // Layout
   gridItems?: string
-  editLink?: string
+
+  // UI / Interaction
   carouselIndicators?: boolean
   carouselArrows?: boolean
   carouselFade?: boolean
   carouselAutoscroll?: boolean
   carouselAutoheight?: boolean
   carouselInterval?: number
+
+  // Edit mode
+  editLink?: string
 }>()
 
 const carousel = useTemplateRef<'carousel'>('carousel')
@@ -22,9 +29,7 @@ const slides = computed(() => {
   }))
 })
 
-/* -------------------------------------------------------
-   AUTOSCROLL SPEED (old logic preserved)
-------------------------------------------------------- */
+// Autoscroll speed
 const interval = computed(() => props.carouselInterval || 5000)
 
 const autoScrollSpeed = computed(() => {
@@ -50,9 +55,7 @@ const autoplayOptions = computed(() =>
   !props.carouselAutoscroll ? { delay: interval.value } : false,
 )
 
-/* -------------------------------------------------------
-   RESET AUTOSCROLL + AUTOPLAY WHEN MANUALLY SELECTED
-------------------------------------------------------- */
+// Reset autoscroll
 function handleSelect() {
   const plugins = carousel.value?.emblaApi?.plugins?.()
   plugins?.autoplay?.reset?.()
@@ -66,12 +69,12 @@ function handleSelect() {
       v-if="slides.length"
       ref="carousel"
       v-slot="{ item }"
-      :arrows="props.carouselArrows"
-      :auto-height="props.carouselAutoheight"
+      :arrows="carouselArrows"
+      :auto-height="carouselAutoheight"
       :auto-scroll="autoScrollOptions"
       :autoplay="autoplayOptions"
-      :dots="props.carouselIndicators"
-      :fade="props.carouselFade"
+      :dots="carouselIndicators"
+      :fade="carouselFade"
       :items="slides"
       loop
       :next="theme.carousel.arrows?.next"
@@ -81,11 +84,11 @@ function handleSelect() {
       :ui="{
         root: theme.carousel.root,
         container: 'items-center transition-[height]',
-        item: props.gridItems,
+        item: gridItems,
       }"
       @select="handleSelect"
     >
-      <div :class="props.gridItems">
+      <div :class="gridItems">
         <component :is="item.vnode" :key="item.key" />
       </div>
     </UCarousel>

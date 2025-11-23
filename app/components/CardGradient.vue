@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { SectionProps } from '~/types'
-
 const props = defineProps<{
-  layout: SectionProps
+  layout: {
+    card?: boolean
+    gradient?: string
+  }
 }>()
 
 const { gradients, card } = useAppConfig().stirTheme
