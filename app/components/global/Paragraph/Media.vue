@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
+import { useMediaOrdering } from '~/composables/useMediaOrdering'
+import { useMediaModal } from '~/composables/useMediaModal'
 
 interface MediaProps {
   id?: number | string
@@ -26,7 +27,6 @@ const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
 
 const theme = useAppConfig().stirTheme
-const breakpoints = useBreakpoints(breakpointsTailwind)
 
 // Normalize media slots
 const slotMedia = computed(() => tk.mediaItems())
@@ -41,85 +41,26 @@ const gridClasses = computed(() =>
     .join(' '),
 )
 
-// modal state
-const open = ref(false)
-const activeIndex = ref(0)
-const startIndex = ref(0)
+const { baseIndices, orderedIndices } = useMediaOrdering(slotMedia, props, tk)
 
-// matrix layout
-const isMatrixLayout = computed(() => !!props.isMatrix)
-
-const columnCount = computed(() => {
-  if (!isMatrixLayout.value) return 1
-
-  const map: Record<string, number> = {}
-  props.gridItems?.split(/\s+/).forEach((cls) => {
-    const match = cls.match(/(?:(\w+):)?columns-(\d+)/)
-    if (match) map[match[1] || 'base'] = parseInt(match[2])
-  })
-
-  const order = ['2xl', 'xl', 'lg', 'md', 'sm']
-  for (const bp of order) {
-    if (breakpoints.greaterOrEqual(bp).value && map[bp]) return map[bp]
-  }
-
-  return map.base || 1
-})
-
-const baseIndices = computed(() => slotMedia.value.map((_, i) => i))
-
-function computeMatrixDomOrder() {
-  if (!isMatrixLayout.value) return baseIndices.value
-
-  const cols = columnCount.value
-  const buckets: number[][] = Array.from({ length: cols }, () => [])
-
-  baseIndices.value.forEach((idx, i) => buckets[i % cols].push(idx))
-
-  return buckets.flat()
-}
-
-const orderedIndices = tk.hydrateOrder(
-  () => baseIndices.value,
-  () => computeMatrixDomOrder(),
-)
-
+/* DOM-ordered VNodes */
 const slotMediaOrdered = computed(() =>
   orderedIndices.value.map((i) => slotMedia.value[i]),
 )
 
-// Items for modal
-const itemsOrdered = computed(() =>
-  baseIndices.value.map((i) => {
-    const vnode = slotMedia.value[i]
-    const p = tk.propsOf(vnode)
-    return {
-      ...p,
-      key: p.mid || p.src || JSON.stringify(p),
-      type: p.type,
-    }
-  }),
-)
-
-const activeItem = computed(() => itemsOrdered.value[activeIndex.value] ?? null)
-
-const modalTitle = computed(() => activeItem.value?.title || '')
-const modalDescription = computed(
-  () => activeItem.value?.alt || activeItem.value?.credit || '',
-)
-const modalCredit = computed(() => activeItem.value?.credit || '')
-
-// Grid → modal index
-function openModal(domIdx: number) {
-  const initialIndex = orderedIndices.value[domIdx] ?? domIdx
-  startIndex.value = initialIndex
-  activeIndex.value = initialIndex
-  open.value = true
-}
-
-function onSelect(index: number) {
-  activeIndex.value = index
-}
+// ---------------------------------------------
+// 🔹 MODAL (centralized composable)
+// ---------------------------------------------
+const {
+  open,
+  startIndex,
+  itemsOrdered,
+  modalTitle,
+  modalDescription,
+  modalCredit,
+  openModal,
+  onSelect,
+} = useMediaModal(slotMedia, baseIndices, tk)
 
 // Embeds
 const AudioEmbed = {
@@ -129,14 +70,12 @@ const AudioEmbed = {
   template: '<div v-html="mediaEmbed"></div>',
 }
 
-const DocumentEmbed = resolveComponent('MediaDocument')
-
 // Component map
 const componentMap = {
   image: resolveComponent('MediaImage'),
   video: resolveComponent('MediaVideo'),
+  document: resolveComponent('MediaDocument'),
   audio: AudioEmbed,
-  document: DocumentEmbed,
 }
 </script>
 
@@ -150,7 +89,7 @@ const componentMap = {
               <!-- DOCUMENTS & AUDIO should NOT show image hover wrapper -->
               <component
                 :is="componentMap[tk.propsOf(node).type]"
-                v-if="isDocument(node) || isAudio(node)"
+                v-if="!props.overlay || isDocument(node) || isAudio(node)"
                 v-bind="tk.propsOf(node)"
               />
 
@@ -162,10 +101,17 @@ const componentMap = {
                   theme.media.rounded,
                   isVideo(node) || props.overlay ? 'cursor-pointer' : '',
                 ]"
-                @click="(isVideo(node) || props.overlay) && openModal(i)"
+                @click="
+                  (isVideo(node) || props.overlay) &&
+                  openModal(i, orderedIndices)
+                "
               >
                 <div
-                  class="transition-transform duration-300 group-hover:scale-105"
+                  :class="[
+                    'transition-transform',
+                    theme.media.effects.scale,
+                    theme.media.transitions.slow,
+                  ]"
                 >
                   <MediaImage
                     v-bind="{ ...tk.propsOf(node), hideCredit: true }"
@@ -174,18 +120,28 @@ const componentMap = {
 
                 <span
                   v-if="tk.propsOf(node).credit"
-                  class="absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2"
+                  :class="[
+                    'absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2',
+                    theme.media.transitions.fast,
+                  ]"
                 >
                   {{ tk.propsOf(node).credit }}
                 </span>
 
                 <template v-if="isVideo(node)">
                   <div
-                    class="absolute inset-0 z-10 bg-black/30 transition-opacity duration-300 group-hover:bg-black/10"
+                    :class="[
+                      'group-hover:bg-black/10] absolute inset-0 z-10 bg-black/30 transition-colors',
+                      theme.media.transitions.slow,
+                    ]"
                   />
                   <button
                     aria-label="Play Video"
-                    class="absolute inset-0 z-20 flex items-center justify-center text-white transition-transform duration-300 hover:scale-110"
+                    :class="[
+                      'absolute inset-0 z-20 flex items-center justify-center text-white transition-transform',
+                      theme.media.transitions.slow,
+                      theme.media.effects.scale,
+                    ]"
                   >
                     <UIcon name="i-heroicons-play-circle" size="60" />
                   </button>
@@ -222,8 +178,23 @@ const componentMap = {
         @click="open = false"
       />
 
+      <div
+        v-if="itemsOrdered.length === 1"
+        class="flex h-full items-center justify-center"
+      >
+        <div class="w-full">
+          <component
+            :is="componentMap[itemsOrdered[0].type]"
+            v-bind="{
+              ...itemsOrdered[0],
+              ...(itemsOrdered[0].type === 'image' ? { noWrapper: true } : {}),
+            }"
+          />
+        </div>
+      </div>
+
       <LazyUCarousel
-        v-if="open && itemsOrdered.length"
+        v-else
         :arrows="itemsOrdered.length > 1"
         :items="itemsOrdered"
         loop
@@ -249,29 +220,39 @@ const componentMap = {
         </template>
       </LazyUCarousel>
 
-      <div
-        v-if="
-          (theme.modal.title && modalTitle) ||
-          (theme.modal.description && modalDescription) ||
-          modalCredit
-        "
-        class="absolute bottom-6 left-1/2 max-w-[90%] -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
+      <Transition
+        appear
+        :enter-active-class="`
+          transform transition ease-out delay-150
+          ${theme.media.transitions.fast}
+        `"
+        enter-from-class="translate-y-20 opacity-0"
+        enter-to-class="translate-y-0 opacity-100"
       >
-        <div v-if="theme.modal.title && modalTitle" class="font-semibold">
-          {{ modalTitle }}
-        </div>
-
         <div
-          v-if="theme.modal.description && modalDescription"
-          class="text-sm opacity-80"
+          v-if="
+            (theme.modal.title && modalTitle) ||
+            (theme.modal.description && modalDescription) ||
+            modalCredit
+          "
+          class="absolute bottom-6 left-1/2 max-w-[90%] -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
         >
-          {{ modalDescription }}
-        </div>
+          <div v-if="theme.modal.title && modalTitle" class="font-semibold">
+            {{ modalTitle }}
+          </div>
 
-        <div v-if="modalCredit" class="text-xs italic opacity-70">
-          {{ modalCredit }}
+          <div
+            v-if="theme.modal.description && modalDescription"
+            class="text-sm opacity-80"
+          >
+            {{ modalDescription }}
+          </div>
+
+          <div v-if="modalCredit" class="text-xs italic opacity-80">
+            {{ modalCredit }}
+          </div>
         </div>
-      </div>
+      </Transition>
     </template>
   </UModal>
 </template>
