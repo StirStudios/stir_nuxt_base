@@ -1,11 +1,14 @@
 import type { VideoPlayer } from '~/types'
 import { watchOnce } from '@vueuse/core'
 
-export function useVideoPlayers() {
-  const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
-  const isScriptLoaded = ref(false)
+const videoPlayers = ref<Map<string, VideoPlayer>>(new Map())
+const isScriptLoaded = ref(false)
+let scriptInjected = false
 
-  if (import.meta.client) {
+export function useVideoPlayers() {
+  if (import.meta.client && !scriptInjected) {
+    scriptInjected = true
+
     useHead({
       script: [
         {
