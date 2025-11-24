@@ -45,21 +45,34 @@ const autoScrollSpeed = computed(() => {
   return +speed.toFixed(2)
 })
 
-const autoScrollOptions = computed(() => ({
-  stopOnMouseEnter: true,
-  stopOnInteraction: false,
-  speed: props.carouselAutoscroll ? autoScrollSpeed.value : 0,
-}))
-
-const autoplayOptions = computed(() =>
-  !props.carouselAutoscroll ? { delay: interval.value } : false,
+const autoScrollOptions = computed(() =>
+  props.carouselAutoscroll
+    ? {
+        speed: autoScrollSpeed.value,
+        stopOnMouseEnter: true,
+        stopOnInteraction: false,
+      }
+    : false,
 )
 
-// Reset autoscroll
+const autoplayOptions = computed(() =>
+  !props.carouselAutoscroll
+    ? {
+        delay: interval.value,
+        stopOnMouseEnter: true,
+        stopOnInteraction: false,
+      }
+    : false,
+)
+
+// Reset plugin timers on manual selection
 function handleSelect() {
   const plugins = carousel.value?.emblaApi?.plugins?.()
-  plugins?.autoplay?.reset?.()
-  plugins?.autoScroll?.reset?.()
+
+  if (plugins?.autoplay && !props.carouselAutoscroll) plugins.autoplay.reset()
+
+  if (plugins?.autoScroll && props.carouselAutoscroll)
+    plugins.autoScroll.reset()
 }
 </script>
 
