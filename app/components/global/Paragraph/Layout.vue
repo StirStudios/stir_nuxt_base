@@ -45,7 +45,6 @@ const sectionId = computed(() => {
       :card="card"
       :container="container"
       :grid-items="gridClass"
-      :spacing="spacing"
       :width="width"
     >
       <template v-for="[slotName] in orderedSlots" :key="slotName">

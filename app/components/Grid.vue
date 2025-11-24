@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const props = defineProps<{
-  spacing?: string
   classes?: string
   gridClasses?: string
   gridItems?: string
@@ -21,7 +20,6 @@ const gridClasses = computed(
 <template>
   <div
     :class="[
-      props.spacing,
       props.container ? themeContainer : '',
       props.card ? themeCard.base : '',
       props.classes,
