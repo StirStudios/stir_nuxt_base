@@ -4,8 +4,8 @@ A production-ready Nuxt 3 starter with full integration for Nuxt UI 3, Tailwind 
 
 ## 🚀 Features
 
-- ✅ **Nuxt 3** with full SSR and Vite support
-- 🎨 **Nuxt UI 3** with customized design tokens, material-style form variants, and Tailwind 4
+- ✅ **Nuxt 4** with full SSR and Vite support
+- 🎨 **Nuxt UI 4** with customized design tokens, material-style form variants, and Tailwind 4
 - 🧩 **Drupal CE** integration for decoupled content, slot-based layouts, and dynamic form rendering
 - 📊 Turnstile CAPTCHA, Sitemap, and Robots support
 - 🌀 Smooth scrolling, page transitions, and motion support via `motion-v`
