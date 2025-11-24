@@ -33,8 +33,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(magicast@0.5.1)
       nuxtjs-drupal-ce:
-        specifier: 2.5.0-rc.5
-        version: 2.5.0-rc.5
+        specifier: 2.5.0-rc.6
+        version: 2.5.0-rc.6
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.17
@@ -3908,8 +3908,8 @@ packages:
       '@types/node':
         optional: true
 
-  nuxtjs-drupal-ce@2.5.0-rc.5:
-    resolution: {integrity: sha512-uLxuvbEmVGgI+DahdIxGYBwUSMg9drSNxIxID3ELvuVmCof2r1YXNUcRfN3A0O+1OKrYvMntwghrn0TlmAx/Fg==}
+  nuxtjs-drupal-ce@2.5.0-rc.6:
+    resolution: {integrity: sha512-qZvF9Jnx0n2hIdyWFYYUQ0DnKY1i4MDUgnyBRoVoM76OvxOf9Iwas8gwOxCyZqft0o5/Japt8NAhmGvivV9Vmw==}
     hasBin: true
 
   nypm@0.6.2:
@@ -9638,7 +9638,7 @@ snapshots:
       - xml2js
       - yaml
 
-  nuxtjs-drupal-ce@2.5.0-rc.5:
+  nuxtjs-drupal-ce@2.5.0-rc.6:
     dependencies:
       defu: 6.1.4
 
