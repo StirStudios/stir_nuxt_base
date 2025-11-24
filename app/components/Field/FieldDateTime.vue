@@ -3,14 +3,14 @@ import type { WebformFieldProps, WebformState } from '~/types'
 import { CalendarDate, DateFormatter } from '@internationalized/date'
 import { getOffsetString, generateTimeOptions } from '~/utils/dateUtils'
 
-const { webform } = useAppConfig().stirTheme
-const isMaterial = computed(() => webform.variant === 'material')
-
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: WebformState
 }>()
+
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
 
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 const multiple = Number(props.field['#multiple']) || 1

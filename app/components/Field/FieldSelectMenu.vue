@@ -2,13 +2,13 @@
 import type { WebformFieldProps } from '~/types'
 import { transformOptions } from '~/utils/transformUtils'
 
-const { webform } = useAppConfig().stirTheme
-
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: Record<string, string>
 }>()
+
+const { webform } = useAppConfig().stirTheme
 
 onMounted(() => {
   if (props.state[props.fieldName] === undefined) {

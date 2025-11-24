@@ -1,24 +1,74 @@
 <script setup lang="ts">
-defineProps<{
-  title: string
-  rows?: object[]
-  pager?: object
+import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
+
+const props = defineProps<{
+  title?: string
+  gridItems?: string
+  width?: string
+  spacing?: string
+  container?: boolean
+
+  viewId?: string
+  displayId?: string
+  parentUuid?: string
+  direction?: string
+
+  pager?: { current: number; totalPages: number } | any
+
+  randomize?: boolean
+  carousel?: boolean
+  carouselArrows?: boolean
+  carouselAutoheight?: boolean
+  carouselAutoscroll?: boolean
+  carouselFade?: boolean
+  carouselIndicators?: boolean
+  carouselInterval?: number
+
+  editLink?: string
 }>()
 
-const { renderCustomElements } = useDrupalCe()
+const vueSlots = useSlots()
+const tk = useSlotsToolkit(vueSlots)
+
+const rawRows = computed(() => tk.slot('rows'))
+
+const slotRows = tk.hydrateOrder(
+  () => rawRows.value,
+  () => (props.randomize ? tk.shuffle(rawRows.value) : rawRows.value),
+)
 </script>
 
 <template>
-  <div class="view">
-    <h1>{{ title }}</h1>
-    <component
-      :is="renderCustomElements(row)"
-      v-for="(row, index) in rows"
-      :key="index"
-    />
-    <DrupalPagination
-      :current="pager.current"
-      :total-pages="pager.totalPages"
-    />
-  </div>
+  <ParagraphCarousel
+    v-if="carousel"
+    :carousel-arrows="carouselArrows"
+    :carousel-autoheight="carouselAutoheight"
+    :carousel-autoscroll="carouselAutoscroll"
+    :carousel-fade="carouselFade"
+    :carousel-indicators="carouselIndicators"
+    :carousel-interval="carouselInterval"
+    :edit-link="editLink"
+    :grid-items="gridItems"
+    :items="slotRows"
+    :randomize="randomize"
+  />
+
+  <Grid
+    v-else
+    :container="container"
+    :grid-items="gridItems"
+    :spacing="spacing"
+    :width="width"
+  >
+    <template v-for="(node, i) in slotRows" :key="i">
+      <component :is="node" />
+    </template>
+  </Grid>
+
+  <DrupalViewsPagination
+    v-if="pager && !carousel"
+    class="mt-8"
+    :current="pager.current"
+    :total-pages="pager.totalPages"
+  />
 </template>

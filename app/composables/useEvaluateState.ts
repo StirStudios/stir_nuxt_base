@@ -1,4 +1,4 @@
-import { evaluateCondition } from '~/utils/evaluateUtils'
+import { evaluateCondition } from '../utils/evaluateUtils'
 
 interface VisibilityCondition {
   [selector: string]: { value: string }

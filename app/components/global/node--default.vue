@@ -1,13 +1,40 @@
 <script setup lang="ts">
-import type { PageProps } from '~/types'
+defineProps<{
+  // Core media info
+  title: string
+  created: string
+  uid?: string | object
+  hide?: boolean | string
 
-// Prevents Vue from automatically binding unknown attributes to the root element.
-// This avoids unexpected warnings when props like `hide` are passed but not explicitly used.
-defineOptions({ inheritAttrs: false })
+  // Routing + path info
+  path?: {
+    alias: string
+    pid: string
+    langcode: string
+  }
 
-defineProps<PageProps>()
+  // Navigation (prev/next nodes)
+  prev_node?: {
+    nid: string
+    title: string
+    url: string
+  } | null
+
+  next_node?: {
+    nid: string
+    title: string
+    url: string
+  } | null
+}>()
+
+defineSlots<{
+  hero?(): unknown
+  section?(): unknown
+}>()
 </script>
 
 <template>
-  <ParagraphLayout :section="section" />
+  <slot name="hero" />
+  <LazyRegionArea area="before_main" />
+  <slot name="section" />
 </template>

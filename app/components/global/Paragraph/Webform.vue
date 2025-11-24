@@ -9,10 +9,20 @@ import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
 const props = defineProps<{
-  item: { webform?: WebformDefinition }
+  id: number
+  uuid: string
+  parentUuid: string
+  region?: string
+  webform?: WebformDefinition
+  align?: string
+  width?: string
+  spacing?: string
+  editLink?: string
   onClose?: () => void
 }>()
-const webform = computed(() => props.item.webform || ({} as WebformDefinition))
+const webform = computed<WebformDefinition>(() => {
+  return props.webform || ({} as WebformDefinition)
+})
 
 // Composables & Utilities
 const { onError } = useValidation()
@@ -165,7 +175,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
 
 <template>
   <EditLink :link="webformSubmissions">
-    <WrapDiv :align="item.align" :styles="[item.width, item.spacing]">
+    <WrapDiv :align="props.align" :styles="[props.width, props.spacing]">
       <WebformContent
         v-model:turnstile-token="turnstileToken"
         :fields="fields"

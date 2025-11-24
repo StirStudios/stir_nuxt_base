@@ -1,27 +1,36 @@
 export function usePageContext() {
-  const { getPage } = useDrupalCe()
-  const page = getPage()
+  const nuxtApp = useNuxtApp()
   const route = useRoute()
 
-  // Extract slug once for performance
-  const slug = route.params.slug?.[0]
+  const currentKey = useState<string>('drupal-ce-current-page-key', () => '')
+  const page = computed(() => nuxtApp.payload?.data?.[currentKey.value])
 
-  // Determine if this is the front page
-  const isFront = computed(
-    () =>
-      route.path === '/' || route.fullPath.startsWith('/#') || slug === 'front',
-  )
+  // Reactive + safe slug
+  const slug = computed(() => {
+    const p = route.params.slug
+    return Array.isArray(p) ? p[0] : p || null
+  })
 
-  // Ensure we access the reactive value inside `page`
+  const isFront = computed(() => route.path === '/')
+
   const isAdministrator = computed(
     () => page.value?.current_user?.roles?.includes('administrator') || false,
   )
 
+  // Element and metadata
   const pageElement = computed(() => page.value?.content?.element || '')
+
+  // Page props
+  const pageProps = computed(() => page.value?.content?.props || {})
+
+  // Safe title access for hero + meta
+  const pageTitle = computed(() => pageProps.value?.title || '')
+  const pageCreated = computed(() => pageProps.value?.created || '')
+  const pageHide = computed(() => pageProps.value?.hide || false)
 
   const bodyClasses = computed(() =>
     [
-      slug || 'front',
+      slug.value || 'front',
       isAdministrator.value ? 'logged-in' : '',
       pageElement.value,
     ]
@@ -31,8 +40,12 @@ export function usePageContext() {
 
   return {
     page,
+    slug,
     isFront,
     isAdministrator,
     bodyClasses,
+    pageTitle,
+    pageCreated,
+    pageHide,
   }
 }

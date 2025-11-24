@@ -1,5 +1,7 @@
 <script setup lang="ts">
 defineProps<{
+  id?: number | string
+  uuid?: string
   link?: string
 }>()
 </script>

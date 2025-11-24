@@ -13,8 +13,6 @@ import FieldDateTime from '@/components/Field/FieldDateTime'
 import FieldAddress from '@/components/Field/FieldAddress'
 import FieldProcessedText from '@/components/Field/FieldProcessedText'
 
-const { webform } = useAppConfig().stirTheme
-
 const props = withDefaults(
   defineProps<{
     field: WebformFieldProps
@@ -29,6 +27,8 @@ const props = withDefaults(
     orderedFieldNames: () => [],
   },
 )
+
+const { webform } = useAppConfig().stirTheme
 
 const componentMap: Record<string, Component> = {
   textfield: FieldInput,

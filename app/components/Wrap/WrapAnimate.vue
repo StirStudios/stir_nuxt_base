@@ -7,15 +7,17 @@ const animations = computed(() => config.stirTheme.animations.once)
 
 const props = defineProps<{
   effect?: string
+  class?: string
 }>()
 
-const motionEffects = getMotionEffect(props.effect)
+const motionEffects = computed(() => getMotionEffect(props.effect))
 </script>
 
 <template>
   <motion.div
-    v-if="effect"
-    class="media"
+    v-if="props.effect"
+    :class="props.class"
+    v-bind="$attrs"
     :in-view-options="{ once: animations }"
     initial="hidden"
     :variants="motionEffects"
@@ -23,5 +25,8 @@ const motionEffects = getMotionEffect(props.effect)
   >
     <slot />
   </motion.div>
-  <slot v-else />
+
+  <template v-else>
+    <slot />
+  </template>
 </template>
