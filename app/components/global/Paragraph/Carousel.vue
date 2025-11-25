@@ -21,9 +21,16 @@ const props = defineProps<{
 const carousel = useTemplateRef<'carousel'>('carousel')
 const theme = useAppConfig().stirTheme
 
-// No randomize. No sorting. Just a clean map.
+const slots = useSlots()
+
 const slides = computed(() => {
-  return (props.items ?? []).map((vnode, i) => ({
+  // Items from views OR media slot
+  const raw =
+    (props.items && props.items.length) || (slots.media && slots.media().length)
+      ? (props.items ?? slots.media())
+      : []
+
+  return raw.map((vnode, i) => ({
     vnode,
     key: vnode.key || i,
   }))
