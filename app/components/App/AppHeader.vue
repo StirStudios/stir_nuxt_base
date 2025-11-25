@@ -30,20 +30,21 @@ onMounted(() => {
 })
 const finalIsScrolled = computed(() => {
   if (import.meta.server) return false
-
   return isScrolled.value || forceScrolled.value
 })
 
 const logoClass = computed(() => {
+  const base = 'transition-all duration-300'
+
   if (import.meta.server) {
-    // Always render default height on server
-    return theme.navigation.logoSize
+    return `${base} ${theme.navigation.logoSize}`
   }
 
-  // In browser, react to scroll
-  return finalIsScrolled.value
+  const size = finalIsScrolled.value
     ? theme.navigation.logoScrolledSize || theme.navigation.logoSize
     : theme.navigation.logoSize
+
+  return `${base} ${size}`
 })
 
 const headerRootClasses = computed(() => [
@@ -91,10 +92,7 @@ const onOpen = (val: boolean) => {
     @update:open="onOpen"
   >
     <template #title>
-      <LazyAppLogo
-        v-if="theme.navigation.logo"
-        :add-classes="['transition-all duration-300', logoClass].join(' ')"
-      />
+      <LazyAppLogo v-if="theme.navigation.logo" :add-classes="logoClass" />
       <template v-else>
         {{ page?.site_info?.name }}
       </template>
