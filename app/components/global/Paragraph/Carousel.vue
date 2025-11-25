@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   // Core content
-  items: unknown[]
+  items?: unknown[]
 
   // Layout
   gridItems?: string
