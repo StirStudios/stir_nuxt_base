@@ -24,7 +24,8 @@ const props = defineProps<{
   carouselIndicators?: boolean
   carouselInterval?: number
 
-  editLink?: string
+  exposedFilters?: unknown[]
+  exposedSorts?: unknown[]
 }>()
 
 const vueSlots = useSlots()
@@ -47,7 +48,6 @@ const slotRows = tk.hydrateOrder(
     :carousel-fade="carouselFade"
     :carousel-indicators="carouselIndicators"
     :carousel-interval="carouselInterval"
-    :edit-link="editLink"
     :grid-items="gridItems"
     :items="slotRows"
     :randomize="randomize"
@@ -66,7 +66,7 @@ const slotRows = tk.hydrateOrder(
   </Grid>
 
   <DrupalViewsPagination
-    v-if="pager && !carousel"
+    v-if="pager && !carousel && pager.totalPages > 1"
     class="mt-8"
     :current="pager.current"
     :total-pages="pager.totalPages"

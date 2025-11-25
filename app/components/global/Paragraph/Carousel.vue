@@ -13,9 +13,6 @@ const props = defineProps<{
   carouselAutoscroll?: boolean
   carouselAutoheight?: boolean
   carouselInterval?: number
-
-  // Edit mode
-  editLink?: string
 }>()
 
 const carousel = useTemplateRef<'carousel'>('carousel')
