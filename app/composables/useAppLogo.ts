@@ -5,12 +5,12 @@ export function useAppLogo(props: { addClasses?: string }) {
   const { isDark } = useDarkMode()
   const { page } = usePageContext()
 
-  const mounted = ref(false)
-  onMounted(() => (mounted.value = true))
-
-  const fillClass = computed(() =>
-    mounted.value ? (isDark.value ? 'fill-white' : 'fill-black') : '',
-  )
+  const fillClass = computed(() => {
+    if (import.meta.server) {
+      return ''
+    }
+    return isDark.value ? 'fill-white' : 'fill-black'
+  })
 
   const svgClasses = computed(() =>
     [props.addClasses, fillClass.value].filter(Boolean).join(' '),
