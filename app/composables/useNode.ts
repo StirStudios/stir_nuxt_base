@@ -1,6 +1,3 @@
-// composables/useNode.ts
-import { computed } from 'vue'
-import type { VNode } from 'vue'
 import { useSlotsToolkit } from './useSlotsToolkit'
 
 /**
