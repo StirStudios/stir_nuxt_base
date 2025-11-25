@@ -28,7 +28,11 @@ const forceScrolled = ref(false)
 onMounted(() => {
   if (route.hash) forceScrolled.value = true
 })
-const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
+const finalIsScrolled = computed(() => {
+  if (import.meta.server) return false
+
+  return isScrolled.value || forceScrolled.value
+})
 
 const headerRootClasses = computed(() => [
   theme.navigation.base,
