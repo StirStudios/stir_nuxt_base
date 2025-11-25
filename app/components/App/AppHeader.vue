@@ -60,7 +60,7 @@ const onOpen = (val: boolean) => {
   <LazyUHeader
     aria-label="Site header"
     :mode="theme.navigation.toggleType"
-    :title="page.site_info?.name"
+    :title="page?.site_info?.name ?? ''"
     :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
@@ -87,7 +87,7 @@ const onOpen = (val: boolean) => {
         "
       />
       <template v-else>
-        {{ page.site_info?.name }}
+        {{ page?.site_info?.name }}
       </template>
     </template>
 
