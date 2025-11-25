@@ -13,7 +13,7 @@ const props = defineProps<{
   parentUuid?: string
   direction?: string
 
-  pager?: { current: number; totalPages: number } | any
+  pager?: { current: number; totalPages: number } | unknown
 
   randomize?: boolean
   carousel?: boolean
