@@ -20,6 +20,7 @@ defineProps<{
   editLink?: string
 }>()
 </script>
+
 <template>
   <EditLink :link="editLink">
     <WrapAnimate :effect="direction">
