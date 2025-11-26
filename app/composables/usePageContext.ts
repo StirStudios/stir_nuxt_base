@@ -17,6 +17,8 @@ export function usePageContext() {
     () => page.value?.current_user?.roles?.includes('administrator') || false,
   )
 
+  const pageLayout = page.value?.page_layout
+
   // Element and metadata
   const pageElement = computed(() => page.value?.content?.element || '')
 
@@ -47,5 +49,6 @@ export function usePageContext() {
     pageTitle,
     pageCreated,
     pageHide,
+    pageLayout,
   }
 }
