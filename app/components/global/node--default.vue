@@ -2,6 +2,10 @@
 import { usePageContext } from '~/composables/usePageContext'
 const { pageLayout } = usePageContext()
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineProps<{
   // Core media info
   title: string
