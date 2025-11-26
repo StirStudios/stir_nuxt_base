@@ -23,9 +23,7 @@ defineProps<{
   <EditLink :link="editLink">
     <div class="space-y-6 p-5">
       <slot name="media" />
-
       <div v-if="text" v-html="text" />
-
       <ParagraphWebform v-if="webform" :on-close="onClose" :webform="webform" />
     </div>
   </EditLink>
