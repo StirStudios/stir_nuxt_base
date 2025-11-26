@@ -14,6 +14,10 @@ const theme = appConfig.stirTheme
 const hydrated = ref(false)
 const forceScrolled = ref(false)
 
+const isFixed = computed(
+  () => props.mode === 'fixed' || isScrolled.value || isFront.value,
+)
+
 // Fetch menu items
 const mainMenu = await fetchMenu('main')
 const navLinks = mainMenu.value.map((item) => ({
@@ -22,10 +26,6 @@ const navLinks = mainMenu.value.map((item) => ({
     ? item.absolute
     : `/${item.alias}${item.options?.fragment ? `#${item.options.fragment}` : ''}`,
 }))
-
-const isFixed = computed(
-  () => props.mode === 'fixed' || isScrolled.value || isFront.value,
-)
 
 const finalIsScrolled = computed(() => {
   if (!hydrated.value) return false
