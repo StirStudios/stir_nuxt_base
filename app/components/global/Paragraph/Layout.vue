@@ -41,7 +41,7 @@ const sectionId = computed(() => {
       {{ props.header }}
     </component>
 
-    <Grid
+    <WrapGrid
       :card="card"
       :container="container"
       :grid-items="gridClass"
@@ -58,6 +58,6 @@ const sectionId = computed(() => {
           <slot :name="slotName" />
         </div>
       </template>
-    </Grid>
+    </WrapGrid>
   </section>
 </template>
