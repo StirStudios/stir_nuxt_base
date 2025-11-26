@@ -32,9 +32,7 @@ function customPageError(error: Record<string, any>) {
 <template>
   <NuxtLayout :name="layout">
     <LazySiteBreadcrumbs v-if="theme.crumbs" />
-
     <component :is="renderCustomElements(page.content)" v-if="page?.content" />
-
     <LazyRegionArea area="after_main" />
   </NuxtLayout>
 </template>

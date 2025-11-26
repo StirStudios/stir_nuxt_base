@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { usePageContext } from '~/composables/usePageContext'
+const { pageLayout } = usePageContext()
+
 defineProps<{
   // Core media info
   title: string
@@ -34,7 +37,7 @@ defineSlots<{
 </script>
 
 <template>
-  <slot name="hero" />
+  <slot v-if="pageLayout !== 'clear'" name="hero" />
   <LazyRegionArea area="before_main" />
   <slot name="section" />
 </template>
