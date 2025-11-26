@@ -53,7 +53,7 @@ const slotRows = tk.hydrateOrder(
     :randomize="randomize"
   />
 
-  <Grid
+  <WrapGrid
     v-else
     :container="container"
     :grid-items="gridItems"
@@ -63,7 +63,7 @@ const slotRows = tk.hydrateOrder(
     <template v-for="(node, i) in slotRows" :key="i">
       <component :is="node" />
     </template>
-  </Grid>
+  </WrapGrid>
 
   <DrupalViewsPagination
     v-if="pager && !carousel && pager.totalPages > 1"
