@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
+
 type UITimelineItem = {
   date?: string
   title?: string
@@ -7,21 +9,12 @@ type UITimelineItem = {
   slot?: string
 }
 
-type TimelineEntry = {
-  date?: string
-  header?: string
-  icon?: string
-  text?: string
-}
-
 const props = defineProps<{
-  // Identity
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  // Layout & styling
   align?: string
   direction?: string
   classes?: string
@@ -29,24 +22,26 @@ const props = defineProps<{
   spacing?: string
   color?: string
 
-  // Data
-  timeline?: TimelineEntry[]
-
-  // Editing
   editLink?: string
 }>()
 
-const timelineItems = computed<UITimelineItem[]>(() => {
-  if (!Array.isArray(props.timeline)) return []
+const vueSlots = useSlots()
+const tk = useSlotsToolkit(vueSlots)
 
-  return props.timeline.map((entry) => ({
-    date: entry.date ?? 'Present',
-    title: entry.header ?? '',
-    icon: entry.icon ?? 'i-lucide-rocket',
-    description: entry.text ?? '',
-    slot: 'rich',
-  }))
-})
+const timelineNodes = computed(() => tk.slot('timeline'))
+
+const timelineItems = computed<UITimelineItem[]>(() =>
+  timelineNodes.value.map((vnode) => {
+    const p = tk.propsOf(vnode)
+    return {
+      date: p.date ?? 'Present',
+      title: p.header ?? '',
+      icon: p.icon ?? 'i-lucide-rocket',
+      description: p.text ?? '',
+      slot: 'rich',
+    }
+  }),
+)
 
 const wrapperClasses = computed(() =>
   [props.classes, props.width, props.spacing].filter(Boolean).join(' '),
@@ -64,8 +59,8 @@ const wrapperClasses = computed(() =>
             :default-value="timelineItems.length - 1"
             :items="timelineItems"
           >
-            <template #rich-description="{ item: slotItem }">
-              <div v-html="slotItem.description" />
+            <template #rich-description="{ item }">
+              <div v-html="item.description" />
             </template>
           </UTimeline>
         </div>
