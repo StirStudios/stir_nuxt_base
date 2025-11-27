@@ -6,9 +6,10 @@ defineOptions({
   inheritAttrs: false,
 })
 
-defineProps<{
+const props = defineProps<{
   // Core media info
   title: string
+  type?: string
   created: string
   uid?: string | object
   hide?: boolean | string
@@ -38,10 +39,23 @@ defineSlots<{
   hero?(): unknown
   section?(): unknown
 }>()
+
+const slots = useSlots()
+const teaser = useNodeTeaser(slots)
+
+const isTeaser = computed(() => props.type?.includes('teaser'))
 </script>
 
 <template>
-  <slot v-if="pageLayout !== 'clear'" name="hero" />
+  <slot v-if="pageLayout !== 'clear' && !isTeaser" name="hero" />
   <LazyRegionArea area="before_main" />
-  <slot name="section" />
+  <NodeTeaser
+    v-if="isTeaser"
+    :created="props.created"
+    orientation="horizontal"
+    :teaser="teaser"
+    :title="props.title"
+    :url="props.path?.alias"
+  />
+  <slot v-else name="section" />
 </template>

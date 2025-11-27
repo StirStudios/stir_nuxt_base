@@ -72,5 +72,16 @@ export function useNode(slots: unknown) {
  */
 export function useNodeTeaser(slots: unknown) {
   const node = useNode(slots)
-  return node.section
+
+  const source = computed(() => {
+    if (node.section?.vnode) return node.section
+    if (node.hero?.vnode) return node.hero
+    return {
+      props: {},
+      media: {},
+      text: '',
+    }
+  })
+
+  return source
 }
