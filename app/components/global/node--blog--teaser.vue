@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { useTeaserPost } from '~/composables/useTeaserPost'
+const slots = useSlots()
+const teaser = useNodeTeaser(slots)
 
 const props = defineProps<{
-  url?: string
   title?: string
   created?: string
-  orientation?: 'horizontal' | 'vertical'
-  teaser: unknown
+  path?: { alias: string }
 }>()
 
-const { post, orientation } = useTeaserPost(props.teaser, {
+const { post, orientation } = useTeaserPost(teaser, {
   title: props.title,
-  url: props.url,
+  url: props.path?.alias,
   created: props.created,
-  orientation: props.orientation,
+  orientation: 'vertical',
 })
 </script>
 
