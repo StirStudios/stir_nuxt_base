@@ -52,7 +52,7 @@ const isTeaser = computed(() => props.type?.includes('teaser'))
   <NodeTeaser
     v-if="isTeaser"
     :created="props.created"
-    orientation="horizontal"
+    orientation="vertical"
     :teaser="teaser"
     :title="props.title"
     :url="props.path?.alias"
