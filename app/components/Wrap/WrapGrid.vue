@@ -1,16 +1,34 @@
 <script setup lang="ts">
-defineProps<{
-  header?: string
+const props = defineProps<{
   classes?: string
+  gridClasses?: string
+  gridItems?: string
+  container?: boolean
+  width?: string
+  card?: boolean
 }>()
+
+defineSlots<{ default(): unknown }>()
+
+const { container: themeContainer, card: themeCard } = useAppConfig().stirTheme
+
+const gridClasses = computed(
+  () => props.gridItems || props.gridClasses || 'grid-cols-1',
+)
 </script>
 
 <template>
-  <template v-if="classes">
-    <h2 v-if="header" class="mb-10 text-center">{{ header }}</h2>
-    <div :class="['aspect-wrap', classes]">
+  <div
+    :class="[
+      props.container ? themeContainer : '',
+      props.card ? themeCard.base : '',
+      props.classes,
+      props.width,
+    ]"
+  >
+    <div :class="gridClasses">
       <slot />
     </div>
-  </template>
-  <slot v-else />
+    <CardGradient v-if="props.card" :layout="props" />
+  </div>
 </template>

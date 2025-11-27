@@ -20,7 +20,9 @@ const props = defineProps<{
   isMatrix?: boolean
 
   /* Content */
+  label?: string
   header?: string
+  headerTag?: string
 
   /* Behavior */
   randomize?: boolean
@@ -41,12 +43,6 @@ type VNodeLoose = {
 const isVideo = (vnode: VNodeLoose) => !!vnode?.props?.mediaEmbed
 const isDocument = (vnode: VNodeLoose) => vnode?.props?.type === 'document'
 const isAudio = (vnode: VNodeLoose) => vnode?.props?.type === 'audio'
-
-const gridClasses = computed(() =>
-  [props.overlay ? '' : props.gridItems, props.widthClass, props.spacing]
-    .filter(Boolean)
-    .join(' '),
-)
 
 const { baseIndices, orderedIndices } = useMediaOrdering(slotMedia, props, tk)
 
@@ -76,74 +72,80 @@ const componentMap = {
 <template>
   <EditLink :link="editLink">
     <WrapAlign :align="align">
-      <WrapGrid :classes="gridClasses" :header="header">
-        <WrapAnimate class="relative" :effect="direction">
-          <div :class="gridItems">
-            <template v-for="(node, i) in slotMediaOrdered" :key="i">
-              <!-- DOCUMENTS & AUDIO should NOT show image hover wrapper -->
-              <component
-                :is="componentMap[tk.propsOf(node).type]"
-                v-if="!overlay || isDocument(node) || isAudio(node)"
-                v-bind="tk.propsOf(node)"
-              />
+      <component :is="headerTag || 'h2'" v-if="header">
+        {{ header }}
+      </component>
 
-              <!-- IMAGES + VIDEO thumbnails (clickable) -->
+      <WrapAnimate class="relative" :effect="direction">
+        <WrapGrid
+          :grid-items="gridItems"
+          :spacing="spacing"
+          :width="widthClass"
+        >
+          <template v-for="(node, i) in slotMediaOrdered" :key="i">
+            <!-- DOCUMENTS & AUDIO should NOT show image hover wrapper -->
+            <component
+              :is="componentMap[tk.propsOf(node).type]"
+              v-if="!overlay || isDocument(node) || isAudio(node)"
+              v-bind="tk.propsOf(node)"
+            />
+
+            <!-- IMAGES + VIDEO thumbnails (clickable) -->
+            <div
+              v-else
+              class="group relative overflow-hidden"
+              :class="[
+                theme.media.rounded,
+                isVideo(node) || overlay ? 'cursor-pointer' : '',
+              ]"
+              @click="
+                (isVideo(node) || overlay) && openModal(i, orderedIndices)
+              "
+            >
               <div
-                v-else
-                class="group relative overflow-hidden"
                 :class="[
-                  theme.media.rounded,
-                  isVideo(node) || overlay ? 'cursor-pointer' : '',
+                  'transition-transform',
+                  theme.media.effects.scale,
+                  theme.media.transitions.slow,
                 ]"
-                @click="
-                  (isVideo(node) || overlay) && openModal(i, orderedIndices)
-                "
               >
+                <MediaImage
+                  v-bind="{ ...tk.propsOf(node), hideCredit: true }"
+                />
+              </div>
+
+              <span
+                v-if="tk.propsOf(node).credit"
+                :class="[
+                  'absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2',
+                  theme.media.transitions.fast,
+                ]"
+              >
+                {{ tk.propsOf(node).credit }}
+              </span>
+
+              <template v-if="isVideo(node)">
                 <div
                   :class="[
-                    'transition-transform',
-                    theme.media.effects.scale,
+                    'group-hover:bg-black/10] absolute inset-0 z-10 bg-black/30 transition-colors',
                     theme.media.transitions.slow,
                   ]"
-                >
-                  <MediaImage
-                    v-bind="{ ...tk.propsOf(node), hideCredit: true }"
-                  />
-                </div>
-
-                <span
-                  v-if="tk.propsOf(node).credit"
+                />
+                <button
+                  aria-label="Play Video"
                   :class="[
-                    'absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2',
-                    theme.media.transitions.fast,
+                    'absolute inset-0 z-20 flex items-center justify-center text-white transition-transform',
+                    theme.media.transitions.slow,
+                    theme.media.effects.scale,
                   ]"
                 >
-                  {{ tk.propsOf(node).credit }}
-                </span>
-
-                <template v-if="isVideo(node)">
-                  <div
-                    :class="[
-                      'group-hover:bg-black/10] absolute inset-0 z-10 bg-black/30 transition-colors',
-                      theme.media.transitions.slow,
-                    ]"
-                  />
-                  <button
-                    aria-label="Play Video"
-                    :class="[
-                      'absolute inset-0 z-20 flex items-center justify-center text-white transition-transform',
-                      theme.media.transitions.slow,
-                      theme.media.effects.scale,
-                    ]"
-                  >
-                    <UIcon name="i-heroicons-play-circle" size="60" />
-                  </button>
-                </template>
-              </div>
-            </template>
-          </div>
-        </WrapAnimate>
-      </WrapGrid>
+                  <UIcon name="i-heroicons-play-circle" size="60" />
+                </button>
+              </template>
+            </div>
+          </template>
+        </WrapGrid>
+      </WrapAnimate>
     </WrapAlign>
   </EditLink>
 
