@@ -33,9 +33,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <EditLink :link="props.editLink">
+  <EditLink :link="editLink">
     <ClientOnly>
-      <div id="venue-calculator-widget" :data-venue="props.venueId" />
+      <div id="venue-calculator-widget" :data-venue="venueId" />
     </ClientOnly>
   </EditLink>
 </template>
