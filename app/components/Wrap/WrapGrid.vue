@@ -2,6 +2,7 @@
 const props = defineProps<{
   classes?: string
   gridClasses?: string
+  spacing?: string
   gridItems?: string
   container?: boolean
   width?: string
@@ -24,6 +25,7 @@ const gridClasses = computed(
       props.card ? themeCard.base : '',
       props.classes,
       props.width,
+      props.spacing,
     ]"
   >
     <div :class="gridClasses">
