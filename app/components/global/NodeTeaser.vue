@@ -18,16 +18,18 @@ const { post, orientation } = useTeaserPost(props.teaser, {
 </script>
 
 <template>
-  <UBlogPost
-    :date="post.date"
-    :description="post.description"
-    :image="post.image"
-    :orientation="orientation"
-    :title="post.title"
-    :to="post.to"
-  >
-    <template #header>
-      <EditLink v-if="post.editLink" :link="post.editLink" />
-    </template>
-  </UBlogPost>
+  <EditLink :link="post.editLink">
+    <UBlogPost
+      :date="post.date"
+      :description="post.description"
+      :image="post.image"
+      :orientation="orientation"
+      :title="post.title"
+      :to="post.to"
+    >
+      <template #description>
+        <div v-html="truncate(post.description, 200)" />
+      </template>
+    </UBlogPost>
+  </EditLink>
 </template>
