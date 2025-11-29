@@ -28,6 +28,9 @@ const { post, orientation } = useTeaserPost(props.teaser, {
       :orientation="orientation"
       :title="post.title"
       :to="post.to"
+      :ui="{
+        image: 'object-center',
+      }"
     >
       <template #description>
         <div v-html="truncate(post.description, 200)" />
