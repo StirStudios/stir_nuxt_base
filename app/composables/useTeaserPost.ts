@@ -2,6 +2,7 @@ export function useTeaserPost(
   input: unknown,
   extra: {
     title?: string
+    nid?: string
     url?: string
     created?: string
     orientation?: 'horizontal' | 'vertical'
@@ -43,7 +44,7 @@ export function useTeaserPost(
       ? new Date(Number(extra.created) * 1000).toISOString().slice(0, 10)
       : '',
     to: extra.url ?? '',
-    editLink: teaserSource.value.props?.editLink,
+    editLink: extra.nid ? `/node/${extra.nid}/edit` : undefined,
   }))
 
   return { teaser: teaserSource, image, post, orientation }

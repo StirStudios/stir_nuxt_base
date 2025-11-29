@@ -3,15 +3,16 @@ import { useTeaserPost } from '~/composables/useTeaserPost'
 
 const props = defineProps<{
   url?: string
+  nid?: string
   title?: string
   created?: string
   orientation?: 'horizontal' | 'vertical'
   teaser: unknown
-  editLink?: string
 }>()
 
 const { post, orientation } = useTeaserPost(props.teaser, {
   title: props.title,
+  nid: props.nid,
   url: props.url,
   created: props.created,
   orientation: props.orientation,
