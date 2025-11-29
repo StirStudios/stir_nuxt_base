@@ -8,7 +8,6 @@ const props = defineProps<{
   created?: string
   orientation?: 'horizontal' | 'vertical'
   teaser: unknown
-  editLink?: string
 }>()
 
 const { post, orientation } = useTeaserPost(props.teaser, {
