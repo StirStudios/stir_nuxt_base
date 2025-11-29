@@ -11,6 +11,13 @@ const route = useRoute()
 const appConfig = useAppConfig()
 const theme = appConfig.stirTheme
 
+const hydrated = ref(false)
+const forceScrolled = ref(false)
+
+const isFixed = computed(
+  () => props.mode === 'fixed' || isScrolled.value || isFront.value,
+)
+
 // Fetch menu items
 const mainMenu = await fetchMenu('main')
 const navLinks = mainMenu.value.map((item) => ({
@@ -20,15 +27,10 @@ const navLinks = mainMenu.value.map((item) => ({
     : `/${item.alias}${item.options?.fragment ? `#${item.options.fragment}` : ''}`,
 }))
 
-const isFixed = computed(
-  () => props.mode === 'fixed' || isScrolled.value || isFront.value,
-)
-
-const forceScrolled = ref(false)
-onMounted(() => {
-  if (route.hash) forceScrolled.value = true
+const finalIsScrolled = computed(() => {
+  if (!hydrated.value) return false
+  return isScrolled.value || forceScrolled.value
 })
-const finalIsScrolled = computed(() => isScrolled.value || forceScrolled.value)
 
 const headerRootClasses = computed(() => [
   theme.navigation.base,
@@ -49,6 +51,11 @@ const headerRootClasses = computed(() => [
   },
 ])
 
+onMounted(() => {
+  hydrated.value = true
+  if (route.hash) forceScrolled.value = true
+})
+
 // Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
 const onOpen = (val: boolean) => {
   if (val && import.meta.client)
@@ -60,7 +67,7 @@ const onOpen = (val: boolean) => {
   <LazyUHeader
     aria-label="Site header"
     :mode="theme.navigation.toggleType"
-    :title="page.site_info?.name"
+    :title="page?.site_info?.name ?? ''"
     :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
     :ui="{
@@ -87,7 +94,7 @@ const onOpen = (val: boolean) => {
         "
       />
       <template v-else>
-        {{ page.site_info?.name }}
+        {{ page?.site_info?.name }}
       </template>
     </template>
 

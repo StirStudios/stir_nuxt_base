@@ -43,3 +43,18 @@ export function truncate(text: string, length = 120): string {
   if (!text) return ''
   return text.length > length ? text.slice(0, length).trimEnd() + '…' : text
 }
+
+/**
+ * Converts a string into a URL-safe slug.
+ * Example: "About Us!" => "about-us"
+ */
+export function slugify(str: string): string {
+  if (!str) return ''
+
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-') // spaces → dash
+    .replace(/[^a-z0-9-]/g, '') // strip non-alphanumeric
+    .replace(/--+/g, '-') // collapse multiple dashes
+}

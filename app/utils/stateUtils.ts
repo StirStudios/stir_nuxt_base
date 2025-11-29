@@ -1,5 +1,5 @@
 import type { WebformState } from '~/types'
-import { normalizeValue } from '~/utils/stringUtils'
+import { normalizeValue } from './stringUtils'
 
 /**
  * Safely access nested properties in a state object using dot notation.

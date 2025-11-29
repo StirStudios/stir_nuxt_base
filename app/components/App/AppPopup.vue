@@ -8,9 +8,9 @@ const open = ref(false)
 const route = useRoute()
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
 const title = computed(
-  () => popup.value?.webform?.webformTitle ?? 'Announcement',
+  () => popup.value?.props?.webform?.webformTitle ?? 'Announcement',
 )
-const description = computed(() => popup.value?.text || '')
+const description = computed(() => popup.value?.props?.text || '')
 const hasPopup = computed(() => !!popup.value)
 
 function showModalOnce() {

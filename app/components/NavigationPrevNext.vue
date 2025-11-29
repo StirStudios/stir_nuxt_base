@@ -1,11 +1,11 @@
 <script setup lang="ts">
+const { page } = usePageContext()
+
 type NodeLink = {
   nid: string
   title: string
   url: string
 }
-
-const { page } = usePageContext()
 
 const prevNode = page.value?.prev_node as NodeLink | null
 const nextNode = page.value?.next_node as NodeLink | null
@@ -23,6 +23,7 @@ const nextNode = page.value?.next_node as NodeLink | null
       :to="prevNode.url"
       variant="link"
     />
+
     <UButton
       v-if="nextNode"
       class="ml-auto"

@@ -9,7 +9,7 @@ import {
   type AnySchema,
   type NumberSchema,
 } from 'yup'
-import { useEvaluateState } from '~/composables/useEvaluateState'
+import { useEvaluateState } from '../composables/useEvaluateState'
 
 export function buildYupSchema(
   fields: Record<string, WebformFieldProps>,

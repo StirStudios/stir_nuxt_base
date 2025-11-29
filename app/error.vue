@@ -11,7 +11,8 @@ defineProps<{ error: NuxtError }>()
   <LazyRegionArea area="top" />
   <LazyDrupalTabs v-if="isAdministrator" />
   <AppHeader :mode="navigation.mode" />
-  <UMain id="main-content" role="main">
+
+  <UMain id="main-content" as="main" role="main">
     <UError
       :clear="{
         label: errorConfig.label,
@@ -22,6 +23,7 @@ defineProps<{ error: NuxtError }>()
       redirect="/"
     />
   </UMain>
+
   <LazyRegionArea area="sub_footer" />
   <LazyAppFooter />
 </template>

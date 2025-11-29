@@ -2,11 +2,13 @@
 defineProps<{
   content?: string
 }>()
+
+defineSlots<{
+  default(): unknown
+}>()
 </script>
 
 <template>
-  <div
-    :class="content.element === 'node' ? '' : 'p-10 text-center'"
-    v-html="content"
-  />
+  <slot />
+  <div v-if="content" v-html="content" />
 </template>

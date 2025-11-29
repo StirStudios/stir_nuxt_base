@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type { WebformFieldProps } from '~/types'
 
-const { webform } = useAppConfig().stirTheme
-const isMaterial = computed(() => webform.variant === 'material')
-
 defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: Record<string, string | number>
   floatingLabel?: boolean
 }>()
+
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
 </script>
 
 <template>

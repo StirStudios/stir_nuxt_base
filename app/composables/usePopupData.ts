@@ -21,39 +21,48 @@ type DecoupledBlocks = Record<string, ParagraphBlockContainer>
 
 export const usePopupData = () => {
   const { page } = usePageContext()
-  const popup = ref<PopupData | null>(null)
+
+  const popup = ref<unknown>(null)
+
+  // Walk CE tree looking for element === 'paragraph-popup'
+  function walk(node: unknown) {
+    if (!node) return
+
+    if (node.element === 'paragraph-popup') {
+      popup.value = node
+      return
+    }
+
+    if (node.slots) {
+      for (const slot of Object.values(node.slots)) {
+        if (Array.isArray(slot)) {
+          slot.forEach(walk)
+        } else {
+          walk(slot)
+        }
+      }
+    }
+  }
 
   watchEffect(() => {
-    const decoupledBlocks: DecoupledBlocks = page.value?.blocks?.decoupled ?? {}
-
-    const allParagraphs: PopupData[] = Object.values(decoupledBlocks)
-      .flatMap((block) => block.paragraphBlock ?? [])
-      .flatMap((p) => Object.values(p.regions ?? {}).flat()) as PopupData[]
-
-    popup.value =
-      allParagraphs.find(
-        (el): el is PopupData =>
-          typeof el.element === 'string' && el.element === 'paragraph-popup',
-      ) ?? null
+    popup.value = null
+    walk(page.value?.content)
   })
 
   const config = computed(() => {
-    const popupData = popup.value ?? {}
+    const p = popup.value?.props || {}
 
     return {
-      delay:
-        typeof popupData.popupDelay === 'number' ? popupData.popupDelay : 100,
-      showOnce: popupData.popupOnce === true,
-      trigger:
-        typeof popupData.popupTrigger === 'string' &&
-        ['delay', 'scroll', 'exit'].includes(popupData.popupTrigger)
-          ? popupData.popupTrigger
-          : 'scroll',
+      delay: typeof p.popupDelay === 'number' ? p.popupDelay : 100,
+      showOnce: p.popupOnce === true,
+      trigger: ['delay', 'scroll', 'exit'].includes(p.popupTrigger)
+        ? p.popupTrigger
+        : 'scroll',
       scrollThreshold:
-        typeof popupData.popupThreshold === 'number' &&
-        popupData.popupThreshold >= 0.25 &&
-        popupData.popupThreshold <= 1
-          ? popupData.popupThreshold
+        typeof p.popupThreshold === 'number' &&
+        p.popupThreshold >= 0.25 &&
+        p.popupThreshold <= 1
+          ? p.popupThreshold
           : 0.25,
     }
   })

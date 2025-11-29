@@ -6,14 +6,14 @@ import {
   getLocalTimeZone,
 } from '@internationalized/date'
 
-const { webform } = useAppConfig().stirTheme
-const isMaterial = computed(() => webform.variant === 'material')
-
 const props = defineProps<{
   field: WebformFieldProps
   fieldName: string
   state: WebformState
 }>()
+
+const { webform } = useAppConfig().stirTheme
+const isMaterial = computed(() => webform.variant === 'material')
 
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 const max = Number(props.field['#multiple']) || 1

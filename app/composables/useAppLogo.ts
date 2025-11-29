@@ -1,5 +1,5 @@
-import useDarkMode from '~/composables/useDarkMode'
-import { usePageContext } from '~/composables/usePageContext'
+import useDarkMode from './useDarkMode'
+import { usePageContext } from './usePageContext'
 
 export function useAppLogo(props: { addClasses?: string }) {
   const { isDark } = useDarkMode()
@@ -16,7 +16,7 @@ export function useAppLogo(props: { addClasses?: string }) {
     [props.addClasses, fillClass.value].filter(Boolean).join(' '),
   )
 
-  const logoTitle = computed(() => page.value.site_info?.name ?? '')
+  const logoTitle = computed(() => page?.value?.site_info?.name || '')
 
   return {
     svgClasses,

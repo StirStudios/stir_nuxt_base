@@ -1,5 +1,5 @@
 import type { WebformFieldProps, WebformState } from '~/types'
-import { useEvaluateState } from '~/composables/useEvaluateState'
+import { useEvaluateState } from './useEvaluateState'
 
 export function evaluateContainerVisibility(
   containerName: string,
