@@ -2,9 +2,9 @@
 import { useTeaserPost } from '~/composables/useTeaserPost'
 
 const props = defineProps<{
+  title?: string
   url?: string
   nid?: string
-  title?: string
   created?: string
   orientation?: 'horizontal' | 'vertical'
   teaser: unknown
