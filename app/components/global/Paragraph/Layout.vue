@@ -59,7 +59,7 @@ const sectionId = computed(() => {
             ['top', 'bottom'].includes(slotName) ? 'col-span-full' : '',
           ]"
         >
-          <WrapArticle is-article="isArticle">
+          <WrapArticle :is-article="isArticle">
             <slot :name="slotName" />
           </WrapArticle>
         </div>
