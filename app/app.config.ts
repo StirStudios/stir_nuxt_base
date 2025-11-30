@@ -123,7 +123,7 @@ export default defineAppConfig({
 
     scrollButton: {
       base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 shadow-md transition-opacity duration-300',
-      icon: 'i-heroicons:arrow-up',
+      icon: 'i-lucide:arrow-up',
       variant: 'solid',
       showAtScrollY: 200,
     },

@@ -139,7 +139,7 @@ const componentMap = {
                     theme.media.effects.scale,
                   ]"
                 >
-                  <UIcon name="i-heroicons-play-circle" size="60" />
+                  <UIcon name="i-lucide-play-circle" size="60" />
                 </button>
               </template>
             </div>

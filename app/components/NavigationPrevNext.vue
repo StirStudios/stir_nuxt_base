@@ -16,7 +16,7 @@ const nextNode = page.value?.next_node as NodeLink | null
     <UButton
       v-if="prevNode"
       color="primary"
-      icon="i-heroicons-chevron-left"
+      icon="i-lucide-chevron-left"
       label="Previous"
       size="xl"
       square
@@ -28,7 +28,7 @@ const nextNode = page.value?.next_node as NodeLink | null
       v-if="nextNode"
       class="ml-auto"
       color="primary"
-      icon="i-heroicons-chevron-right"
+      icon="i-lucide-chevron-right"
       label="Next"
       size="xl"
       square

@@ -15,17 +15,17 @@ const user = computed(() => page.value?.current_user)
 
 const getIconForLabel = (label: string): string | null => {
   const iconMap: Record<string, string> = {
-    'Drupal CMS': 'i-heroicons-home',
-    Settings: 'i-heroicons-cog',
-    View: 'i-heroicons-eye',
-    Edit: 'i-heroicons-pencil',
-    Delete: 'i-heroicons-trash',
-    Revisions: 'i-heroicons-document-duplicate',
-    Export: 'i-heroicons-arrow-up-tray',
-    API: 'i-heroicons-code-bracket',
-    'Log out': 'i-heroicons-arrow-left-start-on-rectangle',
-    'Log in': 'i-heroicons-arrow-right-start-on-rectangle',
-    'My account': 'i-heroicons-user-circle',
+    'Drupal CMS': 'i-lucide-home',
+    Settings: 'i-lucide-settings',
+    View: 'i-lucide-eye',
+    Edit: 'i-lucide-pencil',
+    Delete: 'i-lucide-trash-2',
+    Revisions: 'i-lucide-copy',
+    Export: 'i-lucide-upload',
+    API: 'i-lucide-code',
+    'Log out': 'i-lucide-log-out',
+    'Log in': 'i-lucide-log-in',
+    'My account': 'i-lucide-user',
   }
 
   return iconMap[label] || null

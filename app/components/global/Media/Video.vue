@@ -66,7 +66,7 @@ onMounted(() => {
       v-if="isProcessing"
       class="relative flex aspect-[16/9] w-full flex-col items-center justify-center rounded-lg bg-gradient-to-br from-slate-700 to-zinc-800"
     >
-      <UIcon class="mb-2 size-16 text-white" name="i-heroicons-clock" />
+      <UIcon class="mb-2 size-16 text-white" name="i-lucide-clock" />
       <span class="text-lg font-semibold text-white">
         Video is Processing...
       </span>
@@ -74,7 +74,14 @@ onMounted(() => {
 
     <iframe
       v-else
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allow="
+        accelerometer;
+        autoplay;
+        clipboard-write;
+        encrypted-media;
+        gyroscope;
+        picture-in-picture;
+      "
       allowfullscreen
       :class="['absolute inset-0 h-full w-full bg-black', theme.media.rounded]"
       :data-mid="mid"

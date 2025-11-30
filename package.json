@@ -1,6 +1,6 @@
 {
   "name": "stir_nuxt_base",
-  "version": "4.1.21",
+  "version": "4.1.22",
   "packageManager": "pnpm@9.12.3",
   "scripts": {
     "build": "nuxi build",
@@ -13,7 +13,6 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/lucide": "^1.2.77",
     "@nuxt/ui": "^4.2.1",
     "@nuxtjs/robots": "^5.5.6",

@@ -10,7 +10,7 @@ const { isDark } = useDarkMode()
     <UButton
       aria-label="Theme"
       color="black"
-      :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'"
+      :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
       size="lg"
       variant="ghost"
       @click="isDark = !isDark"
