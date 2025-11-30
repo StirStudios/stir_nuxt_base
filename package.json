@@ -13,7 +13,6 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/lucide": "^1.2.77",
     "@nuxt/ui": "^4.2.1",
     "@nuxtjs/robots": "^5.5.6",

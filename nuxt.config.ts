@@ -33,22 +33,6 @@ export default defineNuxtConfig({
     },
     build: {
       minify: true,
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['vue', 'vue-router', 'pinia'],
-            'nuxt-ui': ['@nuxt/ui'],
-            modules: [
-              'motion-v',
-              'nuxt-vitalizer',
-              '@nuxtjs/turnstile',
-              '@nuxtjs/robots',
-              '@nuxtjs/sitemap',
-              'nuxtjs-drupal-ce',
-            ],
-          },
-        },
-      },
     },
   },
 
@@ -75,6 +59,15 @@ export default defineNuxtConfig({
     '/front': {
       redirect: `${process.env.NUXT_URL}/`,
     },
+  },
+
+  icon: {
+    customCollections: [
+      {
+        prefix: 'social',
+        dir: './app/assets/icons',
+      },
+    ],
   },
 
   modules: [
