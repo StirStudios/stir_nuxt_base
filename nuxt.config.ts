@@ -18,6 +18,10 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    experimental: {
+      parallel: true,
+      asyncContext: true,
+    },
   },
 
   vite: {
@@ -29,6 +33,22 @@ export default defineNuxtConfig({
     },
     build: {
       minify: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router', 'pinia'],
+            'nuxt-ui': ['@nuxt/ui'],
+            modules: [
+              'motion-v',
+              'nuxt-vitalizer',
+              '@nuxtjs/turnstile',
+              '@nuxtjs/robots',
+              '@nuxtjs/sitemap',
+              'nuxtjs-drupal-ce',
+            ],
+          },
+        },
+      },
     },
   },
 
