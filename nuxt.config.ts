@@ -1,11 +1,7 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-02-09',
+  compatibilityDate: '2025-11-30',
 
   css: ['~/assets/css/main.css'],
-
-  features: {
-    inlineStyles: false,
-  },
 
   devtools: { enabled: true },
 
@@ -21,7 +17,6 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     api: process.env.DRUPAL_URL,
-    apiKey: process.env.DRUPAL_API_KEY || '',
     public: {
       api: process.env.DRUPAL_URL,
     },
