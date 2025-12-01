@@ -1,6 +1,6 @@
 # Stir Nuxt Base
 
-A production-ready Nuxt 4 starter with full integration for Nuxt UI 4, Tailwind CSS 4, and decoupled Drupal 11 CMS via Lupus CE.
+A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and full decoupled Drupal 11 (Lupus CE) integration for content-driven, SSR-optimized web apps.
 
 ## 🚀 Features
 
