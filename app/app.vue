@@ -10,6 +10,5 @@
       Skip to main content
     </a>
     <NuxtPage />
-    <LazyAppScrollToTop />
   </UApp>
 </template>

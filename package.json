@@ -1,5 +1,5 @@
 {
-  "name": "stir_nuxt_base",
+  "name": "nuxtjs-drupal-stir-admin",
   "type": "module",
   "version": "2.0.0",
   "packageManager": "pnpm@9.12.3",
@@ -9,29 +9,27 @@
     "generate": "nuxi generate",
     "preview": "nuxi preview",
     "postinstall": "nuxi prepare",
-    "lint": "eslint --ext .ts,.js,.vue, --ignore-path .gitignore .",
-    "release": "release-it"
+    "lint": "eslint . --no-warn-ignored",
+    "lint:fix": "eslint . --fix --no-warn-ignored"
   },
   "dependencies": {
-    "@iconify-json/heroicons": "^1.2.2",
-    "@nuxt/ui": "3.0.0-beta.2",
-    "nuxt": "^3.15.4",
-    "nuxtjs-drupal-ce": "^2.2.5",
-    "tailwindcss": "4.0.10"
+    "@iconify-json/lucide": "^1.2.77",
+    "@nuxt/ui": "^4.2.1",
+    "nuxt": "^4.2.1",
+    "nuxtjs-drupal-ce": "2.5.0-rc.6",
+    "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
-    "@types/node": "^22.13.9",
-    "@typescript-eslint/eslint-plugin": "^8.26.0",
-    "@typescript-eslint/parser": "^8.26.0",
-    "@vue/eslint-config-typescript": "^14.4.0",
-    "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.2",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-vue": "^10.0.0",
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "release-it": "^18.1.2",
-    "vue-eslint-parser": "^10.1.1"
+    "@nuxt/eslint": "^1.11.0",
+    "@nuxt/scripts": "^0.13.0",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.7.3",
+    "prettier-plugin-tailwindcss": "^0.7.1",
+    "typescript": "^5.9.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",

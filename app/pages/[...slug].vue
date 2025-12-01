@@ -1,29 +1,19 @@
-<script setup lang="ts">
-const { fetchPage, renderCustomElements, usePageHead, getPageLayout } =
-  await useDrupalCe()
-const { isAdministrator, bodyClasses } = usePageContext()
-const appConfig = useAppConfig()
+<script lang="ts" setup>
+const { fetchPage, renderCustomElements, usePageHead, usePageLayout } =
+  useDrupalCe()
 
 const page = await fetchPage(useRoute().path, { query: useRoute().query })
-
-const layout = getPageLayout(page)
+const layout = usePageLayout
 
 usePageHead(page)
 
-useHead({
-  htmlAttrs: {
-    lang: 'en',
-  },
-  bodyAttrs: {
-    class: bodyClasses,
-  },
+definePageMeta({
+  key: (route) => route.fullPath.split('#')[0],
 })
 </script>
 
 <template>
   <NuxtLayout :name="layout">
-    <h1 :class="appConfig.stirTheme.h1">{{ page.title }}</h1>
-    <LazySiteBreadcrumbs v-if="appConfig.stirTheme.crumbs" />
-    <component :is="renderCustomElements(page.content)" />
+    <component :is="renderCustomElements(page.content)" v-if="page?.content" />
   </NuxtLayout>
 </template>
