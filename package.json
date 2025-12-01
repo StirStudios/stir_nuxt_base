@@ -1,5 +1,5 @@
 {
-  "name": "stir_nuxt_base",
+  "name": "nuxtjs-drupal-stir",
   "version": "4.1.25",
   "packageManager": "pnpm@9.12.3",
   "scripts": {
