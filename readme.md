@@ -19,7 +19,7 @@ A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and f
 - **[Nuxt 4](https://nuxt.com/)**: `^4.2.1`
 - **[Nuxt UI 4](https://ui.nuxt.com/)**: `^4.2.1`
 - **[Tailwind CSS 4](https://tailwindcss.com/)**: `^4.1.17`
-- **[Drupal CE (Lupus Custom Elements)](https://www.drupal.org/project/lupus_ce)**: `^2.5.0-rc.6`
+- **[nuxtjs-drupal-ce](https://github.com/drunomics/nuxtjs-drupal-ce)**: `^2.5.0-rc.6`
 - **[Vite](https://vitejs.dev/)** + **[Nitro](https://nitro.unjs.io/)**: asset compression and custom build rules
 
 ## 📦 Project Structure
