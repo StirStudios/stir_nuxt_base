@@ -18,6 +18,10 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    experimental: {
+      parallel: true,
+      asyncContext: true,
+    },
   },
 
   vite: {
@@ -55,6 +59,15 @@ export default defineNuxtConfig({
     '/front': {
       redirect: `${process.env.NUXT_URL}/`,
     },
+  },
+
+  icon: {
+    customCollections: [
+      {
+        prefix: 'social',
+        dir: './app/assets/icons',
+      },
+    ],
   },
 
   modules: [

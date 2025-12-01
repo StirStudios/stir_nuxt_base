@@ -158,13 +158,13 @@ socials: [
   {
     title: 'IMDB',
     url: '//imdb.com/name/CLIENT/',
-    icon: 'i-simple-icons:imdb',
+    icon: 'i-social-icons:imdb',
     iconSize: 'size-10',
   },
   {
     title: 'LinkedIn',
     url: '//linkedin.com/in/CLIENT',
-    icon: 'i-simple-icons:linkedin',
+    icon: 'i-social:linkedin',
     iconSize: 'size-10',
   },
 ]
@@ -278,7 +278,7 @@ error: {
 ```ts
 scrollButton: {
   base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 shadow-md transition-opacity duration-300',
-  icon: 'i-heroicons:arrow-up',
+  icon: 'i-lucide:arrow-up',
   variant: 'solid',
   showAtScrollY: 200,
 },
