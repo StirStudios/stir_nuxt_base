@@ -23,7 +23,6 @@ Ensure the host project installs the peer dependencies:
 ## Provided APIs
 
 - `app/components/Drupal/DrupalTabs.vue`: auto-imported navigation tabs powered by Nuxt UI's `UNavigationMenu`.
-- `app/composables/usePageContext.ts`: exposes the current page payload (including `page`, `current_user`, and `local_tasks`).
 - `app/composables/useDrupalCe.ts`: re-export of `nuxtjs-drupal-ce` composables so you can call
   `useDrupalCe().fetchMenu('account')` inside the component or your own code.
 
