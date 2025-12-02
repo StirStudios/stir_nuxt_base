@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { usePageContext } from '~/composables/usePageContext'
+const { page } = usePageContext();
+const config = useRuntimeConfig();
+const siteApi = config.public.api;
+const { fetchMenu } = useDrupalCe();
 
-const { page } = usePageContext()
-const config = useRuntimeConfig()
-const siteApi = config.public.api
-const { fetchMenu } = useDrupalCe()
-
-const accountMenu = ref([])
+const accountMenu = ref([]);
 
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
-)
-const user = computed(() => page.value?.current_user)
+);
+const user = computed(() => page.value?.current_user);
 
 const getIconForLabel = (label: string): string | null => {
   const iconMap: Record<string, string> = {
@@ -26,23 +24,23 @@ const getIconForLabel = (label: string): string | null => {
     'Log out': 'i-lucide-log-out',
     'Log in': 'i-lucide-log-in',
     'My account': 'i-lucide-user',
-  }
+  };
 
-  return iconMap[label] || null
-}
+  return iconMap[label] || null;
+};
 
 // Safe, clean async call with fallback
 try {
-  const rawMenu = await fetchMenu('account')
+  const rawMenu = await fetchMenu('account');
   accountMenu.value = Array.isArray(rawMenu.value)
     ? rawMenu.value.map((item) => ({
         label: item.title,
         to: item.relative || item.url,
         icon: getIconForLabel(item.title),
       }))
-    : []
+    : [];
 } catch (e) {
-  console.error('Failed to fetch account menu:', e)
+  console.error('Failed to fetch account menu:', e);
 }
 
 // Optional: helper to map local tasks
@@ -51,7 +49,7 @@ const getLocalTaskLinks = () =>
     label: tab.label,
     to: tab.url,
     icon: getIconForLabel(tab.label),
-  }))
+  }));
 
 // Dynamic nav links
 const links = computed(() => {
@@ -64,9 +62,11 @@ const links = computed(() => {
         target: '_self',
       },
     ],
-  ]
+  ];
 
-  const localTaskLinks = tabs.value.primary?.length ? [getLocalTaskLinks()] : []
+  const localTaskLinks = tabs.value.primary?.length
+    ? [getLocalTaskLinks()]
+    : [];
 
   const accountDropdown = [
     {
@@ -74,10 +74,10 @@ const links = computed(() => {
       icon: getIconForLabel('My account'),
       children: accountMenu.value,
     },
-  ]
+  ];
 
-  return [...baseLinks, ...localTaskLinks, accountDropdown]
-})
+  return [...baseLinks, ...localTaskLinks, accountDropdown];
+});
 </script>
 
 <template>
