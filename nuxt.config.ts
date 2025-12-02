@@ -1,6 +1,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-12-01',
-  css: ['~/assets/css/main.css'],
+
+  css: ['#layers/nuxtjs-drupal-stir-admin/app/assets/css/main.css'],
+
   modules: [
     function (_, nuxt) {
       const modules = nuxt.options.modules.map((m) =>
