@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-12-01',
 
-  css: ['./assets/css/admin.css'],
+  css: ['#nuxtjs-drupal-stir-admin/assets/css/admin.css'],
 
   modules: [
     function (_, nuxt) {
