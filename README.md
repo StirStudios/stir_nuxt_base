@@ -1,4 +1,4 @@
-# Drupal Admin Layer
+# Nuxtjs + Drupal Admin Layer
 
 A Nuxt layer that ships Drupal-aware navigation primitives (including `DrupalTabs`) backed by `nuxtjs-drupal-ce` and Nuxt UI.
 You can use it directly from this repository (as a Nuxt layer path) or install it as an npm/git dependency that you extend from
