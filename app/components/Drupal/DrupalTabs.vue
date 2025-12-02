@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { page } = usePageContext();
+const { getPage } = useDrupalCe();
+const page = getPage();
 const config = useRuntimeConfig();
 const siteApi = config.public.api;
 const { fetchMenu } = useDrupalCe();
@@ -83,6 +84,7 @@ const links = computed(() => {
 <template>
   <UNavigationMenu
     content-orientation="vertical"
+    v-if="isAdministrator"
     highlight
     highlight-color="primary"
     :items="links"
