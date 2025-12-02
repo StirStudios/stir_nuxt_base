@@ -1,14 +1,8 @@
 {
-  "name": "@your-scope/drupal-admin-layer",
-  "version": "0.1.0",
+  "name": "nuxtjs-drupal-stir-admin",
   "description": "Nuxt layer that exposes Drupal admin navigation primitives.",
   "type": "module",
-  "exports": "./nuxt.config.ts",
-  "files": [
-    "app",
-    "nuxt.config.ts",
-    "README.md"
-  ],
+  "version": "1.0.0",
   "peerDependencies": {
     "nuxt": "^4.2.1",
     "@nuxt/ui": "^4.2.1",
