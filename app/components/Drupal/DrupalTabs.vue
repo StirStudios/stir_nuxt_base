@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { getPage } = useDrupalCe();
 const page = getPage();
+
 const config = useRuntimeConfig();
 const siteApi = config.public.api;
 const { fetchMenu } = useDrupalCe();

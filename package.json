@@ -6,6 +6,6 @@
   "peerDependencies": {
     "nuxt": "^4.2.1",
     "@nuxt/ui": "^4.2.1",
-    "nuxtjs-drupal-ce": "^2.5.0-rc.6"
+    "nuxtjs-drupal-ce": "^2.5.0-rc.7"
   }
 }
