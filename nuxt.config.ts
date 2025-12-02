@@ -1,7 +1,15 @@
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
+
+const layerDir = dirname(fileURLToPath(import.meta.url));
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-12-01',
 
-  css: ['#nuxtjs-drupal-stir-admin/assets/css/admin.css'],
+  css: [
+    // FIX: absolute local path
+    resolve(layerDir, 'assets/css/admin.css'),
+  ],
 
   modules: [
     function (_, nuxt) {
@@ -10,9 +18,7 @@ export default defineNuxtConfig({
       );
 
       if (!modules.includes('@nuxt/ui')) {
-        console.warn(
-          '[nuxtjs-drupal-stir-admin] @nuxt/ui not found — enabling automatically.',
-        );
+        console.warn('[admin-layer] enabling @nuxt/ui automatically');
         nuxt.options.modules.unshift('@nuxt/ui');
       }
     },
