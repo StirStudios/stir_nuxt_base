@@ -1,13 +1,29 @@
 <script setup lang="ts">
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
-
-const page = getPage();
 const drupalBaseUrl = getDrupalBaseUrl();
+const page = getPage();
 
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 );
+
+const getIconForLabel = (label: string): string | null => {
+  const map: Record<string, string> = {
+    'Drupal CMS': 'i-lucide-home',
+    Settings: 'i-lucide-settings',
+    View: 'i-lucide-eye',
+    Edit: 'i-lucide-pencil',
+    Delete: 'i-lucide-trash-2',
+    Revisions: 'i-lucide-copy',
+    Export: 'i-lucide-upload',
+    API: 'i-lucide-code',
+    'Log out': 'i-lucide-log-out',
+    'Log in': 'i-lucide-log-in',
+    'My account': 'i-lucide-user',
+  };
+  return map[label] || null;
+};
 
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
@@ -23,39 +39,24 @@ const localTaskLinks = computed(() =>
 
 const accountMenu = ref([]);
 
-try {
-  const rawMenu = await fetchMenu('account');
+onMounted(async () => {
+  try {
+    const rawMenu = await fetchMenu('account');
 
-  accountMenu.value = Array.isArray(rawMenu.value)
-    ? rawMenu.value.map((item) => ({
-        label: item.title,
-        to: item.relative || item.url,
-        icon: getIconForLabel(item.title),
-      }))
-    : [];
-} catch (e) {
-  console.error('Failed to fetch account menu:', e);
-}
-
-const getIconForLabel = (label: string): string | null => {
-  const iconMap: Record<string, string> = {
-    'Drupal CMS': 'i-lucide-home',
-    Settings: 'i-lucide-settings',
-    View: 'i-lucide-eye',
-    Edit: 'i-lucide-pencil',
-    Delete: 'i-lucide-trash-2',
-    Revisions: 'i-lucide-copy',
-    Export: 'i-lucide-upload',
-    API: 'i-lucide-code',
-    'Log out': 'i-lucide-log-out',
-    'Log in': 'i-lucide-log-in',
-    'My account': 'i-lucide-user',
-  };
-  return iconMap[label] || null;
-};
+    accountMenu.value = Array.isArray(rawMenu.value)
+      ? rawMenu.value.map((item) => ({
+          label: item.title,
+          to: item.relative || item.url,
+          icon: getIconForLabel(item.title),
+        }))
+      : [];
+  } catch (err) {
+    console.error('Failed to fetch account menu:', err);
+  }
+});
 
 const links = computed(() => {
-  const baseLinks = [
+  const base = [
     [
       {
         label: 'Drupal CMS',
@@ -68,7 +69,7 @@ const links = computed(() => {
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : [];
 
-  const accountDropdown = [
+  const dropdown = [
     {
       label: user.value?.name || 'Account',
       icon: getIconForLabel('My account'),
@@ -76,13 +77,13 @@ const links = computed(() => {
     },
   ];
 
-  return [...baseLinks, ...tasks, accountDropdown];
+  return [...base, ...tasks, dropdown];
 });
 </script>
 
 <template>
   <UNavigationMenu
-    v-if="!isAdministrator"
+    v-if="isAdministrator"
     content-orientation="vertical"
     highlight
     highlight-color="primary"
