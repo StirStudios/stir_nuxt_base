@@ -10,24 +10,7 @@ Add the layer to your project and extend it in `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  extends: ['@your-scope/drupal-admin-layer'],
-})
-```
-
-Or reference this repository directly (mirroring the base layer pattern) on the admin branch:
-
-```ts
-export default defineNuxtConfig({
   extends: ['github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin'],
-})
-```
-
-You can also consume it directly from this repository without publishing by pointing Nuxt at the layer path:
-
-```ts
-// nuxt.config.ts
-export default defineNuxtConfig({
-  extends: ['./layers/drupal-admin'],
 })
 ```
 
@@ -35,22 +18,7 @@ Ensure the host project installs the peer dependencies:
 
 - `nuxt@^4.2.1`
 - `@nuxt/ui@^4.2.1`
-- `nuxtjs-drupal-ce@^2.5.0-rc.6`
-
-## Runtime configuration
-
-Set the Drupal base URL so the "Drupal CMS" link in `DrupalTabs` resolves correctly:
-
-```ts
-// nuxt.config.ts
-export default defineNuxtConfig({
-  runtimeConfig: {
-    public: {
-      api: 'https://your-drupal-host',
-    },
-  },
-})
-```
+- `nuxtjs-drupal-ce@^2.5.0-rc.7`
 
 ## Provided APIs
 
