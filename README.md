@@ -1,63 +1,68 @@
-# StirStudios Nuxt UI 3 Theme Layer for Lupus Decoupled
+# Drupal Admin Layer
 
-This setup provides a boilerplate theme layer for your **Lupus Decoupled** web app or website. Simply install it like any other GitHub repository and take advantage of **Nuxt UI 3** and **Tailwind CSS 4**.
-
-## Project Description
-
-**Lupus Decoupled** has already done the heavy lifting by bridging the gap between **Drupal CMS** and a **Nuxt UI** frontend. This project builds upon that by introducing **admin editing tools** for the frontend along with **theme configuration options**.
-
----
+A Nuxt layer that ships Drupal-aware navigation primitives (including `DrupalTabs`) backed by `nuxtjs-drupal-ce` and Nuxt UI.
+You can use it directly from this repository (as a Nuxt layer path) or install it as an npm/git dependency that you extend from
+your own Nuxt app.
 
 ## Installation
 
-This theme layer can be used independently, but you will need a **Drupal installation** with **Lupus Decoupled** installed. For more details, refer to the official [Lupus Decoupled documentation](https://lupus-decoupled.org/get-started/create-new-project).
-
-You will also need to apply this patch so the Drupal user session is available:
-
-```bash
-"drupal/lupus_decoupled": {
-  "User session to the API": "https://git.drupalcode.org/project/lupus_decoupled/-/merge_requests/120.diff"
-}
-```
-
-### 1. Adjust the `.env` file
-
-Rename `example.local.env` to `.env`, then update it to match your environment settings.
-
-### 2. Update `nuxt.config.ts` in Your Root App
-
-Add the following configuration to extend your root **Nuxt** application:
+Add the layer to your project and extend it in `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  extends: [
-    [
-      'github:StirStudios/stir_nuxt_base#release/nuxt-ui-lupus',
-      { install: true },
-    ],
-  ],
+  extends: ['@your-scope/drupal-admin-layer'],
 })
 ```
 
-This will automatically install all necessary dependencies.
-
-> [!TIP]
-> You can add your own style overrides by including a main.css file:
+Or reference this repository directly (mirroring the base layer pattern) on the admin branch:
 
 ```ts
-css: ['~/assets/css/main.css'],
+export default defineNuxtConfig({
+  extends: ['github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin'],
+})
 ```
 
-## References & Resources
+You can also consume it directly from this repository without publishing by pointing Nuxt at the layer path:
 
-- **[Super Fast Nuxt UI 3 Theme Development with Tailwind CSS](https://ui3.nuxt.dev/getting-started)**
-  Get started quickly with Nuxt UI 3 and Tailwind CSS.
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  extends: ['./layers/drupal-admin'],
+})
+```
 
-- **[Lupus Decoupled Drupal](https://lupus-decoupled.org/)**
-  Enjoy using Vue components with Nuxt and component-oriented Decoupled Drupal!
+Ensure the host project installs the peer dependencies:
 
-- **[Lupus Decoupled Drupal GitHub](https://github.com/drunomics/nuxtjs-drupal-ce)**
-  Connects Nuxt v3 with Drupal via the Lupus Custom Elements Renderer.
+- `nuxt@^4.2.1`
+- `@nuxt/ui@^4.2.1`
+- `nuxtjs-drupal-ce@^2.5.0-rc.6`
 
-- **[Lupus Decoupled Drupal (Drupal.org)](https://www.drupal.org/project/lupus_decoupled)**
-  Explore component-oriented Decoupled Drupal with Nuxt!
+## Runtime configuration
+
+Set the Drupal base URL so the "Drupal CMS" link in `DrupalTabs` resolves correctly:
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      api: 'https://your-drupal-host',
+    },
+  },
+})
+```
+
+## Provided APIs
+
+- `app/components/Drupal/DrupalTabs.vue`: auto-imported navigation tabs powered by Nuxt UI's `UNavigationMenu`.
+- `app/composables/usePageContext.ts`: exposes the current page payload (including `page`, `current_user`, and `local_tasks`).
+- `app/composables/useDrupalCe.ts`: re-export of `nuxtjs-drupal-ce` composables so you can call
+  `useDrupalCe().fetchMenu('account')` inside the component or your own code.
+
+### Expected page payload
+
+`DrupalTabs` relies on the Drupal CE payload structure. Ensure your rendered page data provides:
+
+- `local_tasks.primary` and `local_tasks.secondary` arrays for contextual tabs.
+- `current_user.name` (and optional `current_user.roles`).
+- An account menu available via `useDrupalCe().fetchMenu('account')`.
