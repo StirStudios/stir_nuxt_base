@@ -140,6 +140,7 @@ export default defineNuxtConfig({
         drupalBaseUrl: process.env.DRUPAL_URL,
         exposeAPIRouteRules: true,
         disableFormHandler: true,
+        enableComponentPreview: false,
         customErrorPages: true,
       },
     ],
