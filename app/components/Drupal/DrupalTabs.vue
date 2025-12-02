@@ -82,9 +82,12 @@ const links = computed(() => {
 </script>
 
 <template>
+  {{ user }}
+
+  {{ page.current_user }}
   <UNavigationMenu
     content-orientation="vertical"
-    v-if="isAdministrator"
+    v-if="!isAdministrator"
     highlight
     highlight-color="primary"
     :items="links"
