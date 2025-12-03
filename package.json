@@ -8,5 +8,8 @@
     "nuxt": "^4.2.1",
     "nuxtjs-drupal-ce": "^2.5.0-rc.7",
     "tailwindcss": "^4.1.17"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.17"
   }
 }
