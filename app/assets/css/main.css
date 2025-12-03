@@ -1,6 +1,6 @@
 /* Tailwind & Nuxt UI imports */
-@import 'tailwindcss';
-@import '@nuxt/ui';
+@import '../../../node_modules/tailwindcss';
+@import '../../../node_modules/@nuxt/ui';
 
 /* Tailwind Theme Variables */
 @theme static {
