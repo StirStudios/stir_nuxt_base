@@ -89,7 +89,7 @@ const links = computed(() => {
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-neutral-900 p-4 shadow',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated p-4 shadow',
       link: 'text-xs text-white',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-white',
