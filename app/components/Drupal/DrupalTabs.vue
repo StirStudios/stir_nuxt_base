@@ -89,10 +89,10 @@ const links = computed(() => {
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 p-4 shadow',
-      link: 'text-xs text-black dark:text-white',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-neutral-900 p-4 shadow',
+      link: 'text-xs text-white',
       linkLabel: 'hidden md:block',
-      linkLeadingIcon: 'text-black dark:text-white',
+      linkLeadingIcon: 'text-white',
     }"
   />
 </template>

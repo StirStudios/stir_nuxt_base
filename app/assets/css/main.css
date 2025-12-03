@@ -6,7 +6,8 @@
 
 /* Tailwind Theme Variables */
 @theme static {
-  --font-sans: 'InterVariable', system-ui, sans-serif;
+  --font-sans: 'Public Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
   --container-8xl: 96rem;
   --breakpoint-xs: 30rem;
