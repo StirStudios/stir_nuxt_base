@@ -2,6 +2,8 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
+@import 'safelist.inline.css';
+
 /* Tailwind Theme Variables */
 @theme static {
   --font-sans: 'InterVariable', system-ui, sans-serif;
