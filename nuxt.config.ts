@@ -8,17 +8,5 @@ export default defineNuxtConfig({
 
   css: [resolve('./app/assets/css/main.css')],
 
-  modules: [
-    function (_, nuxt) {
-      const modules = nuxt.options.modules.map((m) =>
-        typeof m === 'string' ? m : m[0],
-      );
-
-      // Auto-enable Nuxt UI
-      if (!modules.includes('@nuxt/ui')) {
-        console.warn('[admin-layer] enabling @nuxt/ui automatically');
-        nuxt.options.modules.unshift('@nuxt/ui');
-      }
-    },
-  ],
+  modules: ['@nuxt/ui'],
 });
