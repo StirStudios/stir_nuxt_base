@@ -6,7 +6,7 @@ const layerDir = dirname(fileURLToPath(import.meta.url));
 export default defineNuxtConfig({
   compatibilityDate: '2025-12-01',
 
-  css: [resolve(layerDir, '~/assets/css/main.css')],
+  css: [resolve(layerDir, './app/assets/css/main.css')],
 
   modules: [
     function (_, nuxt) {
