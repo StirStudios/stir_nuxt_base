@@ -2,7 +2,7 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@import 'safelist.inline.css';
+@import './safelist.inline';
 
 /* Tailwind Theme Variables */
 @theme static {
