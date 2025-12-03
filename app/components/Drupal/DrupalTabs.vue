@@ -63,7 +63,7 @@ onMounted(async () => {
 });
 
 // -------------------------------------------------------
-// Navigation items (WITHOUT account menu)
+// LEFT-SIDE MENU (NO ACCOUNT HERE!)
 // -------------------------------------------------------
 const links = computed(() => {
   const base = [
@@ -83,7 +83,7 @@ const links = computed(() => {
 });
 
 // -------------------------------------------------------
-// Client-only color mode switcher
+// COLOR MODE (client only)
 // -------------------------------------------------------
 const mode = process.client ? useColorMode() : ref('light');
 
@@ -107,12 +107,12 @@ const toggleColorMode = () => {
       linkLeadingIcon: 'text-white',
     }"
   >
-    <!-- ===============================================
-         RIGHT-SIDE: Color Mode Switch + Account Dropdown
-         =============================================== -->
+    <!-- =======================================================
+         RIGHT SIDE: MODE SWITCH + ACCOUNT DROPDOWN
+         ======================================================= -->
     <template #list-trailing>
       <div class="flex items-center gap-2">
-        <!-- COLOR MODE SWITCH -->
+        <!-- Color switcher -->
         <UColorModeSwitch
           size="sm"
           :ui="{
@@ -122,26 +122,14 @@ const toggleColorMode = () => {
           }"
         />
 
-        <!-- ACCOUNT DROPDOWN -->
-        <UPopover>
-          <button class="flex items-center gap-1 text-white text-xs">
-            <UIcon name="i-lucide-user" class="size-5 text-white" />
-          </button>
-
-          <template #panel>
-            <div class="p-2 space-y-1">
-              <ULink
-                v-for="item in accountMenu"
-                :key="item.label"
-                :to="item.to"
-                class="flex items-center gap-2 px-2 py-1 text-sm"
-              >
-                <UIcon :name="item.icon" class="size-4" />
-                {{ item.label }}
-              </ULink>
-            </div>
-          </template>
-        </UPopover>
+        <!-- User account dropdown (using UNavigationMenuItem) -->
+        <UNavigationMenuItem
+          :item="{
+            label: user?.name || 'Account',
+            icon: 'i-lucide-user',
+            children: accountMenu,
+          }"
+        />
       </div>
     </template>
   </UNavigationMenu>
