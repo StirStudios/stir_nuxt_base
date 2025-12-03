@@ -1,14 +1,15 @@
-import { defineNuxtConfig } from 'nuxt/config';
-import { createResolver } from '@nuxt/kit';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
-const { resolve } = createResolver(import.meta.url);
+const currentDir = dirname(fileURLToPath(import.meta.url));
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-12-01',
 
-  // Only your CSS entry. Nothing else.
-  css: [resolve('./app/assets/css/main.css')],
+  css: [join(currentDir, './app/assets/css/main.css')],
 
-  // Register your admin module (self layer)
-  modules: ['nuxtjs-drupal-stir-admin'],
+  modules: [
+    // Register your own module so the layer runs!
+    join(currentDir, './admin.ts'),
+  ],
 });
