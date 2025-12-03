@@ -111,7 +111,11 @@ const links = computed(() => {
     }"
   >
     <template #switcher-leading>
-      <UColorModeButton />
+      <UColorModeButton>
+        <template #fallback>
+          <UButton loading variant="ghost" color="neutral" />
+        </template>
+      </UColorModeButton>
     </template>
   </UNavigationMenu>
 </template>
