@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   //   resolve(layerDir, './app/assets/css/main.css'),
   // ],
 
-  css: ['~/app/assets/css/main.css'],
+  css: ['./app/assets/css/main.css'],
 
   modules: [
     function (_, nuxt) {
