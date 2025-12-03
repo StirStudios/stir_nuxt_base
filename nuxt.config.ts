@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 
   css: [
     // FIX: absolute local path
-    resolve(layerDir, 'assets/css/admin.css'),
+    resolve(layerDir, '~/assets/css/admin.css'),
   ],
 
   modules: [
