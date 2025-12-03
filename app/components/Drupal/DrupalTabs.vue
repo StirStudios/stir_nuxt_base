@@ -66,11 +66,7 @@ const colorModeItem = computed(() => [
     label: mode.value === 'dark' ? 'Light mode' : 'Dark mode',
     icon: mode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon',
     onSelect: toggleColorMode,
-
-    role: 'button',
-    'aria-label':
-      mode.value === 'dark' ? 'Switch to light mode' : 'Switch to dark mode',
-    type: 'link',
+    class: 'aria-label:block [&>*:nth-child(2)]:hidden',
   },
 ]);
 
@@ -88,17 +84,19 @@ const links = computed(() => {
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : [];
 
-  const colorToggleGroup = colorModeItem.value;
+  const modeGroup = [
+    ...colorModeItem.value, // <-- icon-only mode switcher
+  ];
 
   const dropdown = [
     {
       label: user.value?.name || 'Account',
       icon: 'i-lucide-user',
-      children: [...accountMenu.value],
+      children: [...accountMenu.value, { type: 'label', label: 'Preferences' }],
     },
   ];
 
-  return [...base, ...tasks, colorToggleGroup, dropdown];
+  return [...base, ...tasks, modeGroup, dropdown];
 });
 </script>
 
