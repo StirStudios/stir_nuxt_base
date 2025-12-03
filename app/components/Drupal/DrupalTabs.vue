@@ -3,14 +3,17 @@ const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
 const drupalBaseUrl = getDrupalBaseUrl();
 const page = getPage();
 
+// -------------------------------------------------------
+// User + admin
+// -------------------------------------------------------
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 );
 
-// -------------------------
-// Icon Mapping
-// -------------------------
+// -------------------------------------------------------
+// Icon map
+// -------------------------------------------------------
 const getIconForLabel = (label: string): string | null => {
   const map: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
@@ -28,9 +31,9 @@ const getIconForLabel = (label: string): string | null => {
   return map[label] || null;
 };
 
-// -------------------------
-// Local Tasks (Primary Tabs)
-// -------------------------
+// -------------------------------------------------------
+// Local tasks
+// -------------------------------------------------------
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
 );
@@ -43,30 +46,25 @@ const localTaskLinks = computed(() =>
   })),
 );
 
-// -------------------------
-// Account Dropdown Menu
-// -------------------------
+// -------------------------------------------------------
+// Account dropdown
+// -------------------------------------------------------
 const accountMenu = ref([]);
 
 onMounted(async () => {
-  try {
-    const rawMenu = await fetchMenu('account');
-
-    accountMenu.value = Array.isArray(rawMenu.value)
-      ? rawMenu.value.map((item) => ({
-          label: item.title,
-          to: item.relative || item.url,
-          icon: getIconForLabel(item.title),
-        }))
-      : [];
-  } catch (err) {
-    console.error('Failed to fetch account menu:', err);
-  }
+  const rawMenu = await fetchMenu('account');
+  accountMenu.value = Array.isArray(rawMenu.value)
+    ? rawMenu.value.map((item) => ({
+        label: item.title,
+        to: item.relative || item.url,
+        icon: getIconForLabel(item.title),
+      }))
+    : [];
 });
 
-// -------------------------
-// Menu Structure
-// -------------------------
+// -------------------------------------------------------
+// Navigation items (WITHOUT account menu)
+// -------------------------------------------------------
 const links = computed(() => {
   const base = [
     [
@@ -81,16 +79,18 @@ const links = computed(() => {
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : [];
 
-  const userMenu = [
-    {
-      label: user.value?.name || 'Account',
-      icon: 'i-lucide-user',
-      children: [...accountMenu.value],
-    },
-  ];
-
-  return [...base, ...tasks, userMenu];
+  return [...base, ...tasks];
 });
+
+// -------------------------------------------------------
+// Client-only color mode switcher
+// -------------------------------------------------------
+const mode = process.client ? useColorMode() : ref('light');
+
+const toggleColorMode = () => {
+  if (!process.client) return;
+  mode.value = mode.value === 'dark' ? 'light' : 'dark';
+};
 </script>
 
 <template>
@@ -101,22 +101,48 @@ const links = computed(() => {
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated px-4 py-1 shadow flex items-center gap-2',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated px-4 py-1 shadow',
       link: 'text-xs',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-white',
     }"
   >
-    <!-- Right-side area (AFTER all navigation items) -->
+    <!-- ===============================================
+         RIGHT-SIDE: Color Mode Switch + Account Dropdown
+         =============================================== -->
     <template #list-trailing>
-      <UColorModeSwitch
-        size="sm"
-        :ui="{
-          root: 'ml-2',
-          icon: 'text-white',
-          thumb: 'bg-white',
-        }"
-      />
+      <div class="flex items-center gap-2">
+        <!-- COLOR MODE SWITCH -->
+        <UColorModeSwitch
+          size="sm"
+          :ui="{
+            icon: 'text-white',
+            thumb: 'bg-white',
+            root: 'cursor-pointer',
+          }"
+        />
+
+        <!-- ACCOUNT DROPDOWN -->
+        <UPopover>
+          <button class="flex items-center gap-1 text-white text-xs">
+            <UIcon name="i-lucide-user" class="size-5 text-white" />
+          </button>
+
+          <template #panel>
+            <div class="p-2 space-y-1">
+              <ULink
+                v-for="item in accountMenu"
+                :key="item.label"
+                :to="item.to"
+                class="flex items-center gap-2 px-2 py-1 text-sm"
+              >
+                <UIcon :name="item.icon" class="size-4" />
+                {{ item.label }}
+              </ULink>
+            </div>
+          </template>
+        </UPopover>
+      </div>
     </template>
   </UNavigationMenu>
 </template>
