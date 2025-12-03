@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import { useColorMode } from '@vueuse/core';
+
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
 const drupalBaseUrl = getDrupalBaseUrl();
 const page = getPage();
 
+// -------------------------
+// User
+// -------------------------
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 );
 
+// -------------------------
+// Icon mapping
+// -------------------------
 const getIconForLabel = (label: string): string | null => {
   const map: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
@@ -25,6 +33,9 @@ const getIconForLabel = (label: string): string | null => {
   return map[label] || null;
 };
 
+// -------------------------
+// Local tasks
+// -------------------------
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
 );
@@ -37,6 +48,9 @@ const localTaskLinks = computed(() =>
   })),
 );
 
+// -------------------------
+// Account menu
+// -------------------------
 const accountMenu = ref([]);
 
 onMounted(async () => {
@@ -55,24 +69,32 @@ onMounted(async () => {
   }
 });
 
-const mode = process.client ? useColorMode() : ref('light');
+// -------------------------
+// Color mode toggle (hydration-safe)
+// -------------------------
+const mode = useColorMode();
+const isMounted = ref(false);
+
+onMounted(() => {
+  isMounted.value = true;
+});
 
 const toggleColorMode = () => {
-  if (!process.client) return;
   mode.value = mode.value === 'dark' ? 'light' : 'dark';
 };
 
-const colorModeItem = computed(() => ({
-  label: 'Toggle color mode',
-  srOnlyLabel: true,
-  icon: mode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon',
-  onSelect: toggleColorMode,
-  class: 'min-w-0',
-  ui: {
-    linkLabel: 'sr-only',
-  },
-}));
+// for the slot
+const colorIcon = computed(() =>
+  !isMounted.value
+    ? null // prevents SSR mismatch
+    : mode.value === 'dark'
+      ? 'i-lucide-sun'
+      : 'i-lucide-moon',
+);
 
+// -------------------------
+// Navigation links
+// -------------------------
 const links = computed(() => {
   const base = [
     [
@@ -93,7 +115,10 @@ const links = computed(() => {
     children: [...accountMenu.value],
   };
 
-  const finalGroup = [colorModeItem.value, userMenu];
+  // final group contains only:
+  // - slot-inserted color icon (via #list-leading)
+  // - the account dropdown
+  const finalGroup = [userMenu];
 
   return [...base, ...tasks, finalGroup];
 });
@@ -107,10 +132,23 @@ const links = computed(() => {
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated px-4 py-1 shadow',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated px-4 py-1 shadow flex items-center',
+      list: 'flex items-center gap-1.5',
       link: 'text-xs',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-white',
     }"
-  />
+  >
+    <!-- 🔥 Color toggle injected before Account dropdown -->
+    <template #list-leading>
+      <button
+        v-if="colorIcon"
+        @click="toggleColorMode"
+        class="flex items-center justify-center p-2 rounded-md hover:bg-elevated/50 focus-visible:outline-none"
+        aria-label="Toggle color mode"
+      >
+        <UIcon :name="colorIcon" class="size-5 text-white" />
+      </button>
+    </template>
+  </UNavigationMenu>
 </template>
