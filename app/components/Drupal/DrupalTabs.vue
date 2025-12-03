@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import { useColorMode } from '@vueuse/core';
+
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
 const drupalBaseUrl = getDrupalBaseUrl();
 const page = getPage();
 
+// ----------------------------------------------
+// User + admin logic
+// ----------------------------------------------
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 );
 
+// ----------------------------------------------
+// Icon mapping
+// ----------------------------------------------
 const getIconForLabel = (label: string): string | null => {
   const map: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
@@ -25,6 +33,9 @@ const getIconForLabel = (label: string): string | null => {
   return map[label] || null;
 };
 
+// ----------------------------------------------
+// Local tasks (primary tabs)
+// ----------------------------------------------
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
 );
@@ -37,6 +48,9 @@ const localTaskLinks = computed(() =>
   })),
 );
 
+// ----------------------------------------------
+// Account dropdown menu
+// ----------------------------------------------
 const accountMenu = ref([]);
 
 onMounted(async () => {
@@ -55,12 +69,30 @@ onMounted(async () => {
   }
 });
 
+// ----------------------------------------------
+// COLOR MODE SWITCHER ITEM
+// ----------------------------------------------
+const mode = useColorMode();
+
+const toggleColorMode = () => {
+  mode.value = mode.value === 'dark' ? 'light' : 'dark';
+};
+
+const colorModeItem = computed(() => ({
+  label: mode.value === 'dark' ? 'Light mode' : 'Dark mode',
+  icon: mode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon',
+  onSelect: toggleColorMode,
+}));
+
+// ----------------------------------------------
+// Final Navigation Menu Items
+// ----------------------------------------------
 const links = computed(() => {
   const base = [
     [
       {
         label: 'Drupal CMS',
-        icon: getIconForLabel('Drupal CMS'),
+        icon: 'i-lucide-home',
         to: `${drupalBaseUrl}/admin/content`,
         target: '_self',
       },
@@ -72,8 +104,15 @@ const links = computed(() => {
   const dropdown = [
     {
       label: user.value?.name || 'Account',
-      icon: getIconForLabel('My account'),
-      children: accountMenu.value,
+      icon: 'i-lucide-user',
+      children: [
+        ...accountMenu.value,
+        {
+          type: 'label',
+          label: 'Preferences',
+        },
+        colorModeItem.value, // <-- injected color mode switcher!
+      ],
     },
   ];
 
