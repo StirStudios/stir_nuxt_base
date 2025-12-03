@@ -10,7 +10,7 @@ export default defineNuxtConfig({
 
   modules: [
     // Register your own module so the layer runs!
-    join(currentDir, 'tailwindcss'),
-    join(currentDir, '@nuxt/ui'),
+    join(currentDir, './node_modules/tailwindcss'),
+    join(currentDir, './node_modules/@nuxt/ui'),
   ],
 });
