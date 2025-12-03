@@ -1,15 +1,17 @@
-import { fileURLToPath } from 'node:url';
-import { resolve, dirname } from 'node:path';
-
-const layerDir = dirname(fileURLToPath(import.meta.url));
+// import { fileURLToPath } from 'node:url';
+// import { resolve, dirname } from 'node:path';
+//
+// const layerDir = dirname(fileURLToPath(import.meta.url));
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-12-01',
+  //
+  // css: [
+  //   // FIX: absolute local path
+  //   resolve(layerDir, './app/assets/css/main.css'),
+  // ],
 
-  css: [
-    // FIX: absolute local path
-    resolve(layerDir, './app/assets/css/main.css'),
-  ],
+  css: ['~/assets/css/main.css'],
 
   modules: [
     function (_, nuxt) {

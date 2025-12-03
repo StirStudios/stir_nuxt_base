@@ -2,13 +2,6 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@import './base';
-@import './utilities';
-@import './custom';
-
-/* Safelist for dynamic Tailwind classes */
-@import './safelist.inline';
-
 /* Tailwind Theme Variables */
 @theme static {
   --font-sans: 'InterVariable', system-ui, sans-serif;
