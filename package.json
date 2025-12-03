@@ -10,6 +10,7 @@
     "tailwindcss": "^4.1.17"
   },
   "dependencies": {
+    "tailwindcss": "^4.1.17",
     "@tailwindcss/vite": "^4.1.17"
   }
 }
