@@ -14,11 +14,11 @@ export default defineNuxtConfig({
 })
 ```
 
-Ensure the host project installs the peer dependencies:
-
-- `nuxt@^4.2.1`
-- `@nuxt/ui@^4.2.1`
-- `nuxtjs-drupal-ce@^2.5.0-rc.7`
+This layer bundles its own UI and Tailwind dependencies so you can extend it without
+installing anything extra in the host project. The layer resolves `@nuxt/ui` from its
+own dependency tree, which avoids "Could not load @nuxt/ui" errors when used from a
+parent app. Ensure your app is on Nuxt `^4.2.1` or newer so it can resolve the layer's
+modules correctly.
 
 ## Provided APIs
 
