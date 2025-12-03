@@ -55,14 +55,15 @@ onMounted(async () => {
   }
 });
 
-const mode = useColorMode();
+const mode = process.client ? useColorMode() : ref('light');
 
 const toggleColorMode = () => {
+  if (!process.client) return;
   mode.value = mode.value === 'dark' ? 'light' : 'dark';
 };
 
 const colorModeItem = computed(() => ({
-  label: mode.value === 'dark' ? 'Light mode' : 'Dark mode',
+  label: 'Toggle color mode',
   srOnlyLabel: true,
   icon: mode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon',
   onSelect: toggleColorMode,
