@@ -10,6 +10,6 @@ export default defineNuxtConfig({
 
   modules: [
     // Register your own module so the layer runs!
-    join(currentDir, './admin.ts'),
+    join(currentDir, './modules/admin.ts'),
   ],
 });
