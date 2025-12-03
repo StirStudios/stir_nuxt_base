@@ -22,7 +22,7 @@ export default defineNuxtModule({
     // 2. Inject Tailwind Vite plugin using THIS layer's node_modules
     nuxt.hook('vite:extend', async ({ config }) => {
       const plugin = await import(
-        resolve('./node_modules/@tailwindcss/vite')
+        resolve('./../node_modules/@tailwindcss/vite')
       ).then((r) => r.default);
 
       config.plugins ||= [];
