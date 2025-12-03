@@ -83,7 +83,7 @@ const links = computed(() => {
 
 <template>
   <UNavigationMenu
-    v-if="isAdministrator"
+    v-if="!isAdministrator"
     content-orientation="vertical"
     highlight
     highlight-color="primary"
