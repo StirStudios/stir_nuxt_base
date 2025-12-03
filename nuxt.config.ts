@@ -1,5 +1,5 @@
 import { defineNuxtConfig } from 'nuxt/config';
-import { createResolver } from '@nuxt/kit';
+import { createResolver, resolveModule } from '@nuxt/kit';
 
 const { resolve } = createResolver(import.meta.url);
 
@@ -8,5 +8,5 @@ export default defineNuxtConfig({
 
   css: [resolve('./app/assets/css/main.css')],
 
-  modules: ['@nuxt/ui'],
+  modules: [resolveModule('@nuxt/ui', { paths: [resolve('./')] })],
 });
