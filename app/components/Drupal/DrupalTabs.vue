@@ -90,7 +90,7 @@ const cmsLink = computed(() => [
     </template>
 
     <template #right>
-      <LazyUColorModeButton size="sm" class="mr-1" class="text-default">
+      <LazyUColorModeButton size="sm" class="mr-1 text-default">
         <template #fallback>
           <UButton loading variant="ghost" color="neutral" />
         </template>
