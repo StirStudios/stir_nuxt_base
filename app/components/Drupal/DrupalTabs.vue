@@ -110,7 +110,7 @@ const links = computed(() => {
       linkLeadingIcon: 'text-white',
     }"
   >
-    <template #switcher-leading>
+    <template #item-trailing>
       <UColorModeButton>
         <template #fallback>
           <UButton loading variant="ghost" color="neutral" />
