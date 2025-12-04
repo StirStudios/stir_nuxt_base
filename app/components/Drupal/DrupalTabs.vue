@@ -1,15 +1,16 @@
 <script setup lang="ts">
-const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
-const page = getPage();
-const drupalBaseUrl = getDrupalBaseUrl();
+const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe()
 
-const user = computed(() => page.value?.current_user || null);
+const page = getPage()
+const drupalBaseUrl = getDrupalBaseUrl()
+
+const user = computed(() => page.value?.current_user || null)
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
-);
+)
 
 const getIconForLabel = (label: string): string | null => {
-  const map: Record<string, string> = {
+  const iconMap: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
     Settings: 'i-lucide-settings',
     View: 'i-lucide-eye',
@@ -21,13 +22,13 @@ const getIconForLabel = (label: string): string | null => {
     'Log out': 'i-lucide-log-out',
     'Log in': 'i-lucide-log-in',
     'My account': 'i-lucide-user',
-  };
-  return map[label] || null;
-};
+  }
+  return iconMap[label] || null
+}
 
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
-);
+)
 
 const localTaskLinks = computed(() =>
   tabs.value.primary.map((tab) => ({
@@ -35,24 +36,12 @@ const localTaskLinks = computed(() =>
     to: tab.url,
     icon: getIconForLabel(tab.label),
   })),
-);
+)
 
-// Wrap tasks into NavigationMenu format
-const taskItems = computed(() => [localTaskLinks.value]);
+const accountMenu = ref([])
 
-const cmsLink = computed(() => [
-  {
-    label: 'Drupal CMS',
-    icon: 'i-lucide-home',
-    to: `${drupalBaseUrl}/admin/content`,
-    target: '_self',
-  },
-]);
-
-const accountMenu = ref([]);
-
-onMounted(async () => {
-  const rawMenu = await fetchMenu('account');
+try {
+  const rawMenu = await fetchMenu('account')
 
   accountMenu.value = Array.isArray(rawMenu.value)
     ? rawMenu.value.map((item) => ({
@@ -60,81 +49,49 @@ onMounted(async () => {
         to: item.relative || item.url,
         icon: getIconForLabel(item.title),
       }))
-    : [];
-});
+    : []
+} catch (e) {
+  console.error('Failed to fetch account menu:', e)
+}
 
-// Build a clean dropdown group
-const accountDropdown = computed(() => [
-  {
-    label: user.value?.name || 'Account',
-    icon: getIconForLabel('My account'),
-    children: accountMenu.value,
-  },
-]);
+const links = computed(() => {
+  const baseLinks = [
+    [
+      {
+        label: 'Drupal CMS',
+        icon: getIconForLabel('Drupal CMS'),
+        to: `${drupalBaseUrl}/admin/content`,
+        target: '_self',
+      },
+    ],
+  ]
 
-// Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
-const onOpen = (val: boolean) => {
-  if (val && import.meta.client) {
-    (document.activeElement as HTMLElement | null)?.blur();
-  }
-};
+  const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : []
+
+  const accountDropdown = [
+    {
+      label: user.value?.name || 'Account',
+      icon: getIconForLabel('My account'),
+      children: accountMenu.value,
+    },
+  ]
+
+  return [...baseLinks, ...tasks, accountDropdown]
+})
 </script>
 
 <template>
-  <LazyUHeader
+  <UNavigationMenu
     v-if="isAdministrator"
-    mode="drawer"
+    content-orientation="vertical"
+    highlight
+    highlight-color="primary"
+    :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented',
-      container: 'max-w-full',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 p-4 shadow',
+      link: 'text-xs text-black dark:text-white',
+      linkLabel: 'hidden md:block',
+      linkLeadingIcon: 'text-black dark:text-white',
     }"
-    @update:open="onOpen"
-  >
-    <template #left>
-      <LazyUNavigationMenu
-        :items="[cmsLink]"
-        :ui="{
-          link: 'text-xs text-default',
-          linkLeadingIcon: 'text-default',
-        }"
-      />
-    </template>
-
-    <template #default>
-      <LazyUNavigationMenu
-        :items="taskItems"
-        :ui="{
-          link: 'text-xs text-default',
-          linkLeadingIcon: 'text-default',
-        }"
-      />
-    </template>
-
-    <template #right>
-      <LazyUColorModeButton size="sm" class="mr-1 text-default">
-        <template #fallback>
-          <UButton loading variant="ghost" color="neutral" />
-        </template>
-      </LazyUColorModeButton>
-
-      <LazyUNavigationMenu
-        :items="[accountDropdown]"
-        :ui="{
-          link: 'text-xs text-default',
-          linkLeadingIcon: 'text-default',
-        }"
-      />
-    </template>
-
-    <template #body>
-      <LazyUNavigationMenu
-        :items="taskItems"
-        orientation="vertical"
-        :ui="{
-          link: 'text-xs text-default',
-          linkLeadingIcon: 'text-default',
-        }"
-      />
-    </template>
-  </LazyUHeader>
+  />
 </template>
