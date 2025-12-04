@@ -67,7 +67,7 @@ const cmsLink = computed(() => [
     v-if="!isAdministrator"
     mode="drawer"
     :ui="{
-      root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented',
+      root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented text-xs',
       container: 'max-w-full',
     }"
   >
@@ -75,7 +75,7 @@ const cmsLink = computed(() => [
       <LazyUNavigationMenu
         :items="[cmsLink]"
         :ui="{
-          link: 'text-xs text-default',
+          link: 'text-default',
           linkLeadingIcon: 'text-default',
         }"
       />
@@ -84,10 +84,8 @@ const cmsLink = computed(() => [
     <template #default>
       <LazyUNavigationMenu
         :items="taskItems"
-        highlight
-        highlight-color="primary"
         :ui="{
-          link: 'text-xs text-default',
+          link: 'text-default',
           linkLeadingIcon: 'text-default',
         }"
       />
@@ -111,7 +109,7 @@ const cmsLink = computed(() => [
           ],
         ]"
         :ui="{
-          link: 'text-xs text-default',
+          link: 'text-default',
           linkLeadingIcon: 'text-default',
         }"
       />
@@ -121,7 +119,7 @@ const cmsLink = computed(() => [
       <LazyUNavigationMenu
         :items="taskItems"
         :ui="{
-          link: 'text-xs text-default',
+          link: 'text-default',
           linkLeadingIcon: 'text-default',
         }"
         orientation="vertical"
