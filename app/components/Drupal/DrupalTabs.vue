@@ -120,7 +120,7 @@ const cmsLink = computed(() => [
           link: 'text-xs text-default',
           linkLeadingIcon: 'text-default',
         }"
-        orientation="horizontal"
+        orientation="vertical"
       />
     </template>
   </LazyUHeader>
