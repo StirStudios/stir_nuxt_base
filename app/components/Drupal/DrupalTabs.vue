@@ -66,7 +66,7 @@ const cmsLink = computed(() => [
   <LazyUHeader
     v-if="!isAdministrator"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full px-4 py-1 shadow',
+      root: 'sticky top-0 z-60 w-full px-4 py-1 backdrop-blur shadow',
     }"
   >
     <template #left>
