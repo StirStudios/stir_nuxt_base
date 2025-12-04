@@ -84,38 +84,31 @@ const cmsLink = computed(() => [
   <!-- =========================================================
        HEADER LAYOUT (this is what fixes literally everything)
        ========================================================= -->
-  <UHeader v-if="!isAdministrator">
+  <LazyUHeader v-if="!isAdministrator">
     <!-- LEFT: Drupal CMS link -->
     <template #left>
-      <UNavigationMenu :items="[cmsLink]" orientation="horizontal" />
+      <LazyUNavigationMenu :items="[cmsLink]" orientation="horizontal" />
     </template>
 
     <!-- CENTER: Local task primary menu -->
     <template #default>
-      <UNavigationMenu
+      <LazyUNavigationMenu
         :items="taskItems"
         orientation="horizontal"
         highlight
         highlight-color="primary"
-        class="hidden md:flex"
-        :ui="{
-          linkLabel: 'text-sm',
-          linkLeadingIcon: 'text-white',
-        }"
       />
     </template>
 
     <!-- RIGHT: color mode button + account dropdown -->
     <template #right>
-      <ClientOnly>
-        <UColorModeButton size="sm" class="mr-1" :ui="{ icon: 'text-white' }">
-          <template #fallback>
-            <UButton loading variant="ghost" color="neutral" />
-          </template>
-        </UColorModeButton>
-      </ClientOnly>
+      <LazyUColorModeButton size="sm" class="mr-1">
+        <template #fallback>
+          <UButton loading variant="ghost" color="neutral" />
+        </template>
+      </LazyUColorModeButton>
 
-      <UNavigationMenu
+      <LazyUNavigationMenu
         :items="[
           [
             {
@@ -132,5 +125,14 @@ const cmsLink = computed(() => [
         }"
       />
     </template>
-  </UHeader>
+
+    <template #body>
+      <LazyUNavigationMenu
+        :items="taskItems"
+        orientation="horizontal"
+        highlight
+        highlight-color="primary"
+      />
+    </template>
+  </LazyUHeader>
 </template>
