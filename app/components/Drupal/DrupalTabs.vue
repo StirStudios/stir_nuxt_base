@@ -60,7 +60,7 @@ const links = computed(() => {
       {
         label: 'Drupal CMS',
         icon: getIconForLabel('Drupal CMS'),
-        to: ${drupalBaseUrl}/admin/content,
+        to: `${drupalBaseUrl}/admin/content`,
         target: '_self',
       },
     ],
