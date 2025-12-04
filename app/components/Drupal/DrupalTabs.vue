@@ -1,19 +1,13 @@
 <script setup lang="ts">
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe()
-const drupalBaseUrl = getDrupalBaseUrl()
+
 const page = getPage()
+const drupalBaseUrl = getDrupalBaseUrl()
 
 const user = computed(() => page.value?.current_user || null)
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 )
-
-const accountMenu = ref([])
-
-const tabs = computed(
-  () => page.value?.local_tasks ?? { primary: [], secondary: [] },
-)
-const user = computed(() => page.value?.current_user)
 
 const getIconForLabel = (label: string): string | null => {
   const iconMap: Record<string, string> = {
@@ -29,13 +23,26 @@ const getIconForLabel = (label: string): string | null => {
     'Log in': 'i-lucide-log-in',
     'My account': 'i-lucide-user',
   }
-
   return iconMap[label] || null
 }
 
-// Safe, clean async call with fallback
+const tabs = computed(
+  () => page.value?.local_tasks ?? { primary: [], secondary: [] },
+)
+
+const localTaskLinks = computed(() =>
+  tabs.value.primary.map((tab) => ({
+    label: tab.label,
+    to: tab.url,
+    icon: getIconForLabel(tab.label),
+  })),
+)
+
+const accountMenu = ref([])
+
 try {
   const rawMenu = await fetchMenu('account')
+
   accountMenu.value = Array.isArray(rawMenu.value)
     ? rawMenu.value.map((item) => ({
         label: item.title,
@@ -47,15 +54,6 @@ try {
   console.error('Failed to fetch account menu:', e)
 }
 
-// Optional: helper to map local tasks
-const getLocalTaskLinks = () =>
-  tabs.value.primary.map((tab) => ({
-    label: tab.label,
-    to: tab.url,
-    icon: getIconForLabel(tab.label),
-  }))
-
-// Dynamic nav links
 const links = computed(() => {
   const baseLinks = [
     [
@@ -68,7 +66,7 @@ const links = computed(() => {
     ],
   ]
 
-  const localTaskLinks = tabs.value.primary?.length ? [getLocalTaskLinks()] : []
+  const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : []
 
   const accountDropdown = [
     {
@@ -78,22 +76,22 @@ const links = computed(() => {
     },
   ]
 
-  return [...baseLinks, ...localTaskLinks, accountDropdown]
+  return [...baseLinks, ...tasks, accountDropdown]
 })
 </script>
 
 <template>
   <UNavigationMenu
-    v-if="isAdministrator"
+    v-if="!isAdministrator"
     content-orientation="vertical"
     highlight
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented',
-      link: 'text-xs text-default',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 p-4 shadow',
+      link: 'text-xs text-black dark:text-white',
       linkLabel: 'hidden md:block',
-      linkLeadingIcon: 'text-default',
+      linkLeadingIcon: 'text-black dark:text-white',
     }"
   />
 </template>
