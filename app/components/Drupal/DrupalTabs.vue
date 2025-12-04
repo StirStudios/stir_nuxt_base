@@ -2,7 +2,6 @@
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
-
 const page = getPage();
 const drupalBaseUrl = getDrupalBaseUrl();
 
@@ -42,19 +41,20 @@ const localTaskLinks = computed(() =>
 
 const accountMenu = ref([]);
 
-try {
-  const rawMenu = await fetchMenu('account');
-
-  accountMenu.value = Array.isArray(rawMenu.value)
-    ? rawMenu.value.map((i) => ({
-        label: i.title,
-        to: i.relative || i.url,
-        icon: getIconForLabel(i.title),
-      }))
-    : [];
-} catch (e) {
-  console.error('Failed to fetch account menu:', e);
-}
+onMounted(async () => {
+  try {
+    const rawMenu = await fetchMenu('account');
+    accountMenu.value = Array.isArray(rawMenu.value)
+      ? rawMenu.value.map((i) => ({
+          label: i.title,
+          to: i.relative || i.url,
+          icon: getIconForLabel(i.title),
+        }))
+      : [];
+  } catch (e) {
+    console.error('Failed to fetch account menu:', e);
+  }
+});
 
 const links = computed(() => {
   const cmsLink = [
@@ -83,23 +83,24 @@ const links = computed(() => {
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isMdUp = breakpoints.greaterOrEqual('md');
-
 const isCollapsed = computed(() => !isMdUp.value);
 </script>
 
 <template>
-  <UNavigationMenu
-    v-if="isAdministrator"
-    content-orientation="vertical"
-    highlight
-    highlight-color="primary"
-    tooltip
-    :collapsed="isCollapsed"
-    :items="links"
-    :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-accented p-4 shadow',
-      link: 'text-xs text-default',
-      linkLeadingIcon: 'text-default',
-    }"
-  />
+  <ClientOnly>
+    <UNavigationMenu
+      v-if="isAdministrator"
+      content-orientation="vertical"
+      highlight
+      highlight-color="primary"
+      tooltip
+      :collapsed="isCollapsed"
+      :items="links"
+      :ui="{
+        root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-accented p-4 shadow',
+        link: 'text-xs text-default',
+        linkLeadingIcon: 'text-default',
+      }"
+    />
+  </ClientOnly>
 </template>
