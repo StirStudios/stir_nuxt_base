@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
-
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
 
 const page = getPage();
@@ -12,7 +10,7 @@ const isAdministrator = computed(() =>
 );
 
 const getIconForLabel = (label: string): string | null => {
-  const map: Record<string, string> = {
+  const iconMap: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
     Settings: 'i-lucide-settings',
     View: 'i-lucide-eye',
@@ -25,7 +23,7 @@ const getIconForLabel = (label: string): string | null => {
     'Log in': 'i-lucide-log-in',
     'My account': 'i-lucide-user',
   };
-  return map[label] || null;
+  return iconMap[label] || null;
 };
 
 const tabs = computed(
@@ -42,28 +40,27 @@ const localTaskLinks = computed(() =>
 
 const accountMenu = ref([]);
 
-onMounted(async () => {
-  try {
-    const rawMenu = await fetchMenu('account');
-    accountMenu.value = Array.isArray(rawMenu.value)
-      ? rawMenu.value.map((i) => ({
-          label: i.title,
-          to: i.relative || i.url,
-          icon: getIconForLabel(i.title),
-        }))
-      : [];
-  } catch (e) {
-    console.error('Failed to fetch account menu:', e);
-  }
-});
+try {
+  const rawMenu = await fetchMenu('account');
+
+  accountMenu.value = Array.isArray(rawMenu.value)
+    ? rawMenu.value.map((item) => ({
+        label: item.title,
+        to: item.relative || item.url,
+        icon: getIconForLabel(item.title),
+      }))
+    : [];
+} catch (e) {
+  console.error('Failed to fetch account menu:', e);
+}
 
 const links = computed(() => {
-  const cmsLink = [
+  const baseLinks = [
     [
       {
         label: 'Drupal CMS',
         icon: getIconForLabel('Drupal CMS'),
-        to: `${drupalBaseUrl}/admin/content`,
+        to: ${drupalBaseUrl}/admin/content,
         target: '_self',
       },
     ],
@@ -79,12 +76,8 @@ const links = computed(() => {
     },
   ];
 
-  return [...cmsLink, ...tasks, accountDropdown];
+  return [...baseLinks, ...tasks, accountDropdown];
 });
-
-const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
-const isMdUp = breakpoints.greaterOrEqual('md');
-const isCollapsed = computed(() => !isMdUp.value);
 </script>
 
 <template>
@@ -94,7 +87,7 @@ const isCollapsed = computed(() => !isMdUp.value);
     highlight
     highlight-color="primary"
     tooltip
-    :collapsed="isCollapsed"
+    collapsed
     :items="links"
     :ui="{
       root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-accented p-4 shadow',
