@@ -3,17 +3,11 @@ const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
 const drupalBaseUrl = getDrupalBaseUrl();
 const page = getPage();
 
-// ----------------------------------------------
-// User + admin
-// ----------------------------------------------
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 );
 
-// ----------------------------------------------
-// Icon mapping
-// ----------------------------------------------
 const getIconForLabel = (label: string): string | null => {
   const map: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
@@ -31,9 +25,6 @@ const getIconForLabel = (label: string): string | null => {
   return map[label] || null;
 };
 
-// ----------------------------------------------
-// Local tasks (primary tabs)
-// ----------------------------------------------
 const tabs = computed(
   () => page.value?.local_tasks ?? { primary: [], secondary: [] },
 );
@@ -46,9 +37,6 @@ const localTaskLinks = computed(() =>
   })),
 );
 
-// ----------------------------------------------
-// Account dropdown menu
-// ----------------------------------------------
 const accountMenu = ref([]);
 
 onMounted(async () => {
@@ -62,14 +50,8 @@ onMounted(async () => {
     : [];
 });
 
-// ----------------------------------------------
-// Navigation items for LOCAL TASKS
-// ----------------------------------------------
 const taskItems = computed(() => [localTaskLinks.value]);
 
-// ----------------------------------------------
-// Drupal CMS link
-// ----------------------------------------------
 const cmsLink = computed(() => [
   {
     label: 'Drupal CMS',
@@ -81,28 +63,34 @@ const cmsLink = computed(() => [
 </script>
 
 <template>
-  <!-- =========================================================
-       HEADER LAYOUT (this is what fixes literally everything)
-       ========================================================= -->
-  <LazyUHeader v-if="!isAdministrator">
-    <!-- LEFT: Drupal CMS link -->
+  <LazyUHeader
+    v-if="!isAdministrator"
+    :ui="{
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full px-4 py-1 shadow',
+    }"
+  >
     <template #left>
-      <LazyUNavigationMenu :items="[cmsLink]" orientation="horizontal" />
-    </template>
-
-    <!-- CENTER: Local task primary menu -->
-    <template #default>
       <LazyUNavigationMenu
-        :items="taskItems"
-        orientation="horizontal"
-        highlight
-        highlight-color="primary"
+        :items="[cmsLink]"
+        :ui="{
+          link: 'text-xs text-default',
+          linkLeadingIcon: 'text-default',
+        }"
       />
     </template>
 
-    <!-- RIGHT: color mode button + account dropdown -->
+    <template #default>
+      <LazyUNavigationMenu
+        :items="taskItems"
+        :ui="{
+          link: 'text-xs text-default',
+          linkLeadingIcon: 'text-default',
+        }"
+      />
+    </template>
+
     <template #right>
-      <LazyUColorModeButton size="sm" class="mr-1">
+      <LazyUColorModeButton size="sm" class="mr-1" class="text-default">
         <template #fallback>
           <UButton loading variant="ghost" color="neutral" />
         </template>
@@ -118,10 +106,9 @@ const cmsLink = computed(() => [
             },
           ],
         ]"
-        orientation="horizontal"
         :ui="{
-          linkLabel: 'text-sm',
-          linkLeadingIcon: 'text-white',
+          link: 'text-xs text-default',
+          linkLeadingIcon: 'text-default',
         }"
       />
     </template>
@@ -129,9 +116,10 @@ const cmsLink = computed(() => [
     <template #body>
       <LazyUNavigationMenu
         :items="taskItems"
-        orientation="horizontal"
-        highlight
-        highlight-color="primary"
+        :ui="{
+          link: 'text-xs text-default',
+          linkLeadingIcon: 'text-default',
+        }"
       />
     </template>
   </LazyUHeader>
