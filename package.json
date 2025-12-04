@@ -13,6 +13,7 @@
     "release": "release-it"
   },
   "dependencies": {
+    "@stir/admin": "github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin",
     "@iconify-json/lucide": "^1.2.77",
     "@nuxt/ui": "^4.2.1",
     "@nuxtjs/robots": "^5.6.0",
