@@ -3,18 +3,18 @@ const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
 const drupalBaseUrl = getDrupalBaseUrl();
 const page = getPage();
 
-// ----------------------------
-// User / Admin
-// ----------------------------
+// ----------------------------------------------
+// User + admin
+// ----------------------------------------------
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
 );
 
-// ----------------------------
-// Icon map
-// ----------------------------
-const iconFor = (label: string): string | null => {
+// ----------------------------------------------
+// Icon mapping
+// ----------------------------------------------
+const getIconForLabel = (label: string): string | null => {
   const map: Record<string, string> = {
     'Drupal CMS': 'i-lucide-home',
     Settings: 'i-lucide-settings',
@@ -31,88 +31,90 @@ const iconFor = (label: string): string | null => {
   return map[label] || null;
 };
 
-// ----------------------------
-// Local tasks (View/Edit/etc)
-// ----------------------------
-const tabs = computed(() => page.value?.local_tasks ?? { primary: [] });
+// ----------------------------------------------
+// Local tasks (primary tabs)
+// ----------------------------------------------
+const tabs = computed(
+  () => page.value?.local_tasks ?? { primary: [], secondary: [] },
+);
 
-const taskItems = computed(() =>
-  tabs.value.primary.map((t) => ({
-    label: t.label,
-    to: t.url,
-    icon: iconFor(t.label),
+const localTaskLinks = computed(() =>
+  tabs.value.primary.map((tab) => ({
+    label: tab.label,
+    to: tab.url,
+    icon: getIconForLabel(tab.label),
   })),
 );
 
-// ----------------------------
-// Account dropdown
-// ----------------------------
+// ----------------------------------------------
+// Account dropdown menu
+// ----------------------------------------------
 const accountMenu = ref([]);
 
 onMounted(async () => {
-  const raw = await fetchMenu('account');
-
-  accountMenu.value = Array.isArray(raw.value)
-    ? raw.value.map((item) => ({
+  const rawMenu = await fetchMenu('account');
+  accountMenu.value = Array.isArray(rawMenu.value)
+    ? rawMenu.value.map((item) => ({
         label: item.title,
         to: item.relative || item.url,
-        icon: iconFor(item.title),
+        icon: getIconForLabel(item.title),
       }))
     : [];
 });
 
-// ----------------------------
-// Client-only color mode
-// ----------------------------
-const mode = process.client ? useColorMode() : ref('light');
+// ----------------------------------------------
+// Navigation items for LOCAL TASKS
+// ----------------------------------------------
+const taskItems = computed(() => [localTaskLinks.value]);
 
-const toggleColor = () => {
-  if (!process.client) return;
-  mode.value = mode.value === 'dark' ? 'light' : 'dark';
-};
+// ----------------------------------------------
+// Drupal CMS link
+// ----------------------------------------------
+const cmsLink = computed(() => [
+  {
+    label: 'Drupal CMS',
+    icon: 'i-lucide-home',
+    to: `${drupalBaseUrl}/admin/content`,
+    target: '_self',
+  },
+]);
 </script>
 
 <template>
-  <UDashboardToolbar v-if="!isAdministrator">
-    <!-- LEFT: Drupal CMS -->
+  <!-- =========================================================
+       HEADER LAYOUT (this is what fixes literally everything)
+       ========================================================= -->
+  <UHeader v-if="!isAdministrator">
+    <!-- LEFT: Drupal CMS link -->
     <template #left>
-      <UNavigationMenu
-        :items="[
-          [
-            {
-              label: 'Drupal CMS',
-              icon: 'i-lucide-home',
-              to: `${drupalBaseUrl}/admin/content`,
-              target: '_self',
-            },
-          ],
-        ]"
-        highlight
-      />
+      <UNavigationMenu :items="[cmsLink]" orientation="horizontal" />
     </template>
 
-    <!-- CENTER: View / Edit / Revisions -->
+    <!-- CENTER: Local task primary menu -->
     <template #default>
       <UNavigationMenu
-        v-if="taskItems.length"
-        :items="[taskItems]"
+        :items="taskItems"
+        orientation="horizontal"
         highlight
-        class="flex-1"
+        highlight-color="primary"
+        class="hidden md:flex"
+        :ui="{
+          linkLabel: 'text-sm',
+          linkLeadingIcon: 'text-white',
+        }"
       />
     </template>
 
-    <!-- RIGHT: Color toggle + Account dropdown -->
+    <!-- RIGHT: color mode button + account dropdown -->
     <template #right>
-      <!-- COLOR SWITCH -->
       <ClientOnly>
-        <UColorModeButton size="sm">
+        <UColorModeButton size="sm" class="mr-1" :ui="{ icon: 'text-white' }">
           <template #fallback>
             <UButton loading variant="ghost" color="neutral" />
           </template>
         </UColorModeButton>
       </ClientOnly>
 
-      <!-- ACCOUNT MENU -->
       <UNavigationMenu
         :items="[
           [
@@ -123,8 +125,12 @@ const toggleColor = () => {
             },
           ],
         ]"
-        highlight
+        orientation="horizontal"
+        :ui="{
+          linkLabel: 'text-sm',
+          linkLeadingIcon: 'text-white',
+        }"
       />
     </template>
-  </UDashboardToolbar>
+  </UHeader>
 </template>
