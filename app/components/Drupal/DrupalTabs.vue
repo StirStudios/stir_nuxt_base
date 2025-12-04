@@ -60,6 +60,12 @@ const cmsLink = computed(() => [
     target: '_self',
   },
 ]);
+
+// Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
+const onOpen = (val: boolean) => {
+  if (val && import.meta.client)
+    (document.activeElement as HTMLElement | null)?.blur();
+};
 </script>
 
 <template>
@@ -70,6 +76,7 @@ const cmsLink = computed(() => [
       root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented',
       container: 'max-w-full',
     }"
+    @update:open="onOpen"
   >
     <template #left>
       <LazyUNavigationMenu
