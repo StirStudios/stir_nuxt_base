@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
-const drupalBaseUrl = getDrupalBaseUrl();
 const page = getPage();
+const drupalBaseUrl = getDrupalBaseUrl();
 
 const user = computed(() => page.value?.current_user || null);
 const isAdministrator = computed(() =>
@@ -37,19 +37,7 @@ const localTaskLinks = computed(() =>
   })),
 );
 
-const accountMenu = ref([]);
-
-onMounted(async () => {
-  const rawMenu = await fetchMenu('account');
-  accountMenu.value = Array.isArray(rawMenu.value)
-    ? rawMenu.value.map((item) => ({
-        label: item.title,
-        to: item.relative || item.url,
-        icon: getIconForLabel(item.title),
-      }))
-    : [];
-});
-
+// Wrap tasks into NavigationMenu format
 const taskItems = computed(() => [localTaskLinks.value]);
 
 const cmsLink = computed(() => [
@@ -61,10 +49,34 @@ const cmsLink = computed(() => [
   },
 ]);
 
+const accountMenu = ref([]);
+
+onMounted(async () => {
+  const rawMenu = await fetchMenu('account');
+
+  accountMenu.value = Array.isArray(rawMenu.value)
+    ? rawMenu.value.map((item) => ({
+        label: item.title,
+        to: item.relative || item.url,
+        icon: getIconForLabel(item.title),
+      }))
+    : [];
+});
+
+// Build a clean dropdown group
+const accountDropdown = computed(() => [
+  {
+    label: user.value?.name || 'Account',
+    icon: getIconForLabel('My account'),
+    children: accountMenu.value,
+  },
+]);
+
 // Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
 const onOpen = (val: boolean) => {
-  if (val && import.meta.client)
+  if (val && import.meta.client) {
     (document.activeElement as HTMLElement | null)?.blur();
+  }
 };
 </script>
 
@@ -106,15 +118,7 @@ const onOpen = (val: boolean) => {
       </LazyUColorModeButton>
 
       <LazyUNavigationMenu
-        :items="[
-          [
-            {
-              label: user?.name || 'Account',
-              icon: 'i-lucide-user',
-              children: accountMenu,
-            },
-          ],
-        ]"
+        :items="[accountDropdown]"
         :ui="{
           link: 'text-xs text-default',
           linkLeadingIcon: 'text-default',
@@ -125,11 +129,11 @@ const onOpen = (val: boolean) => {
     <template #body>
       <LazyUNavigationMenu
         :items="taskItems"
+        orientation="vertical"
         :ui="{
           link: 'text-xs text-default',
           linkLeadingIcon: 'text-default',
         }"
-        orientation="vertical"
       />
     </template>
   </LazyUHeader>
