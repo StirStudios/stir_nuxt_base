@@ -86,7 +86,6 @@ const links = computed(() => {
 
   const userMenu = [
     {
-      label: '',
       slot: 'switcher' as const,
     },
     {
