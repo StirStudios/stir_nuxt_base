@@ -10,7 +10,6 @@ Add the layer to your project as a git dependency so the bundled Nuxt UI and Tai
 packages are resolved from the layer:
 
 ```json
-// package.json
 {
   "dependencies": {
     "@stir/admin": "github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin"
@@ -22,8 +21,10 @@ Then extend the layer in `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  extends: ['github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin'],
-})
+  extends: [
+    'github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin',
+  ],
+});
 ```
 
 This layer bundles its own UI and Tailwind dependencies so you can extend it without
