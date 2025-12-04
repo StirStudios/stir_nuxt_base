@@ -88,12 +88,9 @@ const links = computed(() => {
     label: user.value?.name || 'Account',
     icon: 'i-lucide-user',
     children: [...accountMenu.value],
-    slot: 'switcher' as const,
   };
-  // This group will contain: [ColorSwitch, Account]
-  const finalGroup = [userMenu];
 
-  return [...base, ...tasks, finalGroup];
+  return [...base, ...tasks, [userMenu]];
 });
 </script>
 <template>
