@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { usePageContext } from '~/composables/usePageContext'
+const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe()
+const drupalBaseUrl = getDrupalBaseUrl()
+const page = getPage()
 
-const { page } = usePageContext()
-const config = useRuntimeConfig()
-const siteApi = config.public.api
-const { fetchMenu } = useDrupalCe()
+const user = computed(() => page.value?.current_user || null)
+const isAdministrator = computed(() =>
+  user.value?.roles?.includes('administrator'),
+)
 
 const accountMenu = ref([])
 
@@ -60,7 +62,7 @@ const links = computed(() => {
       {
         label: 'Drupal CMS',
         icon: getIconForLabel('Drupal CMS'),
-        to: `${siteApi}/admin/content`,
+        to: `${drupalBaseUrl}/admin/content`,
         target: '_self',
       },
     ],
@@ -82,15 +84,16 @@ const links = computed(() => {
 
 <template>
   <UNavigationMenu
+    v-if="isAdministrator"
     content-orientation="vertical"
     highlight
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-neutral-200 dark:bg-neutral-900 p-4 shadow',
-      link: 'text-xs text-black dark:text-white',
+      root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented',
+      link: 'text-xs text-default',
       linkLabel: 'hidden md:block',
-      linkLeadingIcon: 'text-black dark:text-white',
+      linkLeadingIcon: 'text-default',
     }"
   />
 </template>
