@@ -67,7 +67,8 @@ const cmsLink = computed(() => [
     v-if="!isAdministrator"
     mode="drawer"
     :ui="{
-      root: 'sticky top-0 z-60 w-full px-4 py-1 backdrop-blur shadow bg-accented',
+      root: 'sticky top-0 z-60 w-full backdrop-blur shadow bg-accented',
+      container: 'max-w-full',
     }"
   >
     <template #left>
