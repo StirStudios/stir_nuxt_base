@@ -13,12 +13,12 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@stir/admin": "github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin",
-    "@iconify-json/lucide": "^1.2.77",
+    "@iconify-json/lucide": "^1.2.78",
     "@nuxt/ui": "^4.2.1",
     "@nuxtjs/robots": "^5.6.0",
     "@nuxtjs/sitemap": "^7.4.7",
     "@nuxtjs/turnstile": "^1.1.1",
+    "@stir/admin": "github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin",
     "motion-v": "^1.7.4",
     "nuxt": "^4.2.1",
     "nuxt-vitalizer": "^2.0.0",
@@ -34,7 +34,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^5.5.4",
-    "prettier": "^3.7.3",
+    "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "release-it": "^19.0.6",
     "typescript": "^5.9.3"
