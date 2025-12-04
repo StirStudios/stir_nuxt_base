@@ -84,6 +84,8 @@ const cmsLink = computed(() => [
     <template #default>
       <LazyUNavigationMenu
         :items="taskItems"
+        highlight
+        highlight-color="primary"
         :ui="{
           link: 'text-xs text-default',
           linkLeadingIcon: 'text-default',
