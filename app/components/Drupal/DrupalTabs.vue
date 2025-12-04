@@ -84,18 +84,18 @@ const links = computed(() => {
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : [];
 
-  const userMenu = [
-    {
-      label: user.value?.name || 'Account',
-      icon: 'i-lucide-user',
-      children: [...accountMenu.value],
-    },
-  ];
+  const userMenu = {
+    label: user.value?.name || 'Account',
+    icon: 'i-lucide-user',
+    children: [...accountMenu.value],
+    slot: 'switcher' as const,
+  };
+  // This group will contain: [ColorSwitch, Account]
+  const finalGroup = [userMenu];
 
-  return [...base, ...tasks, userMenu];
+  return [...base, ...tasks, finalGroup];
 });
 </script>
-
 <template>
   <UNavigationMenu
     v-if="!isAdministrator"
@@ -104,36 +104,18 @@ const links = computed(() => {
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated px-4 py-1 shadow flex items-center justify-between',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-elevated px-4 py-1 shadow',
       link: 'text-xs',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-white',
     }"
   >
-    <!-- ===============================
-         RIGHT: Color Switch + Account
-         =============================== -->
-    <template #list-trailing>
-      <div class="flex items-center gap-2">
-        <!-- Persistent color mode switch -->
-        <ClientOnly>
-          <UColorModeButton
-            size="sm"
-            :ui="{
-              icon: 'text-white',
-              root: 'cursor-pointer',
-            }"
-          />
-        </ClientOnly>
-
-        <!-- Account dropdown (already themed) -->
-        <UNavigationMenuContent
-          v-for="group in links.slice(-1)"
-          :key="group"
-          :items="group"
-          orientation="horizontal"
-        />
-      </div>
+    <template #switcher-leading>
+      <UColorModeButton>
+        <template #fallback>
+          <UButton loading variant="ghost" color="neutral" />
+        </template>
+      </UColorModeButton>
     </template>
   </UNavigationMenu>
 </template>
