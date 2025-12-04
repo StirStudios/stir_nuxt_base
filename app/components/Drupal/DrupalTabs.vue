@@ -84,16 +84,21 @@ const links = computed(() => {
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : [];
 
-  const userMenu = {
-    label: user.value?.name || 'Account',
-    icon: 'i-lucide-user',
-    children: [...accountMenu.value],
-    slot: 'switcher' as const,
-  };
+  const userMenu = [
+    {
+      label: '',
+      slot: 'switcher' as const,
+    },
+    {
+      label: user.value?.name || 'Account',
+      icon: 'i-lucide-user',
+      children: [...accountMenu.value],
+    },
+  ];
   // This group will contain: [ColorSwitch, Account]
-  const finalGroup = [userMenu];
+  // const finalGroup = [userMenu];
 
-  return [...base, ...tasks, finalGroup];
+  return [...base, ...tasks, userMenu];
 });
 </script>
 <template>
@@ -111,11 +116,13 @@ const links = computed(() => {
     }"
   >
     <template #switcher-leading>
-      <UColorModeButton>
-        <template #fallback>
-          <UButton loading variant="ghost" color="neutral" />
-        </template>
-      </UColorModeButton>
+      <ClientOnly>
+        <UColorModeButton>
+          <template #fallback>
+            <UButton loading variant="ghost" color="neutral" />
+          </template>
+        </UColorModeButton>
+      </ClientOnly>
     </template>
   </UNavigationMenu>
 </template>
