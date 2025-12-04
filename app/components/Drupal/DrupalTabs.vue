@@ -2,6 +2,7 @@
 import { useBreakpoints, breakpointsTailwind } from '@vueuse/core';
 
 const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe();
+
 const page = getPage();
 const drupalBaseUrl = getDrupalBaseUrl();
 
@@ -81,26 +82,24 @@ const links = computed(() => {
   return [...cmsLink, ...tasks, accountDropdown];
 });
 
-const breakpoints = useBreakpoints(breakpointsTailwind);
+const breakpoints = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 });
 const isMdUp = breakpoints.greaterOrEqual('md');
 const isCollapsed = computed(() => !isMdUp.value);
 </script>
 
 <template>
-  <ClientOnly>
-    <UNavigationMenu
-      v-if="isAdministrator"
-      content-orientation="vertical"
-      highlight
-      highlight-color="primary"
-      tooltip
-      :collapsed="isCollapsed"
-      :items="links"
-      :ui="{
-        root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-accented p-4 shadow',
-        link: 'text-xs text-default',
-        linkLeadingIcon: 'text-default',
-      }"
-    />
-  </ClientOnly>
+  <UNavigationMenu
+    v-if="isAdministrator"
+    content-orientation="vertical"
+    highlight
+    highlight-color="primary"
+    tooltip
+    :collapsed="isCollapsed"
+    :items="links"
+    :ui="{
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-accented p-4 shadow',
+      link: 'text-xs text-default',
+      linkLeadingIcon: 'text-default',
+    }"
+  />
 </template>
