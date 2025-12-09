@@ -4,7 +4,7 @@ const { navigation } = useAppConfig().stirTheme
 
 <template>
   <LazyRegionArea area="top" />
-  <LazyDrupalTabs />
+  <DrupalTabs />
   <AppHeader :mode="navigation.mode" />
 
   <UMain id="main-content" as="main" role="main">
