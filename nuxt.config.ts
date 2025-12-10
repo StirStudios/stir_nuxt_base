@@ -1,9 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-11-23',
-
-  extends: [
-    'github:StirStudios/nuxtjs-drupal-stir#release/nuxtjs-drupal-stir-admin',
-  ],
+  compatibilityDate: '2025-12-09',
 
   css: ['~/assets/css/main.css'],
 
