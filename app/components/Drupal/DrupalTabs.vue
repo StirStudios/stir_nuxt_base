@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const { getPage, getDrupalBaseUrl, fetchMenu } = useDrupalCe()
+import { usePageContext } from '~/composables/usePageContext'
+const { getDrupalBaseUrl, fetchMenu } = useDrupalCe()
 
-const page = getPage()
+const { page } = usePageContext()
 const drupalBaseUrl = getDrupalBaseUrl()
 
 const user = computed(() => page.value?.current_user || null)
@@ -82,7 +83,7 @@ const links = computed(() => {
 
 <template>
   <UNavigationMenu
-    v-if="!isAdministrator"
+    v-if="isAdministrator"
     content-orientation="vertical"
     highlight
     highlight-color="primary"
