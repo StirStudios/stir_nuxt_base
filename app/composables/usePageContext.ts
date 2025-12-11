@@ -1,9 +1,8 @@
 export function usePageContext() {
-  const nuxtApp = useNuxtApp()
-  const route = useRoute()
+  const { getPage } = useDrupalCe()
 
-  const currentKey = useState<string>('drupal-ce-current-page-key', () => '')
-  const page = computed(() => nuxtApp.payload?.data?.[currentKey.value])
+  const page = getPage()
+  const route = useRoute()
 
   // Reactive + safe slug
   const slug = computed(() => {
