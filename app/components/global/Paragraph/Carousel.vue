@@ -92,7 +92,7 @@ function handleSelect() {
 </script>
 
 <template>
-  <div class="relative z-10" :class="[theme.carousel.padding, width, soacing]">
+  <div class="relative z-10" :class="[theme.carousel.padding, width, spacing]">
     <UCarousel
       v-if="slides.length"
       ref="carousel"
@@ -116,9 +116,9 @@ function handleSelect() {
       }"
       @select="handleSelect"
     >
-      <div :class="gridItems">
+      <WrapDiv :styles="gridItems">
         <component :is="item.vnode" :key="item.key" />
-      </div>
+      </WrapDiv>
     </UCarousel>
   </div>
 </template>
