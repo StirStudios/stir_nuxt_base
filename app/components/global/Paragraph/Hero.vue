@@ -108,13 +108,13 @@ const sectionClasses = computed(() => {
 
   <template v-else>
     <section :class="sectionClasses">
-      <div
-        :class="[
-          heroTheme.text.base,
-          isFrontEffective && heroTheme.text.isFront,
-        ]"
-      >
-        <EditLink :link="editLink">
+      <EditLink :link="editLink">
+        <div
+          :class="[
+            heroTheme.text.base,
+            isFrontEffective && heroTheme.text.isFront,
+          ]"
+        >
           <WrapAnimate :effect="direction">
             <slot name="title">
               <HeroContent
@@ -140,10 +140,10 @@ const sectionClasses = computed(() => {
 
             <slot name="button" />
           </WrapAnimate>
-        </EditLink>
-      </div>
+        </div>
 
-      <slot name="media" />
+        <slot name="media" />
+      </EditLink>
     </section>
   </template>
 </template>
