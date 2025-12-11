@@ -100,47 +100,50 @@ const sectionClasses = computed(() => {
 </script>
 
 <template>
-  <template v-if="mode === 'simple'">
-    <slot name="header" />
-    <slot name="media" />
-    <slot name="footer" />
-  </template>
-
-  <template v-else>
-    <section :class="sectionClasses">
-      <EditLink :link="editLink" />
-      <div
-        :class="[
-          heroTheme.text.base,
-          isFrontEffective && heroTheme.text.isFront,
-        ]"
-      >
-        <WrapAnimate :effect="direction">
-          <slot name="title">
-            <HeroContent
-              v-if="text"
-              :hero-text="text"
-              :is-front="isFrontEffective"
-              :page-title="pageTitleEffective"
-              :site-slogan="siteSlogan"
-            />
-
-            <h1
-              v-else
-              :class="[
-                isFrontEffective ? heroTheme.text?.isFront : heroTheme.text?.h1,
-                heroTheme.text?.container,
-              ]"
-            >
-              {{ pageTitleEffective }}
-            </h1>
-          </slot>
-
-          <slot name="button" />
-        </WrapAnimate>
-      </div>
-
+  <EditLink :link="editLink">
+    <template v-if="mode === 'simple'">
+      <slot name="header" />
       <slot name="media" />
-    </section>
-  </template>
+      <slot name="footer" />
+    </template>
+
+    <template v-else>
+      <section :class="sectionClasses">
+        <div
+          :class="[
+            heroTheme.text.base,
+            isFrontEffective && heroTheme.text.isFront,
+          ]"
+        >
+          <WrapAnimate :effect="direction">
+            <slot name="title">
+              <HeroContent
+                v-if="text"
+                :hero-text="text"
+                :is-front="isFrontEffective"
+                :page-title="pageTitleEffective"
+                :site-slogan="siteSlogan"
+              />
+
+              <h1
+                v-else
+                :class="[
+                  isFrontEffective
+                    ? heroTheme.text?.isFront
+                    : heroTheme.text?.h1,
+                  heroTheme.text?.container,
+                ]"
+              >
+                {{ pageTitleEffective }}
+              </h1>
+            </slot>
+
+            <slot name="button" />
+          </WrapAnimate>
+        </div>
+
+        <slot name="media" />
+      </section>
+    </template>
+  </EditLink>
 </template>
