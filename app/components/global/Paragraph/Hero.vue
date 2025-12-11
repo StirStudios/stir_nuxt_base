@@ -108,42 +108,39 @@ const sectionClasses = computed(() => {
 
   <template v-else>
     <section :class="sectionClasses">
-      <EditLink :link="editLink">
-        <div
-          :class="[
-            heroTheme.text.base,
-            isFrontEffective && heroTheme.text.isFront,
-          ]"
-        >
-          <WrapAnimate :effect="direction">
-            <slot name="title">
-              <HeroContent
-                v-if="text"
-                :hero-text="text"
-                :is-front="isFrontEffective"
-                :page-title="pageTitleEffective"
-                :site-slogan="siteSlogan"
-              />
+      <EditLink :link="editLink" />
+      <div
+        :class="[
+          heroTheme.text.base,
+          isFrontEffective && heroTheme.text.isFront,
+        ]"
+      >
+        <WrapAnimate :effect="direction">
+          <slot name="title">
+            <HeroContent
+              v-if="text"
+              :hero-text="text"
+              :is-front="isFrontEffective"
+              :page-title="pageTitleEffective"
+              :site-slogan="siteSlogan"
+            />
 
-              <h1
-                v-else
-                :class="[
-                  isFrontEffective
-                    ? heroTheme.text?.isFront
-                    : heroTheme.text?.h1,
-                  heroTheme.text?.container,
-                ]"
-              >
-                {{ pageTitleEffective }}
-              </h1>
-            </slot>
+            <h1
+              v-else
+              :class="[
+                isFrontEffective ? heroTheme.text?.isFront : heroTheme.text?.h1,
+                heroTheme.text?.container,
+              ]"
+            >
+              {{ pageTitleEffective }}
+            </h1>
+          </slot>
 
-            <slot name="button" />
-          </WrapAnimate>
-        </div>
+          <slot name="button" />
+        </WrapAnimate>
+      </div>
 
-        <slot name="media" />
-      </EditLink>
+      <slot name="media" />
     </section>
   </template>
 </template>
