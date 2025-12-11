@@ -26,7 +26,5 @@ const motionEffects = computed(() => getMotionEffect(props.effect))
     <slot />
   </motion.div>
 
-  <template v-else>
-    <slot />
-  </template>
+  <slot v-else />
 </template>
