@@ -13,9 +13,7 @@ defineSlots<{ default(): unknown }>()
 
 const { container: themeContainer, card: themeCard } = useAppConfig().stirTheme
 
-const gridClasses = computed(
-  () => props.gridItems || props.gridClasses || 'grid-cols-1',
-)
+const gridClasses = computed(() => props.gridItems || props.gridClasses)
 
 const wrapperClasses = computed(() => {
   return [
@@ -30,9 +28,9 @@ const wrapperClasses = computed(() => {
 
 <template>
   <WrapDiv :styles="wrapperClasses">
-    <div :class="gridClasses">
+    <WrapDiv :styles="gridClasses">
       <slot />
-    </div>
+    </WrapDiv>
     <CardGradient v-if="props.card" :layout="props" />
   </WrapDiv>
 </template>
