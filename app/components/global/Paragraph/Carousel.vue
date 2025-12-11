@@ -1,10 +1,17 @@
 <script setup lang="ts">
 const props = defineProps<{
+  // Base identifiers
+  id?: number | string
+  uuid?: string
+  parentUuid?: string
+  region?: string
+
   // Core content
   items?: unknown[]
 
   // Layout
   gridItems?: string
+  editLink?: string
 
   // UI / Interaction
   carouselIndicators?: boolean
