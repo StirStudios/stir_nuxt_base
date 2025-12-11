@@ -51,6 +51,8 @@ const slotRows = tk.hydrateOrder(
     :grid-items="gridItems"
     :items="slotRows"
     :randomize="randomize"
+    :spacing="spacing"
+    :width="width"
   />
 
   <WrapGrid

@@ -8,10 +8,12 @@ const props = defineProps<{
 
   // Core content
   items?: unknown[]
+  randomize?: boolean
 
   // Layout
   gridItems?: string
-  editLink?: string
+  width?: string
+  spacing?: string
 
   // UI / Interaction
   carouselIndicators?: boolean
@@ -20,6 +22,8 @@ const props = defineProps<{
   carouselAutoscroll?: boolean
   carouselAutoheight?: boolean
   carouselInterval?: number
+
+  editLink?: string
 }>()
 
 const carousel = useTemplateRef<'carousel'>('carousel')
@@ -88,7 +92,7 @@ function handleSelect() {
 </script>
 
 <template>
-  <div class="relative z-10" :class="theme.carousel.padding">
+  <div class="relative z-10" :class="[theme.carousel.padding, width, soacing]">
     <UCarousel
       v-if="slides.length"
       ref="carousel"
