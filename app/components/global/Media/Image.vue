@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { usePageContext } from '~/composables/usePageContext'
+
 const props = defineProps<{
   // Core media info
   title?: string
@@ -26,6 +28,7 @@ const props = defineProps<{
 }>()
 
 const theme = useAppConfig().stirTheme
+const { isFront } = usePageContext()
 const isEager = computed(() => props.loading === 'eager')
 
 // Try to get hero context
@@ -44,7 +47,10 @@ const isBare = computed(() => isHero.value || props.noWrapper === true)
     :alt="alt || ''"
     :class="
       isHero
-        ? theme.hero.image.base
+        ? [
+            theme.hero.image.base,
+            isFront.value ? theme.hero.image.isFront : 'max-w-none',
+          ]
         : [
             theme.media.base,
             theme.media.rounded,
