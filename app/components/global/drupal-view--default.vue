@@ -35,7 +35,15 @@ const rawRows = computed(() => tk.slot('rows'))
 
 const slotRows = tk.hydrateOrder(
   () => rawRows.value,
-  () => (props.randomize ? tk.shuffle(rawRows.value) : rawRows.value),
+  () =>
+    (props.randomize ? tk.shuffle(rawRows.value) : rawRows.value).map(
+      (vnode, index) => {
+        return {
+          ...vnode,
+          key: vnode.key ?? `slide-${index}-${Math.random()}`,
+        }
+      },
+    ),
 )
 </script>
 
