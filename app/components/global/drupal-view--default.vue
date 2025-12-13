@@ -70,9 +70,13 @@ const slotRows = tk.hydrateOrder(
     :spacing="spacing"
     :width="width"
   >
-    <template v-for="(node, i) in slotRows" :key="i">
-      <component :is="node" />
-    </template>
+    <div class="view">
+      <template v-for="(node, i) in slotRows" :key="i">
+        <div class="item">
+          <component :is="node" />
+        </div>
+      </template>
+    </div>
   </WrapGrid>
 
   <DrupalViewsPagination
