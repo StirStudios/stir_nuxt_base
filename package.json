@@ -22,20 +22,20 @@
     "nuxt": "^4.2.2",
     "nuxt-vitalizer": "^2.0.0",
     "nuxtjs-drupal-ce": "^2.5.0",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^4.1.18",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",
-    "@nuxt/scripts": "^0.13.0",
+    "@nuxt/scripts": "^0.13.1",
     "@types/node": "25.0.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "release-it": "^19.0.6",
+    "release-it": "^19.1.0",
     "typescript": "^5.9.3"
   },
   "release-it": {
