@@ -133,7 +133,7 @@ const sectionClasses = computed(() => {
                 :site-slogan="siteSlogan"
               />
 
-              <h1 v-else :class="h1Classes">
+              <h1 v-else v-bind="h1Classes.length ? { class: h1Classes } : {}">
                 {{ pageTitleEffective }}
               </h1>
             </slot>
