@@ -83,13 +83,13 @@ const links = computed(() => {
 
 <template>
   <UNavigationMenu
-    v-if="isAdministrator"
+    v-if="!isAdministrator"
     content-orientation="vertical"
     highlight
     highlight-color="primary"
     :items="links"
     :ui="{
-      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-accented p-4 shadow',
+      root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-zinc-200 text-zinc-800 dark-text-white dark:bg-zinc-900 p-4 shadow',
       link: 'text-xs text-default',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-default',
