@@ -66,6 +66,7 @@ const componentMap = {
   video: resolveComponent('MediaVideo'),
   document: resolveComponent('MediaDocument'),
   audio: resolveComponent('MediaAudio'),
+  link: resolveComponent('MediaLink'),
 }
 </script>
 
