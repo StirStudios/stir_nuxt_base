@@ -116,9 +116,8 @@ const handleModelUpdate = (val: string[]) => {
       <span
         v-if="item.props.description"
         :class="{ 'text-muted': item.props.disabled }"
-      >
-        {{ item.props.description }}
-      </span>
+        v-html="item.props.description"
+      />
       <span
         v-if="item.props.price"
         class="extra"
