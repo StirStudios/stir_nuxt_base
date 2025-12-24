@@ -51,10 +51,28 @@ const items = computed(() => {
     const compareKey = rawProps.checkAgainst
     const valueToCompare = getComparisonValue(compareKey)
 
-    const disabled =
+    const disableWhen = rawProps.disable_when
+    const conditionValue = disableWhen?.field
+      ? props.state[disableWhen.field]
+      : null
+
+    const selected = Array.isArray(conditionValue)
+      ? conditionValue
+      : typeof conditionValue === 'object' && conditionValue !== null
+        ? Object.keys(conditionValue).filter((k) => conditionValue[k] === true)
+        : []
+
+    const disabledByRule =
+      !!disableWhen?.field &&
+      !!disableWhen?.includes &&
+      selected.includes(disableWhen.includes)
+
+    const disabledByRange =
       valueToCompare !== null &&
       ((typeof min === 'number' && valueToCompare < min) ||
         (typeof max === 'number' && valueToCompare > max))
+
+    const disabled = disabledByRule || disabledByRange
 
     return {
       label,
@@ -71,13 +89,20 @@ const items = computed(() => {
  * - Enforce the max selections
  */
 const handleModelUpdate = (val: string[]) => {
-  let updated = [...val]
-
   const disabledKeys = new Set(
     items.value.filter((item) => item.disabled).map((item) => item.value),
   )
 
-  for (const selectedKey of val) {
+  // Restore any disabled options that were previously selected
+  const previous = props.state[props.fieldName] || []
+  let updated = Array.from(
+    new Set([
+      ...val,
+      ...previous.filter((key: string) => disabledKeys.has(key)),
+    ]),
+  )
+
+  for (const selectedKey of updated) {
     const meta = props.field['#optionProperties']?.[selectedKey]
     const linked = meta?.linked_to || meta?.linkedTo || []
 
