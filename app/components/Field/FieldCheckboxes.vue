@@ -51,7 +51,7 @@ const items = computed(() => {
     const compareKey = rawProps.checkAgainst
     const valueToCompare = getComparisonValue(compareKey)
 
-    const disableWhen = rawProps.disable_when
+    const disableWhen = rawProps.disableWhen
     const conditionValue = disableWhen?.field
       ? props.state[disableWhen.field]
       : null
