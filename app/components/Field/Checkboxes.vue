@@ -228,15 +228,25 @@ const handleModelUpdate = (val: string[]) => {
 
   // Remove auto-linked options that are no longer required
   updated = updated.filter((key) => {
+    const normalizedKey = normalizeValue(key)
+
     const isAutoLinked = Object.values(
       props.field['#optionProperties'] || {},
     ).some((opt) =>
       (opt.linked_to || opt.linkedTo || []).some(
-        (l: string) => normalizeValue(l) === normalizeValue(key),
+        (l: string) => normalizeValue(l) === normalizedKey,
       ),
     )
 
-    return !isAutoLinked || requiredByLink.has(key)
+    const userExplicitlySelected = val.some(
+      (v) => normalizeValue(v) === normalizedKey,
+    )
+
+    return (
+      !isAutoLinked || // normal option
+      requiredByLink.has(key) || // still required
+      userExplicitlySelected // user chose it directly
+    )
   })
 
   updated = enforceGroupLimit(
