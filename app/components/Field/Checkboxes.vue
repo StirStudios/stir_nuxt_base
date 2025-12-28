@@ -15,6 +15,16 @@ const props = defineProps<{
 const descriptionContent = shallowRef<string>('')
 const tabBus = useEventBus<string>('tab-changed')
 
+const additionalLaborBreakdown = inject<
+  ComputedRef<{
+    total: number
+    units: { label: string; count: number }[]
+  } | null>
+>(
+  'additionalLaborBreakdown',
+  computed(() => null),
+)
+
 onMounted(() => {
   if (!Array.isArray(props.state[props.fieldName])) {
     props.state[props.fieldName] = []
