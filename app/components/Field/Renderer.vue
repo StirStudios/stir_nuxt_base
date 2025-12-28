@@ -2,16 +2,16 @@
 import type { WebformFieldProps, WebformState } from '~/types'
 import { useEvaluateState } from '~/composables/useEvaluateState'
 
-import FieldInput from '@/components/Field/FieldInput'
-import FieldTextarea from '@/components/Field/FieldTextarea'
-import FieldSelect from '@/components/Field/FieldSelect'
-import FieldRadio from '@/components/Field/FieldRadio'
-import FieldCheckbox from '@/components/Field/FieldCheckbox'
-import FieldCheckboxes from '@/components/Field/FieldCheckboxes'
-import FieldDate from '@/components/Field/FieldDate'
-import FieldDateTime from '@/components/Field/FieldDateTime'
-import FieldAddress from '@/components/Field/FieldAddress'
-import FieldProcessedText from '@/components/Field/FieldProcessedText'
+import FieldInput from '~/components/Field/Input'
+import FieldTextarea from '~/components/Field/Textarea'
+import FieldSelect from '~/components/Field/Select'
+import FieldRadio from '~/components/Field/Radio'
+import FieldCheckbox from '~/components/Field/Checkbox'
+import FieldCheckboxes from '~/components/Field/Checkboxes'
+import FieldDate from '~/components/Field/Date'
+import FieldDateTime from '~/components/Field/DateTime'
+import FieldAddress from '~/components/Field/Address'
+import FieldProcessedText from '~/components/Field/ProcessedText'
 
 const props = withDefaults(
   defineProps<{

@@ -35,6 +35,8 @@ onMounted(() => {
   handleModelUpdate(props.state[props.fieldName])
 })
 
+const isFieldDisabled = computed(() => props.field['#disabled'] === true)
+
 const getComparisonValue = (key?: string): number | null => {
   if (!key) return null
   const normalizedKey = Object.keys(props.state).find(
@@ -72,7 +74,7 @@ const items = computed(() => {
       ((typeof min === 'number' && valueToCompare < min) ||
         (typeof max === 'number' && valueToCompare > max))
 
-    const disabled = disabledByRule || disabledByRange
+    const disabled = isFieldDisabled.value || disabledByRule || disabledByRange
 
     return {
       label,
@@ -81,6 +83,87 @@ const items = computed(() => {
       disabled,
     }
   })
+})
+
+const additionalLaborBreakdown = computed(() => {
+  const rules =
+    props.field['#rules']?.multiplierRules ||
+    props.field['#rules']?.multiplier_rules ||
+    []
+
+  const optionProps = props.field['#optionProperties'] || {}
+  const optionLabels = props.field['#options'] || {}
+
+  const breakdown: { label: string; count: number }[] = []
+  let total = 0
+
+  /**
+   * Map:
+   *   appetizer_stations → "Appetizer Stations"
+   *   late_night_snack   → "Late Night Snack"
+   */
+  const sourceFieldToLabel: Record<string, string> = {}
+
+  const autoRules =
+    props.field['#rules']?.autoSelectWhen ||
+    props.field['#rules']?.auto_select_when ||
+    []
+
+  autoRules.forEach((rule: any) => {
+    const sourceField = rule.when?.all?.[0]?.field
+    const optionKey = rule.select?.option
+
+    if (!sourceField || !optionKey) return
+
+    const resolvedOptionKey = Object.keys(optionLabels).find(
+      (k) => normalizeValue(k) === normalizeValue(optionKey),
+    )
+
+    if (resolvedOptionKey) {
+      sourceFieldToLabel[normalizeValue(sourceField)] =
+        optionLabels[resolvedOptionKey]
+    }
+  })
+
+  rules.forEach((rule: any) => {
+    const sourceKey = Object.keys(props.state).find(
+      (k) =>
+        normalizeValue(k) ===
+        normalizeValue(rule.sourceField || rule.source_field),
+    )
+
+    if (!sourceKey) return
+
+    const selected = props.state[sourceKey]
+    const count = Array.isArray(selected)
+      ? selected.length
+      : typeof selected === 'object' && selected !== null
+        ? Object.keys(selected).filter((k) => selected[k] === true).length
+        : 0
+
+    if (count <= 1) return
+
+    const step = Number(rule.step || 2)
+    const units = Math.ceil((count - 1) / step)
+    if (units <= 0) return
+
+    const optionKey = Object.keys(optionProps).find(
+      (k) => normalizeValue(k) === normalizeValue(rule.option),
+    )
+
+    const unitPrice = optionKey ? optionProps[optionKey]?.price : 0
+
+    breakdown.push({
+      label:
+        sourceFieldToLabel[normalizeValue(rule.sourceField)] ||
+        sourceKey.replace(/_/g, ' '),
+      count: units,
+    })
+
+    total += units * unitPrice
+  })
+
+  return breakdown.length ? { total, units: breakdown } : null
 })
 
 /**
@@ -125,6 +208,32 @@ const handleModelUpdate = (val: string[]) => {
 
   props.state[props.fieldName] = updated
 }
+
+watch(
+  additionalLaborBreakdown,
+  (val) => {
+    if (props.fieldName !== 'additionalLaborFnb') return
+
+    const optionKey = 'additionalLaborUnit'
+    const current: string[] = props.state[props.fieldName] || []
+
+    const hasLabor =
+      !!val && Array.isArray(val.units) && val.units.length > 0 && val.total > 0
+
+    if (hasLabor) {
+      // ensure checkbox is selected
+      if (!current.includes(optionKey)) {
+        props.state[props.fieldName] = [...current, optionKey]
+      }
+    } else {
+      // ensure checkbox is removed
+      if (current.includes(optionKey)) {
+        props.state[props.fieldName] = current.filter((v) => v !== optionKey)
+      }
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -146,11 +255,27 @@ const handleModelUpdate = (val: string[]) => {
         v-html="item.props.description"
       />
       <span
-        v-if="item.props.price"
+        v-if="item.value === 'additionalLaborUnit' && additionalLaborBreakdown"
         class="extra"
-        :class="{ 'text-muted': item.props.disabled }"
       >
+        ${{ additionalLaborBreakdown.total.toLocaleString() }}
+      </span>
+
+      <span v-else-if="item.props.price" class="extra">
         ${{ item.props.price.toLocaleString() }}
+      </span>
+
+      <span
+        v-if="item.value === 'additionalLaborUnit' && additionalLaborBreakdown"
+        class="extra text-muted mt-1 block text-xs"
+      >
+        <span
+          v-for="unit in additionalLaborBreakdown.units"
+          :key="unit.label"
+          class="block"
+        >
+          {{ unit.count }} × {{ unit.label }}
+        </span>
       </span>
     </template>
   </UCheckboxGroup>
