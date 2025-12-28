@@ -194,12 +194,27 @@ const handleModelUpdate = (val: string[]) => {
   )
 
   for (const selectedKey of updated) {
-    const meta = props.field['#optionProperties']?.[selectedKey]
+    // Resolve the actual option key from optionProperties
+    const resolvedKey =
+      Object.keys(props.field['#optionProperties'] || {}).find(
+        (k) => normalizeValue(k) === normalizeValue(selectedKey),
+      ) || selectedKey
+
+    const meta = props.field['#optionProperties']?.[resolvedKey]
     const linked = meta?.linked_to || meta?.linkedTo || []
 
     for (const linkedKey of linked) {
-      if (!updated.includes(linkedKey) && !disabledKeys.has(linkedKey)) {
-        updated.push(linkedKey)
+      // Resolve linked option key as well
+      const resolvedLinkedKey =
+        Object.keys(props.field['#optionProperties'] || {}).find(
+          (k) => normalizeValue(k) === normalizeValue(linkedKey),
+        ) || linkedKey
+
+      if (
+        !updated.includes(resolvedLinkedKey) &&
+        !disabledKeys.has(resolvedLinkedKey)
+      ) {
+        updated.push(resolvedLinkedKey)
       }
     }
   }
