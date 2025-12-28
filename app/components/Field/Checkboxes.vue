@@ -12,18 +12,22 @@ const props = defineProps<{
   state: WebformState
 }>()
 
+/**
+ * Additional labor is a venue-specific derived pricing feature.
+ * This guard ensures the logic is completely inert for all other fields.
+ */
+const supportsAdditionalLabor = computed(() => {
+  return (
+    props.fieldName === 'additionalLaborFnb' &&
+    Array.isArray(
+      props.field['#rules']?.multiplierRules ||
+        props.field['#rules']?.multiplier_rules,
+    )
+  )
+})
+
 const descriptionContent = shallowRef<string>('')
 const tabBus = useEventBus<string>('tab-changed')
-
-const additionalLaborBreakdown = inject<
-  ComputedRef<{
-    total: number
-    units: { label: string; count: number }[]
-  } | null>
->(
-  'additionalLaborBreakdown',
-  computed(() => null),
-)
 
 onMounted(() => {
   if (!Array.isArray(props.state[props.fieldName])) {
@@ -95,86 +99,80 @@ const items = computed(() => {
   })
 })
 
-// const additionalLaborBreakdown = computed(() => {
-// const rules =
-//   props.field['#rules']?.multiplierRules ||
-//   props.field['#rules']?.multiplier_rules ||
-//   []
-//
-// const optionProps = props.field['#optionProperties'] || {}
-// const optionLabels = props.field['#options'] || {}
-//
-// const breakdown: { label: string; count: number }[] = []
-// let total = 0
-//
-// /**
-//  * Map:
-//  *   appetizer_stations → "Appetizer Stations"
-//  *   late_night_snack   → "Late Night Snack"
-//  */
-// const sourceFieldToLabel: Record<string, string> = {}
-//
-// const autoRules =
-//   props.field['#rules']?.autoSelectWhen ||
-//   props.field['#rules']?.auto_select_when ||
-//   []
-//
-// autoRules.forEach((rule: any) => {
-//   const sourceField = rule.when?.all?.[0]?.field
-//   const optionKey = rule.select?.option
-//
-//   if (!sourceField || !optionKey) return
-//
-//   const resolvedOptionKey = Object.keys(optionLabels).find(
-//     (k) => normalizeValue(k) === normalizeValue(optionKey),
-//   )
-//
-//   if (resolvedOptionKey) {
-//     sourceFieldToLabel[normalizeValue(sourceField)] =
-//       optionLabels[resolvedOptionKey]
-//   }
-// })
-//
-// rules.forEach((rule: any) => {
-//   const sourceKey = Object.keys(props.state).find(
-//     (k) =>
-//       normalizeValue(k) ===
-//       normalizeValue(rule.sourceField || rule.source_field),
-//   )
-//
-//   if (!sourceKey) return
-//
-//   const selected = props.state[sourceKey]
-//   const count = Array.isArray(selected)
-//     ? selected.length
-//     : typeof selected === 'object' && selected !== null
-//       ? Object.keys(selected).filter((k) => selected[k] === true).length
-//       : 0
-//
-//   if (count <= 1) return
-//
-//   const step = Number(rule.step || 2)
-//   const units = Math.ceil((count - 1) / step)
-//   if (units <= 0) return
-//
-//   const optionKey = Object.keys(optionProps).find(
-//     (k) => normalizeValue(k) === normalizeValue(rule.option),
-//   )
-//
-//   const unitPrice = optionKey ? optionProps[optionKey]?.price : 0
-//
-//   breakdown.push({
-//     label:
-//       sourceFieldToLabel[normalizeValue(rule.sourceField)] ||
-//       sourceKey.replace(/_/g, ' '),
-//     count: units,
-//   })
-//
-//   total += units * unitPrice
-// })
-//
-// return breakdown.length ? { total, units: breakdown } : null
-// })
+const additionalLaborBreakdown = computed(() => {
+  if (!supportsAdditionalLabor.value) return null
+
+  const rules =
+    props.field['#rules']?.multiplierRules ||
+    props.field['#rules']?.multiplier_rules ||
+    []
+
+  const optionProps = props.field['#optionProperties'] || {}
+  const optionLabels = props.field['#options'] || {}
+
+  const breakdown: { label: string; count: number }[] = []
+  let total = 0
+
+  const sourceFieldToLabel: Record<string, string> = {}
+
+  const autoRules =
+    props.field['#rules']?.autoSelectWhen ||
+    props.field['#rules']?.auto_select_when ||
+    []
+
+  autoRules.forEach((rule: any) => {
+    const sourceField = rule.when?.all?.[0]?.field
+    const optionKey = rule.select?.option
+    if (!sourceField || !optionKey) return
+
+    const resolvedOptionKey = Object.keys(optionLabels).find(
+      (k) => normalizeValue(k) === normalizeValue(optionKey),
+    )
+
+    if (resolvedOptionKey) {
+      sourceFieldToLabel[normalizeValue(sourceField)] =
+        optionLabels[resolvedOptionKey]
+    }
+  })
+
+  rules.forEach((rule: any) => {
+    const sourceKey = Object.keys(props.state).find(
+      (k) =>
+        normalizeValue(k) ===
+        normalizeValue(rule.sourceField || rule.source_field),
+    )
+    if (!sourceKey) return
+
+    const selected = props.state[sourceKey]
+    const count = Array.isArray(selected)
+      ? selected.length
+      : typeof selected === 'object' && selected !== null
+        ? Object.keys(selected).filter((k) => selected[k] === true).length
+        : 0
+
+    if (count <= 1) return
+
+    const step = Number(rule.step || 2)
+    const units = Math.ceil((count - 1) / step)
+    if (units <= 0) return
+
+    const optionKey = Object.keys(optionProps).find(
+      (k) => normalizeValue(k) === normalizeValue(rule.option),
+    )
+    const unitPrice = optionKey ? optionProps[optionKey]?.price : 0
+
+    breakdown.push({
+      label:
+        sourceFieldToLabel[normalizeValue(rule.sourceField)] ||
+        sourceKey.replace(/_/g, ' '),
+      count: units,
+    })
+
+    total += units * unitPrice
+  })
+
+  return breakdown.length ? { total, units: breakdown } : null
+})
 
 /**
  * Handle Model Update:
@@ -219,31 +217,27 @@ const handleModelUpdate = (val: string[]) => {
   props.state[props.fieldName] = updated
 }
 
-// watch(
-// additionalLaborBreakdown,
-// (val) => {
-//   if (props.fieldName !== 'additionalLaborFnb') return
-//
-//   const optionKey = 'additionalLaborUnit'
-//   const current: string[] = props.state[props.fieldName] || []
-//
-//   const hasLabor =
-//     !!val && Array.isArray(val.units) && val.units.length > 0 && val.total > 0
-//
-//   if (hasLabor) {
-//     // ensure checkbox is selected
-//     if (!current.includes(optionKey)) {
-//       props.state[props.fieldName] = [...current, optionKey]
-//     }
-//   } else {
-//     // ensure checkbox is removed
-//     if (current.includes(optionKey)) {
-//       props.state[props.fieldName] = current.filter((v) => v !== optionKey)
-//     }
-//   }
-// },
-// { immediate: true },
-// )
+watch(
+  additionalLaborBreakdown,
+  (val) => {
+    if (!supportsAdditionalLabor.value) return
+
+    const optionKey = 'additionalLaborUnit'
+    const current: string[] = props.state[props.fieldName] || []
+
+    const hasLabor =
+      !!val && Array.isArray(val.units) && val.units.length > 0 && val.total > 0
+
+    if (hasLabor && !current.includes(optionKey)) {
+      props.state[props.fieldName] = [...current, optionKey]
+    }
+
+    if (!hasLabor && current.includes(optionKey)) {
+      props.state[props.fieldName] = current.filter((v) => v !== optionKey)
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
