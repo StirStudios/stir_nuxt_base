@@ -184,8 +184,8 @@ const handleModelUpdate = (val: string[]) => {
     items.value.filter((item) => item.disabled).map((item) => item.value),
   )
 
-  // Restore any disabled options that were previously selected
   const previous = props.state[props.fieldName] || []
+
   let updated = Array.from(
     new Set([
       ...val,
@@ -193,8 +193,14 @@ const handleModelUpdate = (val: string[]) => {
     ]),
   )
 
+  // ======================================================
+  // LINKED OPTIONS (AUTO-ADD + AUTO-REMOVE)
+  // ======================================================
+
+  const requiredByLink = new Set<string>()
+
+  // Add linked options when parent is selected
   for (const selectedKey of updated) {
-    // Resolve the actual option key from optionProperties
     const resolvedKey =
       Object.keys(props.field['#optionProperties'] || {}).find(
         (k) => normalizeValue(k) === normalizeValue(selectedKey),
@@ -204,11 +210,12 @@ const handleModelUpdate = (val: string[]) => {
     const linked = meta?.linked_to || meta?.linkedTo || []
 
     for (const linkedKey of linked) {
-      // Resolve linked option key as well
       const resolvedLinkedKey =
         Object.keys(props.field['#optionProperties'] || {}).find(
           (k) => normalizeValue(k) === normalizeValue(linkedKey),
         ) || linkedKey
+
+      requiredByLink.add(resolvedLinkedKey)
 
       if (
         !updated.includes(resolvedLinkedKey) &&
@@ -219,6 +226,19 @@ const handleModelUpdate = (val: string[]) => {
     }
   }
 
+  // Remove auto-linked options that are no longer required
+  updated = updated.filter((key) => {
+    const isAutoLinked = Object.values(
+      props.field['#optionProperties'] || {},
+    ).some((opt) =>
+      (opt.linked_to || opt.linkedTo || []).some(
+        (l: string) => normalizeValue(l) === normalizeValue(key),
+      ),
+    )
+
+    return !isAutoLinked || requiredByLink.has(key)
+  })
+
   updated = enforceGroupLimit(
     updated,
     props.fieldName,
@@ -227,6 +247,7 @@ const handleModelUpdate = (val: string[]) => {
     props.state,
     webformState,
   )
+
   updated = enforceMaxSelected(updated, props.field['#maxSelected'])
 
   props.state[props.fieldName] = updated
