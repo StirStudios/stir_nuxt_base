@@ -2,17 +2,6 @@
 import type { WebformFieldProps, WebformState } from '~/types'
 import { useEvaluateState } from '~/composables/useEvaluateState'
 
-// import FieldInput from '~/components/Field/Input'
-// import FieldTextarea from '~/components/Field/Textarea'
-// import FieldSelect from '~/components/Field/Select'
-// import FieldRadio from '~/components/Field/Radio'
-// import FieldCheckbox from '~/components/Field/Checkbox'
-// import FieldCheckboxes from '~/components/Field/Checkboxes'
-// import FieldDate from '~/components/Field/Date'
-// import FieldDateTime from '~/components/Field/DateTime'
-// import FieldAddress from '~/components/Field/Address'
-// import FieldProcessedText from '~/components/Field/ProcessedText'
-
 import {
   FieldInput,
   FieldTextarea,
@@ -59,22 +48,6 @@ const componentMap: Record<string, Component> = {
   processed_text: FieldProcessedText,
 }
 
-// const componentMap: Record<string, string> = {
-// textfield: 'FieldInput',
-// email: 'FieldInput',
-// number: 'FieldInput',
-// tel: 'FieldInput',
-// textarea: 'FieldTextarea',
-// select: 'FieldSelect',
-// radio: 'FieldRadio',
-// checkbox: 'FieldCheckbox',
-// checkboxes: 'FieldCheckboxes',
-// datetime: 'FieldDateTime',
-// date: 'FieldDate',
-// address: 'FieldAddress',
-// processed_text: 'FieldProcessedText',
-// }
-
 const shouldRender = computed(() => {
   return (
     props.bypassRelocatedFilter === true || props.field['#relocated'] !== true
@@ -84,11 +57,6 @@ const shouldRender = computed(() => {
 const useFloatingLabels = computed(
   () => props.field['#floating_label'] ?? webform.labels.floating,
 )
-
-// const resolvedComponent = computed(() => {
-// const name = componentMap[props.field['#type']]
-// return name ? resolveComponent(name) : null
-// })
 
 const resolvedComponent = computed(
   () => componentMap[props.field['#type']] || null,
