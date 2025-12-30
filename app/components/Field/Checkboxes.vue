@@ -147,13 +147,6 @@ const handleModelUpdate = (val: string[]) => {
         :class="{ 'text-muted': item.props.disabled }"
         v-html="item.props.description"
       />
-      <span
-        v-if="item.props.price"
-        class="extra"
-        :class="{ 'text-muted': item.props.disabled }"
-      >
-        ${{ item.props.price.toLocaleString() }}
-      </span>
     </template>
   </UCheckboxGroup>
 </template>
