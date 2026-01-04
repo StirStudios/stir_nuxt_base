@@ -21,6 +21,7 @@ const props = defineProps<{
   spacing?: string
   gridClass?: string
   classes?: string
+  regionAlign?: Record<string, string>
 
   // Options
   randomize?: boolean
@@ -52,6 +53,7 @@ const sectionId = computed(() => {
           :class="[
             'region',
             slotName,
+            props.regionAlign?.[slotName],
             ['top', 'bottom'].includes(slotName) ? 'col-span-full' : '',
           ]"
         >
