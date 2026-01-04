@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
+
 const props = defineProps<{
   // Identity
   id?: number | string
@@ -30,11 +32,13 @@ const props = defineProps<{
   editLink?: string
 }>()
 
+const vueSlots = useSlots()
+const tk = useSlotsToolkit(vueSlots)
+
 const open = ref(false)
 const theme = useAppConfig().stirTheme
 
 const linkData = computed(() => props.link || {})
-const hasLink = computed(() => !!linkData.value.url)
 const isExternal = computed(() => !!linkData.value.external)
 const btnLabel = computed(() => linkData.value.title || 'View link')
 const btnColor = computed(() => props.color || 'primary')
@@ -43,10 +47,18 @@ const btnSize = computed(() => props.size || 'xl')
 const btnBlock = computed(() => props.block ?? false)
 const iconName = computed(() => props.icon || null)
 
-const pdf = computed(
-  () => props.media?.find((m) => m.type === 'document') || null,
-)
-const hasPdf = computed(() => !!pdf.value?.url)
+const slotMedia = computed(() => tk.mediaItems())
+
+const pdf = computed(() => {
+  return (
+    slotMedia.value.find(
+      (node) => tk.propsOf(node)?.type === 'document' && tk.propsOf(node)?.url,
+    ) || null
+  )
+})
+
+const hasPdf = computed(() => !!pdf.value)
+const hasLink = computed(() => !hasPdf.value && !!linkData.value.url)
 </script>
 
 <template>
@@ -58,7 +70,7 @@ const hasPdf = computed(() => !!pdf.value?.url)
         class="mt-4"
         :color="btnColor"
         :icon="iconName ?? 'i-lucide-file-text'"
-        :label="pdf.title || btnLabel"
+        :label="tk.propsOf(pdf)?.title || btnLabel"
         :size="btnSize"
         :variant="btnVariant"
         @click="open = true"
@@ -82,12 +94,12 @@ const hasPdf = computed(() => !!pdf.value?.url)
   <UModal
     v-if="hasPdf && theme.pdf"
     v-model:open="open"
-    :description="pdf.alt"
+    :description="tk.propsOf(pdf)?.alt"
     fullscreen
-    :title="pdf.title || btnLabel"
+    :title="tk.propsOf(pdf)?.title || btnLabel"
   >
     <template #body>
-      <PdfViewer :src="pdf.url" />
+      <PdfViewer :src="tk.propsOf(pdf)?.url" />
     </template>
   </UModal>
 </template>
