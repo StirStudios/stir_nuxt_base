@@ -228,7 +228,7 @@ const componentMap = {
         <div
           v-if="
             (theme.modal.title && modalTitle) ||
-            (theme.modal.description && modalDescription) ||
+            (theme.modal.description?.media && modalDescription) ||
             modalCredit
           "
           class="absolute bottom-6 left-1/2 max-w-[90%] -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
@@ -238,7 +238,7 @@ const componentMap = {
           </div>
 
           <div
-            v-if="theme.modal.description && modalDescription"
+            v-if="theme.modal.description?.media && modalDescription"
             class="text-sm opacity-80"
           >
             {{ modalDescription }}
