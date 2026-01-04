@@ -207,6 +207,7 @@ const componentMap = {
             <component
               :is="componentMap[item.type]"
               :key="item.key"
+              class="shadow-2xl"
               v-bind="{
                 ...item,
                 ...(item.type === 'image' ? { noWrapper: true } : {}),
@@ -231,7 +232,7 @@ const componentMap = {
             (theme.modal.description?.media && modalDescription) ||
             modalCredit
           "
-          class="absolute bottom-6 left-1/2 max-w-[90%] -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
+          class="absolute bottom-6 left-1/2 max-w-lg -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
         >
           <div v-if="theme.modal.title && modalTitle" class="font-semibold">
             {{ modalTitle }}

@@ -90,7 +90,7 @@ const links = computed(() => {
     :items="links"
     :ui="{
       root: 'sticky top-0 z-60 h-[3.1rem] w-full bg-zinc-200 text-zinc-800 dark-text-white dark:bg-zinc-900 p-4 shadow',
-      link: 'text-xs text-default',
+      link: 'text-xs text-default hover:before:bg-zinc-200/50 dark:hover:before:bg-zinc-900',
       linkLabel: 'hidden md:block',
       linkLeadingIcon: 'text-default',
       childLink: 'p-2 text-xs',
