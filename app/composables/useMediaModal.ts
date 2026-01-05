@@ -1,15 +1,10 @@
-export function useMediaModal(
-  slotMedia: Ref<unknown[]>,
-  baseIndices: Ref<number[]>,
-  tk: unknown,
-) {
+export function useMediaModal(slotMedia: Ref<unknown[]>, tk: any) {
   const open = ref(false)
   const activeIndex = ref(0)
   const startIndex = ref(0)
 
   const itemsOrdered = computed(() =>
-    baseIndices.value.map((i) => {
-      const vnode = slotMedia.value[i]
+    slotMedia.value.map((vnode, i) => {
       const props = tk.propsOf(vnode)
       return {
         ...props,
@@ -29,10 +24,9 @@ export function useMediaModal(
   )
   const modalCredit = computed(() => activeItem.value?.credit || '')
 
-  function openModal(orderedIndex: number, orderedIndices: number[]) {
-    const initial = orderedIndices[orderedIndex] ?? orderedIndex
-    startIndex.value = initial
-    activeIndex.value = initial
+  function openModal(index: number) {
+    startIndex.value = index
+    activeIndex.value = index
     open.value = true
   }
 
