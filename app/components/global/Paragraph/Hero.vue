@@ -63,6 +63,14 @@ const hideHeroSection = computed(
 const hasMediaSlot = computed(() => tk.slot('media').length > 0)
 const hasHero = computed(() => !!props.text || hasMediaSlot.value)
 
+const h1Classes = computed(() => {
+  const base = isFrontEffective.value
+    ? heroTheme.text?.isFront
+    : heroTheme.text?.h1
+
+  return [base, heroTheme.text?.container].flat().filter(Boolean)
+})
+
 const sectionClasses = computed(() => {
   if (props.mode === 'simple') {
     return props.classes || ''
@@ -125,15 +133,7 @@ const sectionClasses = computed(() => {
                 :site-slogan="siteSlogan"
               />
 
-              <h1
-                v-else
-                :class="[
-                  isFrontEffective
-                    ? heroTheme.text?.isFront
-                    : heroTheme.text?.h1,
-                  heroTheme.text?.container,
-                ]"
-              >
+              <h1 v-else v-bind="h1Classes.length ? { class: h1Classes } : {}">
                 {{ pageTitleEffective }}
               </h1>
             </slot>

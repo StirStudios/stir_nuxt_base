@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-11-23',
+  compatibilityDate: '2025-12-09',
 
   css: ['~/assets/css/main.css'],
 
@@ -140,6 +140,7 @@ export default defineNuxtConfig({
         drupalBaseUrl: process.env.DRUPAL_URL,
         exposeAPIRouteRules: true,
         disableFormHandler: true,
+        enableComponentPreview: false,
         customErrorPages: true,
       },
     ],

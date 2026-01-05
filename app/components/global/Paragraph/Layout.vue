@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { usePageContext } from '~/composables/usePageContext'
 import { slugify } from '~/utils/stringUtils'
 
 const props = defineProps<{
@@ -22,13 +21,11 @@ const props = defineProps<{
   spacing?: string
   gridClass?: string
   classes?: string
+  regionAlign?: Record<string, string>
 
   // Options
   randomize?: boolean
 }>()
-
-const { pageElement } = usePageContext()
-const isArticle = pageElement === 'node-page'
 
 const vueSlots = useSlots()
 const orderedSlots = computed(() => Object.entries(vueSlots))
@@ -56,12 +53,11 @@ const sectionId = computed(() => {
           :class="[
             'region',
             slotName,
+            props.regionAlign?.[slotName],
             ['top', 'bottom'].includes(slotName) ? 'col-span-full' : '',
           ]"
         >
-          <WrapArticle :is-article="isArticle">
-            <slot :name="slotName" />
-          </WrapArticle>
+          <slot :name="slotName" />
         </div>
       </template>
     </WrapGrid>

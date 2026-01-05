@@ -1,10 +1,19 @@
 <script setup lang="ts">
 const props = defineProps<{
+  // Base identifiers
+  id?: number | string
+  uuid?: string
+  parentUuid?: string
+  region?: string
+
   // Core content
   items?: unknown[]
+  randomize?: boolean
 
   // Layout
   gridItems?: string
+  width?: string
+  spacing?: string
 
   // UI / Interaction
   carouselIndicators?: boolean
@@ -13,6 +22,8 @@ const props = defineProps<{
   carouselAutoscroll?: boolean
   carouselAutoheight?: boolean
   carouselInterval?: number
+
+  editLink?: string
 }>()
 
 const carousel = useTemplateRef<'carousel'>('carousel')
@@ -81,7 +92,7 @@ function handleSelect() {
 </script>
 
 <template>
-  <div class="relative z-10" :class="theme.carousel.padding">
+  <div class="relative z-10" :class="[theme.carousel.padding, width, spacing]">
     <UCarousel
       v-if="slides.length"
       ref="carousel"
@@ -105,9 +116,9 @@ function handleSelect() {
       }"
       @select="handleSelect"
     >
-      <div :class="gridItems">
+      <WrapDiv :styles="gridItems">
         <component :is="item.vnode" :key="item.key" />
-      </div>
+      </WrapDiv>
     </UCarousel>
   </div>
 </template>

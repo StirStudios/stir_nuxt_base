@@ -2,6 +2,7 @@
 import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
 import { useMediaOrdering } from '~/composables/useMediaOrdering'
 import { useMediaModal } from '~/composables/useMediaModal'
+import { useElementSize } from '@vueuse/core'
 
 const props = defineProps<{
   /* Identity */
@@ -17,7 +18,12 @@ const props = defineProps<{
   align?: string
   direction?: string
   overlay?: boolean
-  isMatrix?: boolean
+  randomize?: boolean
+
+  masonry?: {
+    lanes?: Record<string, number>
+    gap?: Record<string, number>
+  }
 
   /* Content */
   label?: string
@@ -25,9 +31,10 @@ const props = defineProps<{
   headerTag?: string
 
   /* Behavior */
-  randomize?: boolean
   editLink?: string
 }>()
+
+const scrollArea = useTemplateRef('scrollArea')
 
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
@@ -35,16 +42,15 @@ const theme = useAppConfig().stirTheme
 
 const slotMedia = computed(() => tk.mediaItems())
 
-type VNodeLoose = {
-  props?: Record<string, unknown>
-  [key: string]: unknown
+const componentMap = {
+  image: resolveComponent('MediaImage'),
+  video: resolveComponent('MediaVideo'),
+  document: resolveComponent('MediaDocument'),
+  audio: resolveComponent('MediaAudio'),
+  link: resolveComponent('MediaLink'),
 }
 
-const isVideo = (vnode: VNodeLoose) => !!vnode?.props?.mediaEmbed
-const isDocument = (vnode: VNodeLoose) => vnode?.props?.type === 'document'
-const isAudio = (vnode: VNodeLoose) => vnode?.props?.type === 'audio'
-
-const { baseIndices, orderedIndices } = useMediaOrdering(slotMedia, props, tk)
+const { orderedIndices } = useMediaOrdering(slotMedia, props, tk)
 
 const slotMediaOrdered = computed(() =>
   orderedIndices.value.map((i) => slotMedia.value[i]),
@@ -59,14 +65,19 @@ const {
   modalCredit,
   openModal,
   onSelect,
-} = useMediaModal(slotMedia, baseIndices, tk)
+} = useMediaModal(slotMediaOrdered, tk)
 
-const componentMap = {
-  image: resolveComponent('MediaImage'),
-  video: resolveComponent('MediaVideo'),
-  document: resolveComponent('MediaDocument'),
-  audio: resolveComponent('MediaAudio'),
-}
+const { width } = useElementSize(() => scrollArea.value?.$el)
+
+const lanes = computed(() => {
+  const config = props.masonry?.lanes
+  if (!config) return 1
+  if (width.value >= 768 && config.md) return config.md
+  if (width.value >= 640 && config.sm) return config.sm
+  return config.default ?? 1
+})
+
+const gap = computed(() => props.masonry?.gap?.default ?? 16)
 </script>
 
 <template>
@@ -77,73 +88,38 @@ const componentMap = {
       </component>
 
       <WrapAnimate class="relative" :effect="direction">
+        <UScrollArea
+          v-if="masonry"
+          ref="scrollArea"
+          v-slot="{ item: node, index: i }"
+          class="w-full overflow-hidden"
+          :items="slotMediaOrdered"
+          :virtualize="{ lanes, gap, estimateSize: 480 }"
+        >
+          <MediaItem
+            :index="i"
+            :node="node"
+            :overlay="overlay"
+            :tk="tk"
+            @open="openModal"
+          />
+        </UScrollArea>
+
         <WrapGrid
+          v-else
           :grid-items="gridItems"
           :spacing="spacing"
           :width="widthClass"
         >
-          <template v-for="(node, i) in slotMediaOrdered" :key="i">
-            <!-- DOCUMENTS & AUDIO should NOT show image hover wrapper -->
-            <component
-              :is="componentMap[tk.propsOf(node).type]"
-              v-if="!overlay || isDocument(node) || isAudio(node)"
-              v-bind="tk.propsOf(node)"
-            />
-
-            <!-- IMAGES + VIDEO thumbnails (clickable) -->
-            <div
-              v-else
-              class="group relative overflow-hidden"
-              :class="[
-                theme.media.rounded,
-                isVideo(node) || overlay ? 'cursor-pointer' : '',
-              ]"
-              @click="
-                (isVideo(node) || overlay) && openModal(i, orderedIndices)
-              "
-            >
-              <div
-                :class="[
-                  'transition-transform',
-                  theme.media.effects.scale,
-                  theme.media.transitions.slow,
-                ]"
-              >
-                <MediaImage
-                  v-bind="{ ...tk.propsOf(node), hideCredit: true }"
-                />
-              </div>
-
-              <span
-                v-if="tk.propsOf(node).credit"
-                :class="[
-                  'absolute bottom-0 left-0 w-full translate-x-0 bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 @xs:left-1/2 @xs:w-auto @xs:-translate-x-1/2',
-                  theme.media.transitions.fast,
-                ]"
-              >
-                {{ tk.propsOf(node).credit }}
-              </span>
-
-              <template v-if="isVideo(node)">
-                <div
-                  :class="[
-                    'group-hover:bg-black/10] absolute inset-0 z-10 bg-black/30 transition-colors',
-                    theme.media.transitions.slow,
-                  ]"
-                />
-                <button
-                  aria-label="Play Video"
-                  :class="[
-                    'absolute inset-0 z-20 flex items-center justify-center text-white transition-transform',
-                    theme.media.transitions.slow,
-                    theme.media.effects.scale,
-                  ]"
-                >
-                  <UIcon name="i-lucide-play-circle" size="60" />
-                </button>
-              </template>
-            </div>
-          </template>
+          <MediaItem
+            v-for="(node, i) in slotMediaOrdered"
+            :key="i"
+            :index="i"
+            :node="node"
+            :overlay="overlay"
+            :tk="tk"
+            @open="openModal"
+          />
         </WrapGrid>
       </WrapAnimate>
     </WrapAlign>
@@ -206,6 +182,7 @@ const componentMap = {
             <component
               :is="componentMap[item.type]"
               :key="item.key"
+              class="shadow-2xl"
               v-bind="{
                 ...item,
                 ...(item.type === 'image' ? { noWrapper: true } : {}),
@@ -227,17 +204,17 @@ const componentMap = {
         <div
           v-if="
             (theme.modal.title && modalTitle) ||
-            (theme.modal.description && modalDescription) ||
+            (theme.modal.description?.media && modalDescription) ||
             modalCredit
           "
-          class="absolute bottom-6 left-1/2 max-w-[90%] -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
+          class="absolute bottom-6 left-1/2 max-w-lg -translate-x-1/2 space-y-1 rounded-lg bg-black/60 px-4 py-3 text-center text-white backdrop-blur-sm"
         >
           <div v-if="theme.modal.title && modalTitle" class="font-semibold">
             {{ modalTitle }}
           </div>
 
           <div
-            v-if="theme.modal.description && modalDescription"
+            v-if="theme.modal.description?.media && modalDescription"
             class="text-sm opacity-80"
           >
             {{ modalDescription }}

@@ -35,7 +35,15 @@ const rawRows = computed(() => tk.slot('rows'))
 
 const slotRows = tk.hydrateOrder(
   () => rawRows.value,
-  () => (props.randomize ? tk.shuffle(rawRows.value) : rawRows.value),
+  () =>
+    (props.randomize ? tk.shuffle(rawRows.value) : rawRows.value).map(
+      (vnode, index) => {
+        return {
+          ...vnode,
+          key: vnode.key ?? `slide-${index}-${Math.random()}`,
+        }
+      },
+    ),
 )
 </script>
 
@@ -51,6 +59,8 @@ const slotRows = tk.hydrateOrder(
     :grid-items="gridItems"
     :items="slotRows"
     :randomize="randomize"
+    :spacing="spacing"
+    :width="width"
   />
 
   <WrapGrid
@@ -61,7 +71,9 @@ const slotRows = tk.hydrateOrder(
     :width="width"
   >
     <template v-for="(node, i) in slotRows" :key="i">
-      <component :is="node" />
+      <div class="item">
+        <component :is="node" />
+      </div>
     </template>
   </WrapGrid>
 
