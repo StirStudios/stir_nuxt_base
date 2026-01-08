@@ -9,18 +9,13 @@ const { y } = useWindowScroll()
 const open = ref(false)
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
 
-/**
- * Guards trigger execution per popup instance
- */
 const hasTriggered = ref(false)
 
-/**
- * Reset trigger state ONLY when popup instance changes
- */
 watch(
   () => popup.value?.props?.uuid,
   () => {
     hasTriggered.value = false
+    selectedMedia.value = null
   },
 )
 
@@ -48,6 +43,52 @@ const popupRenderProps = computed(() => {
     editLink,
     direction,
   }
+})
+
+const activeSchedule = computed(() => {
+  const items = popup.value?.slots?.popupSchedule
+  if (!Array.isArray(items) || !items.length) return null
+
+  const now = new Date()
+
+  const parsed = items
+    .map((item) => {
+      const start = item?.props?.dateStart
+        ? new Date(item.props.dateStart)
+        : null
+      const end = item?.props?.dateEnd ? new Date(item.props.dateEnd) : null
+
+      return { item, start, end }
+    })
+    .filter((x) => x.start && x.end)
+
+  // Active schedule
+  const active = parsed.find(({ start, end }) => now >= start && now <= end)
+  if (active) return active.item
+
+  // Next upcoming
+  const upcoming = parsed
+    .filter(({ start }) => start > now)
+    .sort((a, b) => +a.start - +b.start)[0]
+
+  return upcoming?.item ?? null
+})
+
+const selectedMedia = ref<any>(null)
+
+watch(open, (isOpen) => {
+  if (!isOpen) return
+
+  const media = popup.value?.slots?.media
+  if (!Array.isArray(media) || !media.length) {
+    selectedMedia.value = null
+    return
+  }
+
+  selectedMedia.value =
+    media.length === 1
+      ? media[0]
+      : media[Math.floor(Math.random() * media.length)]
 })
 
 function showModalOnce() {
@@ -135,25 +176,20 @@ watch(popup, (val) => {
           variant="solid"
           @click="open = false"
         />
+
         <ParagraphPopup
           v-bind="popupRenderProps"
           :on-close="() => (open = false)"
         >
           <template #media>
-            <template
-              v-for="(mediaItem, i) in popup.slots?.media ?? []"
-              :key="
-                mediaItem?.props?.uuid ||
-                mediaItem?.uuid ||
-                mediaItem?.props?.mid ||
-                i
-              "
-            >
-              <component
-                :is="renderCustomElements(mediaItem)"
-                v-if="mediaItem"
-              />
-            </template>
+            <component
+              :is="renderCustomElements(selectedMedia)"
+              v-if="selectedMedia"
+            />
+          </template>
+
+          <template #schedule>
+            <div v-if="activeSchedule" v-html="activeSchedule.props?.text" />
           </template>
         </ParagraphPopup>
       </template>
