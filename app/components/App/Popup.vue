@@ -64,8 +64,15 @@ const activeSchedule = computed(() => {
     })
     .filter((x) => x.start && x.end)
 
-  const active = parsed.find(({ start, end }) => now >= start && now <= end)
-  if (active) return active
+  const actives = parsed.filter(({ start, end }) => now >= start && now <= end)
+
+  if (actives.length === 1) {
+    return actives[0]
+  }
+
+  if (actives.length > 1) {
+    return actives[Math.floor(Math.random() * actives.length)]
+  }
 
   const upcoming = parsed
     .filter(({ start }) => start > now)
