@@ -64,9 +64,11 @@ const hasMediaSlot = computed(() => tk.slot('media').length > 0)
 const hasHero = computed(() => !!props.text || hasMediaSlot.value)
 
 const h1Classes = computed(() => {
-  const base = isFrontEffective.value
-    ? heroTheme.text?.isFront
-    : heroTheme.text?.h1
+  const base = hasMediaSlot.value
+    ? isFrontEffective.value
+      ? heroTheme.text?.isFront
+      : heroTheme.text?.h1
+    : null
 
   return [base, heroTheme.text?.container].flat().filter(Boolean)
 })
