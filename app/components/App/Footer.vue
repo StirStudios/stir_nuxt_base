@@ -23,14 +23,7 @@ const iconsSocialConfig = theme.socials || []
     <template #left>
       <LazyAppLogo
         v-if="theme.navigation.logo"
-        :add-classes="
-          [
-            'transition-all duration-300',
-            finalIsScrolled
-              ? theme.navigation.logoScrolledSize || theme.navigation.logoSize
-              : theme.navigation.logoSize,
-          ].join(' ')
-        "
+        :add-classes="theme.navigation.logoScrolledSize"
       />
       <template v-else>
         {{ page?.site_info?.name }}
