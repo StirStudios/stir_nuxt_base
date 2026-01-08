@@ -99,6 +99,7 @@ export default defineAppConfig({
         isFront: 'object-right-85 object-cover',
       },
       text: {
+        h1: 'mb-0 text-white',
         base: 'z-10 max-w-2xl relative p-5 text-center',
         isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
       },
