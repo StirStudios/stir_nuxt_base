@@ -54,24 +54,31 @@ const activeSchedule = computed(() => {
   const parsed = items
     .map((item) => {
       const start = item?.props?.dateStart
-        ? new Date(item.props.dateStart)
+        ? new Date(item.props.dateStart + 'Z')
         : null
-      const end = item?.props?.dateEnd ? new Date(item.props.dateEnd) : null
+      const end = item?.props?.dateEnd
+        ? new Date(item.props.dateEnd + 'Z')
+        : null
 
       return { item, start, end }
     })
     .filter((x) => x.start && x.end)
 
-  // Active schedule
   const active = parsed.find(({ start, end }) => now >= start && now <= end)
-  if (active) return active.item
+  if (active) return active
 
-  // Next upcoming
   const upcoming = parsed
     .filter(({ start }) => start > now)
     .sort((a, b) => +a.start - +b.start)[0]
 
-  return upcoming?.item ?? null
+  return upcoming ?? null
+})
+
+const formattedScheduleLabel = computed(() => {
+  const start = activeSchedule.value?.start
+  if (!start) return null
+
+  return formatZonedDateTime(start)
 })
 
 const selectedMedia = ref<any>(null)
@@ -188,8 +195,18 @@ watch(popup, (val) => {
             />
           </template>
 
-          <template #schedule>
-            <div v-if="activeSchedule" v-html="activeSchedule.props?.text" />
+          <template v-if="activeSchedule" #schedule>
+            <UAlert v-if="activeSchedule.item.props?.alert" color="info">
+              <template #description>
+                {{ activeSchedule.item.props.alert }}
+              </template>
+            </UAlert>
+
+            <div v-html="activeSchedule.item.props?.text" />
+
+            <em v-if="formattedScheduleLabel">
+              {{ formattedScheduleLabel }}
+            </em>
           </template>
         </ParagraphPopup>
       </template>
