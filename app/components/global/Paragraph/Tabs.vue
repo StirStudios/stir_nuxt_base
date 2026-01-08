@@ -2,6 +2,9 @@
 const props = defineProps<{
   id?: number | string
   uuid?: string
+  parentUuid?: string
+  region?: string
+
   editLink?: string
 }>()
 
@@ -31,11 +34,11 @@ const activeTabNode = computed(() => {
     <UTabs
       v-if="items.length"
       v-model="active"
-      :items="items"
       class="mb-6 w-full"
+      :items="items"
     >
       <template #content>
-        <component v-if="activeTabNode" :is="activeTabNode" />
+        <component :is="activeTabNode" v-if="activeTabNode" />
       </template>
     </UTabs>
   </EditLink>

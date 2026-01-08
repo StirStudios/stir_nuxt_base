@@ -9,8 +9,8 @@ import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 
 const props = defineProps<{
-  id: number
-  uuid: string
+  id?: number
+  uuid?: string
   parentUuid?: string
   region?: string
   webform?: WebformDefinition

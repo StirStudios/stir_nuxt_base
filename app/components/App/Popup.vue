@@ -2,39 +2,83 @@
 import { useWindowScroll } from '@vueuse/core'
 import { usePopupData } from '~/composables/usePopupData'
 
+const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
 const { y } = useWindowScroll()
+
 const open = ref(false)
-const route = useRoute()
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
+
+/**
+ * Guards trigger execution per popup instance
+ */
+const hasTriggered = ref(false)
+
+/**
+ * Reset trigger state ONLY when popup instance changes
+ */
+watch(
+  () => popup.value?.props?.uuid,
+  () => {
+    hasTriggered.value = false
+  },
+)
+
+const hasPopup = computed(() => !!popup.value)
+
 const title = computed(
   () => popup.value?.props?.webform?.webformTitle ?? 'Announcement',
 )
+
 const description = computed(() => popup.value?.props?.text || '')
-const hasPopup = computed(() => !!popup.value)
+
+const popupRenderProps = computed(() => {
+  if (!popup.value) return {}
+
+  const { id, uuid, parentUuid, region, text, webform, editLink, direction } =
+    popup.value.props ?? {}
+
+  return {
+    id,
+    uuid,
+    parentUuid,
+    region,
+    text,
+    webform,
+    editLink,
+    direction,
+  }
+})
 
 function showModalOnce() {
   if (open.value || (config.value.showOnce && seen.value)) return
+
   open.value = true
-  if (config.value.showOnce) seen.value = true
+
+  if (config.value.showOnce) {
+    seen.value = true
+  }
 }
 
 function handleTrigger() {
   if (!popup.value) return
+  if (hasTriggered.value) return
+
+  hasTriggered.value = true
 
   if (config.value.trigger === 'delay') {
     setTimeout(showModalOnce, config.value.delay)
   }
 
   if (config.value.trigger === 'scroll') {
-    let stop: (() => void) | undefined
-    stop = watch(
+    const stop = watch(
       y,
       (val) => {
         const percent = val / (document.body.scrollHeight - window.innerHeight)
+
         if (percent > config.value.scrollThreshold) {
           showModalOnce()
-          stop?.()
+          stop()
         }
       },
       { immediate: true },
@@ -43,10 +87,7 @@ function handleTrigger() {
 
   if (config.value.trigger === 'exit') {
     const onExitIntent = (e: MouseEvent) => {
-      const isLeavingTop = e.clientY <= 0
-      const isLeavingWindow = !e.relatedTarget
-
-      if (isLeavingTop && isLeavingWindow) {
+      if (e.clientY <= 0 && !e.relatedTarget) {
         showModalOnce()
         document.removeEventListener('mouseout', onExitIntent)
       }
@@ -57,24 +98,11 @@ function handleTrigger() {
 }
 
 onMounted(() => {
-  if (hasPopup.value) {
-    handleTrigger()
-  }
+  if (hasPopup.value) handleTrigger()
 })
 
-watch(
-  () => route.path,
-  async () => {
-    open.value = false
-    await nextTick()
-    if (popup.value) handleTrigger()
-  },
-)
-
 watch(popup, (val) => {
-  if (val) {
-    handleTrigger()
-  }
+  if (val) handleTrigger()
 })
 </script>
 
@@ -107,7 +135,27 @@ watch(popup, (val) => {
           variant="solid"
           @click="open = false"
         />
-        <ParagraphPopup :item="popup" :on-close="() => (open = false)" />
+        <ParagraphPopup
+          v-bind="popupRenderProps"
+          :on-close="() => (open = false)"
+        >
+          <template #media>
+            <template
+              v-for="(mediaItem, i) in popup.slots?.media ?? []"
+              :key="
+                mediaItem?.props?.uuid ||
+                mediaItem?.uuid ||
+                mediaItem?.props?.mid ||
+                i
+              "
+            >
+              <component
+                :is="renderCustomElements(mediaItem)"
+                v-if="mediaItem"
+              />
+            </template>
+          </template>
+        </ParagraphPopup>
       </template>
     </UModal>
   </ClientOnly>

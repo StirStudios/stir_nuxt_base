@@ -6,6 +6,8 @@ defineProps<{
   parentUuid?: string
   region?: string
 
+  title?: string
+
   // Meta
   editLink?: string
 }>()
