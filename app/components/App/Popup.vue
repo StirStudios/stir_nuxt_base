@@ -196,8 +196,14 @@ watch(popup, (val) => {
           </template>
 
           <template v-if="activeSchedule" #schedule>
-            <UAlert v-if="activeSchedule.item.props?.alert" color="info">
-              <template #description>
+            <UAlert
+              v-if="activeSchedule.item.props?.alert"
+              color="info"
+              :ui="{
+                root: 'rounded-none',
+              }"
+            >
+              <template #title>
                 {{ activeSchedule.item.props.alert }}
               </template>
             </UAlert>
