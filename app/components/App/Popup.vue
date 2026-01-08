@@ -200,7 +200,7 @@ watch(popup, (val) => {
               v-if="activeSchedule.item.props?.alert"
               color="info"
               :ui="{
-                root: 'rounded-none',
+                root: 'rounded-none mb-2',
               }"
             >
               <template #title>
