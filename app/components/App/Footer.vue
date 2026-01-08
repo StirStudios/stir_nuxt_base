@@ -21,6 +21,41 @@ const iconsSocialConfig = theme.socials || []
     <LazyRegionArea area="footer" />
 
     <template #left>
+      <LazyAppLogo
+        v-if="theme.navigation.logo"
+        :add-classes="
+          [
+            'transition-all duration-300',
+            finalIsScrolled
+              ? theme.navigation.logoScrolledSize || theme.navigation.logoSize
+              : theme.navigation.logoSize,
+          ].join(' ')
+        "
+      />
+      <template v-else>
+        {{ page?.site_info?.name }}
+      </template>
+    </template>
+
+    <div class="center">
+      <UNavigationMenu
+        v-if="page.footer_menu?.length"
+        class="mb-3"
+        data-nav="Footer Navigation"
+        :items="
+          page.footer_menu.map((item) => ({
+            label: item.title,
+            to: item.url,
+          }))
+        "
+        :ui="{
+          list: 'flex flex-wrap justify-center',
+          item: 'min-w-0 py-0',
+          link: theme.footer.footerLinks,
+        }"
+        variant="link"
+      />
+
       <p class="mb-0">
         © {{ page.site_info?.name }} {{ currentYear }}. All Rights Reserved.<br />
         <template v-if="theme.footer.rights">
@@ -38,25 +73,7 @@ const iconsSocialConfig = theme.socials || []
           </ULink>
         </template>
       </p>
-    </template>
-
-    <UNavigationMenu
-      v-if="page.footer_menu?.length"
-      class="mb-3"
-      data-nav="Footer Navigation"
-      :items="
-        page.footer_menu.map((item) => ({
-          label: item.title,
-          to: item.url,
-        }))
-      "
-      :ui="{
-        list: 'flex flex-wrap justify-center',
-        item: 'min-w-0 py-0',
-        link: theme.footer.footerLinks,
-      }"
-      variant="link"
-    />
+    </div>
 
     <template #right>
       <div class="flex gap-1">
