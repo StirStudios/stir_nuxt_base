@@ -249,15 +249,11 @@ watch(popup, (val) => {
                 }"
               >
                 <UBadge
-                  :class="[
-                    schedule.isLive
-                      ? 'animate-pulse'
-                      : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
-                  ]"
-                  :color="schedule.isLive ? 'error' : undefined"
+                  :class="[schedule.isLive ? 'animate-soft-pulse' : '']"
+                  :color="schedule.isLive ? 'error' : 'neutral'"
                   :icon="schedule.isLive ? 'i-lucide-radio' : 'i-lucide-clock'"
                   size="md"
-                  :variant="schedule.isLive ? 'solid' : 'soft'"
+                  :variant="schedule.isLive ? 'solid' : ''"
                 >
                   {{ schedule.isLive ? 'Live' : 'Next Up' }}
                 </UBadge>
