@@ -8,10 +8,13 @@ const props = defineProps<{
 
 const { gradients, card } = useAppConfig().stirTheme
 
-// Compute the gradient class dynamically, only if card: true
-const gradientClass = computed(() =>
-  props.layout.card ? gradients[props.layout.gradient || '1'] || '' : '',
-)
+const gradientClass = computed(() => {
+  if (!props.layout.card) return ''
+
+  const key = props.layout.gradient || card.defaultGradient || '1'
+
+  return gradients[key] || ''
+})
 </script>
 
 <template>
