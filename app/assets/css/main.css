@@ -18,6 +18,18 @@
 
   --color-white: #ffffff;
   --color-black: #14161a;
+
+  --animate-soft-pulse: softPulse 1.6s ease-in-out infinite;
+
+  @keyframes softPulse {
+    0%,
+    100% {
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
 }
 
 :root {
