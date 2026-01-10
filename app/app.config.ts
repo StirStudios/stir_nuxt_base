@@ -77,6 +77,7 @@ export default defineAppConfig({
       base: 'relative isolate overflow-hidden rounded-xl bg-black/80 dark:bg-black py-16 text-white sm:py-20',
       effect:
         'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
+      defaultGradient: '1',
     },
 
     gradients: {

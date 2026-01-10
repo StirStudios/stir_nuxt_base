@@ -6,6 +6,7 @@ import { dayKey } from '~/utils/timeUtils'
 const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
 const { y } = useWindowScroll()
+const { card } = useAppConfig().stirTheme
 
 const open = ref(false)
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
@@ -27,7 +28,10 @@ const title = computed(
 )
 
 const description = computed(() => popup.value?.props?.text || '')
-const popupAlert = computed(() => popup.value?.props?.alert || '')
+const cardGradientLayout = computed(() => ({
+  card: true,
+  gradient: card.defaultGradient || '1',
+}))
 
 const popupRenderProps = computed(() => {
   if (!popup.value) return {}
@@ -229,24 +233,26 @@ watch(popup, (val) => {
                 {{ popupRenderProps.alert }}
               </template>
             </UAlert>
-
-            <UCarousel
-              v-slot="{ item: schedule }"
-              :autoplay="activeSchedules.length > 1 ? { delay: 3000 } : false"
-              :items="activeSchedules"
-              :loop="activeSchedules.length > 1"
-              :ui="{
-                item: 'basis-full',
-                container: 'relative',
-              }"
-            >
-              <div class="bg-zinc-200 p-5 text-center">
+            <div class="relative overflow-hidden bg-black/90 p-5 text-white">
+              <div class="pointer-events-none absolute -inset-1/2 scale-125">
+                <CardGradient :layout="cardGradientLayout" />
+              </div>
+              <UCarousel
+                v-slot="{ item: schedule }"
+                :autoplay="activeSchedules.length > 1 ? { delay: 3000 } : false"
+                :items="activeSchedules"
+                :loop="activeSchedules.length > 1"
+                :ui="{
+                  item: 'basis-full',
+                  container: 'relative text-center',
+                }"
+              >
                 <div v-html="schedule.item.props?.text" />
                 <em v-if="schedule.start">
                   {{ formatScheduleLabel(schedule.start) }}
                 </em>
-              </div>
-            </UCarousel>
+              </UCarousel>
+            </div>
           </template>
         </ParagraphPopup>
       </template>
