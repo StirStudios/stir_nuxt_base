@@ -8,6 +8,7 @@ defineProps<{
 
   /* Content */
   text?: string
+  alert?: string
   webform?: unknown
 
   /* Behaviour */
