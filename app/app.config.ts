@@ -53,7 +53,7 @@ export default defineAppConfig({
     footer: {
       hideEmail: false,
       base: 'mt-20 bg-accented dark:bg-muted/50 py-10 text-default text-sm',
-      left: 'text-sm leading-relaxed lg:text-left',
+      left: 'text-sm leading-relaxed lg:text-left mt-8 lg:mt-0',
       right: 'lg:items-end flex flex-col items-center gap-2 lg:text-right',
       footerLinks: 'transition-colors text-primary hover:text-primary/90',
       poweredby: true,
