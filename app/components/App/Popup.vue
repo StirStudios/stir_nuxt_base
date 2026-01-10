@@ -30,7 +30,7 @@ const title = computed(
 const description = computed(() => popup.value?.props?.text || '')
 const cardGradientLayout = computed(() => ({
   card: true,
-  gradient: card.defaultGradient || '1',
+  compact: true,
 }))
 
 const popupRenderProps = computed(() => {
@@ -234,9 +234,7 @@ watch(popup, (val) => {
               </template>
             </UAlert>
             <div class="relative overflow-hidden bg-black/90 p-5 text-white">
-              <div class="pointer-events-none absolute -inset-1/2 scale-125">
-                <CardGradient :layout="cardGradientLayout" />
-              </div>
+              <CardGradient :layout="cardGradientLayout" />
               <UCarousel
                 v-slot="{ item: schedule }"
                 :autoplay="activeSchedules.length > 1 ? { delay: 3000 } : false"

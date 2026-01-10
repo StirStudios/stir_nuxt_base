@@ -74,16 +74,23 @@ export default defineAppConfig({
     },
 
     card: {
-      base: 'relative isolate overflow-hidden rounded-xl bg-black/80 dark:bg-black py-16 text-white sm:py-20',
+      base: 'relative isolate overflow-hidden rounded-xl bg-black/80 dark:bg-black text-white',
       effect:
-        'absolute top-0 left-1/2 -z-10 -translate-x-1/2 blur-3xl xl:-top-6',
+        'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl aspect-[1155/678] opacity-40 z-0',
+      sizes: {
+        default: 'w-[72rem]',
+        compact: 'w-[120%] opacity-35',
+      },
       defaultGradient: '1',
     },
 
     gradients: {
       1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
-      2: 'bg-gradient-to-r from-[#ff7f50] to-[#1e90ff]',
-      3: 'bg-gradient-to-b from-[#7b2ff7] to-[#e53e3e]',
+      2: 'bg-gradient-to-r from-[#fde047] via-[#facc15] to-[#2563eb]',
+      3: 'bg-gradient-to-b from-[#166534] via-[#22c55e] to-[#38bdf8]',
+      4: 'bg-gradient-to-br from-[#0f172a] via-[#1d4ed8] to-[#38bdf8]',
+      5: 'bg-gradient-to-tr from-[#22d3ee] via-[#38bdf8] to-[#a855f7]',
+      6: 'bg-gradient-to-r from-[#111827] via-[#dc2626] to-[#f59e0b]',
     },
 
     hero: {

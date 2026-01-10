@@ -3,6 +3,7 @@ const props = defineProps<{
   layout: {
     card?: boolean
     gradient?: string
+    compact?: boolean
   }
 }>()
 
@@ -12,15 +13,25 @@ const gradientClass = computed(() => {
   if (!props.layout.card) return ''
 
   const key = props.layout.gradient || card.defaultGradient || '1'
-
   return gradients[key] || ''
 })
+
+const effectClass = computed(() => card.effect)
+
+const sizeClass = computed(() =>
+  props.layout.compact ? card.sizes.compact : card.sizes.default,
+)
 </script>
 
 <template>
-  <div v-if="layout.card" aria-hidden="true" :class="card.effect">
+  <div
+    v-if="layout.card"
+    aria-hidden="true"
+    class="pointer-events-none"
+    :class="[effectClass, sizeClass]"
+  >
     <div
-      class="aspect-[1155/678] w-[72.1875rem] opacity-30"
+      class="h-full w-full"
       :class="gradientClass"
       style="
         clip-path: polygon(
