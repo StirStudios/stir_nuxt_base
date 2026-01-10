@@ -227,7 +227,10 @@ watch(popup, (val) => {
             <UAlert
               v-if="popupRenderProps.alert"
               color="info"
-              :ui="{ root: 'rounded-none', title: 'text-center' }"
+              :ui="{
+                root: 'rounded-none',
+                title: 'text-center font-bold uppercase',
+              }"
             >
               <template #title>
                 {{ popupRenderProps.alert }}
