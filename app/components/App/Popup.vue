@@ -6,7 +6,6 @@ import { dayKey } from '~/utils/timeUtils'
 const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
 const { y } = useWindowScroll()
-const { card } = useAppConfig().stirTheme
 
 const open = ref(false)
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
@@ -66,41 +65,42 @@ const activeSchedules = computed(() => {
   if (!Array.isArray(schedules) || !schedules.length) return []
 
   const now = new Date()
-  const today = dayKey(now)
+  const today = dayKey(now) // LA day (your default)
 
   const parsed = schedules
     .map((item) => {
       const start = item?.props?.dateStart
-        ? new Date(item.props.dateStart + 'Z')
+        ? new Date(item.props.dateStart + 'Z') // CMS = UTC
         : null
       const end = item?.props?.dateEnd
         ? new Date(item.props.dateEnd + 'Z')
         : null
 
-      return start && end ? { item, start, end, day: dayKey(start) } : null
+      return start && end
+        ? {
+            item,
+            start,
+            end,
+            day: dayKey(start),
+            isLive: now >= start && now <= end,
+          }
+        : null
     })
     .filter(Boolean) as {
     item: any
     start: Date
     end: Date
     day: string
+    isLive: boolean
   }[]
 
   parsed.sort((a, b) => +a.start - +b.start)
 
-  // 1) Active now → rotate all overlapping
-  const activeNow = parsed.filter(
-    ({ start, end }) => now >= start && now <= end,
-  )
-  if (activeNow.length) return activeNow
+  // 1) ALL games today (past + future)
+  const todayAll = parsed.filter(({ day }) => day === today)
+  if (todayAll.length) return todayAll
 
-  // 2) Later today
-  const todayUpcoming = parsed.filter(
-    ({ day, start }) => day === today && start > now,
-  )
-  if (todayUpcoming.length) return todayUpcoming
-
-  // 3) Next future day (now simpler + consistent)
+  // 2) Otherwise: next future day
   const next = parsed.find(({ start }) => start > now)
   return next ? parsed.filter(({ day }) => day === next.day) : []
 })
@@ -245,6 +245,20 @@ watch(popup, (val) => {
                   container: 'relative text-center',
                 }"
               >
+                <UBadge
+                  :class="[
+                    schedule.isLive
+                      ? 'animate-pulse'
+                      : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+                  ]"
+                  :color="schedule.isLive ? 'error' : undefined"
+                  :icon="schedule.isLive ? 'i-lucide-radio' : 'i-lucide-clock'"
+                  size="md"
+                  :variant="schedule.isLive ? 'solid' : 'soft'"
+                >
+                  {{ schedule.isLive ? 'Live' : 'Next Up' }}
+                </UBadge>
+
                 <div v-html="schedule.item.props?.text" />
                 <em v-if="schedule.start">
                   {{ formatScheduleLabel(schedule.start) }}
