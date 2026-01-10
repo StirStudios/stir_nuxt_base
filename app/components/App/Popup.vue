@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core'
 import { usePopupData } from '~/composables/usePopupData'
+import { dayKey } from '~/utils/timeUtils'
 
 const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
@@ -26,12 +27,22 @@ const title = computed(
 )
 
 const description = computed(() => popup.value?.props?.text || '')
+const popupAlert = computed(() => popup.value?.props?.alert || '')
 
 const popupRenderProps = computed(() => {
   if (!popup.value) return {}
 
-  const { id, uuid, parentUuid, region, text, webform, editLink, direction } =
-    popup.value.props ?? {}
+  const {
+    id,
+    uuid,
+    parentUuid,
+    region,
+    text,
+    alert,
+    webform,
+    editLink,
+    direction,
+  } = popup.value.props ?? {}
 
   return {
     id,
@@ -39,19 +50,21 @@ const popupRenderProps = computed(() => {
     parentUuid,
     region,
     text,
+    alert,
     webform,
     editLink,
     direction,
   }
 })
 
-const activeSchedule = computed(() => {
-  const items = popup.value?.slots?.popupSchedule
-  if (!Array.isArray(items) || !items.length) return null
+const activeSchedules = computed(() => {
+  const schedules = popup.value?.slots?.popupSchedule
+  if (!Array.isArray(schedules) || !schedules.length) return []
 
   const now = new Date()
+  const today = dayKey(now)
 
-  const parsed = items
+  const parsed = schedules
     .map((item) => {
       const start = item?.props?.dateStart
         ? new Date(item.props.dateStart + 'Z')
@@ -60,33 +73,37 @@ const activeSchedule = computed(() => {
         ? new Date(item.props.dateEnd + 'Z')
         : null
 
-      return { item, start, end }
+      return start && end ? { item, start, end, day: dayKey(start) } : null
     })
-    .filter((x) => x.start && x.end)
+    .filter(Boolean) as {
+    item: any
+    start: Date
+    end: Date
+    day: string
+  }[]
 
-  const actives = parsed.filter(({ start, end }) => now >= start && now <= end)
+  parsed.sort((a, b) => +a.start - +b.start)
 
-  if (actives.length === 1) {
-    return actives[0]
-  }
+  // 1) Active now → rotate all overlapping
+  const activeNow = parsed.filter(
+    ({ start, end }) => now >= start && now <= end,
+  )
+  if (activeNow.length) return activeNow
 
-  if (actives.length > 1) {
-    return actives[Math.floor(Math.random() * actives.length)]
-  }
+  // 2) Later today
+  const todayUpcoming = parsed.filter(
+    ({ day, start }) => day === today && start > now,
+  )
+  if (todayUpcoming.length) return todayUpcoming
 
-  const upcoming = parsed
-    .filter(({ start }) => start > now)
-    .sort((a, b) => +a.start - +b.start)[0]
-
-  return upcoming ?? null
+  // 3) Next future day (now simpler + consistent)
+  const next = parsed.find(({ start }) => start > now)
+  return next ? parsed.filter(({ day }) => day === next.day) : []
 })
 
-const formattedScheduleLabel = computed(() => {
-  const start = activeSchedule.value?.start
-  if (!start) return null
-
-  return formatZonedDateTime(start)
-})
+function formatScheduleLabel(start?: Date) {
+  return start ? formatZonedDateTime(start) : null
+}
 
 const selectedMedia = ref<any>(null)
 
@@ -202,24 +219,34 @@ watch(popup, (val) => {
             />
           </template>
 
-          <template v-if="activeSchedule" #schedule>
+          <template v-if="activeSchedules.length" #schedule>
             <UAlert
-              v-if="activeSchedule.item.props?.alert"
+              v-if="popupRenderProps.alert"
               color="info"
-              :ui="{
-                root: 'rounded-none mb-2',
-              }"
+              :ui="{ root: 'rounded-none', title: 'text-center' }"
             >
               <template #title>
-                {{ activeSchedule.item.props.alert }}
+                {{ popupRenderProps.alert }}
               </template>
             </UAlert>
 
-            <div v-html="activeSchedule.item.props?.text" />
-
-            <em v-if="formattedScheduleLabel">
-              {{ formattedScheduleLabel }}
-            </em>
+            <UCarousel
+              v-slot="{ item: schedule }"
+              :autoplay="activeSchedules.length > 1 ? { delay: 3000 } : false"
+              :items="activeSchedules"
+              :loop="activeSchedules.length > 1"
+              :ui="{
+                item: 'basis-full',
+                container: 'relative',
+              }"
+            >
+              <div class="bg-zinc-200 p-5 text-center">
+                <div v-html="schedule.item.props?.text" />
+                <em v-if="schedule.start">
+                  {{ formatScheduleLabel(schedule.start) }}
+                </em>
+              </div>
+            </UCarousel>
           </template>
         </ParagraphPopup>
       </template>
