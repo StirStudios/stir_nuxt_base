@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core'
 import { usePopupData } from '~/composables/usePopupData'
-import { dayKey } from '~/utils/timeUtils'
 
 const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
@@ -27,25 +26,12 @@ const title = computed(
 )
 
 const description = computed(() => popup.value?.props?.text || '')
-const cardGradientLayout = computed(() => ({
-  card: true,
-  compact: true,
-}))
 
 const popupRenderProps = computed(() => {
   if (!popup.value) return {}
 
-  const {
-    id,
-    uuid,
-    parentUuid,
-    region,
-    text,
-    alert,
-    webform,
-    editLink,
-    direction,
-  } = popup.value.props ?? {}
+  const { id, uuid, parentUuid, region, text, webform, editLink, direction } =
+    popup.value.props ?? {}
 
   return {
     id,
@@ -53,63 +39,13 @@ const popupRenderProps = computed(() => {
     parentUuid,
     region,
     text,
-    alert,
     webform,
     editLink,
     direction,
   }
 })
 
-const activeSchedules = computed(() => {
-  const schedules = popup.value?.slots?.popupSchedule
-  if (!Array.isArray(schedules) || !schedules.length) return []
-
-  const now = new Date()
-  const today = dayKey(now) // LA day (your default)
-
-  const parsed = schedules
-    .map((item) => {
-      const start = item?.props?.dateStart
-        ? new Date(item.props.dateStart + 'Z') // CMS = UTC
-        : null
-      const end = item?.props?.dateEnd
-        ? new Date(item.props.dateEnd + 'Z')
-        : null
-
-      return start && end
-        ? {
-            item,
-            start,
-            end,
-            day: dayKey(start),
-            isLive: now >= start && now <= end,
-          }
-        : null
-    })
-    .filter(Boolean) as {
-    item: any
-    start: Date
-    end: Date
-    day: string
-    isLive: boolean
-  }[]
-
-  parsed.sort((a, b) => +a.start - +b.start)
-
-  // 1) ALL games today (past + future)
-  const todayAll = parsed.filter(({ day }) => day === today)
-  if (todayAll.length) return todayAll
-
-  // 2) Otherwise: next future day
-  const next = parsed.find(({ start }) => start > now)
-  return next ? parsed.filter(({ day }) => day === next.day) : []
-})
-
-function formatScheduleLabel(start?: Date) {
-  return start ? formatZonedDateTime(start) : null
-}
-
-const selectedMedia = ref<any>(null)
+const selectedMedia = ref<CustomElement | null>(null)
 
 watch(open, (isOpen) => {
   if (!isOpen) return
@@ -173,13 +109,13 @@ function handleTrigger() {
   }
 }
 
-onMounted(() => {
-  if (hasPopup.value) handleTrigger()
-})
-
-watch(popup, (val) => {
-  if (val) handleTrigger()
-})
+watch(
+  popup,
+  (val) => {
+    if (val) handleTrigger()
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -221,49 +157,6 @@ watch(popup, (val) => {
               :is="renderCustomElements(selectedMedia)"
               v-if="selectedMedia"
             />
-          </template>
-
-          <template v-if="activeSchedules.length" #schedule>
-            <UAlert
-              v-if="popupRenderProps.alert"
-              color="info"
-              :ui="{
-                root: 'rounded-none',
-                title: 'text-center font-bold uppercase',
-              }"
-            >
-              <template #title>
-                {{ popupRenderProps.alert }}
-              </template>
-            </UAlert>
-            <div class="relative overflow-hidden bg-black/90 p-5 text-white">
-              <CardGradient :layout="cardGradientLayout" />
-              <UCarousel
-                v-slot="{ item: schedule }"
-                :autoplay="activeSchedules.length > 1 ? { delay: 3000 } : false"
-                :items="activeSchedules"
-                :loop="activeSchedules.length > 1"
-                :ui="{
-                  item: 'basis-full',
-                  container: 'relative text-center',
-                }"
-              >
-                <UBadge
-                  :class="[schedule.isLive ? 'animate-soft-pulse' : '']"
-                  :color="schedule.isLive ? 'error' : 'neutral'"
-                  :icon="schedule.isLive ? 'i-lucide-radio' : 'i-lucide-clock'"
-                  size="md"
-                  :variant="schedule.isLive ? 'solid' : ''"
-                >
-                  {{ schedule.isLive ? 'Live' : 'Next Up' }}
-                </UBadge>
-
-                <div v-html="schedule.item.props?.text" />
-                <em v-if="schedule.start">
-                  {{ formatScheduleLabel(schedule.start) }}
-                </em>
-              </UCarousel>
-            </div>
           </template>
         </ParagraphPopup>
       </template>
