@@ -33,8 +33,6 @@
 }
 
 :root {
-  --ui-header-height: auto;
-
   --ui-primary: var(--ui-color-primary-500);
   --ui-container: var(--container-8xl);
 }
