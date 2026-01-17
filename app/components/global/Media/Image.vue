@@ -51,11 +51,7 @@ const isBare = computed(() => isHero.value || props.noWrapper === true)
             theme.hero.image.base,
             isFront.value ? theme.hero.image.isFront : 'max-w-none',
           ]
-        : [
-            theme.media.base,
-            theme.media.rounded,
-            'm-auto max-w-fit !object-contain',
-          ]
+        : [theme.media.base, theme.media.rounded, 'm-auto !object-contain']
     "
     :fetchpriority="fetchpriority || undefined"
     :height="height"
