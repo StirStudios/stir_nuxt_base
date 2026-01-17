@@ -9,7 +9,7 @@ defineProps<{ error: NuxtError }>()
 
 <template>
   <LazyRegionArea area="top" />
-  <LazyDrupalTabs v-if="isAdministrator" />
+  <LazyDrupalTabs />
   <AppHeader :mode="navigation.mode" />
 
   <UMain id="main-content" as="main" role="main">
@@ -18,6 +18,10 @@ defineProps<{ error: NuxtError }>()
         label: errorConfig.label,
         color: errorConfig.color,
         variant: errorConfig.variant,
+      }"
+      :ui="{
+        links: 'mt-2',
+        statusMessage: 'leading-tight',
       }"
       :error="error"
       redirect="/"
