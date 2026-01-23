@@ -14,8 +14,8 @@ A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and f
 
 ## 🧱 Tech Stack
 
-- **[Nuxt 4](https://nuxt.com/)**: `^4.2.2`
-- **[Nuxt UI 4](https://ui.nuxt.com/)**: `^4.4`
+- **[Nuxt 4](https://nuxt.com/)**: `^4.3.0`
+- **[Nuxt UI 4](https://ui.nuxt.com/)**: `^4.4.0`
 - **[Tailwind CSS 4](https://tailwindcss.com/)**: `^4.1.18`
 - **[nuxtjs-drupal-ce](https://github.com/drunomics/nuxtjs-drupal-ce)**: `^2.5.1`
 - **[Vite](https://vitejs.dev/)** + **[Nitro](https://nitro.unjs.io/)**: asset compression and custom build rules

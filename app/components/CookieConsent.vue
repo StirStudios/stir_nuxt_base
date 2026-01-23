@@ -2,9 +2,16 @@
 const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
 const open = ref(false)
+const isDev = import.meta.dev
 
 const consent = useCookie<boolean>('cookie_consent', {
   maxAge: 60 * 60 * 24 * 365,
+})
+
+const isConfigured = computed(() => {
+  if (!config?.enabled) return false
+
+  return Boolean(config.title && config.message && config.buttonLabel)
 })
 
 function accept() {
@@ -25,7 +32,7 @@ watch(
 
     if (
       !consent.value &&
-      config?.enabled &&
+      isConfigured.value &&
       !isBot &&
       !ignorePaths.includes(route.path)
     ) {
@@ -38,6 +45,7 @@ watch(
 
 <template>
   <UDrawer
+    v-if="isConfigured"
     v-model:open="open"
     :description="config.message"
     :dismissible="false"
@@ -47,7 +55,7 @@ watch(
     side="bottom"
     :title="config.title"
     :ui="{
-      container: 'overflow-y-auto',
+      container: 'overflow-y-auto shadow-lg',
       body: 'text-center text-xs leading-loose',
       title: 'sr-only',
       description: 'sr-only',
@@ -73,7 +81,7 @@ watch(
           target="_blank"
           :to="config.privacyUrl"
         >
-          Privacy Policy </ULink
+          Privacy Policy</ULink
         >.
       </p>
     </template>
@@ -84,4 +92,17 @@ watch(
       </div>
     </template>
   </UDrawer>
+
+  <UAlert
+    v-else-if="config?.enabled && isDev"
+    title="Heads up!"
+    description="Cookie consent is enabled but not fully configured. Please provide title,
+      message, and buttonLabel."
+    color="warning"
+    :ui="{
+      root: 'fixed inset-x-0 bottom-0 rounded-none',
+      wrapper: 'text-center',
+      description: 'opacity-100',
+    }"
+  />
 </template>
