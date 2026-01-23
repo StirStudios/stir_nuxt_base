@@ -13,22 +13,22 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@iconify-json/lucide": "1.2.85",
+    "@iconify-json/lucide": "^1.2.86",
     "@nuxt/ui": "^4.4.0",
-    "@nuxtjs/robots": "5.6.7",
-    "@nuxtjs/sitemap": "7.5.2",
+    "@nuxtjs/robots": "^5.6.7",
+    "@nuxtjs/sitemap": "^7.5.2",
     "@nuxtjs/turnstile": "^1.1.1",
     "motion-v": "^1.9.0",
     "nuxt": "^4.3.0",
     "nuxt-vitalizer": "^2.0.0",
-    "nuxtjs-drupal-ce": "file:../nuxtjs-drupal-ce",
+    "nuxtjs-drupal-ce": "^2.5.1",
     "tailwindcss": "^4.1.18",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.13.0",
     "@nuxt/scripts": "^0.13.2",
-    "@types/node": "25.0.9",
+    "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-nuxt": "^4.0.0",

@@ -35,7 +35,7 @@ const finalIsScrolled = computed(() => {
 const headerRootClasses = computed(() => [
   theme.navigation.base,
   isFixed.value
-    ? ['fixed z-50 w-full', !isAdministrator.value ? 'top-[3.1rem]' : 'top-0']
+    ? ['fixed z-50 w-full', isAdministrator.value ? 'top-[3.1rem]' : 'top-0']
     : 'relative w-full',
   theme.navigation.transparentTop && !finalIsScrolled.value
     ? 'bg-transparent backdrop-none border-none backdrop-blur-none'
