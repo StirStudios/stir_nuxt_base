@@ -83,21 +83,25 @@ const groupedFields = computed(() => {
   )
 })
 
-// Initialize state with form defaults
-onMounted(() => {
+const resetFormState = () => {
   for (const [key, field] of Object.entries(fields)) {
     if (field['#composite']) {
-      state[key] = state[key] || {}
+      state[key] = {}
       for (const subKey in field['#composite']) {
-        state[key][subKey] =
-          state[key][subKey] || field['#composite'][subKey]['value'] || ''
+        state[key][subKey] = field['#composite'][subKey]['value'] || ''
       }
     } else if (field['#type'] === 'checkboxes') {
-      state[key] = Array.isArray(field['#default']) ? field['#default'] : []
+      const defaults = field['#default']
+      state[key] = Array.isArray(defaults) ? [...defaults] : []
     } else {
       state[key] = field['#default'] ?? ''
     }
   }
+}
+
+// Initialize state with form defaults
+onMounted(() => {
+  resetFormState()
 })
 
 // Helper functions for field rendering
@@ -152,7 +156,8 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
     props.onClose?.()
 
     // Reset Form
-    Object.keys(state).forEach((key) => (state[key] = ''))
+    resetFormState()
+    errors.value = {}
     turnstileToken.value = ''
     isFormSubmitted.value = true
   } catch (error) {
