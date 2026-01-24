@@ -182,7 +182,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
     props.onClose?.()
 
     // Reset Form
-    resetFormState()
+    resetFormState({ bumpKey: false })
     errors.value = {}
     turnstileToken.value = ''
     isFormSubmitted.value = true
@@ -227,7 +227,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         :theme-webform="themeWebform"
         :webform-confirmation="webformConfirmation"
         @error="onError"
-        @reset-submission="isFormSubmitted = false"
+        @reset-submission="() => { isFormSubmitted = false; formResetKey++ }"
         @submit="onSubmit"
       />
     </WrapDiv>
