@@ -193,6 +193,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         :theme-webform="themeWebform"
         :webform-confirmation="webformConfirmation"
         @error="onError"
+        @reset-submission="isFormSubmitted = false"
         @submit="onSubmit"
       />
     </WrapDiv>
