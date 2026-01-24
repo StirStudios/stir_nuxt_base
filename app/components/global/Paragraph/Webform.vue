@@ -141,7 +141,9 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
     })
 
     // Handle Successful Submission
-    y.value = 0
+    if (themeWebform.scrollToTopOnSuccess !== false) {
+      y.value = 0
+    }
     toast.add({
       title: 'Success!',
       description: 'Form submitted successfully!',
