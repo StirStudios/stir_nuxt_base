@@ -83,6 +83,26 @@ const groupedFields = computed(() => {
   )
 })
 
+const getFieldDefaultValue = (field: WebformFieldProps) => {
+  const defaultValue = field['#default']
+
+  if (defaultValue !== undefined && defaultValue !== null) {
+    if (Array.isArray(defaultValue)) return [...defaultValue]
+    if (typeof defaultValue === 'object') return { ...defaultValue }
+    return defaultValue
+  }
+
+  const type = field['#type']
+  const multiple =
+    field['#multiple'] === true ||
+    (typeof field['#cardinality'] === 'number' && field['#cardinality'] !== 1)
+
+  if (type === 'checkboxes' || multiple) return []
+  if (type === 'checkbox' || type === 'webform_terms_of_service') return false
+
+  return ''
+}
+
 const resetFormState = () => {
   for (const [key, field] of Object.entries(fields)) {
     if (field['#composite']) {
@@ -90,11 +110,8 @@ const resetFormState = () => {
       for (const subKey in field['#composite']) {
         state[key][subKey] = field['#composite'][subKey]['value'] || ''
       }
-    } else if (field['#type'] === 'checkboxes') {
-      const defaults = field['#default']
-      state[key] = Array.isArray(defaults) ? [...defaults] : []
     } else {
-      state[key] = field['#default'] ?? ''
+      state[key] = getFieldDefaultValue(field)
     }
   }
 }
