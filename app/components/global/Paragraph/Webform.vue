@@ -148,6 +148,13 @@ const shouldRenderIndividualField = (fieldName: string) =>
 const isContainerVisible = (containerName: string) =>
   evaluateContainerVisibility(containerName, state, fields, getGroupFields)
 
+const handleResetSubmission = async () => {
+  isFormSubmitted.value = false
+  y.value = 0
+  await nextTick()
+  formResetKey.value += 1
+}
+
 // Form submission handler
 async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   isLoading.value = true
@@ -227,7 +234,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         :theme-webform="themeWebform"
         :webform-confirmation="webformConfirmation"
         @error="onError"
-        @reset-submission="() => { isFormSubmitted = false; formResetKey++ }"
+        @reset-submission="handleResetSubmission"
         @submit="onSubmit"
       />
     </WrapDiv>
