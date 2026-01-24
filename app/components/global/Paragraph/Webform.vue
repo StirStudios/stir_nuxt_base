@@ -83,8 +83,11 @@ const groupedFields = computed(() => {
   )
 })
 
+const formResetKey = ref(0)
+
 const getFieldDefaultValue = (field: WebformFieldProps) => {
-  const defaultValue = field['#default']
+  const defaultValue =
+    field['#default'] ?? field['#defaultValue'] ?? field['#default_value']
 
   if (defaultValue !== undefined && defaultValue !== null) {
     if (Array.isArray(defaultValue)) return [...defaultValue]
@@ -93,17 +96,19 @@ const getFieldDefaultValue = (field: WebformFieldProps) => {
   }
 
   const type = field['#type']
+  const multipleCount = Number(field['#multiple'])
   const multiple =
     field['#multiple'] === true ||
+    (Number.isFinite(multipleCount) && multipleCount > 1) ||
     (typeof field['#cardinality'] === 'number' && field['#cardinality'] !== 1)
 
   if (type === 'checkboxes' || multiple) return []
-  if (type === 'checkbox' || type === 'webform_terms_of_service') return false
+  if (type === 'checkbox') return false
 
   return ''
 }
 
-const resetFormState = () => {
+const resetFormState = (options: { bumpKey?: boolean } = {}) => {
   for (const [key, field] of Object.entries(fields)) {
     if (field['#composite']) {
       state[key] = {}
@@ -114,11 +119,15 @@ const resetFormState = () => {
       state[key] = getFieldDefaultValue(field)
     }
   }
+
+  if (options.bumpKey !== false) {
+    formResetKey.value += 1
+  }
 }
 
 // Initialize state with form defaults
 onMounted(() => {
-  resetFormState()
+  resetFormState({ bumpKey: false })
 })
 
 // Helper functions for field rendering
@@ -201,6 +210,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   <EditLink :link="webformSubmissions">
     <WrapDiv :align="props.align" :styles="[props.width, props.spacing]">
       <WebformContent
+        :key="formResetKey"
         v-model:turnstile-token="turnstileToken"
         :fields="fields"
         :get-group-fields="getGroupFields"
