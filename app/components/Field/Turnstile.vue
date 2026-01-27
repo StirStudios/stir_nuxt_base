@@ -77,7 +77,9 @@ watchEffect(() => {
 })
 
 const spacingClass = computed(() =>
-  isInteractionOnly.value && !hasVisibleWidget.value ? 'mb-0' : 'max-w-xs',
+  isInteractionOnly.value && !hasVisibleWidget.value
+    ? 'mb-0'
+    : 'max-w-xs overflow-x-hidden',
 )
 </script>
 
