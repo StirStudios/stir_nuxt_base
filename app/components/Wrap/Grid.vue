@@ -15,6 +15,10 @@ const { container: themeContainer, card: themeCard } = useAppConfig().stirTheme
 
 const gridClasses = computed(() => props.gridItems || props.gridClasses)
 
+const gridStyles = computed(() => {
+  return [gridClasses.value, props.card ? 'relative z-10' : null].filter(Boolean)
+})
+
 const wrapperClasses = computed(() => {
   return [
     props.container ? themeContainer : null,
@@ -28,7 +32,7 @@ const wrapperClasses = computed(() => {
 
 <template>
   <WrapDiv :styles="wrapperClasses">
-    <WrapDiv :styles="gridClasses">
+    <WrapDiv :styles="gridStyles">
       <slot />
     </WrapDiv>
     <CardGradient v-if="props.card" :layout="props" />
