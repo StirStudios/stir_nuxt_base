@@ -1,6 +1,5 @@
-// Centralized Default Transition Config
 const defaultTransitionConfig = {
-  duration: 1.2, // Smooth animation
+  duration: 1.2,
   ease: [0.42, 0, 0.58, 1],
   type: 'spring',
   stiffness: 250,
@@ -9,7 +8,6 @@ const defaultTransitionConfig = {
   staggerChildren: 0.3,
 }
 
-// Function to Get Motion Effect Based on Direction
 export const getMotionEffect = (
   direction: string,
   transitionConfig = defaultTransitionConfig,
@@ -19,9 +17,7 @@ export const getMotionEffect = (
     show: { opacity: 1, transition: transitionConfig },
   }
 
-  // All Animation Variants Restored
   const effects = {
-    // Fade Animations
     'fade-in': baseEffect,
     'fade-up': {
       hidden: { opacity: 0, y: 100 },
@@ -40,7 +36,6 @@ export const getMotionEffect = (
       show: { opacity: 1, x: 0, transition: transitionConfig },
     },
 
-    // Flip Animations (Restored)
     'flip-up': {
       hidden: { opacity: 0, rotateX: 90 },
       show: { opacity: 1, rotateX: 0, transition: transitionConfig },
@@ -58,7 +53,6 @@ export const getMotionEffect = (
       show: { opacity: 1, rotateY: 0, transition: transitionConfig },
     },
 
-    // Slide Animations (Restored)
     'slide-up': {
       hidden: { opacity: 0, y: 100 },
       show: { opacity: 1, y: 0, transition: transitionConfig },
@@ -76,7 +70,6 @@ export const getMotionEffect = (
       show: { opacity: 1, x: 0, transition: transitionConfig },
     },
 
-    // Zoom Animations (Restored)
     'zoom-in': {
       hidden: { opacity: 0, scale: 0.8 },
       show: { opacity: 1, scale: 1, transition: transitionConfig },
@@ -86,7 +79,6 @@ export const getMotionEffect = (
       show: { opacity: 1, scale: 1, transition: transitionConfig },
     },
 
-    // Zoom with Direction
     'zoom-in-up': {
       hidden: { opacity: 0, scale: 0.8, y: 100 },
       show: { opacity: 1, scale: 1, y: 0, transition: transitionConfig },

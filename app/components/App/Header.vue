@@ -3,17 +3,14 @@ import { useScrollNav } from '~/composables/useScrollNav'
 import { usePageContext } from '~/composables/usePageContext'
 
 const props = defineProps<{ mode?: 'fixed' | 'static' }>()
-
 const { scrollDirection, atBottom, isScrolled } = useScrollNav()
 const { page, isFront, isAdministrator } = usePageContext()
 const { fetchMenu } = useDrupalCe()
 const route = useRoute()
 const appConfig = useAppConfig()
 const theme = appConfig.stirTheme
-
 const hydrated = ref(false)
 const forceScrolled = ref(false)
-
 const isFixed = computed(
   () => props.mode === 'fixed' || isScrolled.value || isFront.value,
 )

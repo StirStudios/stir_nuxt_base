@@ -8,7 +8,6 @@ const props = defineProps<{
 }>()
 
 const { gradients, card } = useAppConfig().stirTheme
-
 const gradientClass = computed(() => {
   if (!props.layout.card) return ''
 
@@ -17,7 +16,6 @@ const gradientClass = computed(() => {
 })
 
 const effectClass = computed(() => card.effect)
-
 const sizeClass = computed(() =>
   props.layout.compact ? card.sizes.compact : card.sizes.default,
 )

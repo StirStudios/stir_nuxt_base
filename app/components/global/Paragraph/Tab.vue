@@ -1,6 +1,5 @@
 <script setup lang="ts">
 defineProps<{
-  // Identity
   id?: number | string
   uuid?: string
   parentUuid?: string
@@ -8,7 +7,6 @@ defineProps<{
 
   title?: string
 
-  // Meta
   editLink?: string
 }>()
 </script>

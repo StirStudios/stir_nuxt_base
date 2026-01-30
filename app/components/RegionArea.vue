@@ -1,9 +1,7 @@
 <script setup lang="ts">
 const { renderCustomElements } = useDrupalCe()
 const { page } = usePageContext()
-
 const props = defineProps<{ area: string }>()
-
 const regionBlocks = computed(() => page.value?.blocks?.[props.area] ?? {})
 </script>
 

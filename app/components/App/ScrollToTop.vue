@@ -3,9 +3,7 @@ import { useWindowScroll } from '@vueuse/core'
 
 const { y } = useWindowScroll()
 const theme = useAppConfig().stirTheme.scrollButton
-
 const showButton = computed(() => y.value > theme.showAtScrollY)
-
 const scrollToTop = () => {
   y.value = 0
 }

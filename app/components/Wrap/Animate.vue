@@ -4,7 +4,6 @@ import { motion } from 'motion-v'
 
 const config = useAppConfig()
 const animations = computed(() => config.stirTheme.animations.once)
-
 const props = defineProps<{
   effect?: string
   class?: string

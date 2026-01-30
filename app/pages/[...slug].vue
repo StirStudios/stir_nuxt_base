@@ -22,10 +22,24 @@ definePageMeta({
   key: (route) => route.fullPath.split('#')[0],
 })
 
-function customPageError(error: Record<string, any>) {
-  const code = error?.value?.statusCode ?? 500
-  const message = error?.value?.statusMessage ?? 'Page not found'
+function customPageError(error: unknown) {
+  const payload = getErrorPayload(error)
+  const code = payload?.statusCode ?? 500
+  const message = payload?.statusMessage ?? 'Page not found'
   throw createError({ statusCode: code, statusMessage: message })
+}
+
+function getErrorPayload(
+  error: unknown,
+): { statusCode?: number; statusMessage?: string } | null {
+  if (!error || typeof error !== 'object') return null
+  const value = (error as { value?: unknown }).value
+  if (!value || typeof value !== 'object') return null
+  const payload = value as {
+    statusCode?: number
+    statusMessage?: string
+  }
+  return payload
 }
 </script>
 

@@ -19,7 +19,6 @@ export function useTeaserPost(
   })
 
   const orientation = computed(() => extra.orientation ?? 'horizontal')
-
   const image = computed(() => {
     const m = teaserSource.value.media
     if (!m?.src) return null

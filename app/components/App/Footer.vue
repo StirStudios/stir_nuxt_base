@@ -3,7 +3,6 @@ import { usePageContext } from '~/composables/usePageContext'
 
 const { page } = usePageContext()
 const theme = useAppConfig().stirTheme
-
 const currentYear = new Date().getFullYear()
 const iconsSocialConfig = theme.socials || []
 </script>

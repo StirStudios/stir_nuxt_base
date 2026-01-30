@@ -1,12 +1,12 @@
+import type { useSlotsToolkit } from './useSlotsToolkit'
+
 export function useMediaOrdering(
-  slotMedia: Ref<any[]>,
+  slotMedia: Ref<unknown[]>,
   props: { randomize?: boolean },
   tk: ReturnType<typeof useSlotsToolkit>,
 ) {
-  // Base DOM order
   const baseIndices = computed(() => slotMedia.value.map((_, i) => i))
 
-  // Fisher–Yates shuffle
   function computeRandomOrder() {
     const arr = [...baseIndices.value]
     for (let i = arr.length - 1; i > 0; i--) {

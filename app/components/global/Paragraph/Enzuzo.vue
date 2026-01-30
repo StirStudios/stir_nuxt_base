@@ -1,12 +1,10 @@
 <script setup lang="ts">
 const props = defineProps<{
-  // Base CE identity
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  // Component-specific
   embedUrl?: string
 }>()
 

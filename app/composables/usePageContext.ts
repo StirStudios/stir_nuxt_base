@@ -1,7 +1,6 @@
 export function usePageContext() {
   const nuxtApp = useNuxtApp()
   const route = useRoute()
-
   const currentKey = useState<string>('drupal-ce-current-page-key', () => '')
   const page = computed(() => nuxtApp.payload?.data?.[currentKey.value])
 
@@ -12,7 +11,6 @@ export function usePageContext() {
   })
 
   const isFront = computed(() => route.path === '/')
-
   const isAdministrator = computed(
     () => page.value?.current_user?.roles?.includes('administrator') || false,
   )
@@ -28,7 +26,6 @@ export function usePageContext() {
   const pageCreated = computed(() => pageProps.value?.created || '')
   const pageHide = computed(() => pageProps.value?.hide || false)
   const pageLayout = computed(() => page.value?.page_layout || '')
-
   const bodyClasses = computed(() =>
     [
       slug.value || 'front',

@@ -1,16 +1,13 @@
 <script setup lang="ts">
 const props = defineProps<{
-  /* Identity */
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  /* Calculator embed */
   embedUrl?: string
   venueId?: string
 
-  /* Editing */
   editLink?: string
 }>()
 

@@ -4,7 +4,6 @@ import { usePageContext } from './usePageContext'
 export function useAppLogo(props: { addClasses?: string }) {
   const { isDark } = useDarkMode()
   const { page } = usePageContext()
-
   const mounted = ref(false)
   onMounted(() => (mounted.value = true))
 

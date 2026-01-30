@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   id?: number | string
   uuid?: string
   parentUuid?: string
@@ -10,7 +10,6 @@ const props = defineProps<{
 
 const vueSlots = useSlots()
 const active = ref<string | number>('0')
-
 const tabNodes = computed(() => {
   const nodes = vueSlots.tab?.()
   return Array.isArray(nodes) ? nodes : []

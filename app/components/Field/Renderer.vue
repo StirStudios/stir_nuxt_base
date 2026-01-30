@@ -31,7 +31,6 @@ const props = withDefaults(
 )
 
 const { webform } = useAppConfig().stirTheme
-
 const componentMap: Record<string, Component> = {
   textfield: FieldInput,
   email: FieldInput,

@@ -1,21 +1,17 @@
 <script setup lang="ts">
 defineProps<{
-  /* Identity */
   id: number | string
   uuid: string
   parentUuid?: string
   region?: string
 
-  /* Content */
   text?: string
   alert?: string
   webform?: unknown
 
-  /* Behaviour */
   direction?: string
   onClose?: () => void
 
-  /* Editor tools */
   editLink?: string
 }>()
 </script>

@@ -10,7 +10,6 @@ const props = defineProps<{
 
 const { getPage } = useDrupalCe()
 const page = getPage()
-
 const breadcrumbs = computed<CrumbItem[]>(() => {
   if (props.crumbs && props.crumbs.length > 0) {
     return props.crumbs

@@ -36,7 +36,6 @@ onMounted(() => {
 })
 
 const isFieldDisabled = computed(() => props.field['#disabled'] === true)
-
 const getComparisonValue = (key?: string): number | null => {
   if (!key) return null
   const normalizedKey = Object.keys(props.state).find(
@@ -52,7 +51,6 @@ const items = computed(() => {
     const [min, max] = rawProps.range || []
     const compareKey = rawProps.checkAgainst
     const valueToCompare = getComparisonValue(compareKey)
-
     const disableWhen = rawProps.disableWhen
     const conditionValue = disableWhen?.field
       ? props.state[disableWhen.field]

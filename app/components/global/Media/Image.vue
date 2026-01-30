@@ -2,14 +2,12 @@
 import { usePageContext } from '~/composables/usePageContext'
 
 const props = defineProps<{
-  // Core media info
   title?: string
   alt?: string
   src?: string
   type?: string
   platform?: string
 
-  // Rendering attributes
   srcset?: string
   sizes?: string
   width?: number
@@ -18,26 +16,18 @@ const props = defineProps<{
   fetchpriority?: 'high' | 'auto'
   noWrapper?: boolean
 
-  // Optional link & metadata
   link?: string
   credit?: string
   hideCredit?: boolean
 
-  // Contextual flags
   isHero?: boolean
 }>()
 
 const theme = useAppConfig().stirTheme
 const { isFront } = usePageContext()
 const isEager = computed(() => props.loading === 'eager')
-
-// Try to get hero context
 const injectedIsHero = inject<boolean>('isHero', false)
-
-// Explicit prop OR inherited hero → hero mode
 const isHero = computed(() => props.isHero === true || injectedIsHero)
-
-// Bare mode: Hero OR noWrapper
 const isBare = computed(() => isHero.value || props.noWrapper === true)
 </script>
 

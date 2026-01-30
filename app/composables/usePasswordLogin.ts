@@ -3,19 +3,15 @@ import { object, string } from 'yup'
 export function usePasswordLogin() {
   const config = useAppConfig().protectedRoutes
   const heading = computed(() => config?.loginHeading || 'Login')
-
   const toast = useToast()
   const isLoading = ref(false)
   const showLogin = ref(false)
-
   const state = reactive({ password: '' })
   const schema = object({ password: string().required('Password is required') })
-
   const session = useUserSession()
   const { onError } = useValidation()
   const route = useRoute()
   const router = useRouter()
-
   const onSubmit = async (event: FormSubmitEvent<typeof state>) => {
     isLoading.value = true
     try {

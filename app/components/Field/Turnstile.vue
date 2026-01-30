@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const turnstileToken = defineModel<string>()
-
 const { turnstile: themeTurnstile = {} } = useAppConfig().stirTheme
-
 const hasLabel = computed(() => Boolean(themeTurnstile.label))
 </script>
 
