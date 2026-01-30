@@ -23,7 +23,6 @@ defineSlots<{
 
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
-
 const { observeVideos } = useIntersectionObserver()
 const { isFront, pageTitle, pageHide } = usePageContext()
 const { locked } = useNavLock()
@@ -62,7 +61,6 @@ const hideHeroSection = computed(
 
 const hasMediaSlot = computed(() => tk.slot('media').length > 0)
 const hasHero = computed(() => !!props.text || hasMediaSlot.value)
-
 const h1Classes = computed(() => {
   const base = hasMediaSlot.value
     ? isFrontEffective.value

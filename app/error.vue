@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { usePageContext } from '~/composables/usePageContext'
-
-const { isAdministrator } = usePageContext()
 const { navigation, error: errorConfig } = useAppConfig().stirTheme
 
 defineProps<{ error: NuxtError }>()
@@ -19,12 +16,12 @@ defineProps<{ error: NuxtError }>()
         color: errorConfig.color,
         variant: errorConfig.variant,
       }"
+      :error="error"
+      redirect="/"
       :ui="{
         links: 'mt-2',
         statusMessage: 'leading-tight',
       }"
-      :error="error"
-      redirect="/"
     />
   </UMain>
 

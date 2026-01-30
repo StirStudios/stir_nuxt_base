@@ -7,7 +7,6 @@ defineOptions({
 })
 
 const props = defineProps<{
-  // Core media info
   title: string
   type?: string
   isArticle?: boolean | string
@@ -15,14 +14,12 @@ const props = defineProps<{
   uid?: string | object
   hide?: boolean | string
 
-  // Routing + path info
   path?: {
     alias: string
     pid: string
     langcode: string
   }
 
-  // Navigation (prev/next nodes)
   prev_node?: {
     nid: string
     title: string
@@ -43,7 +40,6 @@ defineSlots<{
 
 const slots = useSlots()
 const teaser = useNodeTeaser(slots)
-
 const isTeaser = computed(() => props.type?.includes('teaser'))
 const isArticle = computed(() => !!props.isArticle)
 </script>

@@ -12,9 +12,7 @@ const props = defineProps<{
 defineSlots<{ default(): unknown }>()
 
 const { container: themeContainer, card: themeCard } = useAppConfig().stirTheme
-
 const gridClasses = computed(() => props.gridItems || props.gridClasses)
-
 const gridStyles = computed(() => {
   return [gridClasses.value, props.card ? 'relative z-10' : null].filter(Boolean)
 })

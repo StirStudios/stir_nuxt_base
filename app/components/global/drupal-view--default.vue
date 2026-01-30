@@ -30,9 +30,7 @@ const props = defineProps<{
 
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
-
 const rawRows = computed(() => tk.slot('rows'))
-
 const slotRows = tk.hydrateOrder(
   () => rawRows.value,
   () =>

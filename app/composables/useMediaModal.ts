@@ -1,8 +1,13 @@
-export function useMediaModal(slotMedia: Ref<unknown[]>, tk: any) {
+import type { VNode } from 'vue'
+import type { useSlotsToolkit } from './useSlotsToolkit'
+
+export function useMediaModal(
+  slotMedia: Ref<VNode[]>,
+  tk: ReturnType<typeof useSlotsToolkit>,
+) {
   const open = ref(false)
   const activeIndex = ref(0)
   const startIndex = ref(0)
-
   const itemsOrdered = computed(() =>
     slotMedia.value.map((vnode, i) => {
       const props = tk.propsOf(vnode)

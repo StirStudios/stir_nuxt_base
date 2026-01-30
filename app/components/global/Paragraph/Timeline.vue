@@ -27,9 +27,7 @@ const props = defineProps<{
 
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
-
 const timelineNodes = computed(() => tk.slot('timeline'))
-
 const timelineItems = computed<UITimelineItem[]>(() =>
   timelineNodes.value.map((vnode) => {
     const p = tk.propsOf(vnode)

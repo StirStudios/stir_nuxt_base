@@ -1,21 +1,17 @@
 <script setup lang="ts">
 const props = defineProps<{
-  // Base identifiers
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  // Core content
   items?: unknown[]
   randomize?: boolean
 
-  // Layout
   gridItems?: string
   width?: string
   spacing?: string
 
-  // UI / Interaction
   carouselIndicators?: boolean
   carouselArrows?: boolean
   carouselFade?: boolean
@@ -28,11 +24,8 @@ const props = defineProps<{
 
 const carousel = useTemplateRef<'carousel'>('carousel')
 const theme = useAppConfig().stirTheme
-
 const slots = useSlots()
-
 const slides = computed(() => {
-  // Items from views OR media slot
   const raw =
     (props.items && props.items.length) || (slots.media && slots.media().length)
       ? (props.items ?? slots.media())
@@ -44,15 +37,12 @@ const slides = computed(() => {
   }))
 })
 
-// Autoscroll speed
 const interval = computed(() => props.carouselInterval || 5000)
-
 const autoScrollSpeed = computed(() => {
   const minInterval = 1000
   const maxInterval = 10000
   const minSpeed = 1
   const maxSpeed = 10
-
   const clamped = Math.max(minInterval, Math.min(interval.value, maxInterval))
   const ratio = (maxInterval - clamped) / (maxInterval - minInterval)
   const speed = minSpeed + ratio * (maxSpeed - minSpeed)
@@ -80,7 +70,6 @@ const autoplayOptions = computed(() =>
     : false,
 )
 
-// Reset plugin timers on manual selection
 function handleSelect() {
   const plugins = carousel.value?.emblaApi?.plugins?.()
 

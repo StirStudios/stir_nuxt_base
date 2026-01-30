@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { usePageContext } from '~/composables/usePageContext'
 const { getDrupalBaseUrl, fetchMenu } = useDrupalCe()
-
 const { page } = usePageContext()
 const drupalBaseUrl = getDrupalBaseUrl()
-
 const user = computed(() => page.value?.current_user || null)
 const isAdministrator = computed(() =>
   user.value?.roles?.includes('administrator'),
@@ -68,7 +66,6 @@ const links = computed(() => {
   ]
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : []
-
   const accountDropdown = [
     {
       label: user.value?.name || 'Account',

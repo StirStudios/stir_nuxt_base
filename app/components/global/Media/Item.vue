@@ -28,13 +28,10 @@ const emit = defineEmits<{
 }>()
 
 const theme = useAppConfig().stirTheme
-
 const mediaProps = computed(() => props.tk.propsOf(props.node))
-
 const isVideo = computed(() => mediaProps.value.type === 'video')
 const isDocument = computed(() => mediaProps.value.type === 'document')
 const isAudio = computed(() => mediaProps.value.type === 'audio')
-
 const componentMap: Record<MediaType, Component> = {
   image: resolveComponent('MediaImage'),
   video: resolveComponent('MediaVideo'),

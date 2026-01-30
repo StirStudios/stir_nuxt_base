@@ -11,14 +11,12 @@ const props = defineProps<{
 
 const { webform } = useAppConfig().stirTheme
 const isMaterial = computed(() => webform.variant === 'material')
-
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 const multiple = Number(props.field['#multiple']) || 1
 const minTime = props.field['#dateTimeMin'] ?? '10:00:00'
 const maxTime = props.field['#dateTimeMax'] ?? '22:00:00'
 const step = Number(props.field['#dateTimeStep']) || 1800
 const siteTimezone = props.field['#timezone'] || 'America/Los_Angeles'
-
 const timeOptions = generateTimeOptions(minTime, maxTime, step)
 const timeSelectOptions = Object.fromEntries(
   timeOptions.map((t) => [t.value, t.label]),
@@ -73,7 +71,6 @@ watchEffect(() => {
 
       // Pass this date into getOffsetString so DST is correct
       const offset = getOffsetString(siteTimezone, jsDate)
-
       const full = `${dateStr}T${h}:${m}:00${offset}`
       values.push(full)
     }

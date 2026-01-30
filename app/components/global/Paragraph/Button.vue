@@ -2,25 +2,21 @@
 import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
 
 const props = defineProps<{
-  // Identity
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  // Layout
   align?: string
   spacing?: string
   width?: string
 
-  // Button appearance
   color?: string
   size?: string
   variant?: string
   icon?: string
   block?: boolean
 
-  // Link
   link?: {
     element?: string
     title?: string
@@ -28,16 +24,13 @@ const props = defineProps<{
     external?: boolean
   }
 
-  // Extras
   editLink?: string
 }>()
 
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
-
 const open = ref(false)
 const theme = useAppConfig().stirTheme
-
 const linkData = computed(() => props.link || {})
 const isExternal = computed(() => !!linkData.value.external)
 const btnLabel = computed(() => linkData.value.title || 'View link')
@@ -46,9 +39,7 @@ const btnVariant = computed(() => props.variant || 'solid')
 const btnSize = computed(() => props.size || 'xl')
 const btnBlock = computed(() => props.block ?? false)
 const iconName = computed(() => props.icon || null)
-
 const slotMedia = computed(() => tk.mediaItems())
-
 const pdf = computed(() => {
   return (
     slotMedia.value.find(

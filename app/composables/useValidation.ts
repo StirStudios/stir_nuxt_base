@@ -4,7 +4,6 @@ type FormErrorEvent = {
 
 export const useValidation = () => {
   const toast = useToast()
-
   const onError = (event: FormErrorEvent) => {
     if (!import.meta.client) return
     if (!event?.errors?.length) return

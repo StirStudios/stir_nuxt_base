@@ -12,7 +12,6 @@ const props = defineProps<{
 const descriptionContent = shallowRef('')
 const checkboxValue = ref<boolean>(false)
 const optionProps = props.field['#optionProperties'] || {}
-
 const { disabled, checked } = useEvaluateState(
   props.field['#states'] ?? {},
   props.state,

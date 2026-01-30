@@ -5,13 +5,11 @@ import { useMediaModal } from '~/composables/useMediaModal'
 import { useElementSize } from '@vueuse/core'
 
 const props = defineProps<{
-  /* Identity */
   id?: number | string
   uuid?: string
   parentUuid?: string
   region?: string
 
-  /* Layout */
   gridItems?: string
   spacing?: string
   widthClass?: string
@@ -25,23 +23,18 @@ const props = defineProps<{
     gap?: Record<string, number>
   }
 
-  /* Content */
   label?: string
   header?: string
   headerTag?: string
 
-  /* Behavior */
   editLink?: string
 }>()
 
 const scrollArea = useTemplateRef('scrollArea')
-
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
 const theme = useAppConfig().stirTheme
-
 const slotMedia = computed(() => tk.mediaItems())
-
 const componentMap = {
   image: resolveComponent('MediaImage'),
   video: resolveComponent('MediaVideo'),
@@ -51,7 +44,6 @@ const componentMap = {
 }
 
 const { orderedIndices } = useMediaOrdering(slotMedia, props, tk)
-
 const slotMediaOrdered = computed(() =>
   orderedIndices.value.map((i) => slotMedia.value[i]),
 )
@@ -68,7 +60,6 @@ const {
 } = useMediaModal(slotMediaOrdered, tk)
 
 const { width } = useElementSize(() => scrollArea.value?.$el)
-
 const lanes = computed(() => {
   const config = props.masonry?.lanes
   if (!config) return 1

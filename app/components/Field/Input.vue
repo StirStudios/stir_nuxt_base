@@ -10,7 +10,6 @@ const props = defineProps<{
 
 const { webform } = useAppConfig().stirTheme
 const isMaterial = computed(() => webform.variant === 'material')
-
 const id = ref(useId())
 const isNumber = computed(() => props.field['#type'] === 'number')
 const isTel = computed(() => props.field['#type'] === 'tel')

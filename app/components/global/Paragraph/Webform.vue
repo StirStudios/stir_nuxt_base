@@ -24,51 +24,34 @@ const webform = computed<WebformDefinition>(() => {
   return props.webform || ({} as WebformDefinition)
 })
 
-// Composables & Utilities
 const { onError } = useValidation()
 const { y } = useWindowScroll()
 const toast = useToast()
-
 const { webform: themeWebform } = useAppConfig().stirTheme
-
-// Destructure webform props
 const {
   fields: rawFields = {},
   webformId = '',
   webformSubmissions = '',
   webformConfirmation = '',
-  webformConfirmationType = '',
-  webformRedirect = '',
   actions = [],
 } = webform.value
 
-// Flatten the fields once at mount
 const fields = flattenWebformFields(rawFields)
-
 const state = reactive({})
 
-// Then safely assign to shared store
 webformState.fields = fields
 webformState.state = state
 
-// Reactive state
 const turnstileToken = ref('')
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
-
-// Compute Yup schema dynamically
 const schema = computed(() => buildYupSchema(fields, state))
-
-// Maintain API order of fields
 const orderedFieldNames = computed(() => Object.keys(fields))
-
-// Determine submit button label from actions
 const submitButtonLabel = computed(
   () => actions[0]?.['#submit_Label'] || 'Submit',
 )
 
-// Group fields dynamically for better rendering
 const groupedFields = computed(() => {
   return orderedFieldNames.value.reduce(
     (acc, fieldName) => {
@@ -84,7 +67,6 @@ const groupedFields = computed(() => {
 })
 
 const formResetKey = ref(0)
-
 const getFieldDefaultValue = (field: WebformFieldProps) => {
   const defaultValue =
     field['#default'] ?? field['#defaultValue'] ?? field['#default_value']
@@ -125,14 +107,11 @@ const resetFormState = (options: { bumpKey?: boolean } = {}) => {
   }
 }
 
-// Initialize state with form defaults
 onMounted(() => {
   resetFormState({ bumpKey: false })
 })
 
-// Helper functions for field rendering
 const containerTypes = ['section', 'fieldset', 'details', 'webform_section']
-
 const shouldRenderGroupContainer = (fieldName: string) =>
   fields[fieldName]?.parent &&
   groupedFields.value[fields[fieldName]?.parent]?.[0] === fieldName &&
@@ -155,15 +134,12 @@ const handleResetSubmission = async () => {
   formResetKey.value += 1
 }
 
-// Form submission handler
 async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   isLoading.value = true
   errors.value = {}
 
   try {
     const hiddenDefaults = getHiddenDefaults(fields)
-
-    // Prepare Payload
     const payload = {
       webform_id: webformId,
       ...transformPayloadToSnakeCase(state),
@@ -171,13 +147,11 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
       turnstile_response: turnstileToken.value,
     }
 
-    // Submit Form Data
     await $fetch('/api/webform/submit', {
       method: 'POST',
       body: JSON.stringify(payload),
     })
 
-    // Handle Successful Submission
     if (themeWebform.scrollToTopOnSuccess !== false) {
       y.value = 0
     }
@@ -188,7 +162,6 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
     })
     props.onClose?.()
 
-    // Reset Form
     resetFormState({ bumpKey: false })
     errors.value = {}
     turnstileToken.value = ''
@@ -196,7 +169,6 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   } catch (error) {
     console.error('Submission Error:', error)
 
-    // Handle Errors from Backend
     const errorMessage =
       error?.response?._data?.error?.message ||
       error?.response?._data?.message ||

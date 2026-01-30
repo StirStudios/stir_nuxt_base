@@ -9,7 +9,6 @@ type IconsSocialProps = {
 }
 
 const props = defineProps<IconsSocialProps>()
-
 const iconSize = props.iconSize || 'size-10'
 </script>
 

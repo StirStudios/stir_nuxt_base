@@ -1,6 +1,5 @@
 export function useIntersectionObserver() {
   let observer: IntersectionObserver | null = null
-
   const observeVideos = (threshold: number = 0.1) => {
     if (!import.meta.client) return
 

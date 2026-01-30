@@ -3,7 +3,6 @@ import { aspectRatios } from '~/utils/aspectRatios'
 import { useVideoPlayers } from '~/composables/useVideoPlayers'
 
 const props = defineProps<{
-  // Core media
   mid?: string | number
   title?: string
   alt?: string
@@ -11,31 +10,22 @@ const props = defineProps<{
   platform?: string
   mediaEmbed?: string
 
-  // Dimensions
   width?: number
   height?: number
 
-  // Rendering flags
   noWrapper?: boolean
 }>()
 
 const theme = useAppConfig().stirTheme
 const { media: mediaTheme } = theme
 const { initializePlayers } = useVideoPlayers()
-
-// Hero mode removes wrapper
 const isHero = inject<boolean>('isHero', false)
 const isBare = computed(() => isHero || props.noWrapper === true)
-
-// Bunny placeholder size
 const isProcessing = computed(() => props.width === 180)
-
-// Aspect-ratio utility
 const aspectClass = computed(() =>
   aspectRatios(props.width ?? 16, props.height ?? 9),
 )
 
-// Init Bunny player for iframe embeds
 onMounted(() => {
   if (!isBare.value && props.mediaEmbed && !isProcessing.value) {
     initializePlayers()

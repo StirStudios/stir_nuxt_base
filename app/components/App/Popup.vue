@@ -5,10 +5,8 @@ import { usePopupData } from '~/composables/usePopupData'
 const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
 const { y } = useWindowScroll()
-
 const open = ref(false)
 const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
-
 const hasTriggered = ref(false)
 
 watch(
@@ -20,13 +18,11 @@ watch(
 )
 
 const hasPopup = computed(() => !!popup.value)
-
 const title = computed(
   () => popup.value?.props?.webform?.webformTitle ?? 'Announcement',
 )
 
 const description = computed(() => popup.value?.props?.text || '')
-
 const popupRenderProps = computed(() => {
   if (!popup.value) return {}
 

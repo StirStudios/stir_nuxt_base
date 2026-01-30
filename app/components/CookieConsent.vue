@@ -3,7 +3,6 @@ const { cookieConsent: config } = useAppConfig()
 const route = useRoute()
 const open = ref(false)
 const isDev = import.meta.dev
-
 const consent = useCookie<boolean>('cookie_consent', {
   maxAge: 60 * 60 * 24 * 365,
 })
@@ -95,10 +94,10 @@ watch(
 
   <UAlert
     v-else-if="config?.enabled && isDev"
-    title="Heads up!"
+    color="warning"
     description="Cookie consent is enabled but not fully configured. Please provide title,
       message, and buttonLabel."
-    color="warning"
+    title="Heads up!"
     :ui="{
       root: 'fixed inset-x-0 bottom-0 rounded-none',
       wrapper: 'text-center',

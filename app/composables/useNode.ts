@@ -20,7 +20,6 @@ export function useNode(slots: unknown) {
     })
 
     const props = computed(() => tk.propsOf(vnode.value) ?? {})
-
     const mediaProps = computed(() => {
       const node = vnode.value
       if (!node) return {}
@@ -28,7 +27,6 @@ export function useNode(slots: unknown) {
       // Slots dictionary: { media(): VNode[] }
       type SlotDict = Record<string, (() => VNode[]) | undefined>
       const children = node.children as unknown as SlotDict
-
       const mediaFn = children.media
       if (!mediaFn) return {}
 
@@ -72,7 +70,6 @@ export function useNode(slots: unknown) {
  */
 export function useNodeTeaser(slots: unknown) {
   const node = useNode(slots)
-
   const source = computed(() => {
     if (node.section?.vnode) return node.section
     if (node.hero?.vnode) return node.hero
