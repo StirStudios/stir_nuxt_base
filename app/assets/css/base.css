@@ -46,6 +46,11 @@
     a {
       @apply text-primary;
     }
+
+    section,
+    header {
+      @apply mb-15;
+    }
   }
 
   /* Animations */

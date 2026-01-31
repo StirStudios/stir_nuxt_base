@@ -6,22 +6,22 @@ import path from 'path'
 // Define breakpoints
 const breakpoints = ['', 'sm:', 'md:', 'lg:', 'xl:']
 
-// ✅ Limit grid columns to a max of 5
+// Limit grid columns to a max of 6
 const columns = Array.from({ length: 6 }, (_, i) => `grid-cols-${i + 1}`)
 
-// ✅ Limit col-span to a max of 3 (we rarely go higher)
+// Limit col-span to a max of 3 (we rarely go higher)
 const spans = Array.from({ length: 3 }, (_, i) => `col-span-${i + 1}`)
 
-// ✅ Limit gaps to a max of 10
+// Limit gaps to a max of 10
 const gaps = [...Array.from({ length: 10 }, (_, i) => `gap-${i + 1}`), 'gap-20']
 
-// ✅ Add space-y-* classes up to 10 and space-y-20
+// Add space-y-* classes up to 10 and space-y-20
 const spaceY = [
   ...Array.from({ length: 10 }, (_, i) => `space-y-${i + 1}`),
   'space-y-20',
 ]
 
-// ✅ Limit basis to only 1/2, 1/3, 1/4, and 1/5
+// Limit basis to common fractions
 const basisValues = [
   'basis-1/1',
   'basis-1/2',
@@ -32,10 +32,10 @@ const basisValues = [
   'basis-1/7',
 ]
 
-// ✅ Limit columns-{n} to a max of 5 (for multi-column layouts)
+// Limit columns-{n} to a max of 5 (for multi-column layouts)
 const columnsDynamic = Array.from({ length: 5 }, (_, i) => `columns-${i + 1}`)
 
-// ✅ Limit spacing sizes to a reasonable range
+// Limit spacing sizes to a reasonable range
 const spacings = [0, 1, 2, 3, 4, 5, 10, 15, 20]
 const spacingClasses = spacings.flatMap((size) => [
   `p-${size}`,
@@ -66,12 +66,12 @@ breakpoints.forEach((bp) => {
   basisValues.forEach((basis) => safelist.add(`${bp}${basis}`))
   spacingClasses.forEach((cls) => safelist.add(`${bp}${cls}`))
 
-  // ✅ Add visibility helpers for each breakpoint
+  // Add visibility helpers for each breakpoint
   safelist.add(`${bp}hidden`)
   safelist.add(`${bp}block`)
 })
 
-// ✅ Add additional required classes
+// Add additional required classes
 const additionalClasses = [
   'lg:block',
   'mx-auto',
@@ -86,11 +86,13 @@ const additionalClasses = [
   'lg:grid-cols-[4fr_8fr]',
   'text-muted',
   'list-none',
+  'aspect-video',
+  'aspect-square',
 ]
 
 additionalClasses.forEach((cls) => safelist.add(cls))
 
-// ✅ Write to Tailwind inline() safelist file (Tailwind v4 compatible)
+// Write to Tailwind inline() safelist file (Tailwind v4 compatible)
 function generateInlineSources(classes: Set<string>): string {
   const lines: string[] = []
   const sorted = Array.from(classes).sort()
@@ -110,5 +112,5 @@ const inlineCSS = generateInlineSources(safelist)
 fs.writeFileSync(safelistPath, inlineCSS)
 
 console.log(
-  `✅ Tailwind v4 inline safelist generated: ${safelist.size} classes saved to ${safelistPath}`,
+  `Tailwind v4 inline safelist generated: ${safelist.size} classes saved to ${safelistPath}`,
 )
