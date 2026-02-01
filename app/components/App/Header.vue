@@ -103,8 +103,8 @@ const onOpen = (val: boolean) => {
     </template>
 
     <LazyUNavigationMenu
+      aria-label="Site Navigation"
       :color="theme.navigation.color"
-      data-nav="Site Navigation"
       :highlight="theme.navigation.highlight.show"
       :highlight-color="
         theme.navigation.highlight.show ? theme.navigation.highlight.color : ''
@@ -119,7 +119,7 @@ const onOpen = (val: boolean) => {
 
     <template #body>
       <LazyUNavigationMenu
-        data-nav="Mobile Navigation"
+        aria-label="Mobile Navigation"
         :items="navLinks"
         orientation="vertical"
         :ui="{ link: theme.navigation.slideover.link }"
