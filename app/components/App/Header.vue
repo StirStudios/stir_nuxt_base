@@ -29,24 +29,31 @@ const finalIsScrolled = computed(() => {
   return isScrolled.value || forceScrolled.value
 })
 
-const headerRootClasses = computed(() => [
-  theme.navigation.base,
-  isFixed.value
-    ? ['fixed z-50 w-full', isAdministrator.value ? 'top-[3.1rem]' : 'top-0']
-    : 'relative w-full',
-  theme.navigation.transparentTop && !finalIsScrolled.value
-    ? 'bg-transparent backdrop-none border-none backdrop-blur-none'
-    : theme.navigation.background,
-  {
-    'is-scrolled': finalIsScrolled.value,
-    '-translate-y-full':
-      isFixed.value &&
-      ((isFront.value && !finalIsScrolled.value && theme.navigation.isHidden) ||
-        (finalIsScrolled.value &&
-          scrollDirection.value === 'down' &&
-          !atBottom.value)),
-  },
-])
+const headerRootClasses = computed(() => {
+  const shouldHide =
+    isFixed.value &&
+    ((isFront.value && !finalIsScrolled.value && theme.navigation.isHidden) ||
+      (finalIsScrolled.value &&
+        scrollDirection.value === 'down' &&
+        !atBottom.value))
+
+  return [
+    theme.navigation.base,
+    isFixed.value
+      ? [
+          'fixed z-50 w-full',
+          isAdministrator.value && !shouldHide ? 'top-[3.1rem]' : 'top-0',
+        ]
+      : 'relative w-full',
+    theme.navigation.transparentTop && !finalIsScrolled.value
+      ? 'bg-transparent backdrop-none border-none backdrop-blur-none'
+      : theme.navigation.background,
+    {
+      'is-scrolled': finalIsScrolled.value,
+      '-translate-y-full': shouldHide,
+    },
+  ]
+})
 
 onMounted(() => {
   hydrated.value = true
