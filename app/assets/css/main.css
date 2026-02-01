@@ -3,7 +3,6 @@
 
 @import './base';
 @import './utilities';
-
 @import './safelist.inline';
 
 @theme static {
