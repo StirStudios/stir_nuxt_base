@@ -32,8 +32,8 @@ const iconsSocialConfig = theme.socials || []
     <div class="center">
       <UNavigationMenu
         v-if="page.footer_menu?.length"
+        aria-label="Footer Navigation"
         class="mb-3"
-        data-nav="Footer Navigation"
         :items="
           page.footer_menu.map((item) => ({
             label: item.title,
