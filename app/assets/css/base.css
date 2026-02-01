@@ -1,5 +1,4 @@
 @layer base {
-  /* Headings */
   h1,
   h2 {
     @apply font-serif;
@@ -25,7 +24,6 @@
     @apply cursor-pointer;
   }
 
-  /* Section Prose Styling */
   .prose {
     p,
     ul,
@@ -53,7 +51,6 @@
     }
   }
 
-  /* Animations */
   section {
     @apply overflow-x-clip;
   }
