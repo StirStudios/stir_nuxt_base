@@ -74,6 +74,11 @@ const onOpen = (val: boolean) => {
     :title="page?.site_info?.name ?? ''"
     :to="'/'"
     :toggle-side="theme.navigation.toggleDirection"
+    :menu="{
+      content: {
+        'aria-label': 'Site navigation menu',
+      },
+    }"
     :ui="{
       root: headerRootClasses,
       container: theme.navigation.container,

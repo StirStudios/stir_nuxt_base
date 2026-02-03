@@ -13,7 +13,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.87",
+    "@iconify-json/lucide": "^1.2.88",
     "@nuxt/ui": "https://pkg.pr.new/@nuxt/ui@6e66015",
     "@nuxtjs/robots": "^5.7.0",
     "@nuxtjs/sitemap": "^7.6.0",
