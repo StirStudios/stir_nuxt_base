@@ -6,6 +6,7 @@ const props = defineProps<{
   gridItems?: string
   width?: string
   spacing?: string
+  rowsWrapper: unknown
   container?: boolean
 
   viewId?: string
