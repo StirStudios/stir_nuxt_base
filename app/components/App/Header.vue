@@ -70,15 +70,15 @@ const onOpen = (val: boolean) => {
 <template>
   <LazyUHeader
     aria-label="Site header"
-    :mode="theme.navigation.toggleType"
-    :title="page?.site_info?.name ?? ''"
-    :to="'/'"
-    :toggle-side="theme.navigation.toggleDirection"
     :menu="{
       content: {
         'aria-label': 'Site navigation menu',
       },
     }"
+    :mode="theme.navigation.toggleType"
+    :title="page?.site_info?.name ?? ''"
+    :to="'/'"
+    :toggle-side="theme.navigation.toggleDirection"
     :ui="{
       root: headerRootClasses,
       container: theme.navigation.container,
