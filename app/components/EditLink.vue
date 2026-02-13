@@ -3,6 +3,8 @@ defineProps<{
   id?: number | string
   uuid?: string
   link?: string
+  parentUuid?: string
+  region?: string
 }>()
 </script>
 

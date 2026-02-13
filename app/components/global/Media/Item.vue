@@ -32,12 +32,12 @@ const mediaProps = computed(() => props.tk.propsOf(props.node))
 const isVideo = computed(() => mediaProps.value.type === 'video')
 const isDocument = computed(() => mediaProps.value.type === 'document')
 const isAudio = computed(() => mediaProps.value.type === 'audio')
-const componentMap: Record<MediaType, Component> = {
-  image: resolveComponent('MediaImage'),
-  video: resolveComponent('MediaVideo'),
-  document: resolveComponent('MediaDocument'),
-  audio: resolveComponent('MediaAudio'),
-  link: resolveComponent('MediaLink'),
+const componentMap: Record<MediaType, string> = {
+  image: 'MediaImage',
+  video: 'MediaVideo',
+  document: 'MediaDocument',
+  audio: 'MediaAudio',
+  link: 'MediaLink',
 }
 </script>
 

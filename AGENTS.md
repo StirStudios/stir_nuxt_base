@@ -1,67 +1,96 @@
 # AGENTS.md
 
-This repo is a **Nuxt 4 + Nuxt UI 4 + Tailwind 4** starter with **Lupus Decoupled Drupal (Custom Elements)**
-integration via **nuxtjs-drupal-ce**.
-Use the guidance below when making changes.
+This repository is a **Nuxt 4 layer/base theme** using **Nuxt UI 4 + Tailwind 4** with
+**Lupus Decoupled Drupal (Custom Elements)** via **nuxtjs-drupal-ce**.
+Use these rules for all changes.
+
+## Primary goals
+- Keep the layer production-safe for SSR and reusable across downstream projects.
+- Preserve Drupal CE compatibility and predictable custom-element rendering.
+- Favor explicit, typed, and documented configuration over implicit behavior.
 
 ## Project overview
-- **Framework:** Nuxt 4 (SSR by default)
+- **Framework:** Nuxt 4 (SSR by default, Nitro runtime)
 - **UI:** Nuxt UI 4 + Tailwind CSS 4
-- **CMS:** Decoupled Drupal CE (`nuxtjs-drupal-ce`)
-- **Build tooling:** Vite + Nitro
+- **CMS integration:** `nuxtjs-drupal-ce` (Lupus Decoupled Custom Elements)
+- **Performance modules:** `nuxt-vitalizer`, `motion-v`
+- **Aux modules:** robots, sitemap, turnstile, scripts, eslint
 
 ## Repository structure (high level)
-- `app/` – Nuxt app (pages, components, composables, plugins)
-- `server/` – Nitro server routes/middleware
-- `assets/` – CSS, images, and other static assets
-- `docs/` – project documentation
-- `nuxt.config.ts`, `app.config.ts` – primary configuration
+- `app/` - Nuxt app code (pages, components, composables, plugins)
+- `server/` - Nitro server routes/middleware/utilities
+- `assets/` - global CSS and static assets
+- `docs/` - integration and project docs
+- `types/` - shared TS types/interfaces
+- `nuxt.config.ts` - runtime/build/module configuration
+- `app.config.ts` - Nuxt UI/theme-level app configuration
 
-## Environment & configuration
-- Document any required environment variables in `readme.md` and keep `nuxt.config.ts` aligned.
-- If a change adds/renames env vars, update docs and note in summaries.
-- Prefer `.env`-driven configuration; avoid hardcoding URLs or secrets.
-- Call out any runtime overrides used via `NUXT_PUBLIC_DRUPAL_CE_*` environment variables.
+## Environment and configuration rules
+- Keep `.env`-driven config aligned with `nuxt.config.ts`; avoid hardcoded URLs/secrets.
+- If adding/renaming env vars, update `readme.md` and mention in your summary.
+- When changed, explicitly document purpose and expected values for:
+  - `DRUPAL_URL`
+  - `DRUPAL_API_KEY`
+  - `NUXT_URL`
+  - `NUXT_NAME`
+  - `NUXT_ENV`
+  - `NUXT_INDEXABLE`
+  - `SERVER_DOMAIN_CLIENT`
+  - `TURNSTILE_KEY`
+  - `TURNSTILE_SECRET`
+- Call out runtime overrides via `NUXT_PUBLIC_DRUPAL_CE_*` variables whenever used.
+- If route rules/redirects change (for example `/admincontrol` or `/front`), document user-facing impact.
 
 ## Coding conventions
-- **TypeScript first.** Prefer typed params/returns and keep types close to usage.
-- **Nuxt/Vue patterns.** Use composables for shared logic and keep components focused.
-- **Tailwind + Nuxt UI tokens.** Prefer existing design tokens/variants before adding custom CSS.
-- **Avoid over-commenting.** Add comments only for non-obvious logic, assumptions, or external constraints.
-- **No try/catch around imports.** (Project-wide rule.)
-- **File naming:** follow Nuxt conventions (PascalCase components, camelCase composables).
+- TypeScript-first: prefer typed params, return types, and narrow interfaces near usage.
+- Use Nuxt/Vue idioms: composables for shared logic, focused components, minimal cross-layer coupling.
+- Prefer Nuxt UI tokens/variants and Tailwind utilities before writing custom CSS.
+- Keep comments minimal and only for non-obvious logic or external constraints.
+- Do not wrap imports in `try/catch` (project-wide rule).
+- Naming:
+  - Vue components: PascalCase unless Drupal custom-element mapping requires kebab-case.
+  - Composables: camelCase with `use*` naming.
+  - Server utilities/routes: clear, purpose-driven names that match Nitro conventions.
 
-## Drupal integration guidance
-- This project targets **Lupus Decoupled Drupal (Custom Elements)** and uses **nuxtjs-drupal-ce**.
-- Favor existing Drupal CE utilities/composables for fetching content.
-- Keep content mapping and schema assumptions explicit in code (types or inline doc comment).
-- If a change affects rendering of Drupal-driven layouts, blocks, or custom elements, call it out in the summary.
-- If a change requires new Drupal fields, Custom Elements config, or JSON:API includes, document in `docs/` or `readme.md`.
-- **Custom element component naming:** prefer kebab-case filenames matching element names
-  (e.g. `node-article-teaser.vue`) to keep a 1:1 mapping; defaults can use `--default` suffixes.
-- **Component location:** place global custom element components in `components/global` when applicable.
-- **Custom Elements JSON format:** default is `explicit`; use `legacy` only for older backends and document the reason.
-- **Key module options to document when changed:** `drupalBaseUrl`, `serverDrupalBaseUrl`, `ceApiEndpoint`,
-  `customElementJsonFormat`, and any menu endpoint overrides.
+## Drupal CE integration guidance
+- Prefer existing `nuxtjs-drupal-ce` utilities/composables before custom fetch logic.
+- Keep schema and mapping assumptions explicit with types or concise inline notes.
+- For custom elements, prefer 1:1 filename mapping in kebab-case
+  (example: `node-article-teaser.vue`); fallback components may use `--default` suffix.
+- Place globally reused custom-element components in `components/global` when appropriate.
+- Default Custom Elements JSON format is `explicit`; use `legacy` only for old backends and document why.
+- If changed, document these module options and expected behavior:
+  - `drupalBaseUrl`
+  - `serverDrupalBaseUrl`
+  - `ceApiEndpoint`
+  - `customElementJsonFormat`
+  - menu endpoint overrides
+- Any change affecting Drupal-driven layout/block/custom-element rendering must be clearly called out in summaries.
+- If a feature requires new Drupal fields, CE config, or JSON:API include changes, document in `docs/` or `readme.md`.
 
-## Best practices
-- Keep SSR compatibility in mind (no direct browser-only APIs at module top-level).
-- Prefer server-safe APIs and `process.client`/`process.server` guards when needed.
-- Avoid breaking changes to public interfaces/config unless explicitly requested.
-- For new UI, confirm it matches Nuxt UI theming and tokens before adding custom styles.
+## SSR, runtime, and performance safeguards
+- No browser-only APIs at module top-level.
+- Use `import.meta.client`/`import.meta.server` (or Nuxt-safe guards) where runtime-specific logic is required.
+- Keep server/client behavior consistent when touching hydration-sensitive UI.
+- When changing `nuxt-vitalizer`, hydration timing, or motion behavior, verify no regression in interaction readiness.
+- Avoid breaking public interfaces/config defaults unless explicitly requested.
 
-## Testing & verification
-Use the existing scripts when appropriate:
-- `pnpm lint` – lint the codebase
-- `pnpm build` – production build
-- `pnpm dev` – local dev server
-- `pnpm generate` – static generation when needed
+## Validation checklist
+Run relevant checks after changes:
+- `pnpm lint`
+- `pnpm build`
+- `pnpm generate` (when static output behavior is affected)
+- `pnpm dev` (for local/manual verification when needed)
 
-If tests aren’t run, mention why in the summary.
+If checks are skipped, state exactly which were not run and why.
 
-## Release workflow
+## Release and safety rules
 - Do **not** run `pnpm release` unless explicitly requested.
+- Do not introduce breaking changes to shared layer contracts without approval.
 
-## PR expectations
-- Summaries should highlight user-facing changes and any Drupal integration impact.
-- Note any configuration changes and required environment variables.
+## PR / handoff expectations
+- Summaries must include:
+  - user-facing changes
+  - Drupal integration impact (if any)
+  - config/env changes
+  - verification performed (or skipped with reason)

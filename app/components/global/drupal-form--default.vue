@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DrupalFormProps } from '~/types'
+import type { DrupalFormProps } from '~~/types'
 
 defineProps<DrupalFormProps>()
 </script>
@@ -21,7 +21,7 @@ defineProps<DrupalFormProps>()
 </template>
 
 <style lang="css">
-@import '~/assets/css/main.css';
+@reference '~/assets/css/main.css';
 
 .drupal-form {
   .form-item {

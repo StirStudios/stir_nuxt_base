@@ -19,7 +19,7 @@ useHead({
 })
 
 definePageMeta({
-  key: (route) => route.fullPath.split('#')[0],
+  key: (route) => route.fullPath.split('#')[0] ?? route.path,
 })
 
 function customPageError(error: unknown) {

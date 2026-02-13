@@ -30,22 +30,24 @@ const props = defineProps<{
   editLink?: string
 }>()
 
-const scrollArea = useTemplateRef('scrollArea')
+const scrollArea = ref<{ $el?: HTMLElement } | null>(null)
 const vueSlots = useSlots()
 const tk = useSlotsToolkit(vueSlots)
 const theme = useAppConfig().stirTheme
 const slotMedia = computed(() => tk.mediaItems())
-const componentMap = {
-  image: resolveComponent('MediaImage'),
-  video: resolveComponent('MediaVideo'),
-  document: resolveComponent('MediaDocument'),
-  audio: resolveComponent('MediaAudio'),
-  link: resolveComponent('MediaLink'),
+const componentMap: Record<string, string> = {
+  image: 'MediaImage',
+  video: 'MediaVideo',
+  document: 'MediaDocument',
+  audio: 'MediaAudio',
+  link: 'MediaLink',
 }
 
 const { orderedIndices } = useMediaOrdering(slotMedia, props, tk)
 const slotMediaOrdered = computed(() =>
-  orderedIndices.value.map((i) => slotMedia.value[i]),
+  orderedIndices.value
+    .map((i) => slotMedia.value[i])
+    .filter((item): item is NonNullable<(typeof slotMedia.value)[number]> => !!item),
 )
 
 const {

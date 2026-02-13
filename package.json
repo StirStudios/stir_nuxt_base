@@ -10,15 +10,17 @@
     "postinstall": "nuxi prepare",
     "lint": "eslint . --no-warn-ignored",
     "lint:fix": "eslint . --fix --no-warn-ignored",
+    "typecheck": "nuxi typecheck",
     "release": "release-it"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.89",
+    "@internationalized/date": "^3.11.0",
     "@nuxt/ui": "https://pkg.pr.new/@nuxt/ui@6e66015",
     "@nuxtjs/robots": "^5.7.0",
     "@nuxtjs/sitemap": "^7.6.0",
     "@nuxtjs/turnstile": "^1.1.1",
-    "motion-v": "^1.10.2",
+    "@vueuse/core": "^14.2.0",
     "nuxt": "^4.3.1",
     "nuxt-vitalizer": "^2.0.0",
     "nuxtjs-drupal-ce": "^2.5.3",
@@ -37,7 +39,8 @@
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "release-it": "^19.2.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vue-tsc": "^2.2.12"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",

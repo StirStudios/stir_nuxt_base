@@ -19,7 +19,6 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
     experimental: {
-      parallel: true,
       asyncContext: true,
     },
   },
@@ -74,7 +73,6 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/eslint',
     '@nuxt/scripts',
-    'motion-v/nuxt',
 
     [
       'nuxt-vitalizer',
@@ -144,7 +142,7 @@ export default defineNuxtConfig({
         customErrorPages: true,
       },
     ],
-  ],
+  ] as Array<string | [string, Record<string, unknown>]>,
 
   runtimeConfig: {
     api: process.env.DRUPAL_URL,

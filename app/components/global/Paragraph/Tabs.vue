@@ -10,6 +10,7 @@ defineProps<{
 
 const vueSlots = useSlots()
 const active = ref<string | number>('0')
+type TabsItem = { label: string; value: string }
 const tabNodes = computed(() => {
   const nodes = vueSlots.tab?.()
   return Array.isArray(nodes) ? nodes : []

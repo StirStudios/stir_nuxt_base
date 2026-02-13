@@ -17,11 +17,20 @@ const isFixed = computed(
 
 // Fetch menu items
 const mainMenu = await fetchMenu('main')
-const navLinks = mainMenu.value.map((item) => ({
-  label: item.title,
+type MainMenuItem = {
+  title?: string
+  external?: boolean
+  absolute?: string
+  alias?: string
+  options?: {
+    fragment?: string
+  }
+}
+const navLinks = mainMenu.value.map((item: MainMenuItem) => ({
+  label: item.title ?? '',
   to: item.external
-    ? item.absolute
-    : `/${item.alias}${item.options?.fragment ? `#${item.options.fragment}` : ''}`,
+    ? (item.absolute ?? '')
+    : `/${item.alias ?? ''}${item.options?.fragment ? `#${item.options.fragment}` : ''}`,
 }))
 
 const finalIsScrolled = computed(() => {

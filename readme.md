@@ -6,7 +6,7 @@ A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and f
 - 🎨 **Nuxt UI 4** with customized design tokens, material-style form variants, and Tailwind 4
 - 🧩 **Drupal CE** integration for decoupled content, slot-based layouts, and dynamic form rendering
 - 📊 Turnstile CAPTCHA, Sitemap, and Robots support
-- 🌀 Smooth scrolling, page transitions, and motion support via `motion-v`
+- 🌀 Smooth scrolling and page transitions
 - ⚙️ Vitalizer: Delayed hydration for performance optimization
 - 🔐 Environment-aware route rules, protected admin redirects
 - 🧪 ESLint, Prettier, and Release It pre-configured
@@ -23,7 +23,7 @@ A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and f
 ## 📦 Project Structure
 
 - `nuxt.config.ts` — Full config for modules, routing, environment, and build
-- `app.config.ts` — UI theming, layout, animation, and third-party settings
+- `app/app.config.ts` — UI theming, layout, animation, and third-party settings
 - `assets/css/main.css` — Tailwind CSS entry point
 - `utils/uiVariants.ts` — Custom Nuxt UI material variant tokens
 
@@ -34,5 +34,14 @@ pnpm dev        # Start local dev server
 pnpm build      # Build for production
 pnpm preview    # Preview production build
 pnpm lint       # Lint project
+pnpm typecheck  # Nuxt + Vue TypeScript checks
 pnpm release    # Tag + prepare release
+```
+
+## ✅ Pre-Merge Checks
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm build
 ```
