@@ -5,7 +5,7 @@ import type { ObjectSchema } from 'yup'
 defineProps<{
   fields: Record<string, WebformFieldProps>
   state: WebformState
-  schema?: ObjectSchema<Record<string, unknown>>
+  schema: ObjectSchema<Record<string, unknown>>
   isFormSubmitted: boolean
   isLoading: boolean
   isSchemaReady: boolean

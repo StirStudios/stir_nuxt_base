@@ -7,6 +7,7 @@ import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 import { evaluateCondition } from '~/utils/evaluateUtils'
+import { buildYupSchema } from '~/utils/buildYupSchema'
 import type { WebformDefinition, WebformFieldProps, WebformState } from '../../../../types'
 import type { ObjectSchema } from 'yup'
 
@@ -49,8 +50,8 @@ const turnstileToken = ref('')
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
-const schema = shallowRef<ObjectSchema<Record<string, unknown>>>()
-const isSchemaReady = ref(false)
+const schema = shallowRef<ObjectSchema<Record<string, unknown>>>(buildYupSchema(fields, state))
+const isSchemaReady = ref(true)
 const visibilitySignature = computed(() =>
   orderedFieldNames.value
     .map((fieldName) =>
@@ -61,28 +62,9 @@ const visibilitySignature = computed(() =>
     .join(''),
 )
 
-let schemaBuildVersion = 0
-
-async function refreshSchema() {
-  const buildVersion = ++schemaBuildVersion
-  isSchemaReady.value = false
-  const { buildYupSchema } = await import('~/utils/buildYupSchema')
-
-  if (buildVersion !== schemaBuildVersion) return
-
+watch(visibilitySignature, () => {
   schema.value = buildYupSchema(fields, state)
-  isSchemaReady.value = true
-}
-
-if (import.meta.server) {
-  await refreshSchema()
-}
-
-if (import.meta.client) {
-  watch(visibilitySignature, () => {
-    void refreshSchema()
-  }, { immediate: true })
-}
+}, { flush: 'post' })
 const submitButtonLabel = computed(
   () => actions[0]?.['#submit_Label'] || 'Submit',
 )
@@ -157,9 +139,7 @@ const resetFormState = (options: { bumpKey?: boolean } = {}) => {
   }
 }
 
-onMounted(() => {
-  resetFormState({ bumpKey: false })
-})
+resetFormState({ bumpKey: false })
 
 const containerTypes = ['section', 'fieldset', 'details', 'webform_section']
 const shouldRenderGroupContainer = (fieldName: string) =>
@@ -246,7 +226,6 @@ async function onSubmit(_event: { data: Record<string, unknown> }) {
   <EditLink :link="webformSubmissions">
     <WrapDiv :align="props.align" :styles="[props.width, props.spacing]">
       <WebformContent
-        v-if="schema"
         :key="formResetKey"
         v-model:turnstile-token="turnstileToken"
         :fields="fields"
