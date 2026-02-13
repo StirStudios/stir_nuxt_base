@@ -65,6 +65,7 @@ let schemaBuildVersion = 0
 
 async function refreshSchema() {
   const buildVersion = ++schemaBuildVersion
+  isSchemaReady.value = false
   const { buildYupSchema } = await import('~/utils/buildYupSchema')
 
   if (buildVersion !== schemaBuildVersion) return
@@ -73,9 +74,15 @@ async function refreshSchema() {
   isSchemaReady.value = true
 }
 
-watch(visibilitySignature, () => {
-  void refreshSchema()
-}, { immediate: true })
+if (import.meta.server) {
+  await refreshSchema()
+}
+
+if (import.meta.client) {
+  watch(visibilitySignature, () => {
+    void refreshSchema()
+  }, { immediate: true })
+}
 const submitButtonLabel = computed(
   () => actions[0]?.['#submit_Label'] || 'Submit',
 )
