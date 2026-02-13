@@ -4,20 +4,6 @@ import {
   defaultTransitionConfig,
 } from '~/utils/animations'
 
-const config = useAppConfig()
-const animateOnce = computed(() => config.stirTheme.animations.once !== false)
-const props = defineProps<{
-  effect?: string
-  class?: string
-}>()
-
-const root = ref<HTMLElement | null>(null)
-const isInView = ref(false)
-const hasEntered = ref(false)
-const supportsLinearEasing = ref(false)
-const springEasing = createSpringLinearEasing(defaultTransitionConfig)
-const fallbackEasing = `cubic-bezier(${defaultTransitionConfig.ease.join(', ')})`
-
 const hiddenTransforms: Record<string, string> = {
   'fade-in': 'none',
   'fade-up': 'translateY(100px)',
@@ -44,53 +30,29 @@ const hiddenTransforms: Record<string, string> = {
   'zoom-out-right': 'translateX(100px) scale(1.2)',
 }
 
-const shouldShow = computed(() => {
-  if (!props.effect) return true
-  if (animateOnce.value && hasEntered.value) return true
-  return isInView.value
-})
+const springEasing = createSpringLinearEasing(defaultTransitionConfig)
+const fallbackEasing = `cubic-bezier(${defaultTransitionConfig.ease.join(', ')})`
+const supportsLinearEasing =
+  import.meta.client &&
+  typeof CSS !== 'undefined' &&
+  CSS.supports('transition-timing-function', 'linear(0, 1)')
+const transitionTimingFunction = supportsLinearEasing
+  ? springEasing
+  : fallbackEasing
 
-const transitionTimingFunction = computed(() =>
-  supportsLinearEasing.value ? springEasing : fallbackEasing,
-)
+const observerCallbacks = new WeakMap<HTMLElement, (visible: boolean) => void>()
+const observedElements = new Set<HTMLElement>()
+let sharedObserver: IntersectionObserver | null = null
 
-const animationStyle = computed(() => {
-  if (!props.effect) return undefined
+function getSharedObserver(): IntersectionObserver | null {
+  if (!import.meta.client || !('IntersectionObserver' in window)) return null
+  if (sharedObserver) return sharedObserver
 
-  const hiddenTransform = hiddenTransforms[props.effect] ?? hiddenTransforms['fade-in']
-
-  return {
-    opacity: shouldShow.value ? '1' : '0',
-    transform: shouldShow.value ? 'none' : hiddenTransform,
-    transition: `opacity ${defaultTransitionConfig.duration}s ${transitionTimingFunction.value} ${defaultTransitionConfig.delay}s, transform ${defaultTransitionConfig.duration}s ${transitionTimingFunction.value} ${defaultTransitionConfig.delay}s`,
-    willChange: 'opacity, transform',
-    transformStyle: props.effect?.startsWith('flip-') ? 'preserve-3d' : undefined,
-  }
-})
-
-onMounted(() => {
-  if (!props.effect || !root.value) return
-
-  supportsLinearEasing.value = CSS.supports(
-    'transition-timing-function',
-    'linear(0, 1)',
-  )
-
-  if (!('IntersectionObserver' in window)) {
-    isInView.value = true
-    hasEntered.value = true
-    return
-  }
-
-  const observer = new IntersectionObserver(
+  sharedObserver = new IntersectionObserver(
     (entries) => {
-      const entry = entries[0]
-      const visible = Boolean(entry?.isIntersecting)
-      isInView.value = visible
-
-      if (visible) {
-        hasEntered.value = true
-        if (animateOnce.value) observer.disconnect()
+      for (const entry of entries) {
+        const target = entry.target as HTMLElement
+        observerCallbacks.get(target)?.(Boolean(entry.isIntersecting))
       }
     },
     {
@@ -99,9 +61,91 @@ onMounted(() => {
     },
   )
 
-  observer.observe(root.value)
+  return sharedObserver
+}
 
-  onBeforeUnmount(() => observer.disconnect())
+function observeInView(
+  element: HTMLElement,
+  onVisibleChange: (visible: boolean) => void,
+): () => void {
+  const observer = getSharedObserver()
+  if (!observer) {
+    onVisibleChange(true)
+    return () => {}
+  }
+
+  observerCallbacks.set(element, onVisibleChange)
+  observedElements.add(element)
+  observer.observe(element)
+
+  return () => {
+    observer.unobserve(element)
+    observerCallbacks.delete(element)
+    observedElements.delete(element)
+
+    if (observedElements.size === 0 && sharedObserver) {
+      sharedObserver.disconnect()
+      sharedObserver = null
+    }
+  }
+}
+
+const config = useAppConfig()
+const animateOnce = computed(() => config.stirTheme.animations.once !== false)
+const props = defineProps<{
+  effect?: string
+  class?: string
+}>()
+
+const root = ref<HTMLElement | null>(null)
+const isInView = ref(false)
+const hasEntered = ref(false)
+
+const shouldShow = computed(() => {
+  if (!props.effect) return true
+  if (animateOnce.value && hasEntered.value) return true
+  return isInView.value
+})
+
+const animationStyle = computed(() => {
+  if (!props.effect) return undefined
+
+  const hiddenTransform =
+    hiddenTransforms[props.effect] ?? hiddenTransforms['fade-in']
+
+  return {
+    opacity: shouldShow.value ? '1' : '0',
+    transform: shouldShow.value ? 'none' : hiddenTransform,
+    transition: `opacity ${defaultTransitionConfig.duration}s ${transitionTimingFunction} ${defaultTransitionConfig.delay}s, transform ${defaultTransitionConfig.duration}s ${transitionTimingFunction} ${defaultTransitionConfig.delay}s`,
+    willChange: 'opacity, transform',
+    transformStyle: props.effect?.startsWith('flip-')
+      ? 'preserve-3d'
+      : undefined,
+  }
+})
+
+let stopObserving: (() => void) | null = null
+
+onMounted(() => {
+  if (!props.effect || !root.value) return
+
+  stopObserving = observeInView(root.value, (visible) => {
+    isInView.value = visible
+    if (visible) {
+      hasEntered.value = true
+      if (animateOnce.value) {
+        stopObserving?.()
+        stopObserving = null
+      }
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  if (stopObserving) {
+    stopObserving()
+    stopObserving = null
+  }
 })
 </script>
 
