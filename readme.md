@@ -57,3 +57,7 @@ pnpm build
 
 Use `pnpm deps:update:safe` for routine updates.  
 See `docs/dependency-update-policy.md` for the full policy.
+
+## Release Checklist
+
+Use `docs/release-checklist.md` as the standard pre-merge/pre-release checklist.
