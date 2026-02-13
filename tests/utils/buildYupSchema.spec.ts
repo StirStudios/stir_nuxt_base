@@ -98,4 +98,42 @@ describe('buildYupSchema', () => {
       }),
     ).resolves.toBeTruthy()
   })
+
+  it('does not validate hidden required datetime fields until they become visible', async () => {
+    const fields: Record<string, WebformFieldProps> = {
+      showDates: {
+        '#type': 'text',
+        '#title': 'Show Dates',
+        '#name': 'show_dates',
+      },
+      eventDate: createDateTimeField({
+        '#required': true,
+        '#multiple': 3,
+        '#states': {
+          visible: {
+            ':input[name="showDates"]': { value: 'yes' },
+          },
+        },
+      }),
+    }
+    const state: WebformState = { showDates: 'no' }
+
+    const hiddenSchema = buildYupSchema(fields, state)
+    await expect(hiddenSchema.validate({ showDates: 'no' })).resolves.toBeTruthy()
+
+    state.showDates = 'yes'
+    const visibleSchema = buildYupSchema(fields, state)
+    await expect(visibleSchema.validate({ showDates: 'yes' })).rejects.toBeTruthy()
+
+    await expect(
+      visibleSchema.validate({
+        showDates: 'yes',
+        eventDate: [
+          '2026-02-19T10:30:00-0800',
+          '2026-02-20T10:30:00-0800',
+          '2026-02-21T10:30:00-0800',
+        ],
+      }),
+    ).resolves.toBeTruthy()
+  })
 })
