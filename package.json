@@ -10,8 +10,13 @@
     "postinstall": "nuxi prepare",
     "lint": "eslint . --no-warn-ignored",
     "lint:fix": "eslint . --fix --no-warn-ignored",
+    "smoke:login": "node scripts/smoke/login-page.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
+    "verify:ci": "pnpm test && pnpm lint && pnpm typecheck && pnpm build && pnpm smoke:login",
+    "deps:update": "pnpm update",
+    "deps:verify": "pnpm verify:ci",
+    "deps:update:safe": "pnpm deps:update && pnpm deps:verify",
     "typecheck": "nuxi typecheck",
     "release": "release-it"
   },

@@ -37,6 +37,9 @@ pnpm lint       # Lint project
 pnpm typecheck  # Nuxt + Vue TypeScript checks
 pnpm test       # Run unit tests
 pnpm test:watch # Run unit tests in watch mode
+pnpm smoke:login # Smoke-test /login via preview server
+pnpm verify:ci  # Full local quality gate (test/lint/typecheck/build/smoke)
+pnpm deps:update:safe # Safe dependency update flow
 pnpm release    # Tag + prepare release
 ```
 
@@ -48,3 +51,8 @@ pnpm typecheck
 pnpm test
 pnpm build
 ```
+
+## Dependency Update Policy
+
+Use `pnpm deps:update:safe` for routine updates.  
+See `docs/dependency-update-policy.md` for the full policy.
