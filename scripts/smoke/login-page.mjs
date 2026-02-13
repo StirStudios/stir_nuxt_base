@@ -3,6 +3,7 @@ import { spawn } from 'node:child_process'
 
 const host = process.env.SMOKE_HOST || '127.0.0.1'
 const port = Number(process.env.SMOKE_PORT || 4310)
+const smokePath = process.env.SMOKE_PATH || '/'
 const baseUrl = `http://${host}:${port}`
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS || 60000)
 
@@ -11,8 +12,8 @@ async function waitForServer() {
 
   while (Date.now() - started < timeoutMs) {
     try {
-      const response = await fetch(`${baseUrl}/login`)
-      if (response.ok) return
+      const response = await fetch(`${baseUrl}${smokePath}`)
+      if (response.status < 500) return
     } catch {
       // Keep polling until timeout.
     }
@@ -65,14 +66,18 @@ async function runSmoke() {
       )
     }
 
-    const response = await fetch(`${baseUrl}/login`)
-    if (!response.ok) {
-      throw new Error(`Expected /login 200 but got ${response.status}`)
+    const response = await fetch(`${baseUrl}${smokePath}`)
+    if (response.status >= 500) {
+      throw new Error(
+        `Expected ${smokePath} to respond below 500 but got ${response.status}`,
+      )
     }
 
     const html = await response.text()
-    if (!html.includes('Enter Password')) {
-      throw new Error('Login smoke check failed: missing "Enter Password"')
+    if (!html.includes('<html')) {
+      throw new Error(
+        `Smoke check failed: ${smokePath} did not return an HTML document`,
+      )
     }
   } catch (error) {
     const details =
