@@ -17,6 +17,7 @@ export type InputType =
   | 'radio'
   | 'checkbox'
   | 'checkboxes'
+  | 'hidden'
   | 'processed_text'
   | 'datetime'
   | 'section'
@@ -54,7 +55,21 @@ export interface States {
   checked?: ConditionType
 }
 
+export interface WebformOptionProperties {
+  price?: number
+  description?: string
+  range?: [number?, number?]
+  checkAgainst?: string
+  disableWhen?: {
+    field?: string
+    includes?: string
+  }
+  linked_to?: string[]
+  linkedTo?: string[]
+}
+
 export interface WebformFieldProps {
+  [key: string]: unknown
   '#type': InputType
   '#title': string
   '#value'?: number | string
@@ -64,7 +79,7 @@ export interface WebformFieldProps {
   '#required'?: boolean
   '#requiredError'?: string
   '#options'?: Record<string, string>
-  '#optionProperties'?: Record<string, { price?: number; description?: string }>
+  '#optionProperties'?: Record<string, WebformOptionProperties>
   '#text'?: string
   '#min'?: number
   '#max'?: number
@@ -87,6 +102,7 @@ export interface GroupField extends WebformFieldProps {
 }
 
 export interface WebformActionProps {
+  [key: string]: unknown
   '#type': string
   '#title': string
   '#submit_label': string
@@ -94,7 +110,7 @@ export interface WebformActionProps {
 
 export type WebformState = Record<
   string,
-  string | number | boolean | string[] | undefined | object
+  string | number | boolean | string[] | Record<string, unknown> | undefined
 >
 
 export type WebformFields = Record<string, WebformFieldProps>

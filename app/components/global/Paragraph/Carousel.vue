@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { VNode } from 'vue'
+
 const props = defineProps<{
   id?: number | string
   uuid?: string
@@ -26,15 +28,16 @@ const carousel = useTemplateRef<'carousel'>('carousel')
 const theme = useAppConfig().stirTheme
 const slots = useSlots()
 const slides = computed(() => {
-  const raw =
-    (props.items && props.items.length) || (slots.media && slots.media().length)
-      ? (props.items ?? slots.media())
-      : []
+  const slotItems = slots.media?.() ?? []
+  const raw: unknown[] = (props.items?.length ?? 0) > 0 ? (props.items ?? []) : slotItems
 
-  return raw.map((vnode, i) => ({
-    vnode,
-    key: vnode.key || i,
-  }))
+  return raw.map((vnode, i) => {
+    const typedNode = vnode as VNode
+    return {
+      vnode: typedNode,
+      key: typedNode.key || i,
+    }
+  })
 })
 
 const interval = computed(() => props.carouselInterval || 5000)
@@ -71,7 +74,11 @@ const autoplayOptions = computed(() =>
 )
 
 function handleSelect() {
-  const plugins = carousel.value?.emblaApi?.plugins?.()
+  const plugins = (
+    carousel.value as unknown as {
+      emblaApi?: { plugins?: () => Record<string, { reset: () => void }> }
+    } | null
+  )?.emblaApi?.plugins?.()
 
   if (plugins?.autoplay && !props.carouselAutoscroll) plugins.autoplay.reset()
 

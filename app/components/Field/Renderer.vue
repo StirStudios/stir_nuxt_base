@@ -1,19 +1,7 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types'
+import type { Component } from 'vue'
+import type { WebformFieldProps, WebformState } from '~~/types'
 import { useEvaluateState } from '~/composables/useEvaluateState'
-
-import {
-  FieldInput,
-  FieldTextarea,
-  FieldSelect,
-  FieldRadio,
-  FieldCheckbox,
-  FieldCheckboxes,
-  FieldDate,
-  FieldDateTime,
-  FieldAddress,
-  FieldProcessedText,
-} from '#components'
 
 const props = withDefaults(
   defineProps<{
@@ -32,19 +20,29 @@ const props = withDefaults(
 
 const { webform } = useAppConfig().stirTheme
 const componentMap: Record<string, Component> = {
-  textfield: FieldInput,
-  email: FieldInput,
-  number: FieldInput,
-  tel: FieldInput,
-  textarea: FieldTextarea,
-  select: FieldSelect,
-  radio: FieldRadio,
-  checkbox: FieldCheckbox,
-  checkboxes: FieldCheckboxes,
-  datetime: FieldDateTime,
-  date: FieldDate,
-  address: FieldAddress,
-  processed_text: FieldProcessedText,
+  textfield: defineAsyncComponent(() => import('~/components/Field/Input.vue')),
+  email: defineAsyncComponent(() => import('~/components/Field/Input.vue')),
+  number: defineAsyncComponent(() => import('~/components/Field/Input.vue')),
+  tel: defineAsyncComponent(() => import('~/components/Field/Input.vue')),
+  textarea: defineAsyncComponent(
+    () => import('~/components/Field/Textarea.vue'),
+  ),
+  select: defineAsyncComponent(() => import('~/components/Field/Select.vue')),
+  radio: defineAsyncComponent(() => import('~/components/Field/Radio.vue')),
+  checkbox: defineAsyncComponent(
+    () => import('~/components/Field/Checkbox.vue'),
+  ),
+  checkboxes: defineAsyncComponent(
+    () => import('~/components/Field/Checkboxes.vue'),
+  ),
+  datetime: defineAsyncComponent(
+    () => import('~/components/Field/DateTime.vue'),
+  ),
+  date: defineAsyncComponent(() => import('~/components/Field/Date.vue')),
+  address: defineAsyncComponent(() => import('~/components/Field/Address.vue')),
+  processed_text: defineAsyncComponent(
+    () => import('~/components/Field/ProcessedText.vue'),
+  ),
 }
 
 const shouldRender = computed(() => {

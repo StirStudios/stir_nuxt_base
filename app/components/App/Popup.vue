@@ -6,7 +6,10 @@ const { renderCustomElements } = useDrupalCe()
 const { popup, config } = usePopupData()
 const { y } = useWindowScroll()
 const open = ref(false)
-const seen = useCookie('marketing_popup', { maxAge: 60 * 60 * 24 * 7 })
+const seen = useCookie<boolean>('marketing_popup', {
+  maxAge: 60 * 60 * 24 * 7,
+  default: () => false,
+})
 const hasTriggered = ref(false)
 
 watch(
@@ -19,7 +22,12 @@ watch(
 
 const hasPopup = computed(() => !!popup.value)
 const title = computed(
-  () => popup.value?.props?.webform?.webformTitle ?? 'Announcement',
+  () =>
+    (
+      (popup.value?.props as Record<string, unknown>)?.webform as
+        | { webformTitle?: string }
+        | undefined
+    )?.webformTitle ?? 'Announcement',
 )
 
 const description = computed(() => popup.value?.props?.text || '')
@@ -41,7 +49,7 @@ const popupRenderProps = computed(() => {
   }
 })
 
-const selectedMedia = ref<CustomElement | null>(null)
+const selectedMedia = ref<Record<string, unknown> | null>(null)
 
 watch(open, (isOpen) => {
   if (!isOpen) return

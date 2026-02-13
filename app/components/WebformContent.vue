@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types'
+import type { WebformFieldProps, WebformState } from '~~/types'
 import type { ObjectSchema } from 'yup'
 
 defineProps<{
   fields: Record<string, WebformFieldProps>
   state: WebformState
-  schema: ObjectSchema<Record<string, unknown>>
+  schema?: ObjectSchema<Record<string, unknown>>
   isFormSubmitted: boolean
   isLoading: boolean
+  isSchemaReady: boolean
   orderedFieldNames: string[]
   themeWebform: Record<string, string>
   groupedFields: Record<string, string[]>
@@ -21,10 +22,12 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'submit', event: FormSubmitEvent): void
+  (e: 'submit', event: { data: Record<string, unknown> }): void
   (e: 'error', event: unknown): void
   (e: 'update:turnstileToken', value: string): void
 }>()
+
+const validateOn = ['blur', 'change', 'input'] as const
 </script>
 
 <template>
@@ -37,6 +40,7 @@ const emit = defineEmits<{
     "
     :schema="schema"
     :state="state"
+    :validate-on="validateOn"
     @error="emit('error', $event)"
     @submit="emit('submit', $event)"
   >
@@ -66,7 +70,7 @@ const emit = defineEmits<{
               v-if="
                 !fields[groupedFieldName]?.['#tabGroup'] ||
                 groupedFields[fields[fieldName]?.parent || '']?.find(
-                  (name) =>
+                  (name: string) =>
                     fields[name]?.['#tabGroup'] ===
                     fields[groupedFieldName]?.['#tabGroup'],
                 ) === groupedFieldName
@@ -100,6 +104,7 @@ const emit = defineEmits<{
 
     <WrapAlign :align="themeWebform.submitAlign">
       <UButton
+        :disabled="!isSchemaReady || isLoading"
         :label="submitButtonLabel"
         :loading="isLoading"
         :size="themeWebform.buttonSize"

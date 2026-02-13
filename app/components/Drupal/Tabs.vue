@@ -25,19 +25,25 @@ const getIconForLabel = (label: string): string | null => {
   return iconMap[label] || null
 }
 
+type LocalTask = { label: string; url: string }
+
 const tabs = computed(
-  () => page.value?.local_tasks ?? { primary: [], secondary: [] },
+  () =>
+    (page.value?.local_tasks as {
+      primary: LocalTask[]
+      secondary: LocalTask[]
+    }) ?? { primary: [], secondary: [] },
 )
 
 const localTaskLinks = computed(() =>
-  tabs.value.primary.map((tab) => ({
+  tabs.value.primary.map((tab: LocalTask) => ({
     label: tab.label,
     to: tab.url,
     icon: getIconForLabel(tab.label),
   })),
 )
 
-const accountMenu = ref([])
+const accountMenu = ref<Array<{ label: string; to: string; icon: string | null }>>([])
 
 try {
   const rawMenu = await fetchMenu('account')

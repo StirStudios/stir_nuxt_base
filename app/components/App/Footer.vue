@@ -5,6 +5,12 @@ const { page } = usePageContext()
 const theme = useAppConfig().stirTheme
 const currentYear = new Date().getFullYear()
 const iconsSocialConfig = theme.socials || []
+const footerMenuItems = computed(() =>
+  (page.value?.footer_menu || []).map((item: { title?: string; url?: string }) => ({
+    label: item.title || '',
+    to: item.url || '',
+  })),
+)
 </script>
 
 <template>
@@ -34,12 +40,7 @@ const iconsSocialConfig = theme.socials || []
         v-if="page.footer_menu?.length"
         aria-label="Footer Navigation"
         class="mb-3"
-        :items="
-          page.footer_menu.map((item) => ({
-            label: item.title,
-            to: item.url,
-          }))
-        "
+        :items="footerMenuItems"
         :ui="{
           list: 'flex flex-wrap justify-center',
           item: 'min-w-0 py-0',

@@ -6,7 +6,7 @@ const toast = useToast()
 const shownMessages = useState('shownMessages', () => new Set<string>())
 
 onMounted(() => {
-  const messages = getMessages().value
+  const messages = getMessages().value as Array<{ message: string; type: string }>
 
   messages.forEach((message) => {
     // Check if the message has already been shown

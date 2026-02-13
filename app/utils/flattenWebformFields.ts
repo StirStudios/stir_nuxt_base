@@ -1,4 +1,4 @@
-import type { WebformFieldProps, GroupField } from '~/types'
+import type { WebformFieldProps, GroupField } from '~~/types'
 
 interface FlattenedField extends WebformFieldProps {
   parent: string | null
@@ -34,7 +34,6 @@ export function flattenWebformFields(
       )
 
     if (isGroup && hasChildren) {
-      // Optionally keep section container itself (for rendering title/description)
       if (type === 'section') {
         flat[key] = {
           ...field,

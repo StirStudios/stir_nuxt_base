@@ -3,10 +3,12 @@ import { flattenWebformFields } from '~/utils/flattenWebformFields'
 import { webformState } from '~/composables/useWebformState'
 import { evaluateContainerVisibility } from '~/composables/useContainerVisibility'
 import { transformPayloadToSnakeCase } from '~/utils/transformUtils'
-import { buildYupSchema } from '~/utils/buildYupSchema'
 import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
+import { evaluateCondition } from '~/utils/evaluateUtils'
+import type { WebformDefinition, WebformFieldProps, WebformState } from '~~/types'
+import type { ObjectSchema } from 'yup'
 
 const props = defineProps<{
   id?: number
@@ -37,7 +39,8 @@ const {
 } = webform.value
 
 const fields = flattenWebformFields(rawFields)
-const state = reactive({})
+const state = reactive<WebformState>({})
+const orderedFieldNames = computed(() => Object.keys(fields))
 
 webformState.fields = fields
 webformState.state = state
@@ -46,8 +49,40 @@ const turnstileToken = ref('')
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
-const schema = computed(() => buildYupSchema(fields, state))
-const orderedFieldNames = computed(() => Object.keys(fields))
+const schema = shallowRef<ObjectSchema<Record<string, unknown>>>()
+const isSchemaReady = ref(false)
+const visibilitySignature = computed(() =>
+  orderedFieldNames.value
+    .map((fieldName) =>
+      evaluateCondition(fields[fieldName]?.['#states']?.visible, state, true)
+        ? '1'
+        : '0',
+    )
+    .join(''),
+)
+
+let schemaBuildVersion = 0
+
+async function refreshSchema() {
+  const buildVersion = ++schemaBuildVersion
+  isSchemaReady.value = false
+  const { buildYupSchema } = await import('~/utils/buildYupSchema')
+
+  if (buildVersion !== schemaBuildVersion) return
+
+  schema.value = buildYupSchema(fields, state)
+  isSchemaReady.value = true
+}
+
+if (import.meta.server) {
+  await refreshSchema()
+}
+
+if (import.meta.client) {
+  watch(visibilitySignature, () => {
+    void refreshSchema()
+  }, { immediate: true })
+}
 const submitButtonLabel = computed(
   () => actions[0]?.['#submit_Label'] || 'Submit',
 )
@@ -67,14 +102,23 @@ const groupedFields = computed(() => {
 })
 
 const formResetKey = ref(0)
-const getFieldDefaultValue = (field: WebformFieldProps) => {
+const getFieldDefaultValue = (field: WebformFieldProps): WebformState[string] => {
   const defaultValue =
     field['#default'] ?? field['#defaultValue'] ?? field['#default_value']
 
   if (defaultValue !== undefined && defaultValue !== null) {
     if (Array.isArray(defaultValue)) return [...defaultValue]
-    if (typeof defaultValue === 'object') return { ...defaultValue }
-    return defaultValue
+    if (typeof defaultValue === 'object') {
+      return { ...(defaultValue as Record<string, unknown>) }
+    }
+    if (
+      typeof defaultValue === 'string' ||
+      typeof defaultValue === 'number' ||
+      typeof defaultValue === 'boolean'
+    ) {
+      return defaultValue
+    }
+    return ''
   }
 
   const type = field['#type']
@@ -92,10 +136,16 @@ const getFieldDefaultValue = (field: WebformFieldProps) => {
 
 const resetFormState = (options: { bumpKey?: boolean } = {}) => {
   for (const [key, field] of Object.entries(fields)) {
-    if (field['#composite']) {
-      state[key] = {}
-      for (const subKey in field['#composite']) {
-        state[key][subKey] = field['#composite'][subKey]['value'] || ''
+    const composite =
+      typeof field['#composite'] === 'object' && field['#composite'] !== null
+        ? field['#composite']
+        : undefined
+
+    if (composite) {
+      state[key] = {} as Record<string, unknown>
+      const compositeState = state[key] as Record<string, unknown>
+      for (const [subKey, subField] of Object.entries(composite)) {
+        compositeState[subKey] = subField['#value'] || ''
       }
     } else {
       state[key] = getFieldDefaultValue(field)
@@ -122,7 +172,7 @@ const getGroupFields = (parentName: string) =>
 
 const shouldRenderIndividualField = (fieldName: string) =>
   !fields[fieldName]?.parent &&
-  !containerTypes.includes(fields[fieldName]['#type'])
+  (fields[fieldName] ? !containerTypes.includes(fields[fieldName]['#type']) : false)
 
 const isContainerVisible = (containerName: string) =>
   evaluateContainerVisibility(containerName, state, fields, getGroupFields)
@@ -134,7 +184,7 @@ const handleResetSubmission = async () => {
   formResetKey.value += 1
 }
 
-async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
+async function onSubmit(_event: { data: Record<string, unknown> }) {
   isLoading.value = true
   errors.value = {}
 
@@ -168,10 +218,17 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
     isFormSubmitted.value = true
   } catch (error) {
     console.error('Submission Error:', error)
+    const errorData = (error as { response?: { _data?: Record<string, unknown> } })
+      ?.response?._data as
+      | {
+          error?: { message?: string }
+          message?: string
+        }
+      | undefined
 
     const errorMessage =
-      error?.response?._data?.error?.message ||
-      error?.response?._data?.message ||
+      errorData?.error?.message ||
+      errorData?.message ||
       'Form submission failed. Please try again.'
 
     toast.add({
@@ -189,6 +246,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
   <EditLink :link="webformSubmissions">
     <WrapDiv :align="props.align" :styles="[props.width, props.spacing]">
       <WebformContent
+        v-if="schema"
         :key="formResetKey"
         v-model:turnstile-token="turnstileToken"
         :fields="fields"
@@ -197,6 +255,7 @@ async function onSubmit(_event: FormSubmitEvent<Record<string, unknown>>) {
         :is-container-visible="isContainerVisible"
         :is-form-submitted="isFormSubmitted"
         :is-loading="isLoading"
+        :is-schema-ready="isSchemaReady"
         :ordered-field-names="orderedFieldNames"
         :schema="schema"
         :should-render-group-container="shouldRenderGroupContainer"

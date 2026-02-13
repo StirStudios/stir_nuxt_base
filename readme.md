@@ -6,7 +6,7 @@ A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and f
 - 🎨 **Nuxt UI 4** with customized design tokens, material-style form variants, and Tailwind 4
 - 🧩 **Drupal CE** integration for decoupled content, slot-based layouts, and dynamic form rendering
 - 📊 Turnstile CAPTCHA, Sitemap, and Robots support
-- 🌀 Smooth scrolling, page transitions, and motion support via `motion-v`
+- 🌀 Smooth scrolling and page transitions
 - ⚙️ Vitalizer: Delayed hydration for performance optimization
 - 🔐 Environment-aware route rules, protected admin redirects
 - 🧪 ESLint, Prettier, and Release It pre-configured
@@ -23,7 +23,7 @@ A production-ready Nuxt 4 starter template with Nuxt UI 4, Tailwind CSS 4, and f
 ## 📦 Project Structure
 
 - `nuxt.config.ts` — Full config for modules, routing, environment, and build
-- `app.config.ts` — UI theming, layout, animation, and third-party settings
+- `app/app.config.ts` — UI theming, layout, animation, and third-party settings
 - `assets/css/main.css` — Tailwind CSS entry point
 - `utils/uiVariants.ts` — Custom Nuxt UI material variant tokens
 
@@ -34,5 +34,30 @@ pnpm dev        # Start local dev server
 pnpm build      # Build for production
 pnpm preview    # Preview production build
 pnpm lint       # Lint project
+pnpm typecheck  # Nuxt + Vue TypeScript checks
+pnpm test       # Run unit tests
+pnpm test:watch # Run unit tests in watch mode
+pnpm smoke:login # Smoke-test /login via preview server
+pnpm verify:ci  # Full local quality gate (test/lint/typecheck/build/smoke)
+pnpm perf:report # Build + output top client chunk size report
+pnpm deps:update:safe # Safe dependency update flow
 pnpm release    # Tag + prepare release
 ```
+
+## ✅ Pre-Merge Checks
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+## Dependency Update Policy
+
+Use `pnpm deps:update:safe` for routine updates.  
+See `docs/dependency-update-policy.md` for the full policy.
+
+## Release Checklist
+
+Use `docs/release-checklist.md` as the standard pre-merge/pre-release checklist.

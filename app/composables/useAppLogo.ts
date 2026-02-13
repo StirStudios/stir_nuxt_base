@@ -1,5 +1,5 @@
-import useDarkMode from './useDarkMode'
-import { usePageContext } from './usePageContext'
+import useDarkMode from '~/composables/useDarkMode'
+import { usePageContext } from '~/composables/usePageContext'
 
 export function useAppLogo(props: { addClasses?: string }) {
   const { isDark } = useDarkMode()

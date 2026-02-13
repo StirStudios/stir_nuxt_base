@@ -1,5 +1,4 @@
 export function cleanHTML(html: string): string {
-  // SSR: return original string (do NOT blank it out)
   if (typeof window === 'undefined') return (html || '').trim()
 
   const parser = new DOMParser()

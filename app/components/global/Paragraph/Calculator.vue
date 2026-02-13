@@ -13,9 +13,8 @@ const props = defineProps<{
 
 const { load } = useScript({
   id: 'venue-calculator-script',
-  src: props.embedUrl,
+  src: props.embedUrl ?? '',
   async: true,
-  bundle: true,
 })
 
 onMounted(async () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types'
+import type { WebformFieldProps, WebformState } from '~~/types'
 import { CalendarDate, DateFormatter } from '@internationalized/date'
 import { getOffsetString, generateTimeOptions } from '~/utils/dateUtils'
 
@@ -9,40 +9,56 @@ const props = defineProps<{
   state: WebformState
 }>()
 
+const { emitFormInput, emitFormChange } = useFormField()
 const { webform } = useAppConfig().stirTheme
 const isMaterial = computed(() => webform.variant === 'material')
 const df = new DateFormatter('en-US', { dateStyle: 'medium' })
 const multiple = Number(props.field['#multiple']) || 1
-const minTime = props.field['#dateTimeMin'] ?? '10:00:00'
-const maxTime = props.field['#dateTimeMax'] ?? '22:00:00'
+const minTime = String(props.field['#dateTimeMin'] ?? '10:00:00')
+const maxTime = String(props.field['#dateTimeMax'] ?? '22:00:00')
 const step = Number(props.field['#dateTimeStep']) || 1800
-const siteTimezone = props.field['#timezone'] || 'America/Los_Angeles'
+const siteTimezone =
+  typeof props.field['#timezone'] === 'string'
+    ? props.field['#timezone']
+    : 'America/Los_Angeles'
 const timeOptions = generateTimeOptions(minTime, maxTime, step)
-const timeSelectOptions = Object.fromEntries(
-  timeOptions.map((t) => [t.value, t.label]),
-)
+
+type CalendarDateLike = {
+  year: number
+  month: number
+  day: number
+  toDate: (tz: string) => Date
+}
 
 type DateTimeBlock = {
-  date: CalendarDate | null
+  date: CalendarDateLike | null
   start: string
 }
 
-function formatCalendarDate(date: CalendarDate): string {
+function formatCalendarDate(date: CalendarDateLike): string {
   return `${date.year}-${String(date.month).padStart(2, '0')}-${String(
     date.day,
   ).padStart(2, '0')}`
 }
 
+function formatDateLabel(date: CalendarDateLike): string {
+  const dateValue = date.toDate(siteTimezone)
+  return df.format(dateValue)
+}
+
 const blocks = ref<DateTimeBlock[]>(
   Array.from({ length: multiple }, (_, i) => {
     const stored = props.state[`${props.fieldName}-${i}`] ?? ''
-    let date: CalendarDate | null = null
+    let date: CalendarDateLike | null = null
     let start = timeOptions[0]?.value ?? '00:00'
 
     if (typeof stored === 'string' && stored.includes('T')) {
       const [dateStr, timeStr] = stored.split('T')
-      const [y, m, d] = dateStr.split('-').map(Number)
-      if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+      if (!dateStr) return { date, start }
+      const [y = Number.NaN, m = Number.NaN, d = Number.NaN] = dateStr
+        .split('-')
+        .map(Number)
+      if (Number.isFinite(y) && Number.isFinite(m) && Number.isFinite(d)) {
         date = new CalendarDate(y, m, d)
       }
 
@@ -64,12 +80,10 @@ watchEffect(() => {
   blocks.value.forEach((block) => {
     if (block.date && block.start) {
       const dateStr = formatCalendarDate(block.date)
-      const [h, m] = block.start.split(':')
+      const [h = '', m = ''] = block.start.split(':')
+      if (!h || !m) return
 
-      // Construct a JS Date for the chosen day + time
       const jsDate = new Date(`${dateStr}T${h}:${m}:00`)
-
-      // Pass this date into getOffsetString so DST is correct
       const offset = getOffsetString(siteTimezone, jsDate)
       const full = `${dateStr}T${h}:${m}:00${offset}`
       values.push(full)
@@ -78,6 +92,15 @@ watchEffect(() => {
 
   props.state[props.fieldName] = values
 })
+
+watch(
+  blocks,
+  () => {
+    emitFormInput()
+    emitFormChange()
+  },
+  { deep: true },
+)
 </script>
 
 <template>
@@ -96,11 +119,7 @@ watchEffect(() => {
               size="md"
               :variant="webform.variant"
             >
-              {{
-                block.date
-                  ? df.format(block.date.toDate(siteTimezone))
-                  : 'Select Date'
-              }}
+              {{ block.date ? formatDateLabel(block.date) : 'Select Date' }}
             </UButton>
             <template #content>
               <UCalendar v-model="block.date" class="p-2" />
@@ -115,11 +134,7 @@ watchEffect(() => {
             size="md"
             :variant="webform.variant"
           >
-            {{
-              block.date
-                ? df.format(block.date.toDate(siteTimezone))
-                : 'Select Date'
-            }}
+            {{ block.date ? formatDateLabel(block.date) : 'Select Date' }}
           </UButton>
           <template #content>
             <UCalendar v-model="block.date" class="p-2" />
@@ -127,12 +142,14 @@ watchEffect(() => {
         </UPopover>
 
         <UFormField :label="`Time ${i + 1}`" :required="!!field['#required']">
-          <FieldSelect
+          <USelect
             v-model="block.start"
-            :field-name="`${fieldName}-${i}-start`"
-            :items="timeSelectOptions"
+            class="w-full"
+            :items="timeOptions"
+            label-key="label"
             placeholder="Select time"
-            :state="{}"
+            value-key="value"
+            :variant="webform.variant"
           />
         </UFormField>
       </template>

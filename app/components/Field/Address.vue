@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { WebformFieldProps } from '~~/types'
+
 const props = defineProps<{
-  field: Record<string, unknown>
+  field: WebformFieldProps
   fieldName: string
   state: Record<string, Record<string, string>>
   floatingLabel?: boolean
@@ -9,31 +11,35 @@ const props = defineProps<{
 const { webform } = useAppConfig().stirTheme
 const isMaterial = computed(() => webform.variant === 'material')
 
-// Ensure composite fields exist before accessing
-const compositeFields = computed(() => {
-  return typeof props.field?.['#composite'] === 'object'
+const compositeFields = computed<Record<string, WebformFieldProps>>(() =>
+  typeof props.field['#composite'] === 'object' &&
+  props.field['#composite'] !== null
     ? props.field['#composite']
-    : {}
-})
+    : {},
+)
 
-// Ensure country options exist before accessing
 const countryOptions = computed(() => {
-  return compositeFields.value.country?.options
-    ? Object.entries(compositeFields.value.country.options).map(
-        ([key, label]) => ({ value: key, label }),
-      )
+  const countryField = compositeFields.value.country
+  const options =
+    countryField && typeof countryField['#options'] === 'object'
+      ? countryField['#options']
+      : undefined
+
+  return options
+    ? Object.entries(options).map(([key, label]) => ({
+        value: key,
+        label: String(label),
+      }))
     : []
 })
 
-// Determine if floating labels should be used (configurable per field)
 const useFloatingLabels = computed(
   () =>
     props.field['#floating_label'] !== undefined
-      ? props.field['#floating_label'] // Per-field setting
-      : webform.labels.floating, // Global default
+      ? props.field['#floating_label']
+      : webform.labels.floating,
 )
 
-// Ensure state[fieldName] is initialized before access
 if (!props.state[props.fieldName]) {
   props.state[props.fieldName] = {}
 }
@@ -44,7 +50,7 @@ if (!props.state[props.fieldName]) {
     <UFormField
       v-for="(fieldData, key) in compositeFields"
       :key="key"
-      :label="!useFloatingLabels ? fieldData.label : ''"
+      :label="!useFloatingLabels ? String(fieldData['#title'] ?? key) : ''"
       :name="`${fieldName}.${key}`"
       :required="!!field['#required']"
     >
@@ -62,7 +68,7 @@ if (!props.state[props.fieldName]) {
           :for="fieldName"
         >
           <span :class="[isMaterial ? '' : 'px-1', 'bg-default inline-flex']">
-            {{ fieldData.label }}
+            {{ String(fieldData['#title'] ?? key) }}
           </span>
         </label>
       </UInput>

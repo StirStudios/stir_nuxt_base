@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { WebformFieldProps } from '~/types'
-import { transformOptions } from '~/utils/transformUtils'
+import type { WebformFieldProps } from '~~/types'
 import { useEventBus } from '@vueuse/core'
+import { transformOptions } from '~/utils/transformUtils'
 
 const props = defineProps<{
   field?: WebformFieldProps
@@ -13,25 +13,27 @@ const props = defineProps<{
 
 const { webform } = useAppConfig().stirTheme
 
-// Initialize Event Bus
+const getDefaultValue = () => {
+  const value = props.field?.['#defaultValue']
+  return typeof value === 'string' ? value : ''
+}
+
 const tabBus = useEventBus<string>('tab-changed')
 
 onMounted(() => {
-  props.state[props.fieldName] ??= props.field?.['#defaultValue'] ?? ''
+  props.state[props.fieldName] ??= getDefaultValue()
 })
 
-// Revert to default if the value is cleared
 watch(
   () => props.state[props.fieldName],
   (newVal) => {
     if (!newVal) {
-      props.state[props.fieldName] = props.field?.['#defaultValue'] ?? ''
+      props.state[props.fieldName] = getDefaultValue()
     }
   },
   { immediate: true },
 )
 
-// Compute select items only when dependencies change
 const selectItems = computed(() => {
   if (Array.isArray(props.items)) return props.items
   if (props.items && typeof props.items === 'object') {
@@ -40,10 +42,8 @@ const selectItems = computed(() => {
   return props.field ? transformOptions(props.field['#options'] ?? {}) : []
 })
 
-// Determine button rendering mode
 const renderAsButtons = computed(() => props.fieldName === 'tabs')
 
-// Handle button click and emit tab change event
 const handleButtonClick = (value: string) => {
   props.state[props.fieldName] = value
   tabBus.emit(value)

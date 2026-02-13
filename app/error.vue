@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { NuxtError } from '#app'
+
 const { navigation, error: errorConfig } = useAppConfig().stirTheme
 
 defineProps<{ error: NuxtError }>()
