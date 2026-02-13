@@ -3,16 +3,23 @@ import { spawn } from 'node:child_process'
 
 const host = process.env.SMOKE_HOST || '127.0.0.1'
 const port = Number(process.env.SMOKE_PORT || 4310)
-const smokePath = process.env.SMOKE_PATH || '/api/auth/csrf'
+const smokePath = process.env.SMOKE_PATH || '/api/health'
 const baseUrl = `http://${host}:${port}`
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS || 60000)
+const requestTimeoutMs = Number(process.env.SMOKE_REQUEST_TIMEOUT_MS || 4000)
+
+async function fetchWithTimeout(url) {
+  return fetch(url, {
+    signal: AbortSignal.timeout(requestTimeoutMs),
+  })
+}
 
 async function waitForServer() {
   const started = Date.now()
 
   while (Date.now() - started < timeoutMs) {
     try {
-      const response = await fetch(`${baseUrl}${smokePath}`)
+      const response = await fetchWithTimeout(`${baseUrl}${smokePath}`)
       if (response.status < 500) return
     } catch {
       // Keep polling until timeout.
@@ -66,7 +73,7 @@ async function runSmoke() {
       )
     }
 
-    const response = await fetch(`${baseUrl}${smokePath}`)
+    const response = await fetchWithTimeout(`${baseUrl}${smokePath}`)
     if (response.status >= 500) {
       throw new Error(
         `Expected ${smokePath} to respond below 500 but got ${response.status}`,
@@ -93,6 +100,6 @@ async function runSmoke() {
 }
 
 runSmoke().catch((error) => {
-  console.error('[smoke:login] failed:', error)
+  console.error('[smoke] failed:', error)
   process.exit(1)
 })

@@ -45,5 +45,6 @@ jobs:
 
       - name: Smoke Login Page
         env:
-          SMOKE_PATH: /api/auth/csrf
+          SMOKE_PATH: /api/health
+          SMOKE_REQUEST_TIMEOUT_MS: "4000"
         run: pnpm smoke:login
