@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformOptionProperties, WebformState } from '~~/types'
+import type { WebformFieldProps, WebformOptionProperties, WebformState } from '~/types'
 import { useEventBus } from '@vueuse/core'
 import { cleanHTML } from '~/utils/cleanHTML'
 import { enforceGroupLimit, enforceMaxSelected } from '~/utils/selectionUtils'
