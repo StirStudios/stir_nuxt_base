@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DrupalFormProps } from '~/types'
+import type { DrupalFormProps } from '../../../types'
 
 defineProps<DrupalFormProps>()
 </script>

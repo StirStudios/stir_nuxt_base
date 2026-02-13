@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
-import type { WebformFieldProps, WebformState } from '~/types'
+import type { WebformFieldProps, WebformState } from '../../../types'
 import { useEvaluateState } from '~/composables/useEvaluateState'
 
 const props = withDefaults(
