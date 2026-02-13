@@ -7,7 +7,7 @@ import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
 import { evaluateCondition } from '~/utils/evaluateUtils'
-import type { WebformDefinition, WebformFieldProps, WebformState } from '~~/types'
+import type { WebformDefinition, WebformFieldProps, WebformState } from '~/types'
 import type { ObjectSchema } from 'yup'
 
 const props = defineProps<{

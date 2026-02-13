@@ -1,4 +1,4 @@
-import type { WebformState } from '~~/types'
+import type { WebformState } from '~/types'
 import { evaluateCondition } from '~/utils/evaluateUtils'
 
 interface VisibilityCondition {
