@@ -239,6 +239,7 @@ async function onSubmit(_event: { data: Record<string, unknown> }) {
   <EditLink :link="webformSubmissions">
     <WrapDiv :align="props.align" :styles="[props.width, props.spacing]">
       <WebformContent
+        v-if="schema"
         :key="formResetKey"
         v-model:turnstile-token="turnstileToken"
         :fields="fields"

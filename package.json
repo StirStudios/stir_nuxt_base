@@ -10,6 +10,8 @@
     "postinstall": "nuxi prepare",
     "lint": "eslint . --no-warn-ignored",
     "lint:fix": "eslint . --fix --no-warn-ignored",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "nuxi typecheck",
     "release": "release-it"
   },
@@ -40,6 +42,7 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "release-it": "^19.2.4",
     "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
     "vue-tsc": "^2.2.12"
   },
   "release-it": {

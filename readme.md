@@ -35,6 +35,8 @@ pnpm build      # Build for production
 pnpm preview    # Preview production build
 pnpm lint       # Lint project
 pnpm typecheck  # Nuxt + Vue TypeScript checks
+pnpm test       # Run unit tests
+pnpm test:watch # Run unit tests in watch mode
 pnpm release    # Tag + prepare release
 ```
 
@@ -43,5 +45,6 @@ pnpm release    # Tag + prepare release
 ```bash
 pnpm lint
 pnpm typecheck
+pnpm test
 pnpm build
 ```
