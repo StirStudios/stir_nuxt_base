@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const protectedPaths = config.requireLoginPaths || []
   if (!protectedPaths.length) return
 
-  const isProtected = protectedPaths.some((path) => {
+  const isProtected = protectedPaths.some((path: string) => {
     if (path.endsWith('/')) {
       return to.path.startsWith(path)
     } else {
@@ -24,12 +24,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     await session.fetch()
   }
 
-  // Redirect logged-in user away from login page
   if (to.path === config.loginPath && session.loggedIn.value) {
     return navigateTo(config.redirectOnLogin)
   }
 
-  // Not logged in → redirect to login, preserving query (e.g. ?password=...)
   if (!session.loggedIn.value) {
     return navigateTo({
       path: config.loginPath,

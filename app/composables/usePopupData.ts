@@ -1,3 +1,9 @@
+type PopupNode = {
+  element?: string
+  props?: Record<string, unknown>
+  slots?: Record<string, unknown>
+}
+
 export const usePopupData = () => {
   const { page } = usePageContext()
   const popup = ref<PopupNode | null>(null)
@@ -70,10 +76,4 @@ export const usePopupData = () => {
   })
 
   return { popup, config }
-}
-
-type PopupNode = {
-  element?: string
-  props?: Record<string, unknown>
-  slots?: Record<string, unknown>
 }

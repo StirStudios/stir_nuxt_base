@@ -12,7 +12,7 @@ export function usePasswordLogin() {
   const { onError } = useValidation()
   const route = useRoute()
   const router = useRouter()
-  const onSubmit = async (event: FormSubmitEvent<typeof state>) => {
+  const onSubmit = async (event: { data: typeof state }) => {
     isLoading.value = true
     try {
       await $fetch('/api/auth/login', {
@@ -47,7 +47,6 @@ export function usePasswordLogin() {
     }
   }
 
-  // Auto-login from ?password=...
   onMounted(() => {
     if (import.meta.server) return
 

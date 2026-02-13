@@ -1,4 +1,4 @@
-import type { WebformFieldProps } from '~/types'
+import type { WebformFieldProps, WebformState } from '~~/types'
 import {
   object,
   string,
@@ -9,20 +9,22 @@ import {
   type AnySchema,
   type NumberSchema,
 } from 'yup'
-import { useEvaluateState } from '../composables/useEvaluateState'
+import { evaluateCondition } from './evaluateUtils'
 
 export function buildYupSchema(
   fields: Record<string, WebformFieldProps>,
-  state: Record<string, unknown>,
+  state: WebformState,
 ): ObjectSchema<Record<string, unknown>> {
   const shape: Record<string, AnySchema> = {}
 
   for (const [key, field] of Object.entries(fields)) {
-    // Use the composable to evaluate visibility
-    const { visible } = useEvaluateState(field['#states'] ?? {}, state)
+    const isVisible = evaluateCondition(
+      field['#states']?.visible,
+      state,
+      true,
+    )
 
-    // Skip if field is not visible
-    if (!visible.value) continue
+    if (!isVisible) continue
 
     const requiredError = field['#requiredError'] || 'This field is required'
     const isRequired = field['#required'] === true
@@ -30,9 +32,14 @@ export function buildYupSchema(
     const isNumber = field['#type'] === 'number'
     const isCheckboxes = field['#type'] === 'checkboxes'
     const isCheckbox = field['#type'] === 'checkbox'
+    const isDateLike = field['#type'] === 'date' || field['#type'] === 'datetime'
     const isMultiple = '#multiple' in field && !!field['#multiple']
+    const multipleCountRaw = Number(field['#multiple'])
+    const requiredMultipleCount =
+      isDateLike && Number.isFinite(multipleCountRaw) && multipleCountRaw > 1
+        ? multipleCountRaw
+        : 1
 
-    // Composite object fields
     if ('#composite' in field && typeof field['#composite'] === 'object') {
       const subShape: Record<string, AnySchema> = {}
       for (const [subKey, subField] of Object.entries(
@@ -49,11 +56,12 @@ export function buildYupSchema(
       continue
     }
 
-    // Checkboxes group or multiple select
     if (isCheckboxes || isMultiple) {
       let validator = array().of(string())
       if (isRequired) {
-        validator = validator.min(1, requiredError).required(requiredError)
+        validator = validator
+          .min(requiredMultipleCount, requiredError)
+          .required(requiredError)
       }
       if (field['#minSelected']) {
         validator = validator.min(
@@ -71,7 +79,6 @@ export function buildYupSchema(
       continue
     }
 
-    // Single checkbox (boolean-like "I agree")
     if (isCheckbox) {
       let checkboxSchema = boolean()
         .transform((value) => value === '1' || value === true)
@@ -85,7 +92,6 @@ export function buildYupSchema(
       continue
     }
 
-    // Default string/number/tel/email field
     let base: AnySchema = string().nullable()
 
     if (isNumber) {

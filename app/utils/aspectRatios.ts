@@ -1,11 +1,3 @@
-/**
- * Returns Tailwind aspect ratio + max-height utility classes
- * based on image width/height or theme config.
- *
- * Example output:
- *  - "aspect-[9/16] max-h-[40%]"
- *  - "aspect-[16/9] max-h-[30%]"
- */
 export const aspectRatios = (
   width: number | null,
   height: number | null,

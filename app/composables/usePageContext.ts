@@ -3,7 +3,6 @@ export function usePageContext() {
   const page = getPage()
   const route = useRoute()
 
-  // Reactive + safe slug
   const slug = computed(() => {
     const p = route.params.slug
     return Array.isArray(p) ? p[0] : p || null
@@ -14,13 +13,10 @@ export function usePageContext() {
     () => page.value?.current_user?.roles?.includes('administrator') || false,
   )
 
-  // Element and metadata
   const pageElement = computed(() => page.value?.content?.element || '')
 
-  // Page props
   const pageProps = computed(() => page.value?.content?.props || {})
 
-  // Safe title access for hero + meta
   const pageTitle = computed(() => pageProps.value?.title || '')
   const pageCreated = computed(() => pageProps.value?.created || '')
   const pageHide = computed(() => pageProps.value?.hide || false)

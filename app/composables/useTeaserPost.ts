@@ -8,13 +8,19 @@ export function useTeaserPost(
     orientation?: 'horizontal' | 'vertical'
   } = {},
 ) {
-  // Always resolve actual data
+  const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null
+
   const teaserSource = computed(() => {
-    const raw = input?.value ?? input ?? {}
+    const source = isRecord(input) && 'value' in input ? input.value : input
+    const raw = isRecord(source) ? source : {}
+    const props = isRecord(raw.props) ? raw.props : {}
+    const media = isRecord(raw.media) ? raw.media : {}
+    const text = typeof raw.text === 'string' ? raw.text : ''
     return {
-      props: raw.props ?? {},
-      media: raw.media ?? {},
-      text: raw.text ?? '',
+      props,
+      media,
+      text,
     }
   })
 

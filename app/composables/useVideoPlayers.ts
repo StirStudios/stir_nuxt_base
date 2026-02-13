@@ -35,7 +35,6 @@ export function useVideoPlayers() {
       ],
     })
 
-    // Only initialize players after script is loaded
     watchOnce(isScriptLoaded, (loaded) => {
       if (loaded) {
         initializePlayers()

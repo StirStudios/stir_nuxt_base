@@ -7,18 +7,20 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (process.env.NODE_ENV !== 'production' || !cfg?.enabled || !cfg.domain)
     return
 
-  const { onLoaded } = useScript({
-    id: 'plausible-script',
-    src: cfg.scriptUrl,
-    async: true,
-    defer: true,
-    'data-domain': cfg.domain,
-  })
+  const loadPlausible = () =>
+    useScript({
+      id: 'plausible-script',
+      src: cfg.scriptUrl,
+      async: true,
+      defer: true,
+      'data-domain': cfg.domain,
+    })
 
-  onLoaded(() => {
-    type PlausibleQueueFunction = ((
-      event: string,
-      options?: Record<string, unknown>,
+  const onScriptLoaded = ({ onLoaded }: ReturnType<typeof loadPlausible>) =>
+    onLoaded(() => {
+      type PlausibleQueueFunction = ((
+        event: string,
+        options?: Record<string, unknown>,
     ) => void) & {
       q?: unknown[]
     }
@@ -34,13 +36,19 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
 
     win.plausible = plausibleFn
-
-    // Initial pageview
     plausibleFn('pageview')
-
-    // SPA route tracking
     nuxtApp.hook('page:finish', () => {
       plausibleFn('pageview')
     })
   })
+
+  const idleApi = globalThis as typeof globalThis & {
+    requestIdleCallback?: (callback: IdleRequestCallback) => number
+  }
+
+  if (typeof idleApi.requestIdleCallback === 'function') {
+    idleApi.requestIdleCallback(() => onScriptLoaded(loadPlausible()))
+  } else {
+    setTimeout(() => onScriptLoaded(loadPlausible()), 1)
+  }
 })

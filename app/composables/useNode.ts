@@ -1,18 +1,14 @@
-import { useSlotsToolkit } from './useSlotsToolkit'
+import type { VNode } from 'vue'
+import { useSlotsToolkit } from '~/composables/useSlotsToolkit'
 
 /**
- * UNIVERSAL NODE SLOT PARSER
- * Extracts section, hero, or any paragraph-style slot.
+ * Extracts paragraph-like slot data (`section`, `hero`, or custom slots).
  */
 export function useNode(slots: unknown) {
   const tk = useSlotsToolkit(slots)
 
   /**
-   * Extract a paragraph from a named slot:
-   * - vnode
-   * - props
-   * - text
-   * - media (nested slot)
+   * Extracts `vnode`, `props`, `text`, and nested `media` from a slot.
    */
   const useParagraph = (slotName: string) => {
     const vnode = computed<VNode | undefined>(() => {
@@ -24,7 +20,6 @@ export function useNode(slots: unknown) {
       const node = vnode.value
       if (!node) return {}
 
-      // Slots dictionary: { media(): VNode[] }
       type SlotDict = Record<string, (() => VNode[]) | undefined>
       const children = node.children as unknown as SlotDict
       const mediaFn = children.media
@@ -53,11 +48,9 @@ export function useNode(slots: unknown) {
   }
 
   return {
-    // Default slots nodes typically have
     section: useParagraph('section'),
     hero: useParagraph('hero'),
 
-    // Extensible for custom cases:
     paragraph(slotName: string) {
       return useParagraph(slotName)
     },
@@ -65,8 +58,7 @@ export function useNode(slots: unknown) {
 }
 
 /**
- * TEASER EXTRACTION
- * just returns `.section` from a node.
+ * Returns the first available teaser source (`section`, then `hero`).
  */
 export function useNodeTeaser(slots: unknown) {
   const node = useNode(slots)

@@ -9,7 +9,6 @@ export function useIntersectionObserver() {
 
     if (videoElements.length === 0) return
 
-    // Create a new IntersectionObserver instance
     observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -24,7 +23,6 @@ export function useIntersectionObserver() {
       { threshold },
     )
 
-    // Start observing all video elements
     videoElements.forEach((videoElement) => observer?.observe(videoElement))
   }
 
@@ -35,7 +33,6 @@ export function useIntersectionObserver() {
     }
   }
 
-  // Ensure cleanup happens when the component is unmounted
   onBeforeUnmount(() => {
     disconnectObserver()
   })

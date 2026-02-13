@@ -1,5 +1,5 @@
 import { useWindowScroll, useThrottleFn } from '@vueuse/core'
-import { usePageContext } from './usePageContext'
+import { usePageContext } from '~/composables/usePageContext'
 
 export function useScrollNav(baseScrollThreshold = 10, directionDelta = 10) {
   if (!import.meta.client) {
@@ -29,14 +29,12 @@ export function useScrollNav(baseScrollThreshold = 10, directionDelta = 10) {
     const current = y.value
     const delta = current - lastScrollPosition.value
 
-    // Direction tracking
     if (directions.bottom) {
       scrollDirection.value = 'down'
     } else if (directions.top) {
       scrollDirection.value = 'up'
     }
 
-    // Always show navbar at or near top
     if (current <= adjustedScrollThreshold.value) {
       showNavbar.value = true
     } else if (delta > directionDelta) {

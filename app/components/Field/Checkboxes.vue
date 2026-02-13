@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { WebformFieldProps, WebformState } from '~/types'
-import { cleanHTML } from '~/utils/cleanHTML'
+import type { WebformFieldProps, WebformOptionProperties, WebformState } from '~~/types'
 import { useEventBus } from '@vueuse/core'
-import { handleTabChange } from '~/utils/visibilityUtils'
+import { cleanHTML } from '~/utils/cleanHTML'
 import { enforceGroupLimit, enforceMaxSelected } from '~/utils/selectionUtils'
 import { normalizeValue } from '~/utils/stringUtils'
+import { handleTabChange } from '~/utils/visibilityUtils'
 
 const props = defineProps<{
   field: WebformFieldProps
@@ -21,7 +21,6 @@ onMounted(() => {
   }
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
 
-  // Listen for tab changes and clear values if not visible
   tabBus.on((tabValue: string) => {
     handleTabChange(
       props.field['#states']?.visible,
@@ -31,11 +30,15 @@ onMounted(() => {
     )
   })
 
-  // Apply model update logic
   handleModelUpdate(props.state[props.fieldName])
 })
 
 const isFieldDisabled = computed(() => props.field['#disabled'] === true)
+const toStringArray = (value: unknown): string[] =>
+  Array.isArray(value)
+    ? value.filter((entry): entry is string => typeof entry === 'string')
+    : []
+
 const getComparisonValue = (key?: string): number | null => {
   if (!key) return null
   const normalizedKey = Object.keys(props.state).find(
@@ -47,8 +50,9 @@ const getComparisonValue = (key?: string): number | null => {
 
 const items = computed(() => {
   return Object.entries(props.field['#options'] || {}).map(([key, label]) => {
-    const rawProps = props.field['#optionProperties']?.[key] || {}
-    const [min, max] = rawProps.range || []
+    const rawProps = (props.field['#optionProperties']?.[key] ||
+      {}) as WebformOptionProperties
+    const [min, max] = Array.isArray(rawProps.range) ? rawProps.range : []
     const compareKey = rawProps.checkAgainst
     const valueToCompare = getComparisonValue(compareKey)
     const disableWhen = rawProps.disableWhen
@@ -57,9 +61,11 @@ const items = computed(() => {
       : null
 
     const selected = Array.isArray(conditionValue)
-      ? conditionValue
+      ? toStringArray(conditionValue)
       : typeof conditionValue === 'object' && conditionValue !== null
-        ? Object.keys(conditionValue).filter((k) => conditionValue[k] === true)
+        ? Object.keys(conditionValue as Record<string, unknown>).filter(
+            (k) => (conditionValue as Record<string, unknown>)[k] === true,
+          )
         : []
 
     const disabledByRule =
@@ -83,28 +89,25 @@ const items = computed(() => {
   })
 })
 
-/**
- * Handle Model Update:
- * - Enforce the group limit
- * - Enforce the max selections
- */
-const handleModelUpdate = (val: string[]) => {
+const handleModelUpdate = (val: unknown) => {
+  const selectedValues = toStringArray(val)
   const disabledKeys = new Set(
     items.value.filter((item) => item.disabled).map((item) => item.value),
   )
 
-  // Restore any disabled options that were previously selected
-  const previous = props.state[props.fieldName] || []
+  const previous = toStringArray(props.state[props.fieldName])
   let updated = Array.from(
     new Set([
-      ...val,
+      ...selectedValues,
       ...previous.filter((key: string) => disabledKeys.has(key)),
     ]),
   )
 
   for (const selectedKey of updated) {
-    const meta = props.field['#optionProperties']?.[selectedKey]
-    const linked = meta?.linked_to || meta?.linkedTo || []
+    const meta = props.field['#optionProperties']?.[
+      selectedKey
+    ] as WebformOptionProperties | undefined
+    const linked = [...(meta?.linked_to ?? []), ...(meta?.linkedTo ?? [])]
 
     for (const linkedKey of linked) {
       if (!updated.includes(linkedKey) && !disabledKeys.has(linkedKey)) {

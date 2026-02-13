@@ -29,11 +29,22 @@ export default defineNuxtPlugin(() => {
       type: cfg.type ?? '1',
     }
 
-    useScript({
-      id: 'userway-widget',
-      src: 'https://cdn.userway.org/widget.js',
-      crossorigin: 'anonymous',
-      referrerpolicy: 'no-referrer',
-    })
+    const loadUserway = () =>
+      useScript({
+        id: 'userway-widget',
+        src: 'https://cdn.userway.org/widget.js',
+        crossorigin: 'anonymous',
+        referrerpolicy: 'no-referrer',
+      })
+
+    const idleApi = globalThis as typeof globalThis & {
+      requestIdleCallback?: (callback: IdleRequestCallback) => number
+    }
+
+    if (typeof idleApi.requestIdleCallback === 'function') {
+      idleApi.requestIdleCallback(() => loadUserway())
+    } else {
+      setTimeout(() => loadUserway(), 1)
+    }
   }
 })

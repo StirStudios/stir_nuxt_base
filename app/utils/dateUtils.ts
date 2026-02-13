@@ -1,7 +1,3 @@
-/**
- * Generates a timezone offset string (e.g. "-0700", "+0100") for a given IANA timezone.
- * Defaults to the current date/time if no date is provided.
- */
 export function getOffsetString(
   timeZone: string,
   date: Date = new Date(),
@@ -14,26 +10,18 @@ export function getOffsetString(
   const parts = dtf.formatToParts(date)
   const offset = parts.find((p) => p.type === 'timeZoneName')?.value || 'GMT+0'
 
-  // Example offsets: "GMT-7", "GMT+05:30"
   const match = offset.match(/GMT([+-]?\d+)(?::(\d+))?/)
   if (match && match[1] !== undefined) {
-    const rawHours = match[1] // includes sign
+    const rawHours = match[1]
     const sign = rawHours.startsWith('-') ? '-' : '+'
     const hours = String(Math.abs(Number(rawHours))).padStart(2, '0')
     const minutes = String(match[2] || '0').padStart(2, '0')
     return `${sign}${hours}${minutes}`
   }
 
-  // Fallback: no match, return UTC
   return '+0000'
 }
 
-/**
- * Generates time options for a given range and step interval.
- * @param min - Start time (HH:mm:ss or HH:mm)
- * @param max - End time (HH:mm:ss or HH:mm)
- * @param step - Interval in seconds
- */
 export function generateTimeOptions(min: string, max: string, step: number) {
   const times: { value: string; label: string }[] = []
 

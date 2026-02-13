@@ -9,6 +9,7 @@ export const useValidation = () => {
     if (!event?.errors?.length) return
 
     const firstError = event.errors[0]
+    if (!firstError) return
     const element = document.getElementById(firstError.id)
 
     if (element) {
