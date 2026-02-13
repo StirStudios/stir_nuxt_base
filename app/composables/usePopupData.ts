@@ -4,57 +4,85 @@ type PopupNode = {
   slots?: Record<string, unknown>
 }
 
+type UnknownRecord = Record<string, unknown>
+
+function isRecord(value: unknown): value is UnknownRecord {
+  return typeof value === 'object' && value !== null
+}
+
+function findPopup(node: unknown): PopupNode | null {
+  if (!isRecord(node)) return null
+
+  const stack: unknown[] = [node]
+
+  while (stack.length) {
+    const current = stack.pop()
+    if (!isRecord(current)) continue
+
+    if (current.element === 'paragraph-popup') {
+      return current as PopupNode
+    }
+
+    const slots = current.slots
+    if (!isRecord(slots)) continue
+
+    for (const slotValue of Object.values(slots)) {
+      if (Array.isArray(slotValue)) {
+        for (let i = slotValue.length - 1; i >= 0; i--) {
+          stack.push(slotValue[i])
+        }
+      } else {
+        stack.push(slotValue)
+      }
+    }
+  }
+
+  return null
+}
+
 export const usePopupData = () => {
   const { page } = usePageContext()
   const popup = ref<PopupNode | null>(null)
 
-  function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === 'object' && value !== null
-  }
+  const contentSource = computed(() => page.value?.content)
+  const decoupledSource = computed(() => page.value?.blocks?.decoupled)
 
-  function walk(node: unknown) {
-    if (!isRecord(node)) return
-
-    if (node.element === 'paragraph-popup') {
-      popup.value = node as PopupNode
-      return
-    }
-
-    if (node.slots && isRecord(node.slots)) {
-      Object.values(node.slots).forEach((slot) => {
-        if (Array.isArray(slot)) {
-          slot.forEach(walk)
-        } else {
-          walk(slot)
-        }
-      })
-    }
-  }
-
-  watchEffect(() => {
+  watch([contentSource, decoupledSource], ([content, decoupled]) => {
     popup.value = null
 
-    const content = page.value?.content
     if (content) {
-      if (Array.isArray(content)) {
-        content.forEach(walk)
+      if (Array.isArray(content) && content.length) {
+        for (const entry of content) {
+          const found = findPopup(entry)
+          if (found) {
+            popup.value = found
+            break
+          }
+        }
       } else {
-        walk(content)
+        popup.value = findPopup(content)
       }
     }
 
-    const decoupled = page.value?.blocks?.decoupled
+    if (popup.value) return
     if (!isRecord(decoupled)) return
 
     Object.values(decoupled).forEach((block) => {
+      if (popup.value) return
       if (!isRecord(block)) return
       const paragraphBlocks = (block.slots as Record<string, unknown>)
         ?.paragraphBlock
       if (!Array.isArray(paragraphBlocks)) return
 
-      paragraphBlocks.forEach(walk)
+      for (const entry of paragraphBlocks) {
+        const found = findPopup(entry)
+        if (found) {
+          popup.value = found
+          break
+        }
+      }
     })
-  })
+  }, { immediate: true })
 
   const config = computed(() => {
     const p = popup.value?.props ?? {}

@@ -57,24 +57,37 @@ function hydrateOrder<T>(baseFn: () => T[], clientFn: () => T[]) {
 }
 
 export function useSlotsToolkit(slots: unknown) {
+  const slotMap = slots as SlotMap
+  const slot = (name: string): VNode[] => {
+    const content = slotMap[name]?.()
+    return Array.isArray(content) ? content : []
+  }
+
+  const heroMedia = () => {
+    const heroNodes = slot('hero')
+    if (!heroNodes.length) return null
+
+    const heroVNode = heroNodes[0]
+    if (!heroVNode) return null
+    const children = heroVNode.children as { media?: () => VNode[] } | undefined
+    const nested = children?.media?.()
+    return Array.isArray(nested) ? (nested[0] ?? null) : null
+  }
+
+  const mediaItems = () => slot('media')
+  const isMediaEmbed = (vnode: VNode | undefined) => {
+    const props = getVNodeProps(vnode)
+    return !!props.mediaEmbed
+  }
+
   return {
     slots,
-    slot(name: string) {
-      return useSlotVNode(slots, name)
-    },
+    slot,
     propsOf: getVNodeProps,
-    heroMedia() {
-      return extractHeroMedia(slots)
-    },
-    mediaItems() {
-      return extractMediaItems(slots)
-    },
-    shuffle<T>(items: T[]): T[] {
-      return shuffleArray(items)
-    },
-    isMediaEmbed(vnode: VNode | undefined) {
-      return isVNodeMediaEmbed(vnode)
-    },
+    heroMedia,
+    mediaItems,
+    shuffle: shuffleArray,
+    isMediaEmbed,
     hydrateOrder,
   }
 }

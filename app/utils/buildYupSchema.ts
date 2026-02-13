@@ -11,21 +11,79 @@ import {
 } from 'yup'
 import { evaluateCondition } from './evaluateUtils'
 
+const SCHEMA_CACHE_LIMIT = 100
+const schemaCache = new WeakMap<
+  Record<string, WebformFieldProps>,
+  Map<string, ObjectSchema<Record<string, unknown>>>
+>()
+
+function stableStringify(value: unknown): string {
+  if (value === null || value === undefined) return ''
+  if (typeof value !== 'object') return String(value)
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`
+
+  const entries = Object.entries(value as Record<string, unknown>).sort(
+    ([a], [b]) => a.localeCompare(b),
+  )
+  return `{${entries.map(([k, v]) => `${k}:${stableStringify(v)}`).join(',')}}`
+}
+
+function fieldSignature(field: WebformFieldProps): string {
+  const signature = {
+    type: field['#type'],
+    required: field['#required'],
+    requiredError: field['#requiredError'],
+    min: field['#min'],
+    max: field['#max'],
+    minSelected: field['#minSelected'],
+    maxSelected: field['#maxSelected'],
+    multiple: field['#multiple'],
+    options: field['#options'],
+    optionProperties: field['#optionProperties'],
+    composite: field['#composite'],
+  }
+  return stableStringify(signature)
+}
+
+function getVisibleEntries(
+  fields: Record<string, WebformFieldProps>,
+  state: WebformState,
+): Array<[string, WebformFieldProps]> {
+  const visible: Array<[string, WebformFieldProps]> = []
+  for (const [key, field] of Object.entries(fields)) {
+    if (evaluateCondition(field['#states']?.visible, state, true)) {
+      visible.push([key, field])
+    }
+  }
+  return visible
+}
+
+function getSchemaCacheKey(
+  visibleEntries: Array<[string, WebformFieldProps]>,
+): string {
+  return visibleEntries
+    .map(([key, field]) => `${key}:${fieldSignature(field)}`)
+    .join('|')
+}
+
 export function buildYupSchema(
   fields: Record<string, WebformFieldProps>,
   state: WebformState,
 ): ObjectSchema<Record<string, unknown>> {
+  const visibleEntries = getVisibleEntries(fields, state)
+  const cacheKey = getSchemaCacheKey(visibleEntries)
+  let perFieldsCache = schemaCache.get(fields)
+  if (!perFieldsCache) {
+    perFieldsCache = new Map()
+    schemaCache.set(fields, perFieldsCache)
+  }
+
+  const cached = perFieldsCache.get(cacheKey)
+  if (cached) return cached
+
   const shape: Record<string, AnySchema> = {}
 
-  for (const [key, field] of Object.entries(fields)) {
-    const isVisible = evaluateCondition(
-      field['#states']?.visible,
-      state,
-      true,
-    )
-
-    if (!isVisible) continue
-
+  for (const [key, field] of visibleEntries) {
     const requiredError = field['#requiredError'] || 'This field is required'
     const isRequired = field['#required'] === true
     const isEmail = field['#type'] === 'email'
@@ -126,5 +184,13 @@ export function buildYupSchema(
     })
   }
 
-  return object().shape(shape)
+  const schema = object().shape(shape)
+
+  if (perFieldsCache.size >= SCHEMA_CACHE_LIMIT) {
+    const oldestKey = perFieldsCache.keys().next().value
+    if (oldestKey) perFieldsCache.delete(oldestKey)
+  }
+  perFieldsCache.set(cacheKey, schema)
+
+  return schema
 }
