@@ -10,6 +10,7 @@
     "postinstall": "nuxi prepare",
     "lint": "eslint . --no-warn-ignored",
     "lint:fix": "eslint . --fix --no-warn-ignored",
+    "perf:report": "node scripts/perf/report.mjs",
     "smoke:login": "node scripts/smoke/login-page.mjs",
     "test": "vitest run",
     "test:watch": "vitest",

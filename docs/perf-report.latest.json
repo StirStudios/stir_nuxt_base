@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-02-13T22:32:11.032Z",
+  "topClientChunks": [
+    {
+      "name": "_nuxt/Byu-ePvk.js",
+      "sizeKb": 404.93,
+      "gzipKb": 141.14
+    },
+    {
+      "name": "_nuxt/BEUkQsDd.js",
+      "sizeKb": 62.14,
+      "gzipKb": 15.2
+    },
+    {
+      "name": "_nuxt/DPCg4T6h.js",
+      "sizeKb": 55.56,
+      "gzipKb": 12.21
+    },
+    {
+      "name": "_nuxt/Cvu9gRmd.js",
+      "sizeKb": 52.51,
+      "gzipKb": 14.58
+    },
+    {
+      "name": "_nuxt/X6Cz2NGL.js",
+      "sizeKb": 42.68,
+      "gzipKb": 13.9
+    },
+    {
+      "name": "_nuxt/BpI5_m59.js",
+      "sizeKb": 35.88,
+      "gzipKb": 10.14
+    },
+    {
+      "name": "_nuxt/t4P1zmW0.js",
+      "sizeKb": 31.41,
+      "gzipKb": 9.18
+    },
+    {
+      "name": "_nuxt/Bokk41nh.js",
+      "sizeKb": 30.26,
+      "gzipKb": 10.49
+    },
+    {
+      "name": "_nuxt/BQZ79Gbe.js",
+      "sizeKb": 29.7,
+      "gzipKb": 11.13
+    },
+    {
+      "name": "_nuxt/DxjOyqQ2.js",
+      "sizeKb": 27.71,
+      "gzipKb": 10.56
+    }
+  ],
+  "totalOutputSize": {
+    "total": "5.48 MB",
+    "gzip": "1.38 MB gzip"
+  }
+}
