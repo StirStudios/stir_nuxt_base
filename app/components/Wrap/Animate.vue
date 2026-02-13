@@ -32,13 +32,7 @@ const hiddenTransforms: Record<string, string> = {
 
 const springEasing = createSpringLinearEasing(defaultTransitionConfig)
 const fallbackEasing = `cubic-bezier(${defaultTransitionConfig.ease.join(', ')})`
-const supportsLinearEasing =
-  import.meta.client &&
-  typeof CSS !== 'undefined' &&
-  CSS.supports('transition-timing-function', 'linear(0, 1)')
-const transitionTimingFunction = supportsLinearEasing
-  ? springEasing
-  : fallbackEasing
+const transitionTimingFunction = ref(fallbackEasing)
 
 const observerCallbacks = new WeakMap<HTMLElement, (visible: boolean) => void>()
 const observedElements = new Set<HTMLElement>()
@@ -116,7 +110,7 @@ const animationStyle = computed(() => {
   return {
     opacity: shouldShow.value ? '1' : '0',
     transform: shouldShow.value ? 'none' : hiddenTransform,
-    transition: `opacity ${defaultTransitionConfig.duration}s ${transitionTimingFunction} ${defaultTransitionConfig.delay}s, transform ${defaultTransitionConfig.duration}s ${transitionTimingFunction} ${defaultTransitionConfig.delay}s`,
+    transition: `opacity ${defaultTransitionConfig.duration}s ${transitionTimingFunction.value} ${defaultTransitionConfig.delay}s, transform ${defaultTransitionConfig.duration}s ${transitionTimingFunction.value} ${defaultTransitionConfig.delay}s`,
     willChange: 'opacity, transform',
     transformStyle: props.effect?.startsWith('flip-')
       ? 'preserve-3d'
@@ -127,6 +121,13 @@ const animationStyle = computed(() => {
 let stopObserving: (() => void) | null = null
 
 onMounted(() => {
+  if (
+    typeof CSS !== 'undefined' &&
+    CSS.supports('transition-timing-function', 'linear(0, 1)')
+  ) {
+    transitionTimingFunction.value = springEasing
+  }
+
   if (!props.effect || !root.value) return
 
   stopObserving = observeInView(root.value, (visible) => {
