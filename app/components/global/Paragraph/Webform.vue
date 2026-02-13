@@ -6,7 +6,6 @@ import { transformPayloadToSnakeCase } from '~/utils/transformUtils'
 import { getHiddenDefaults } from '~/utils/getHiddenDefaults'
 import { useValidation } from '~/composables/useValidation'
 import { useWindowScroll } from '@vueuse/core'
-import { buildYupSchema } from '~/utils/buildYupSchema'
 import { evaluateCondition } from '~/utils/evaluateUtils'
 import type { WebformDefinition, WebformFieldProps, WebformState } from '~~/types'
 import type { ObjectSchema } from 'yup'
@@ -50,25 +49,33 @@ const turnstileToken = ref('')
 const isFormSubmitted = ref(false)
 const isLoading = ref(false)
 const errors = ref<Record<string, string>>({})
-const schema = shallowRef<ObjectSchema<Record<string, unknown>>>(
-  buildYupSchema(fields, state),
-)
-const lastVisibilitySignature = ref('')
-
-watchEffect(() => {
-  const visibilitySignature = orderedFieldNames.value
+const schema = shallowRef<ObjectSchema<Record<string, unknown>>>()
+const isSchemaReady = ref(false)
+const visibilitySignature = computed(() =>
+  orderedFieldNames.value
     .map((fieldName) =>
       evaluateCondition(fields[fieldName]?.['#states']?.visible, state, true)
         ? '1'
         : '0',
     )
-    .join('')
+    .join(''),
+)
 
-  if (visibilitySignature === lastVisibilitySignature.value) return
+let schemaBuildVersion = 0
 
-  lastVisibilitySignature.value = visibilitySignature
+async function refreshSchema() {
+  const buildVersion = ++schemaBuildVersion
+  const { buildYupSchema } = await import('~/utils/buildYupSchema')
+
+  if (buildVersion !== schemaBuildVersion) return
+
   schema.value = buildYupSchema(fields, state)
-})
+  isSchemaReady.value = true
+}
+
+watch(visibilitySignature, () => {
+  void refreshSchema()
+}, { immediate: true })
 const submitButtonLabel = computed(
   () => actions[0]?.['#submit_Label'] || 'Submit',
 )
@@ -240,6 +247,7 @@ async function onSubmit(_event: { data: Record<string, unknown> }) {
         :is-container-visible="isContainerVisible"
         :is-form-submitted="isFormSubmitted"
         :is-loading="isLoading"
+        :is-schema-ready="isSchemaReady"
         :ordered-field-names="orderedFieldNames"
         :schema="schema"
         :should-render-group-container="shouldRenderGroupContainer"

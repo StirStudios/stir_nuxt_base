@@ -5,9 +5,10 @@ import type { ObjectSchema } from 'yup'
 defineProps<{
   fields: Record<string, WebformFieldProps>
   state: WebformState
-  schema: ObjectSchema<Record<string, unknown>>
+  schema?: ObjectSchema<Record<string, unknown>>
   isFormSubmitted: boolean
   isLoading: boolean
+  isSchemaReady: boolean
   orderedFieldNames: string[]
   themeWebform: Record<string, string>
   groupedFields: Record<string, string[]>
@@ -103,6 +104,7 @@ const validateOn = ['blur', 'change', 'input'] as const
 
     <WrapAlign :align="themeWebform.submitAlign">
       <UButton
+        :disabled="!isSchemaReady || isLoading"
         :label="submitButtonLabel"
         :loading="isLoading"
         :size="themeWebform.buttonSize"
