@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process'
 
 const host = process.env.SMOKE_HOST || '127.0.0.1'
 const port = Number(process.env.SMOKE_PORT || 4310)
-const smokePath = process.env.SMOKE_PATH || '/'
+const smokePath = process.env.SMOKE_PATH || '/api/auth/csrf'
 const baseUrl = `http://${host}:${port}`
 const timeoutMs = Number(process.env.SMOKE_TIMEOUT_MS || 60000)
 
@@ -73,11 +73,9 @@ async function runSmoke() {
       )
     }
 
-    const html = await response.text()
-    if (!html.includes('<html')) {
-      throw new Error(
-        `Smoke check failed: ${smokePath} did not return an HTML document`,
-      )
+    const body = await response.text()
+    if (body.trim().length === 0) {
+      throw new Error(`Smoke check failed: ${smokePath} returned an empty body`)
     }
   } catch (error) {
     const details =

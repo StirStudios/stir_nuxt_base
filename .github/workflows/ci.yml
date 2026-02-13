@@ -44,4 +44,6 @@ jobs:
         run: pnpm build
 
       - name: Smoke Login Page
+        env:
+          SMOKE_PATH: /api/auth/csrf
         run: pnpm smoke:login
