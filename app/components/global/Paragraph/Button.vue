@@ -50,6 +50,12 @@ const pdf = computed(() => {
 
 const hasPdf = computed(() => !!pdf.value)
 const hasLink = computed(() => !hasPdf.value && !!linkData.value.url)
+const pdfProps = computed(() => tk.propsOf(pdf.value ?? undefined))
+const pdfTitle = computed(() => String(pdfProps.value?.title || btnLabel.value))
+const pdfDescription = computed(
+  () => String(pdfProps.value?.alt || 'PDF document preview'),
+)
+const pdfUrl = computed(() => pdfProps.value?.url as string | undefined)
 </script>
 
 <template>
@@ -61,7 +67,7 @@ const hasLink = computed(() => !hasPdf.value && !!linkData.value.url)
         class="mt-4"
         :color="btnColor"
         :icon="iconName ?? 'i-lucide-file-text'"
-        :label="tk.propsOf(pdf)?.title || btnLabel"
+        :label="pdfTitle"
         :size="btnSize"
         :variant="btnVariant"
         @click="open = true"
@@ -86,12 +92,12 @@ const hasLink = computed(() => !hasPdf.value && !!linkData.value.url)
   <UModal
     v-if="hasPdf && theme.pdf"
     v-model:open="open"
-    :description="tk.propsOf(pdf)?.alt"
+    :description="pdfDescription"
     fullscreen
-    :title="tk.propsOf(pdf)?.title || btnLabel"
+    :title="pdfTitle"
   >
     <template #body>
-      <PdfViewer :src="tk.propsOf(pdf)?.url" />
+      <PdfViewer :src="pdfUrl" />
     </template>
   </UModal>
 </template>
