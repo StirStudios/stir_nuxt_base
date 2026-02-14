@@ -1,5 +1,7 @@
 <script setup lang="ts">
-defineProps<{
+import { cleanHTML } from '~/utils/cleanHTML'
+
+const props = defineProps<{
   id?: number | string
   uuid?: string
   parentUuid?: string
@@ -15,6 +17,8 @@ defineProps<{
 
   editLink?: string
 }>()
+
+const safeTextHtml = computed(() => cleanHTML(props.text ?? ''))
 </script>
 
 <template>
@@ -22,12 +26,13 @@ defineProps<{
     <WrapAnimate :effect="direction">
       <WrapAlign :align="align">
         <div
+          v-if="safeTextHtml"
           :class="[
             [classes, 'prose'].filter(Boolean).join(' '),
             width,
             spacing,
           ]"
-          v-html="text"
+          v-html="safeTextHtml"
         />
       </WrapAlign>
     </WrapAnimate>

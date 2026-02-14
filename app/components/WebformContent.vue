@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { WebformFieldProps, WebformState } from '../../types'
 import type { ObjectSchema } from 'yup'
+import { cleanHTML } from '~/utils/cleanHTML'
 
 defineProps<{
   fields: Record<string, WebformFieldProps>
@@ -28,6 +29,7 @@ const emit = defineEmits<{
 }>()
 
 const validateOn = ['blur', 'change', 'input'] as const
+const safeHtml = (value?: string) => cleanHTML(value ?? '')
 </script>
 
 <template>
@@ -57,7 +59,7 @@ const validateOn = ['blur', 'change', 'input'] as const
         <div
           v-if="fields[fieldName]?.parentDescription"
           class="section-desc"
-          v-html="fields[fieldName]?.parentDescription"
+          v-html="safeHtml(fields[fieldName]?.parentDescription)"
         />
         <div :class="themeWebform.fieldGroup">
           <template
@@ -116,6 +118,6 @@ const validateOn = ['blur', 'change', 'input'] as const
   <div
     v-else
     :class="`${themeWebform.response} prose`"
-    v-html="webformConfirmation"
+    v-html="safeHtml(webformConfirmation)"
   />
 </template>

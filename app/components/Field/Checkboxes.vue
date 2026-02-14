@@ -14,6 +14,7 @@ const props = defineProps<{
 
 const descriptionContent = shallowRef<string>('')
 const tabBus = useEventBus<string>('tab-changed')
+let stopTabBus: (() => void) | null = null
 
 onMounted(() => {
   if (!Array.isArray(props.state[props.fieldName])) {
@@ -21,7 +22,7 @@ onMounted(() => {
   }
   descriptionContent.value = cleanHTML(props.field['#description'] || '')
 
-  tabBus.on((tabValue: string) => {
+  stopTabBus = tabBus.on((tabValue: string) => {
     handleTabChange(
       props.field['#states']?.visible,
       tabValue,
@@ -31,6 +32,11 @@ onMounted(() => {
   })
 
   handleModelUpdate(props.state[props.fieldName])
+})
+
+onBeforeUnmount(() => {
+  stopTabBus?.()
+  stopTabBus = null
 })
 
 const isFieldDisabled = computed(() => props.field['#disabled'] === true)

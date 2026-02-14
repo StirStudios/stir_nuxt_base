@@ -1,8 +1,11 @@
+let navHooksRegistered = false
+
 export function useNavLock() {
   const nuxtApp = useNuxtApp()
   const locked = useState<boolean>('nav-locked', () => false)
 
-  if (import.meta.client) {
+  if (import.meta.client && !navHooksRegistered) {
+    navHooksRegistered = true
     nuxtApp.hook('page:start', () => {
       locked.value = true
     })

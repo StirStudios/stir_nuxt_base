@@ -8,22 +8,23 @@ const props = defineProps<{
 }>()
 
 const { gradients, card } = useAppConfig().stirTheme
+const gradientMap = gradients as Record<string, string>
 const gradientClass = computed(() => {
   if (!props.layout.card) return ''
 
-  const key = props.layout.gradient || card.defaultGradient || '1'
-  return gradients[key] || ''
+  const key = props.layout.gradient ?? card.defaultGradient ?? '1'
+  return gradientMap[key] || ''
 })
 
-const effectClass = computed(() => card.effect)
+const effectClass = computed(() => card.effect ?? '')
 const sizeClass = computed(() =>
-  props.layout.compact ? card.sizes.compact : card.sizes.default,
+  props.layout.compact ? (card.sizes?.compact ?? '') : (card.sizes?.default ?? ''),
 )
 </script>
 
 <template>
   <div
-    v-if="layout.card"
+    v-if="props.layout.card"
     aria-hidden="true"
     class="pointer-events-none"
     :class="[effectClass, sizeClass]"

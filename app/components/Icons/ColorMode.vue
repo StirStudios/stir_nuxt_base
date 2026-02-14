@@ -3,10 +3,11 @@ import useDarkMode from '~/composables/useDarkMode'
 
 const appConfig = useAppConfig()
 const { isDark } = useDarkMode()
+const colorMode = useColorMode()
 </script>
 
 <template>
-  <ClientOnly v-if="!appConfig.colorMode?.forced">
+  <ClientOnly v-if="appConfig.colorMode?.showToggle !== false && !colorMode.forced">
     <UButton
       aria-label="Theme"
       color="black"

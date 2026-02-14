@@ -12,47 +12,77 @@ const props = withDefaults(
   },
 )
 
-const previousURL = props.current > 0 ? `?page=${props.current - 1}` : null
-const nextURL =
-  props.current + 1 < props.totalPages ? `?page=${props.current + 1}` : null
-const hellipLeft = props.current > props.maxLinks / 2 + 1
-const hellipRight = props.totalPages - props.current > props.maxLinks / 2
+const route = useRoute()
+const current = computed(() => Math.max(0, props.current))
+const totalPages = computed(() => Math.max(0, props.totalPages))
+const maxLinks = computed(() => Math.max(1, props.maxLinks))
+
+const pageWindow = computed(() => {
+  const half = Math.floor(maxLinks.value / 2)
+  const start = Math.max(0, current.value - half)
+  const end = Math.min(totalPages.value - 1, current.value + half)
+  const pages: number[] = []
+
+  for (let page = start; page <= end; page++) {
+    pages.push(page)
+  }
+
+  return pages
+})
+
+const previousPage = computed(() =>
+  current.value > 0 ? current.value - 1 : null,
+)
+const nextPage = computed(() =>
+  current.value + 1 < totalPages.value ? current.value + 1 : null,
+)
+const hellipLeft = computed(
+  () => (pageWindow.value.at(0) ?? 0) > 0,
+)
+const hellipRight = computed(
+  () => (pageWindow.value.at(-1) ?? -1) < totalPages.value - 1,
+)
+
+function pageToLink(page: number) {
+  return {
+    path: route.path,
+    query: {
+      ...route.query,
+      page: String(page),
+    },
+  }
+}
 </script>
 
 <template>
   <div class="views-pager">
     <nav aria-label="Pagination" class="isolate inline-flex gap-1 -space-x-px">
-      <a
-        v-if="previousURL"
+      <NuxtLink
+        v-if="previousPage !== null"
         class="relative inline-flex min-w-10 items-center px-2 py-2 text-sm"
-        :href="previousURL"
+        :to="pageToLink(previousPage)"
       >
         <span class="sr-only">Previous</span>
         &lt;&lt;
-      </a>
+      </NuxtLink>
       <span
         v-if="hellipLeft"
         class="relative inline-flex min-w-10 items-center px-4 py-2"
         >&hellip;</span
       >
-      <template v-for="n in totalPages">
+      <template v-for="page in pageWindow" :key="page">
         <component
-          :is="n - 1 == current ? 'span' : 'a'"
-          v-if="
-            n - 1 == current ||
-            (n - 1 < current && n - 1 > current - maxLinks / 2 - 1) ||
-            (n - 1 > current && n - 1 < current + maxLinks / 2 + 1)
-          "
-          :key="n"
+          :is="page === current ? 'span' : 'NuxtLink'"
+          :aria-current="page === current ? 'page' : undefined"
           :class="{
             'relative z-10 inline-flex min-w-10 items-center px-4 py-2':
-              n - 1 == current,
+              page === current,
             'relative inline-flex min-w-10 items-center px-4 py-2':
-              n - 1 != current,
+              page !== current,
           }"
-          :href="'?page=' + (n - 1)"
+          :to="page !== current ? pageToLink(page) : undefined"
         >
-          {{ n }}
+          {{ page + 1 }}
         </component>
       </template>
       <span
@@ -60,14 +90,14 @@ const hellipRight = props.totalPages - props.current > props.maxLinks / 2
         class="relative inline-flex min-w-10 items-center"
         >&hellip;</span
       >
-      <a
-        v-if="nextURL"
+      <NuxtLink
+        v-if="nextPage !== null"
         class="relative inline-flex min-w-10 items-center px-2 py-2"
-        :href="nextURL"
+        :to="pageToLink(nextPage)"
       >
         <span class="sr-only">Next</span>
         &gt;&gt;
-      </a>
+      </NuxtLink>
     </nav>
   </div>
 </template>

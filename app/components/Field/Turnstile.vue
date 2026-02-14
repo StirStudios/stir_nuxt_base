@@ -1,6 +1,12 @@
 <script setup lang="ts">
+type TurnstileTheme = {
+  appearance?: 'always' | 'execute' | 'interaction-only'
+  label?: string
+}
+
 const turnstileToken = defineModel<string>()
-const { turnstile: themeTurnstile = {} } = useAppConfig().stirTheme
+const themeTurnstile = ((useAppConfig().stirTheme as { turnstile?: unknown })
+  .turnstile ?? {}) as TurnstileTheme
 const hasLabel = computed(() => Boolean(themeTurnstile.label))
 </script>
 

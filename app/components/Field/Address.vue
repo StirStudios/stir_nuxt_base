@@ -58,12 +58,12 @@ if (!props.state[props.fieldName]) {
         v-if="key !== 'country'"
         v-model="state[fieldName][key]"
         class="w-full"
-        :placeholder="floatingLabel ? ' ' : ''"
-        :ui="floatingLabel ? { base: 'peer' } : {}"
+        :placeholder="useFloatingLabels ? ' ' : ''"
+        :ui="useFloatingLabels ? { base: 'peer' } : {}"
         :variant="webform.variant"
       >
         <label
-          v-if="floatingLabel"
+          v-if="useFloatingLabels"
           :class="[isMaterial ? '' : 'px-1.5', webform.labels.base]"
           :for="fieldName"
         >
@@ -80,7 +80,7 @@ if (!props.state[props.fieldName]) {
         :items="countryOptions"
         label-key="label"
         placeholder="Select Country"
-        value-key="label"
+        value-key="value"
         :variant="webform.variant"
       />
     </UFormField>

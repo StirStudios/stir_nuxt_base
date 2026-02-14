@@ -7,7 +7,10 @@ import {
 export default defineAppConfig({
   colorMode: {
     forced: false,
+    preference: 'dark',
+    showToggle: false,
     lightRoutes: [],
+    darkRoutes: [],
   },
 
   cookieConsent: {
@@ -20,7 +23,6 @@ export default defineAppConfig({
 
     h1: 'mb-20 text-center text-6xl',
     container: 'max-w-(--ui-container) mx-auto px-4 md:px-5 lg:px-8',
-
     header: 'md:px-auto fixed top-0 z-30 w-full !p-0',
 
     navigation: {
@@ -50,6 +52,27 @@ export default defineAppConfig({
       },
     },
 
+    hero: {
+      base: 'hero flex items-center justify-center overflow-hidden',
+      mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
+      noMediaSpacing: 'pt-30 lg:pt-54',
+      noMediaFallback:
+        'bg-gradient-to-b from-gray-900 via-gray-800 to-black/70',
+      overlay:
+        'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50',
+      isFront: 'h-screen',
+      image: {
+        base: 'absolute min-h-full w-auto max-w-none min-w-full',
+        isFront: 'object-right-85 object-cover',
+      },
+      text: {
+        h1: 'mb-0 text-white',
+        base: 'z-10 max-w-2xl relative p-5 text-center',
+        isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
+      },
+      hide: 'pt-30',
+    },
+
     footer: {
       hideEmail: false,
       base: 'mt-20 bg-accented dark:bg-muted/50 py-10 text-default text-sm',
@@ -73,47 +96,6 @@ export default defineAppConfig({
       },
     },
 
-    card: {
-      base: 'relative isolate overflow-hidden rounded-xl bg-black/80 dark:bg-black text-white',
-      effect:
-        'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl aspect-[1155/678] opacity-40 z-0',
-      sizes: {
-        default: 'w-[72rem]',
-        compact: 'w-[120%] opacity-35',
-      },
-      defaultGradient: '1',
-    },
-
-    gradients: {
-      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
-      2: 'bg-gradient-to-r from-[#fde047] via-[#facc15] to-[#2563eb]',
-      3: 'bg-gradient-to-b from-[#166534] via-[#22c55e] to-[#38bdf8]',
-      4: 'bg-gradient-to-br from-[#0f172a] via-[#1d4ed8] to-[#38bdf8]',
-      5: 'bg-gradient-to-tr from-[#22d3ee] via-[#38bdf8] to-[#a855f7]',
-      6: 'bg-gradient-to-r from-[#111827] via-[#dc2626] to-[#f59e0b]',
-    },
-
-    hero: {
-      base: 'hero flex items-center justify-center overflow-hidden',
-      mediaSpacing: 'min-h-[22rem] lg:min-h-[35rem] mb-20',
-      noMediaSpacing: 'pt-30 lg:pt-54',
-      noMediaFallback:
-        'bg-gradient-to-b from-gray-900 via-gray-800 to-black/70',
-      overlay:
-        'relative min-h-[22rem] lg:min-h-[35rem] after:to-bg-black-10 after:absolute after:inset-0 after:z-auto after:h-full after:w-full after:bg-gradient-to-b after:from-black/80 after:via-black/50',
-      isFront: 'h-screen',
-      image: {
-        base: 'absolute min-h-full w-auto max-w-none min-w-full',
-        isFront: 'object-right-85 object-cover',
-      },
-      text: {
-        h1: 'mb-0 text-white',
-        base: 'z-10 max-w-2xl relative p-5 text-center',
-        isFront: 'absolute bottom-0 left-0 p-10 lg:p-24',
-      },
-      hide: 'pt-30',
-    },
-
     carousel: {
       padding: 'pb-12',
       root: '',
@@ -131,19 +113,6 @@ export default defineAppConfig({
         media: true,
         default: false,
       },
-    },
-
-    scrollButton: {
-      base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 shadow-md transition-opacity duration-300',
-      icon: 'i-lucide:arrow-up',
-      variant: 'solid',
-      showAtScrollY: 200,
-    },
-
-    error: {
-      label: 'Take me back home',
-      color: 'primary',
-      variant: 'solid',
     },
 
     webform: {
@@ -174,6 +143,26 @@ export default defineAppConfig({
       label: 'Let us know you’re human',
     },
 
+    card: {
+      base: 'relative isolate overflow-hidden rounded-xl bg-black/80 dark:bg-black text-white',
+      effect:
+        'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 blur-3xl aspect-[1155/678] opacity-40 z-0',
+      sizes: {
+        default: 'w-[72rem]',
+        compact: 'w-[120%] opacity-35',
+      },
+      defaultGradient: '1',
+    },
+
+    gradients: {
+      1: 'bg-gradient-to-tr from-[#f35b0f] to-[#6b4ef2]',
+      2: 'bg-gradient-to-r from-[#fde047] via-[#facc15] to-[#2563eb]',
+      3: 'bg-gradient-to-b from-[#166534] via-[#22c55e] to-[#38bdf8]',
+      4: 'bg-gradient-to-br from-[#0f172a] via-[#1d4ed8] to-[#38bdf8]',
+      5: 'bg-gradient-to-tr from-[#22d3ee] via-[#38bdf8] to-[#a855f7]',
+      6: 'bg-gradient-to-r from-[#111827] via-[#dc2626] to-[#f59e0b]',
+    },
+
     animations: {
       once: false,
     },
@@ -183,6 +172,19 @@ export default defineAppConfig({
       landscape: 'aspect-[16/9]',
       square: 'aspect-square',
       fourThree: 'aspect-[4/3]',
+    },
+
+    scrollButton: {
+      base: 'fixed bottom-4 left-4 z-50 rounded-full p-2 shadow-md transition-opacity duration-300',
+      icon: 'i-lucide:arrow-up',
+      variant: 'solid',
+      showAtScrollY: 200,
+    },
+
+    error: {
+      label: 'Take me back home',
+      color: 'primary',
+      variant: 'solid',
     },
   },
 

@@ -18,7 +18,11 @@ function accept() {
   open.value = false
 }
 
-const ignorePaths = [config?.termsUrl, config?.privacyUrl].filter(Boolean)
+const ignorePaths = computed(() =>
+  [config?.termsUrl, config?.privacyUrl].filter(
+    (path): path is string => typeof path === 'string' && path.length > 0,
+  ),
+)
 
 watch(
   () => route.path,
@@ -33,7 +37,7 @@ watch(
       !consent.value &&
       isConfigured.value &&
       !isBot &&
-      !ignorePaths.includes(route.path)
+      !ignorePaths.value.includes(route.path)
     ) {
       open.value = true
     }
@@ -68,15 +72,17 @@ watch(
         <ULink
           v-if="config.termsUrl"
           class="underline"
+          rel="noopener noreferrer"
           target="_blank"
           :to="config.termsUrl"
         >
           Terms of Service
         </ULink>
-        <span class="mx-1">and</span>
+        <span v-if="config.termsUrl && config.privacyUrl" class="mx-1">and</span>
         <ULink
           v-if="config.privacyUrl"
           class="underline"
+          rel="noopener noreferrer"
           target="_blank"
           :to="config.privacyUrl"
         >

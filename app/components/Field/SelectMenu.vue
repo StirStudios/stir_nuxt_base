@@ -9,6 +9,7 @@ const props = defineProps<{
 }>()
 
 const { webform } = useAppConfig().stirTheme
+const selectItems = computed(() => transformOptions(props.field['#options'] || {}))
 
 onMounted(() => {
   if (props.state[props.fieldName] === undefined) {
@@ -21,7 +22,7 @@ onMounted(() => {
   <USelectMenu
     v-model="state[fieldName]"
     class="w-full"
-    :items="transformOptions(field['#options'] || {})"
+    :items="selectItems"
     placeholder="Select"
     :variant="webform.variant"
   />

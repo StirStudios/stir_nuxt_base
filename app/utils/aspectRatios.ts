@@ -1,3 +1,10 @@
+type AspectRatioConfig = {
+  portrait?: string
+  landscape?: string
+  square?: string
+  fourThree?: string
+}
+
 export const aspectRatios = (
   width: number | null,
   height: number | null,
@@ -9,7 +16,7 @@ export const aspectRatios = (
   },
 ) => {
   const appConfig = useAppConfig?.()
-  const ratioConfig = appConfig?.stirTheme?.aspectRatios || {}
+  const ratioConfig = (appConfig?.stirTheme?.aspectRatios || {}) as AspectRatioConfig
 
   const defaults = {
     portrait: 'aspect-[9/16]',

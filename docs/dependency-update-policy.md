@@ -30,7 +30,6 @@ This runs `pnpm update` and then:
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm build`
-- `pnpm smoke:login`
 
 ## Major-version upgrades
 

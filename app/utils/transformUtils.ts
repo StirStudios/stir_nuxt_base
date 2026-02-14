@@ -1,18 +1,32 @@
 import { toSnakeCase } from './stringUtils'
 
+type OptionObject = { label: string; description?: string }
+type OptionValue = string | OptionObject
+type AddressPayload = {
+  address?: string
+  address_2?: string
+  city?: string
+  stateProvince?: string
+  postalCode?: string
+  country?: string
+}
+
+function isOptionObject(value: OptionValue): value is OptionObject {
+  return typeof value === 'object' && value !== null && 'label' in value
+}
+
+function isAddressPayload(value: unknown): value is AddressPayload {
+  return typeof value === 'object' && value !== null && 'address' in value
+}
+
 export function transformOptions(
-  options: Record<string, string | { label: string; description?: string }>,
+  options: Record<string, OptionValue>,
 ) {
   return Object.entries(options).map(([value, option]) => {
-    const isObjectOption = (
-      obj: string | { label: string; description?: string },
-    ): obj is { label: string; description?: string } =>
-      typeof obj === 'object' && obj !== null && 'label' in obj
-
     return {
       value,
-      label: isObjectOption(option) ? option.label : option,
-      description: isObjectOption(option) ? (option.description ?? '') : '',
+      label: isOptionObject(option) ? option.label : option,
+      description: isOptionObject(option) ? (option.description ?? '') : '',
     }
   })
 }
@@ -30,20 +44,14 @@ export function transformPayloadToSnakeCase<T extends Record<string, unknown>>(
       return
     }
 
-    if (
-      typeof value === 'object' &&
-      value !== null &&
-      'address' in value &&
-      typeof (value as Record<string, unknown>)?.address === 'string'
-    ) {
-      const address = value as Record<string, unknown>
+    if (isAddressPayload(value) && typeof value.address === 'string') {
       result[snakeKey] = {
-        address: address.address ?? '',
-        address_2: address.address_2 ?? '',
-        city: address.city ?? '',
-        state_province: address.stateProvince ?? '',
-        postal_code: address.postalCode ?? '',
-        country: address.country ?? '',
+        address: value.address ?? '',
+        address_2: value.address_2 ?? '',
+        city: value.city ?? '',
+        state_province: value.stateProvince ?? '',
+        postal_code: value.postalCode ?? '',
+        country: value.country ?? '',
       }
       return
     }

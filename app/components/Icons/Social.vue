@@ -17,6 +17,7 @@ const iconSize = props.iconSize || 'size-10'
     :aria-label="`Visit our ${title} page`"
     inactive-class="transition-colors hover:text-primary"
     raw
+    rel="noopener noreferrer"
     target="_blank"
     :to="url"
   >

@@ -61,6 +61,12 @@ const hideHeroSection = computed(
 
 const hasMediaSlot = computed(() => tk.slot('media').length > 0)
 const hasHero = computed(() => !!props.text || hasMediaSlot.value)
+const containsVideo = computed(() =>
+  tk
+    .slot('media')
+    .some((node) => node?.props?.type === 'video' || node?.props?.mediaEmbed),
+)
+
 const h1Classes = computed(() => {
   const base = hasMediaSlot.value
     ? isFrontEffective.value
@@ -68,7 +74,7 @@ const h1Classes = computed(() => {
       : heroTheme.text?.h1
     : null
 
-  return [base, heroTheme.text?.container].flat().filter(Boolean)
+  return [base].filter(Boolean)
 })
 
 const sectionClasses = computed(() => {
@@ -77,13 +83,6 @@ const sectionClasses = computed(() => {
   }
 
   const hasHeroContent = hasHero.value
-
-  // Detect if the media slot contains a video
-  const containsVideo = computed(() =>
-    tk
-      .slot('media')
-      .some((node) => node?.props?.type === 'video' || node?.props?.mediaEmbed),
-  )
 
   return [
     heroTheme.base,
@@ -99,7 +98,6 @@ const sectionClasses = computed(() => {
     hasMediaSlot.value && heroTheme.overlay,
     isFrontEffective.value && heroTheme.isFront,
 
-    // Only add video height if the hero contains a video
     containsVideo.value && 'min-h-[75vh]',
   ]
     .flat()

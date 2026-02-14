@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core'
+import type { PopupNode } from '~/composables/usePopupData'
 import { usePopupData } from '~/composables/usePopupData'
 
 const { renderCustomElements } = useDrupalCe()
@@ -12,9 +13,53 @@ const seen = useCookie<boolean>('marketing_popup', {
 })
 const hasTriggered = ref(false)
 
+type PopupWebform = {
+  webformTitle?: string
+}
+
+type PopupProps = {
+  id?: string | number
+  uuid?: string
+  parentUuid?: string
+  region?: string
+  text?: string
+  webform?: PopupWebform
+  editLink?: string
+  direction?: string
+}
+
+type PopupMedia = Record<string, unknown>
+
+let delayTimer: ReturnType<typeof setTimeout> | null = null
+let stopScrollWatch: (() => void) | null = null
+let onExitIntent: ((event: MouseEvent) => void) | null = null
+
+function cleanupTriggerHandlers() {
+  if (delayTimer) {
+    clearTimeout(delayTimer)
+    delayTimer = null
+  }
+
+  if (stopScrollWatch) {
+    stopScrollWatch()
+    stopScrollWatch = null
+  }
+
+  if (onExitIntent && import.meta.client) {
+    document.removeEventListener('mouseout', onExitIntent)
+    onExitIntent = null
+  }
+}
+
+function getPopupProps(node: PopupNode | null): PopupProps {
+  if (!node?.props || typeof node.props !== 'object') return {}
+  return node.props as PopupProps
+}
+
 watch(
   () => popup.value?.props?.uuid,
   () => {
+    cleanupTriggerHandlers()
     hasTriggered.value = false
     selectedMedia.value = null
   },
@@ -22,20 +67,13 @@ watch(
 
 const hasPopup = computed(() => !!popup.value)
 const title = computed(
-  () =>
-    (
-      (popup.value?.props as Record<string, unknown>)?.webform as
-        | { webformTitle?: string }
-        | undefined
-    )?.webformTitle ?? 'Announcement',
+  () => getPopupProps(popup.value).webform?.webformTitle ?? 'Announcement',
 )
 
-const description = computed(() => popup.value?.props?.text || '')
+const description = computed(() => getPopupProps(popup.value).text ?? '')
 const popupRenderProps = computed(() => {
-  if (!popup.value) return {}
-
   const { id, uuid, parentUuid, region, text, webform, editLink, direction } =
-    popup.value.props ?? {}
+    getPopupProps(popup.value)
 
   return {
     id,
@@ -49,7 +87,10 @@ const popupRenderProps = computed(() => {
   }
 })
 
-const selectedMedia = ref<Record<string, unknown> | null>(null)
+const selectedMedia = ref<PopupMedia | null>(null)
+const closeModal = () => {
+  open.value = false
+}
 
 watch(open, (isOpen) => {
   if (!isOpen) return
@@ -77,24 +118,29 @@ function showModalOnce() {
 }
 
 function handleTrigger() {
+  if (!import.meta.client) return
   if (!popup.value) return
   if (hasTriggered.value) return
 
   hasTriggered.value = true
 
   if (config.value.trigger === 'delay') {
-    setTimeout(showModalOnce, config.value.delay)
+    delayTimer = setTimeout(showModalOnce, config.value.delay)
   }
 
   if (config.value.trigger === 'scroll') {
-    const stop = watch(
+    stopScrollWatch = watch(
       y,
       (val) => {
-        const percent = val / (document.body.scrollHeight - window.innerHeight)
+        const scrollRoot = document.documentElement
+        const scrollable = scrollRoot.scrollHeight - window.innerHeight
+        if (scrollable <= 0) return
+
+        const percent = val / scrollable
 
         if (percent > config.value.scrollThreshold) {
           showModalOnce()
-          stop()
+          cleanupTriggerHandlers()
         }
       },
       { immediate: true },
@@ -102,10 +148,10 @@ function handleTrigger() {
   }
 
   if (config.value.trigger === 'exit') {
-    const onExitIntent = (e: MouseEvent) => {
+    onExitIntent = (e: MouseEvent) => {
       if (e.clientY <= 0 && !e.relatedTarget) {
         showModalOnce()
-        document.removeEventListener('mouseout', onExitIntent)
+        cleanupTriggerHandlers()
       }
     }
 
@@ -116,10 +162,17 @@ function handleTrigger() {
 watch(
   popup,
   (val) => {
-    if (val) handleTrigger()
+    cleanupTriggerHandlers()
+    if (val) {
+      handleTrigger()
+    }
   },
   { immediate: true },
 )
+
+onBeforeUnmount(() => {
+  cleanupTriggerHandlers()
+})
 </script>
 
 <template>
@@ -154,7 +207,7 @@ watch(
 
         <ParagraphPopup
           v-bind="popupRenderProps"
-          :on-close="() => (open = false)"
+          :on-close="closeModal"
         >
           <template #media>
             <component

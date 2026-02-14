@@ -4,7 +4,18 @@ import { usePageContext } from '~/composables/usePageContext'
 const { page } = usePageContext()
 const theme = useAppConfig().stirTheme
 const currentYear = new Date().getFullYear()
-const iconsSocialConfig = theme.socials || []
+type SocialIconConfig = {
+  title?: string
+  url?: string
+  icon: string
+  iconSize?: string
+  activeClass?: string
+  inactiveClass?: string
+}
+const iconsSocialConfig = computed<SocialIconConfig[]>(() => {
+  const socials = (theme as { socials?: unknown }).socials
+  return Array.isArray(socials) ? (socials as SocialIconConfig[]) : []
+})
 const footerMenuItems = computed(() =>
   (page.value?.footer_menu || []).map((item: { title?: string; url?: string }) => ({
     label: item.title || '',
@@ -28,7 +39,7 @@ const footerMenuItems = computed(() =>
     <template #left>
       <LazyAppLogo
         v-if="theme.navigation.logo"
-        :add-classes="theme.navigation.logoScrolledSize"
+        :add-classes="theme.navigation.logoScrolledSize || theme.navigation.logoSize"
       />
       <template v-else>
         {{ page?.site_info?.name }}
@@ -60,7 +71,7 @@ const footerMenuItems = computed(() =>
             :inactive-class="theme.footer.footerLinks"
             raw
             target="_blank"
-            to="//www.stirstudiosdesign.com"
+            to="https://www.stirstudiosdesign.com"
           >
             StirStudios
           </ULink>
@@ -72,14 +83,14 @@ const footerMenuItems = computed(() =>
       <div class="flex gap-1">
         <IconsSocial
           v-for="(icon, index) in iconsSocialConfig"
-          :key="index"
+          :key="icon.url || icon.title || index"
           v-bind="icon"
           class="me-1"
         />
       </div>
 
       <ULink
-        v-if="!theme.footer.hideEmail"
+        v-if="!theme.footer.hideEmail && page.site_info?.mail"
         :inactive-class="theme.footer.footerLinks"
         raw
         target="_blank"
