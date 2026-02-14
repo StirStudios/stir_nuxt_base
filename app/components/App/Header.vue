@@ -11,9 +11,11 @@ const appConfig = useAppConfig()
 const theme = appConfig.stirTheme
 const hydrated = ref(false)
 const forceScrolled = ref(false)
-const isFixed = computed(
-  () => props.mode === 'fixed' || isScrolled.value || isFront.value,
-)
+const isFixed = computed(() => {
+  if (props.mode === 'fixed') return true
+  if (props.mode === 'static') return false
+  return isFront.value
+})
 
 // Fetch menu items
 const mainMenu = await fetchMenu('main')
@@ -66,8 +68,15 @@ const headerRootClasses = computed(() => {
 
 onMounted(() => {
   hydrated.value = true
-  if (route.hash) forceScrolled.value = true
 })
+
+watch(
+  () => route.hash,
+  (hash) => {
+    forceScrolled.value = Boolean(hash)
+  },
+  { immediate: true },
+)
 
 // Fix: blur active element when slideover opens (prevents aria-hidden focus warning)
 const onOpen = (val: boolean) => {
@@ -93,7 +102,8 @@ const onOpen = (val: boolean) => {
       container: theme.navigation.container,
       header: theme.navigation.header,
       body: theme.navigation.slideover.body,
-      right: appConfig.colorMode?.forced
+      right:
+        appConfig.colorMode?.forced || appConfig.colorMode?.showToggle === false
         ? 'block lg:hidden lg:flex-0'
         : 'lg:flex-1',
     }"
@@ -127,7 +137,7 @@ const onOpen = (val: boolean) => {
       :variant="theme.navigation.variant"
     />
 
-    <template #right>
+    <template v-if="appConfig.colorMode?.showToggle !== false" #right>
       <LazyIconsColorMode />
     </template>
 

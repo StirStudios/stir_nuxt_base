@@ -13,7 +13,7 @@ Use these rules for all changes.
 - **Framework:** Nuxt 4 (SSR by default, Nitro runtime)
 - **UI:** Nuxt UI 4 + Tailwind CSS 4
 - **CMS integration:** `nuxtjs-drupal-ce` (Lupus Decoupled Custom Elements)
-- **Performance modules:** `nuxt-vitalizer`, `motion-v`
+- **Performance modules:** `nuxt-vitalizer`
 - **Aux modules:** robots, sitemap, turnstile, scripts, eslint
 
 ## Repository structure (high level)

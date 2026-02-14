@@ -3,9 +3,19 @@ import { useWindowScroll } from '@vueuse/core'
 
 const { y } = useWindowScroll()
 const theme = useAppConfig().stirTheme.scrollButton
-const showButton = computed(() => y.value > theme.showAtScrollY)
+const showButton = computed(() => y.value > (theme.showAtScrollY ?? 200))
+
 const scrollToTop = () => {
-  y.value = 0
+  if (!import.meta.client) return
+
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
+
+  window.scrollTo({
+    top: 0,
+    behavior: prefersReducedMotion ? 'auto' : 'smooth',
+  })
 }
 </script>
 
@@ -13,7 +23,14 @@ const scrollToTop = () => {
   <ClientOnly>
     <UButton
       aria-label="Scroll to top of page"
-      :class="[theme.base, showButton ? 'opacity-100' : 'opacity-0']"
+      :aria-hidden="!showButton"
+      :class="[
+        theme.base,
+        showButton
+          ? 'pointer-events-auto opacity-100'
+          : 'pointer-events-none opacity-0',
+      ]"
+      :tabindex="showButton ? 0 : -1"
       :variant="theme.variant"
       @click="scrollToTop"
     >

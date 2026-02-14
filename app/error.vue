@@ -4,6 +4,12 @@ import type { NuxtError } from '#app'
 const { navigation, error: errorConfig } = useAppConfig().stirTheme
 
 defineProps<{ error: NuxtError }>()
+
+const clearAction = computed(() => ({
+  label: errorConfig?.label || 'Take me back home',
+  color: errorConfig?.color || 'primary',
+  variant: errorConfig?.variant || 'solid',
+}))
 </script>
 
 <template>
@@ -13,11 +19,7 @@ defineProps<{ error: NuxtError }>()
 
   <UMain id="main-content" as="main" role="main">
     <UError
-      :clear="{
-        label: errorConfig.label,
-        color: errorConfig.color,
-        variant: errorConfig.variant,
-      }"
+      :clear="clearAction"
       :error="error"
       redirect="/"
       :ui="{

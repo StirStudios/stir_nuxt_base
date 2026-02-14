@@ -2,6 +2,10 @@ export function useIntersectionObserver() {
   let observer: IntersectionObserver | null = null
   const observeVideos = (threshold: number = 0.1) => {
     if (!import.meta.client) return
+    if (observer) {
+      observer.disconnect()
+      observer = null
+    }
 
     const videoElements = document.querySelectorAll(
       'video',

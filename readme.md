@@ -37,8 +37,7 @@ pnpm lint       # Lint project
 pnpm typecheck  # Nuxt + Vue TypeScript checks
 pnpm test       # Run unit tests
 pnpm test:watch # Run unit tests in watch mode
-pnpm smoke:login # Smoke-test /login via preview server
-pnpm verify:ci  # Full local quality gate (test/lint/typecheck/build/smoke)
+pnpm verify:ci  # Full local quality gate (test/lint/typecheck/build)
 pnpm perf:report # Build + output top client chunk size report
 pnpm deps:update:safe # Safe dependency update flow
 pnpm release    # Tag + prepare release

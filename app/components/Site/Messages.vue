@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { cleanHTML } from '~/utils/cleanHTML'
+
 const { getMessages } = useDrupalCe()
 const toast = useToast()
 
@@ -14,7 +16,7 @@ onMounted(() => {
       // Show the toast
       toast.add({
         title: message.type === 'success' ? 'Success!' : 'Error!',
-        description: h('div', { innerHTML: message.message }),
+        description: h('div', { innerHTML: cleanHTML(message.message || '') }),
         icon: getAlertIcon(message.type),
         color: message.type === 'success' ? 'success' : 'error',
       })

@@ -4,16 +4,23 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (!import.meta.client) return
 
   const cfg = useAppConfig().analytics?.plausible
-  if (process.env.NODE_ENV !== 'production' || !cfg?.enabled || !cfg.domain)
+  if (
+    process.env.NODE_ENV !== 'production' ||
+    !cfg?.enabled ||
+    !cfg.domain ||
+    !cfg.scriptUrl
+  )
     return
+  const scriptUrl = cfg.scriptUrl
+  const domain = cfg.domain
 
   const loadPlausible = () =>
     useScript({
       id: 'plausible-script',
-      src: cfg.scriptUrl,
+      src: scriptUrl,
       async: true,
       defer: true,
-      'data-domain': cfg.domain,
+      'data-domain': domain,
     })
 
   const onScriptLoaded = ({ onLoaded }: ReturnType<typeof loadPlausible>) =>

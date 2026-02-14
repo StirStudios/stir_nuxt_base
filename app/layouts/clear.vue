@@ -1,4 +1,6 @@
 <template>
   <LazyDrupalTabs />
-  <UMain id="main-content" as="main" role="main"> <slot /> </UMain>
+  <UMain id="main-content" as="main" role="main">
+    <slot />
+  </UMain>
 </template>

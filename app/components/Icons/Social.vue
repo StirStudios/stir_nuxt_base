@@ -16,6 +16,7 @@ const iconSize = props.iconSize || 'size-10'
   <ULink
     :aria-label="`Visit our ${title} page`"
     inactive-class="transition-colors hover:text-primary"
+    rel="noopener noreferrer"
     raw
     target="_blank"
     :to="url"

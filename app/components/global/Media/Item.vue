@@ -32,6 +32,13 @@ const mediaProps = computed(() => props.tk.propsOf(props.node))
 const isVideo = computed(() => mediaProps.value.type === 'video')
 const isDocument = computed(() => mediaProps.value.type === 'document')
 const isAudio = computed(() => mediaProps.value.type === 'audio')
+
+const canOpenOverlay = computed(() => !isDocument.value && !isAudio.value)
+const openOverlay = () => {
+  if (!canOpenOverlay.value) return
+  emit('open', props.index)
+}
+
 const componentMap: Record<MediaType, string> = {
   image: 'MediaImage',
   video: 'MediaVideo',
@@ -51,14 +58,20 @@ const componentMap: Record<MediaType, string> = {
   <div
     v-else
     class="group relative overflow-hidden"
+    :aria-label="isVideo ? 'Open video modal' : 'Open media modal'"
     :class="[theme.media.rounded, isVideo || overlay ? 'cursor-pointer' : '']"
-    @click="emit('open', index)"
+    role="button"
+    tabindex="0"
+    @click="openOverlay"
+    @keydown.enter.prevent="openOverlay"
+    @keydown.space.prevent="openOverlay"
   >
     <div
       :class="[
         'transition-transform',
         theme.media.effects.scale,
         theme.media.transitions.slow,
+        'group-focus-within:scale-105',
       ]"
     >
       <MediaImage v-bind="{ ...mediaProps, hideCredit: true }" />
@@ -68,6 +81,7 @@ const componentMap: Record<MediaType, string> = {
       v-if="mediaProps.credit"
       :class="[
         'absolute bottom-0 left-0 w-full bg-black/40 px-2 py-1 text-center text-xs font-bold text-white opacity-0 transition-opacity group-hover:opacity-100',
+        'group-focus-within:opacity-100',
         theme.media.transitions.fast,
       ]"
     >
@@ -76,14 +90,14 @@ const componentMap: Record<MediaType, string> = {
 
     <template v-if="isVideo">
       <div
-        class="absolute inset-0 z-10 bg-black/30 transition-colors group-hover:bg-black/10"
+        class="absolute inset-0 z-10 bg-black/30 transition-colors group-hover:bg-black/10 group-focus-within:bg-black/10"
       />
-      <button
-        aria-label="Play Video"
+      <span
+        aria-hidden="true"
         class="absolute inset-0 z-20 flex items-center justify-center text-white"
       >
         <UIcon name="i-lucide-play-circle" size="60" />
-      </button>
+      </span>
     </template>
   </div>
 </template>

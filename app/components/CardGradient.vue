@@ -11,19 +11,19 @@ const { gradients, card } = useAppConfig().stirTheme
 const gradientClass = computed(() => {
   if (!props.layout.card) return ''
 
-  const key = props.layout.gradient || card.defaultGradient || '1'
+  const key = props.layout.gradient ?? card.defaultGradient ?? '1'
   return gradients[key] || ''
 })
 
-const effectClass = computed(() => card.effect)
+const effectClass = computed(() => card.effect ?? '')
 const sizeClass = computed(() =>
-  props.layout.compact ? card.sizes.compact : card.sizes.default,
+  props.layout.compact ? (card.sizes?.compact ?? '') : (card.sizes?.default ?? ''),
 )
 </script>
 
 <template>
   <div
-    v-if="layout.card"
+    v-if="props.layout.card"
     aria-hidden="true"
     class="pointer-events-none"
     :class="[effectClass, sizeClass]"

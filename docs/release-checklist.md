@@ -26,7 +26,6 @@ This runs:
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm build`
-- `pnpm smoke:login`
 
 ## 3. Performance snapshot
 

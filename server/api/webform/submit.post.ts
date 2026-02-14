@@ -1,11 +1,35 @@
 import { defineEventHandler, readBody, createError } from 'h3'
 
+function normalizeErrorStatus(error: unknown): number {
+  if (!error || typeof error !== 'object') return 500
+  const statusCode =
+    (error as { statusCode?: unknown; status?: unknown }).statusCode ??
+    (error as { status?: unknown }).status
+  return typeof statusCode === 'number' ? statusCode : 500
+}
+
+function normalizeErrorMessage(error: unknown): string {
+  if (!error || typeof error !== 'object')
+    return 'Form submission failed. Please try again later.'
+
+  const statusMessage = (error as { statusMessage?: unknown }).statusMessage
+  if (typeof statusMessage === 'string' && statusMessage.trim()) {
+    return statusMessage
+  }
+
+  const message = (error as { message?: unknown }).message
+  if (typeof message === 'string' && message.trim()) {
+    return message
+  }
+
+  return 'Form submission failed. Please try again later.'
+}
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
   try {
-    // Read the request body
-    const body = await readBody(event)
+    const body = await readBody<Record<string, unknown>>(event)
 
     if (!body?.webform_id) {
       throw createError({
@@ -22,13 +46,16 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Fetch CSRF Token from our API
-    const { csrfToken } = await $fetch<{ csrfToken: string }>('/api/auth/csrf')
+    const { csrfToken } = await $fetch<{ csrfToken: string | null }>(
+      '/api/auth/csrf',
+    )
+    if (!csrfToken) {
+      throw createError({
+        statusCode: 502,
+        statusMessage: 'Unable to fetch CSRF token',
+      })
+    }
 
-    // Ensure csrfToken is explicitly cast as a string
-    const csrfTokenString: string = csrfToken ?? ''
-
-    // Send JSON to Drupal
     const drupalApiUrl = `${config.public.api}/api/stir_webform_rest/submit`
 
     return await $fetch(drupalApiUrl, {
@@ -36,14 +63,14 @@ export default defineEventHandler(async (event) => {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'X-CSRF-Token': csrfTokenString,
+        'X-CSRF-Token': csrfToken,
       },
-      body: JSON.stringify(body),
+      body,
     })
   } catch (error) {
     throw createError({
-      statusCode: 500,
-      statusMessage: 'Form submission failed. Please try again later.',
+      statusCode: normalizeErrorStatus(error),
+      statusMessage: normalizeErrorMessage(error),
       data: error,
     })
   }

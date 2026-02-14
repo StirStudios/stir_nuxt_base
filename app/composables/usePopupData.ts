@@ -1,4 +1,4 @@
-type PopupNode = {
+export type PopupNode = {
   element?: string
   props?: Record<string, unknown>
   slots?: Record<string, unknown>

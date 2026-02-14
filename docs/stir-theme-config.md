@@ -10,7 +10,60 @@ This document outlines the full structure of the StirStudios `app.config.ts` fil
 colorMode: {
   forced: false,
   preference: 'dark',
-  lightRoutes: ['about', 'help'],
+  showToggle: true,
+  lightRoutes: ['/clients', '/book'],
+  darkRoutes: ['/pricing'],
+}
+```
+
+#### `colorMode` behavior and precedence
+
+- `forced: true`
+  - Forces all routes to `preference`.
+  - Theme toggle is hidden.
+  - `lightRoutes` and `darkRoutes` are ignored while forced mode is on.
+- `forced: false`
+  - Route overrides apply first:
+    - `lightRoutes` => route forced to light.
+    - `darkRoutes` => route forced to dark.
+  - If no route override matches:
+    - `showToggle: false` => `preference` is enforced as baseline.
+    - `showToggle: true` => user preference is allowed.
+
+#### Toggle visibility notes
+
+- `showToggle: false` hides the color mode button.
+- Header right-slot spacing is collapsed when toggle is hidden (no empty right gap).
+
+#### Route matching rules
+
+- Use `'/'` for homepage only.
+- Route arrays use prefix matching for non-root entries (e.g. `'/pricing'` matches `/pricing` and child paths).
+- Empty entries are ignored (do not use `''`).
+
+#### Common patterns
+
+Hide toggle but keep route-based forcing:
+
+```ts
+colorMode: {
+  forced: false,
+  preference: 'dark',
+  showToggle: false,
+  lightRoutes: ['/clients', '/book', '/calculator', '/photos'],
+  darkRoutes: [],
+}
+```
+
+Force dark homepage, light elsewhere, no toggle:
+
+```ts
+colorMode: {
+  forced: false,
+  preference: 'light',
+  showToggle: false,
+  lightRoutes: [],
+  darkRoutes: ['/'],
 }
 ```
 
@@ -84,6 +137,15 @@ cookieConsent: {
 ---
 
 ## 🎨 `stirTheme`
+
+Recommended key order in `stirTheme`:
+
+1. Global flags and layout primitives:
+   `pdf`, `crumbs`, `h1`, `container`, `header`, `navigation`, `hero`, `footer`
+2. Content/component behavior:
+   `media`, `carousel`, `modal`, `webform`, `turnstile`
+3. Visual/system tokens and utilities:
+   `card`, `gradients`, `animations`, `aspectRatios`, `scrollButton`, `error`
 
 ### ✨ General
 

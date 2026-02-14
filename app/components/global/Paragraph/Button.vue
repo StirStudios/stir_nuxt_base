@@ -74,6 +74,7 @@ const hasLink = computed(() => !hasPdf.value && !!linkData.value.url)
         :color="btnColor"
         :icon="iconName"
         :label="btnLabel"
+        :rel="isExternal ? 'noopener noreferrer' : undefined"
         :size="btnSize"
         :target="isExternal ? '_blank' : undefined"
         :to="linkData.url"
