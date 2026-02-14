@@ -45,6 +45,11 @@ Use these rules for all changes.
 - TypeScript-first: prefer typed params, return types, and narrow interfaces near usage.
 - Use Nuxt/Vue idioms: composables for shared logic, focused components, minimal cross-layer coupling.
 - Prefer Nuxt UI tokens/variants and Tailwind utilities before writing custom CSS.
+- Prefer nested CSS for readability when using Tailwind v4 CSS features.
+- In scoped styles, use `:global(...)` with `:deep(...)` when targeting global theme/state classes.
+- Prefer stable class hooks (for example `app-nav`) over ARIA/attribute selectors for reusable styling targets.
+- Treat `app/assets/css/custom.css` as an import/index file; place new styles in focused partials under `app/assets/css/custom/`.
+- If custom styles in one file grow beyond roughly 80-120 lines or mix unrelated concerns, split them in the same PR.
 - Keep comments minimal and only for non-obvious logic or external constraints.
 - Do not wrap imports in `try/catch` (project-wide rule).
 - Naming:

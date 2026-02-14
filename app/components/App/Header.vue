@@ -112,6 +112,7 @@ const onOpen = (val: boolean) => {
     <template #title>
       <LazyAppLogo
         v-if="theme.navigation.logo"
+        class="app-logo"
         :add-classes="
           [
             'transition-all duration-300',
@@ -128,6 +129,7 @@ const onOpen = (val: boolean) => {
 
     <LazyUNavigationMenu
       aria-label="Site Navigation"
+      class="app-nav app-nav-desktop"
       :color="theme.navigation.color"
       :highlight="theme.navigation.highlight.show"
       :highlight-color="
@@ -144,6 +146,7 @@ const onOpen = (val: boolean) => {
     <template #body>
       <LazyUNavigationMenu
         aria-label="Mobile Navigation"
+        class="app-nav app-nav-mobile"
         :items="navLinks"
         orientation="vertical"
         :ui="{ link: theme.navigation.slideover.link }"
