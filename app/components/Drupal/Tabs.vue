@@ -30,6 +30,13 @@ const getIconForLabel = (label: string): string | null => {
 type LocalTask = { label: string; url: string }
 type LocalTasks = { primary: LocalTask[]; secondary: LocalTask[] }
 type MenuLink = { label: string; to: string; icon: string | null }
+type AccountMenuItem = { title?: string; relative?: string; url?: string }
+
+const getValidTo = (value: unknown): string | null => {
+  if (typeof value !== 'string') return null
+  const trimmed = value.trim()
+  return trimmed.length ? trimmed : null
+}
 
 const tabs = computed<LocalTasks>(() => {
   const localTasks = page.value?.local_tasks as Partial<LocalTasks> | undefined
@@ -41,39 +48,59 @@ const tabs = computed<LocalTasks>(() => {
 })
 
 const localTaskLinks = computed(() =>
-  tabs.value.primary.map((tab: LocalTask) => ({
-    label: tab.label,
-    to: tab.url,
-    icon: getIconForLabel(tab.label),
-  })),
+  tabs.value.primary
+    .map((tab: LocalTask) => {
+      const to = getValidTo(tab.url)
+      if (!to) return null
+
+      return {
+        label: tab.label,
+        to,
+        icon: getIconForLabel(tab.label),
+      }
+    })
+    .filter((tab): tab is MenuLink => tab !== null),
 )
 
 const accountMenu = ref<MenuLink[]>([])
 const isAccountMenuLoaded = ref(false)
 
-watch(
-  isAdministrator,
-  async (isAdmin) => {
-    if (!isAdmin || isAccountMenuLoaded.value) return
+const loadAccountMenu = async () => {
+  if (!isAdministrator.value || isAccountMenuLoaded.value) return
 
-    try {
-      const rawMenu = await fetchMenu('account')
+  try {
+    const rawMenu = await fetchMenu('account')
+    const menuItems = Array.isArray(rawMenu.value)
+      ? (rawMenu.value as AccountMenuItem[])
+      : []
 
-      accountMenu.value = Array.isArray(rawMenu.value)
-        ? rawMenu.value.map((item) => ({
-            label: item.title,
-            to: item.relative || item.url,
-            icon: getIconForLabel(item.title),
-          }))
-        : []
-      isAccountMenuLoaded.value = true
-    } catch (error) {
-      console.error('Failed to fetch account menu:', error)
-      accountMenu.value = []
-    }
-  },
-  { immediate: true },
-)
+    accountMenu.value = menuItems
+      .map((item) => {
+        const label = item.title || ''
+        const to = getValidTo(item.relative || item.url)
+        if (!label || !to) return null
+
+        return {
+          label,
+          to,
+          icon: getIconForLabel(label),
+        }
+      })
+      .filter((item): item is MenuLink => item !== null)
+    isAccountMenuLoaded.value = true
+  } catch (error) {
+    console.error('Failed to fetch account menu:', error)
+    accountMenu.value = []
+  }
+}
+
+onMounted(() => {
+  void loadAccountMenu()
+})
+
+watch(isAdministrator, (isAdmin) => {
+  if (isAdmin) void loadAccountMenu()
+})
 
 const links = computed(() => {
   const baseLinks = [
@@ -88,15 +115,20 @@ const links = computed(() => {
   ]
 
   const tasks = localTaskLinks.value.length ? [localTaskLinks.value] : []
-  const accountDropdown = [
-    {
+  const accountItem = accountMenu.value.length
+    ? {
+        label: user.value?.name || 'Account',
+        icon: getIconForLabel('My account'),
+        children: accountMenu.value,
+      }
+    : {
       label: user.value?.name || 'Account',
       icon: getIconForLabel('My account'),
-      children: accountMenu.value,
-    },
-  ]
+      to: `${drupalBaseUrl}/user`,
+      target: '_self',
+    }
 
-  return [...baseLinks, ...tasks, accountDropdown]
+  return [...baseLinks, ...tasks, [accountItem]]
 })
 </script>
 
