@@ -74,7 +74,7 @@ const h1Classes = computed(() => {
       : heroTheme.text?.h1
     : null
 
-  return [base, heroTheme.text?.container].flat().filter(Boolean)
+  return [base].filter(Boolean)
 })
 
 const sectionClasses = computed(() => {

@@ -4,7 +4,18 @@ import { usePageContext } from '~/composables/usePageContext'
 const { page } = usePageContext()
 const theme = useAppConfig().stirTheme
 const currentYear = new Date().getFullYear()
-const iconsSocialConfig = theme.socials || []
+type SocialIconConfig = {
+  title?: string
+  url?: string
+  icon: string
+  iconSize?: string
+  activeClass?: string
+  inactiveClass?: string
+}
+const iconsSocialConfig = computed<SocialIconConfig[]>(() => {
+  const socials = (theme as { socials?: unknown }).socials
+  return Array.isArray(socials) ? (socials as SocialIconConfig[]) : []
+})
 const footerMenuItems = computed(() =>
   (page.value?.footer_menu || []).map((item: { title?: string; url?: string }) => ({
     label: item.title || '',

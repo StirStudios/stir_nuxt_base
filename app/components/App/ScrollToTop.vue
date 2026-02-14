@@ -22,8 +22,8 @@ const scrollToTop = () => {
 <template>
   <ClientOnly>
     <UButton
-      aria-label="Scroll to top of page"
       :aria-hidden="!showButton"
+      aria-label="Scroll to top of page"
       :class="[
         theme.base,
         showButton

@@ -57,8 +57,8 @@ const componentMap: Record<MediaType, string> = {
 
   <div
     v-else
-    class="group relative overflow-hidden"
     :aria-label="isVideo ? 'Open video modal' : 'Open media modal'"
+    class="group relative overflow-hidden"
     :class="[theme.media.rounded, isVideo || overlay ? 'cursor-pointer' : '']"
     role="button"
     tabindex="0"

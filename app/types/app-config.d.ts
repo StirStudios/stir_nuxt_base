@@ -45,7 +45,6 @@ type ColorModeConfig = {
 
 declare module 'nuxt/schema' {
   interface AppConfigInput {
-    stirTheme?: Record<string, any>
     protectedRoutes?: ProtectedRoutesConfig
     analytics?: AnalyticsConfig
     userway?: UserwayConfig
@@ -54,7 +53,6 @@ declare module 'nuxt/schema' {
   }
 
   interface AppConfig {
-    stirTheme: Record<string, any>
     protectedRoutes: ProtectedRoutesConfig
     analytics: AnalyticsConfig
     userway: UserwayConfig
